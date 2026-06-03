@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Nombres Relatifs · Niveau 1 — Introduction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#1E88E5; --primary-dark:#1565C0; --primary-mid:#42A5F5; --primary-bg:#E3F2FD;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#0D47A1 0%,#1E88E5 55%,#90CAF9 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(13,71,161,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#1E88E5; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#1565C0; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#0D47A1,#1E88E5,#90CAF9); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.blue   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#0D47A1,#1565C0); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .examples-row { display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
+        .example-chip { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:10px; padding:8px 16px; font-size:.95rem; font-weight:800; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .example-chip span { color:#888; font-size:.75rem; font-family:inherit; font-weight:700; display:block; text-align:center; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* QCM */
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        /* Fill in */
+        .fill-item { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:70px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* Guided exercises */
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* Completion */
+        .completion { display:none; background:linear-gradient(135deg,#0D47A1,#1E88E5,#90CAF9); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #0A2F6E; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        /* Level nav */
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+
+        @media(max-width:600px){
+            .header-inner { flex-wrap:wrap; }
+            .header-center { order:-1; flex-basis:100%; }
+            .opts.short { grid-template-columns:1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>± Nombres Relatifs · Introduction</h1>
+            <p>Niveau 1 · Positifs, négatifs, valeur absolue, comparaison</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 1 — Introduction</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- ══ 1. LEÇON ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon blue">±</div>
+        <div>
+            <div class="card-title">La leçon — Nombres relatifs</div>
+            <div class="card-sub">Définition · Droite graduée · Valeur absolue · Comparaison</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Les <strong>nombres relatifs</strong> incluent tous les entiers : positifs, négatifs et le zéro.
+            On les utilise partout : températures, altitudes, comptes bancaires, étages d'un immeuble…
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Définition</h3>
+            <p>
+                • Un <strong>nombre positif</strong> est supérieur à 0 : +3, +17, +0,5…  (le + est souvent omis)<br>
+                • Un <strong>nombre négatif</strong> est inférieur à 0 : −3, −17, −0,5…  (le − est obligatoire)<br>
+                • <strong>Zéro</strong> n'est ni positif, ni négatif — c'est le séparateur des deux côtés.<br><br>
+                Ensemble, positifs + négatifs + zéro = les <strong>nombres relatifs</strong> (ou entiers relatifs).
+            </p>
+        </div>
+
+        <!-- SVG 1 : Droite graduée −10 à +10 -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 620 130" xmlns="http://www.w3.org/2000/svg" style="max-width:620px;width:100%">
+                <rect x="0" y="0" width="620" height="130" fill="#EEF5FF" rx="10"/>
+                <text x="310" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#0D47A1" font-family="Nunito, sans-serif">Droite graduée des nombres relatifs</text>
+
+                <!-- Axe -->
+                <line x1="30" y1="62" x2="590" y2="62" stroke="#1E88E5" stroke-width="2.5"/>
+                <polygon points="590,57 602,62 590,67" fill="#1E88E5"/>
+
+                <!-- Graduations et labels de -10 à +10 -->
+                <g font-size="10" font-weight="700" font-family="Courier New, monospace" fill="#1565C0">
+                <!-- -10 -->
+                <line x1="30"  y1="57" x2="30"  y2="67" stroke="#1565C0" stroke-width="1.5"/>
+                <text x="30"  y="80" text-anchor="middle">−10</text>
+                <!-- -9 -->
+                <line x1="56"  y1="59" x2="56"  y2="65" stroke="#90CAF9" stroke-width="1"/>
+                <!-- -8 -->
+                <line x1="82"  y1="59" x2="82"  y2="65" stroke="#90CAF9" stroke-width="1"/>
+                <!-- -7 : point rouge -->
+                <line x1="108" y1="57" x2="108" y2="67" stroke="#1565C0" stroke-width="1.5"/>
+                <text x="108" y="80" text-anchor="middle">−7</text>
+                <!-- -6,-5,-4,-3 -->
+                <line x1="134" y1="59" x2="134" y2="65" stroke="#90CAF9" stroke-width="1"/>
+                <line x1="160" y1="59" x2="160" y2="65" stroke="#90CAF9" stroke-width="1"/>
+                <line x1="186" y1="59" x2="186" y2="65" stroke="#90CAF9" stroke-width="1"/>
+                <line x1="212" y1="59" x2="212" y2="65" stroke="#90CAF9" stroke-width="1"/>
+                <!-- -2 : point bleu -->
+                <line x1="238" y1="57" x2="238" y2="67" stroke="#1565C0" stroke-width="1.5"/>
+                <text x="238" y="80" text-anchor="middle">−2</text>
+                <!-- -1 -->
+                <line x1="264" y1="59" x2="264" y2="65" stroke="#90CAF9" stroke-width="1"/>
+                <!-- 0 -->
+                <line x1="290" y1="55" x2="290" y2="69" stroke="#0D47A1" stroke-width="2.5"/>
+                <text x="290" y="80" text-anchor="middle" fill="#0D47A1" font-weight="900">0</text>
+                <!-- 1,2 -->
+                <line x1="316" y1="59" x2="316" y2="65" stroke="#90CAF9" stroke-width="1"/>
+                <line x1="342" y1="59" x2="342" y2="65" stroke="#90CAF9" stroke-width="1"/>
+                <!-- +3 : point vert -->
+                <line x1="368" y1="57" x2="368" y2="67" stroke="#1565C0" stroke-width="1.5"/>
+                <text x="368" y="80" text-anchor="middle">+3</text>
+                <!-- 4,5 -->
+                <line x1="394" y1="59" x2="394" y2="65" stroke="#90CAF9" stroke-width="1"/>
+                <line x1="420" y1="59" x2="420" y2="65" stroke="#90CAF9" stroke-width="1"/>
+                <!-- +6 : point vert -->
+                <line x1="446" y1="57" x2="446" y2="67" stroke="#1565C0" stroke-width="1.5"/>
+                <text x="446" y="80" text-anchor="middle">+6</text>
+                <!-- 7,8,9 -->
+                <line x1="472" y1="59" x2="472" y2="65" stroke="#90CAF9" stroke-width="1"/>
+                <line x1="498" y1="59" x2="498" y2="65" stroke="#90CAF9" stroke-width="1"/>
+                <line x1="524" y1="59" x2="524" y2="65" stroke="#90CAF9" stroke-width="1"/>
+                <!-- +10 -->
+                <line x1="550" y1="57" x2="550" y2="67" stroke="#1565C0" stroke-width="1.5"/>
+                <text x="550" y="80" text-anchor="middle">+10</text>
+                </g>
+
+                <!-- Points colorés avec valeur absolue -->
+                <!-- −7 rouge -->
+                <circle cx="108" cy="62" r="7" fill="#E53935"/>
+                <text x="108" y="47" text-anchor="middle" font-size="10" font-weight="900" fill="#E53935" font-family="Nunito,sans-serif">|−7|=7</text>
+                <!-- −2 orange -->
+                <circle cx="238" cy="62" r="7" fill="#FF9600"/>
+                <text x="238" y="47" text-anchor="middle" font-size="10" font-weight="900" fill="#D07A00" font-family="Nunito,sans-serif">|−2|=2</text>
+                <!-- +3 vert -->
+                <circle cx="368" cy="62" r="7" fill="#58CC02"/>
+                <text x="368" y="47" text-anchor="middle" font-size="10" font-weight="900" fill="#46A302" font-family="Nunito,sans-serif">|+3|=3</text>
+                <!-- +6 bleu foncé -->
+                <circle cx="446" cy="62" r="7" fill="#1E88E5"/>
+                <text x="446" y="47" text-anchor="middle" font-size="10" font-weight="900" fill="#1565C0" font-family="Nunito,sans-serif">|+6|=6</text>
+
+                <text x="310" y="118" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito,sans-serif">← négatifs · · · · · zéro · · · · · positifs →</text>
+            </svg>
+        </div>
+
+        <div class="def-box">
+            <h3>📏 Valeur absolue</h3>
+            <p>
+                La <strong>valeur absolue</strong> d'un nombre, c'est sa <strong>distance au zéro</strong> sur la droite graduée.<br>
+                Elle est toujours <strong>positive ou nulle</strong>. On la note avec des barres verticales.<br><br>
+                • |+5| = <strong>5</strong> &nbsp;·&nbsp; |−5| = <strong>5</strong> &nbsp;·&nbsp; |0| = <strong>0</strong><br>
+                • |−12| = <strong>12</strong> &nbsp;·&nbsp; |−0| = <strong>0</strong>
+            </p>
+        </div>
+
+        <div class="rule-box">
+            <h3>⚖️ Comparer des nombres relatifs</h3>
+            <p>
+                <strong>Règle 1 :</strong> Tout nombre négatif est plus petit que zéro, et zéro est plus petit que tout positif.<br>
+                &nbsp;&nbsp;&nbsp;→ négatif &lt; 0 &lt; positif<br><br>
+                <strong>Règle 2 :</strong> Entre deux nombres négatifs, le plus <strong>proche de zéro</strong> est le plus grand.<br>
+                &nbsp;&nbsp;&nbsp;→ −2 &gt; −7 &nbsp; car &nbsp; |−2| = 2 &lt; 7 = |−7|<br><br>
+                <strong>Astuce :</strong> Sur la droite graduée, le nombre le plus à droite est toujours le plus grand.
+            </p>
+        </div>
+
+        <!-- SVG 2 : Thermomètre -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 580 160" xmlns="http://www.w3.org/2000/svg" style="max-width:580px;width:100%">
+                <rect x="0" y="0" width="580" height="160" fill="#FFF8F0" rx="10"/>
+                <text x="290" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#0D47A1" font-family="Nunito,sans-serif">Thermomètre — nombres relatifs dans la vie réelle</text>
+
+                <!-- Thermomètre 1 : hiver −15°C -->
+                <g transform="translate(80,30)">
+                    <rect x="12" y="5" width="16" height="90" rx="8" fill="#E3F2FD" stroke="#90CAF9" stroke-width="2"/>
+                    <rect x="14" y="60" width="12" height="35" rx="2" fill="#1E88E5"/>
+                    <circle cx="20" cy="103" r="12" fill="#1E88E5" stroke="#1565C0" stroke-width="2"/>
+                    <text x="20" y="130" text-anchor="middle" font-size="11" font-weight="900" fill="#1565C0" font-family="Nunito,sans-serif">−15°C</text>
+                    <text x="20" y="143" text-anchor="middle" font-size="9" fill="#888" font-family="Nunito,sans-serif">Hiver ❄️</text>
+                </g>
+
+                <!-- Thermomètre 2 : 0°C -->
+                <g transform="translate(210,30)">
+                    <rect x="12" y="5" width="16" height="90" rx="8" fill="#E3F2FD" stroke="#90CAF9" stroke-width="2"/>
+                    <rect x="14" y="90" width="12" height="5" rx="2" fill="#90CAF9"/>
+                    <circle cx="20" cy="103" r="12" fill="#90CAF9" stroke="#1E88E5" stroke-width="2"/>
+                    <text x="20" y="130" text-anchor="middle" font-size="11" font-weight="900" fill="#1565C0" font-family="Nunito,sans-serif">0°C</text>
+                    <text x="20" y="143" text-anchor="middle" font-size="9" fill="#888" font-family="Nunito,sans-serif">Gel 🧊</text>
+                </g>
+
+                <!-- Thermomètre 3 : +20°C -->
+                <g transform="translate(340,30)">
+                    <rect x="12" y="5" width="16" height="90" rx="8" fill="#E3F2FD" stroke="#90CAF9" stroke-width="2"/>
+                    <rect x="14" y="30" width="12" height="65" rx="2" fill="#FF9600"/>
+                    <circle cx="20" cy="103" r="12" fill="#FF9600" stroke="#D07A00" stroke-width="2"/>
+                    <text x="20" y="130" text-anchor="middle" font-size="11" font-weight="900" fill="#D07A00" font-family="Nunito,sans-serif">+20°C</text>
+                    <text x="20" y="143" text-anchor="middle" font-size="9" fill="#888" font-family="Nunito,sans-serif">Printemps 🌸</text>
+                </g>
+
+                <!-- Thermomètre 4 : +38°C -->
+                <g transform="translate(470,30)">
+                    <rect x="12" y="5" width="16" height="90" rx="8" fill="#E3F2FD" stroke="#90CAF9" stroke-width="2"/>
+                    <rect x="14" y="10" width="12" height="85" rx="2" fill="#E53935"/>
+                    <circle cx="20" cy="103" r="12" fill="#E53935" stroke="#B71C1C" stroke-width="2"/>
+                    <text x="20" y="130" text-anchor="middle" font-size="11" font-weight="900" fill="#B71C1C" font-family="Nunito,sans-serif">+38°C</text>
+                    <text x="20" y="143" text-anchor="middle" font-size="9" fill="#888" font-family="Nunito,sans-serif">Canicule ☀️</text>
+                </g>
+            </svg>
+        </div>
+
+        <!-- SVG 3 : Comparaison −2 vs −7 sur droite graduée -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 120" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="120" fill="#F1F8E9" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Nunito,sans-serif">Comparer −2 et −7 : le moins loin du zéro est le plus grand</text>
+
+                <!-- Axe -->
+                <line x1="40" y1="62" x2="520" y2="62" stroke="#388E3C" stroke-width="2"/>
+                <polygon points="520,57 530,62 520,67" fill="#388E3C"/>
+
+                <!-- Graduations −10 à +2 -->
+                <g font-size="10" font-weight="700" font-family="Courier New,monospace" fill="#2E7D32">
+                    <line x1="40"  y1="57" x2="40"  y2="67" stroke="#388E3C" stroke-width="1.5"/>
+                    <text x="40"  y="80" text-anchor="middle">−10</text>
+                    <line x1="88"  y1="59" x2="88"  y2="65" stroke="#A5D6A7" stroke-width="1"/>
+                    <line x1="136" y1="57" x2="136" y2="67" stroke="#388E3C" stroke-width="1.5"/>
+                    <text x="136" y="80" text-anchor="middle">−7</text>
+                    <line x1="184" y1="59" x2="184" y2="65" stroke="#A5D6A7" stroke-width="1"/>
+                    <line x1="232" y1="59" x2="232" y2="65" stroke="#A5D6A7" stroke-width="1"/>
+                    <line x1="280" y1="59" x2="280" y2="65" stroke="#A5D6A7" stroke-width="1"/>
+                    <line x1="328" y1="57" x2="328" y2="67" stroke="#388E3C" stroke-width="1.5"/>
+                    <text x="328" y="80" text-anchor="middle">−2</text>
+                    <line x1="376" y1="59" x2="376" y2="65" stroke="#A5D6A7" stroke-width="1"/>
+                    <line x1="424" y1="55" x2="424" y2="69" stroke="#1B5E20" stroke-width="2.5"/>
+                    <text x="424" y="80" text-anchor="middle" fill="#1B5E20" font-weight="900">0</text>
+                    <line x1="472" y1="59" x2="472" y2="65" stroke="#A5D6A7" stroke-width="1"/>
+                </g>
+
+                <!-- Flèche distance −7 à 0 -->
+                <line x1="136" y1="45" x2="424" y2="45" stroke="#E53935" stroke-width="2" stroke-dasharray="5,3"/>
+                <polygon points="424,41 432,45 424,49" fill="#E53935"/>
+                <polygon points="136,41 128,45 136,49" fill="#E53935"/>
+                <text x="280" y="38" text-anchor="middle" font-size="10" font-weight="900" fill="#E53935" font-family="Nunito,sans-serif">|−7| = 7 unités</text>
+
+                <!-- Flèche distance −2 à 0 -->
+                <line x1="328" y1="100" x2="424" y2="100" stroke="#1E88E5" stroke-width="2" stroke-dasharray="5,3"/>
+                <polygon points="424,96 432,100 424,104" fill="#1E88E5"/>
+                <polygon points="328,96 320,100 328,104" fill="#1E88E5"/>
+                <text x="376" y="115" text-anchor="middle" font-size="10" font-weight="900" fill="#1E88E5" font-family="Nunito,sans-serif">|−2| = 2 unités</text>
+
+                <!-- Points -->
+                <circle cx="136" cy="62" r="7" fill="#E53935"/>
+                <circle cx="328" cy="62" r="7" fill="#1E88E5"/>
+                <circle cx="424" cy="62" r="5" fill="#1B5E20"/>
+
+                <text x="136" y="51" text-anchor="middle" font-size="9" font-weight="900" fill="#E53935" font-family="Nunito,sans-serif">−7</text>
+                <text x="328" y="51" text-anchor="middle" font-size="9" font-weight="900" fill="#1E88E5" font-family="Nunito,sans-serif">−2</text>
+                <text x="50"  y="110" font-size="10" font-weight="900" fill="#1B5E20" font-family="Nunito,sans-serif">Conclusion : −7 &lt; −2 car |−7| &gt; |−2|</text>
+            </svg>
+        </div>
+
+        <!-- SVG 4 : Immeuble avec étages -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 340 300" xmlns="http://www.w3.org/2000/svg" style="max-width:340px;width:100%">
+                <rect x="0" y="0" width="340" height="300" fill="#F5F5F5" rx="10"/>
+                <text x="170" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#0D47A1" font-family="Nunito,sans-serif">Immeuble — nombres positifs et négatifs</text>
+
+                <!-- Sol (ligne du 0) -->
+                <rect x="60" y="152" width="220" height="4" fill="#795548"/>
+                <text x="30" y="157" text-anchor="end" font-size="10" font-weight="900" fill="#795548" font-family="Nunito,sans-serif">Sol →</text>
+
+                <!-- Étages positifs (au-dessus) -->
+                <!-- Étage 3 -->
+                <rect x="80" y="62" width="180" height="36" fill="#BBDEFB" stroke="#1E88E5" stroke-width="2" rx="3"/>
+                <text x="170" y="85" text-anchor="middle" font-size="13" font-weight="900" fill="#1565C0" font-family="Nunito,sans-serif">Étage +3</text>
+                <!-- Étage 2 -->
+                <rect x="80" y="98" width="180" height="36" fill="#90CAF9" stroke="#1E88E5" stroke-width="2" rx="3"/>
+                <text x="170" y="121" text-anchor="middle" font-size="13" font-weight="900" fill="#0D47A1" font-family="Nunito,sans-serif">Étage +2</text>
+                <!-- Étage 1 -->
+                <rect x="80" y="134" width="180" height="22" fill="#42A5F5" stroke="#1E88E5" stroke-width="2" rx="3"/>
+                <text x="170" y="149" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="Nunito,sans-serif">Étage +1</text>
+
+                <!-- Rez-de-chaussée -->
+                <rect x="80" y="156" width="180" height="22" fill="#FFF176" stroke="#F9A825" stroke-width="2" rx="3"/>
+                <text x="170" y="171" text-anchor="middle" font-size="11" font-weight="900" fill="#F57F17" font-family="Nunito,sans-serif">0 — Rez-de-chaussée</text>
+
+                <!-- Sous-sols (négatifs) -->
+                <!-- Sous-sol −1 -->
+                <rect x="80" y="178" width="180" height="30" fill="#FFCDD2" stroke="#E53935" stroke-width="2" rx="3"/>
+                <text x="170" y="198" text-anchor="middle" font-size="13" font-weight="900" fill="#B71C1C" font-family="Nunito,sans-serif">Sous-sol −1 🅿️</text>
+                <!-- Sous-sol −2 -->
+                <rect x="80" y="208" width="180" height="30" fill="#EF9A9A" stroke="#E53935" stroke-width="2" rx="3"/>
+                <text x="170" y="228" text-anchor="middle" font-size="13" font-weight="900" fill="#B71C1C" font-family="Nunito,sans-serif">Sous-sol −2 🅿️</text>
+                <!-- Sous-sol −3 -->
+                <rect x="80" y="238" width="180" height="30" fill="#E57373" stroke="#B71C1C" stroke-width="2" rx="3"/>
+                <text x="170" y="258" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Nunito,sans-serif">Sous-sol −3 🅿️</text>
+
+                <!-- Flèches + et − -->
+                <text x="32" y="115" text-anchor="middle" font-size="20" font-weight="900" fill="#1E88E5" font-family="Nunito,sans-serif">+</text>
+                <text x="32" y="225" text-anchor="middle" font-size="20" font-weight="900" fill="#E53935" font-family="Nunito,sans-serif">−</text>
+
+                <text x="170" y="290" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito,sans-serif">Plus haut = nombre plus grand ↑</text>
+            </svg>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Pièges classiques</h3>
+            <p>
+                ❌ <strong>−8 > −3</strong> est FAUX ! Entre deux négatifs, le plus grand est celui dont la valeur absolue est la plus <em>petite</em>.<br>
+                ✅ <strong>−3 > −8</strong> car |−3| = 3 &lt; 8 = |−8| (−3 est plus proche de 0).<br><br>
+                ❌ Penser que "négatif × négatif = négatif" — c'est pour l'addition ! (−3 + −5 = −8)<br>
+                ❌ Oublier que |0| = 0 (pas "non défini" — zéro est à distance zéro de lui-même).
+            </p>
+        </div>
+
+        <div class="examples-row">
+            <div class="example-chip">−15°C &lt; 0°C &lt; +25°C<span>température</span></div>
+            <div class="example-chip">−320m &lt; −15m &lt; 0 &lt; +8500m<span>altitude</span></div>
+            <div class="example-chip">−200€ &lt; 0 &lt; +500€<span>compte bancaire</span></div>
+            <div class="example-chip">Sous-sol −2 &lt; RdC 0 &lt; Étage +3<span>immeuble</span></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 2. QCM ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">✏️</div>
+        <div>
+            <div class="card-title">Exercices — QCM</div>
+            <div class="card-sub">5 questions · Pièges classiques sur les relatifs</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Q1 -->
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Quel nombre est le plus grand : −3 ou −8 ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">A) −3</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">B) −8</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">C) Ils sont égaux</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">D) Impossible à dire</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q2 -->
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Quelle est la valeur absolue de −7 ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">A) −7</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">B) 7</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">C) 0</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">D) 1/7</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q3 -->
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Quel est l'ordre croissant de −5, 3, −1, 0 ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">A) −5 &lt; −1 &lt; 0 &lt; 3</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">B) −1 &lt; −5 &lt; 0 &lt; 3</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">C) 0 &lt; −1 &lt; −5 &lt; 3</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">D) 3 &lt; 0 &lt; −1 &lt; −5</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q4 -->
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Quelle est la valeur absolue de −0 ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">A) 0</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">B) −0</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">C) Non défini</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">D) 1</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q5 -->
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Vrai ou Faux : −8 &gt; −3 ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">A) Vrai</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">B) Faux — −8 &lt; −3</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">C) Vrai, car |−8| &gt; |−3|</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">D) Ça dépend du contexte</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 3. TEXTES À TROUS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">📝</div>
+        <div>
+            <div class="card-title">Exercices — Textes à trous</div>
+            <div class="card-sub">3 exercices · Valeur absolue · Comparaison · Ordre</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Trou 1 -->
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Sur la droite graduée, −3 se situe à
+                <input class="blank" id="f1a" placeholder="?"> unités de 0.
+                Sa valeur absolue s'écrit |−3| = <input class="blank" id="f1b" placeholder="?">.
+            </div>
+            <button class="verify-btn" onclick="checkFill(1)">Vérifier</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <!-- Trou 2 -->
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Entre −4 et −9, le plus grand est
+                <input class="blank" id="f2a" placeholder="?"> car |−4| =
+                <input class="blank" id="f2b" placeholder="?"> et |−9| = 9, donc −4 est plus proche de 0.
+            </div>
+            <button class="verify-btn" onclick="checkFill(2)">Vérifier</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <!-- Trou 3 -->
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Place −3 et 7 dans l'ordre croissant avec −10 et 0.
+                L'ordre est : −10 &lt; <input class="blank" id="f3a" placeholder="?"> &lt; 0 &lt; <input class="blank" id="f3b" placeholder="?">.
+            </div>
+            <button class="verify-btn" onclick="checkFill(3)">Vérifier</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 4. EXERCICES GUIDÉS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon blue">🎯</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · Style CE1D</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Ex 1 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Valeur absolue et droite graduée</div>
+                <div class="ex-stmt">
+                    Pour chaque nombre, donne sa valeur absolue et indique s'il se place à gauche ou à droite du zéro sur la droite graduée.<br><br>
+                    Nombres : <strong>−7 &nbsp;·&nbsp; +4 &nbsp;·&nbsp; −2 &nbsp;·&nbsp; +9</strong>
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">|−7| = <strong>7</strong> → à gauche du zéro (nombre négatif)</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">|+4| = <strong>4</strong> → à droite du zéro (nombre positif)</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">|−2| = <strong>2</strong> → à gauche du zéro (nombre négatif)</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">|+9| = <strong>9</strong> → à droite du zéro (nombre positif)</div></div>
+                <div class="final-ans">✅ Rappel : la valeur absolue = distance au zéro, toujours positive.<br>Négatif → gauche · Positif → droite · Zéro → au centre.</div>
+            </div>
+        </div>
+
+        <!-- Ex 2 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Comparer et ordonner</div>
+                <div class="ex-stmt">
+                    Place ces cinq nombres dans l'ordre croissant (du plus petit au plus grand) :<br><br>
+                    <strong>−5 &nbsp;·&nbsp; 2 &nbsp;·&nbsp; −1 &nbsp;·&nbsp; −8 &nbsp;·&nbsp; 0</strong>
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Tous les négatifs sont inférieurs à 0, qui est inférieur à 2.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Parmi les négatifs : −8 est le plus loin de 0 (|−8|=8), donc le plus petit. Ensuite −5 (|−5|=5), puis −1 (|−1|=1).</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">On les place dans l'ordre : −8, −5, −1, 0, 2.</div></div>
+                <div class="final-ans">✅ Ordre croissant : <strong>−8 &lt; −5 &lt; −1 &lt; 0 &lt; 2</strong></div>
+            </div>
+        </div>
+
+        <!-- Ex 3 CE1D -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Style CE1D · Contexte réel</div>
+                <div class="ex-stmt">
+                    Un plongeur est à −15 m par rapport à la surface de la mer.
+                    Un sous-marin militaire se trouve à −320 m. Un hélicoptère vole à +850 m.<br><br>
+                    <strong>a)</strong> Qui se trouve le plus haut ?<br>
+                    <strong>b)</strong> Classe ces trois altitudes dans l'ordre croissant.<br>
+                    <strong>c)</strong> Quelle est la distance entre le plongeur et la surface de la mer ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">a</div><div class="sol-text">L'<strong>hélicoptère</strong> à +850 m est le plus haut : c'est le seul nombre positif, donc le plus grand.</div></div>
+                <div class="sol-step"><div class="sol-num">b</div><div class="sol-text">Les deux négatifs d'abord : −320 &lt; −15 (car |−320| = 320 &gt; 15 = |−15|). Puis +850.<br>Ordre croissant : <strong>−320 m &lt; −15 m &lt; +850 m</strong></div></div>
+                <div class="sol-step"><div class="sol-num">c</div><div class="sol-text">La surface est à 0 m. La distance = valeur absolue de l'altitude du plongeur.<br>|−15| = <strong>15 mètres</strong>.</div></div>
+                <div class="final-ans">✅ a) L'hélicoptère &nbsp;·&nbsp; b) −320 &lt; −15 &lt; +850 &nbsp;·&nbsp; c) 15 mètres</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ══ COMPLETION ══ -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 1 terminé !</h2>
+    <p>Bravo ! Tu maîtrises les bases des nombres relatifs.<br>Tu as gagné <strong id="finalXP">0</strong> XP !</p>
+</div>
+
+<!-- ══ NAVIGATION ══ -->
+<div class="level-nav">
+    <h3>📚 Navigation — Nombres Relatifs</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_relatifs_niveau1.html" class="nav-btn current">▶ Niveau 1 — Introduction</a>
+        <a href="maths_relatifs_niveau2.html" class="nav-btn">Niveau 2 — Opérations</a>
+        <a href="maths_relatifs_niveau3.html" class="nav-btn">Niveau 3 — Règles de signe</a>
+        <a href="maths_relatifs_niveau4.html" class="nav-btn">Niveau 4 — Problèmes</a>
+        <a href="maths_relatifs_niveau5.html" class="nav-btn">Niveau 5 — Défi</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:1, 3:0, 4:0, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! Sur la droite graduée, −3 est plus à droite que −8. Entre deux négatifs, le plus proche de 0 est le plus grand.",
+    2:"✅ Parfait ! |−7| = 7. La valeur absolue, c'est la distance au zéro — toujours positive.",
+    3:"✅ Bravo ! Sur la droite graduée, de gauche à droite : −5 &lt; −1 &lt; 0 &lt; 3.",
+    4:"✅ Exact ! |−0| = |0| = 0. Le zéro est à distance zéro de lui-même.",
+    5:"✅ Bravo ! −8 &gt; −3 est FAUX. On a −8 &lt; −3 : −8 est plus loin du zéro, donc plus petit."
+};
+
+const QCM_ERR = {
+    1:"❌ C'est −3 le plus grand ! Sur la droite, −3 est plus à droite que −8. Entre négatifs : moins loin du zéro = plus grand.",
+    2:"❌ |−7| = 7. La valeur absolue = distance au zéro. Elle est toujours positive ou nulle.",
+    3:"❌ L'ordre croissant va du plus petit au plus grand. Sur la droite : −5 &lt; −1 &lt; 0 &lt; 3.",
+    4:"❌ |−0| = 0. Zéro n'est ni positif ni négatif, et sa distance à lui-même est 0.",
+    5:"❌ C'est FAUX ! −8 &lt; −3. Avoir une grande valeur absolue ne rend pas un négatif plus grand — c'est l'inverse !"
+};
+
+const FILL_DATA = {
+    1:{fields:['f1a','f1b'], accepted:[['3'],['3']],
+       msgOk:"✅ |−3| = 3. La distance de −3 au zéro est bien 3 unités.",
+       msgErr:"❌ −3 se situe à 3 unités de 0 et |−3| = 3."},
+    2:{fields:['f2a','f2b'], accepted:[['-4','−4'],['4']],
+       msgOk:"✅ −4 &gt; −9 car −4 est plus proche de 0 que −9 (|−4|=4 &lt; 9=|−9|).",
+       msgErr:"❌ Entre −4 et −9, le plus grand est −4 car |−4|=4 &lt; |−9|=9 (plus proche de 0)."},
+    3:{fields:['f3a','f3b'], accepted:[['-3','−3'],['7']],
+       msgOk:"✅ −10 &lt; −3 &lt; 0 &lt; 7. Sur la droite graduée : de gauche (petit) à droite (grand).",
+       msgErr:"❌ L'ordre est −10 &lt; −3 &lt; 0 &lt; 7 : les négatifs d'abord (−10 est plus loin de 0 que −3)."}
+};
+
+const TOTAL = 8;
+let score = 0;
+const qcmDone = {};
+const fillDone = {};
+
+function norm(s){ return s.trim().toLowerCase().replace(/\s+/g,''); }
+
+function updateBar(){
+    const pct = Math.round((score/TOTAL)*100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct+'%';
+    bar.classList.toggle('has-progress', score>0);
+    document.getElementById('progTxt').textContent = score+' / '+TOTAL+' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if(score >= Math.ceil(TOTAL * 0.8)){
+        localStorage.setItem('edu_completed_relatifs_1','1');
+        document.getElementById('finalXP').textContent = xp;
+        document.getElementById('completionBanner').classList.add('show');
+    }
+}
+
+function checkQCM(q, chosen){
+    if(qcmDone[q]) return;
+    qcmDone[q] = true;
+    const correct = QCM_CORRECT[q];
+    const isOk = (chosen === correct);
+    if(isOk) score++;
+    const btns = document.querySelectorAll('#q'+q+' .opt-btn');
+    btns.forEach((b,i) => {
+        b.disabled = true;
+        if(i === correct) b.classList.add(isOk ? 'correct' : 'show-correct');
+        if(i === chosen && !isOk) b.classList.add('wrong');
+    });
+    const fb = document.getElementById('qf'+q);
+    fb.className = 'q-feedback '+(isOk?'correct':'wrong');
+    fb.textContent = isOk ? QCM_OK[q] : QCM_ERR[q];
+    updateBar();
+}
+
+function checkFill(n){
+    if(fillDone[n]) return;
+    const d = FILL_DATA[n];
+    let allOk = true;
+    d.fields.forEach((id,i) => {
+        const inp = document.getElementById(id);
+        const val = norm(inp.value);
+        const ok  = d.accepted[i].map(norm).includes(val);
+        inp.disabled = true;
+        inp.classList.add(ok ? 'correct' : 'wrong');
+        if(!ok) allOk = false;
+    });
+    if(allOk){ score++; fillDone[n] = true; }
+    const fb = document.getElementById('ff'+n);
+    fb.className = 'fill-feedback show '+(allOk?'correct':'wrong');
+    fb.innerHTML = allOk ? d.msgOk : d.msgErr;
+    const btn = document.querySelector('#ff'+n).previousElementSibling;
+    btn.disabled = true;
+    updateBar();
+}
+
+function toggleSol(num){
+    const btn = document.getElementById('rb'+num);
+    const sol = document.getElementById('sol'+num);
+    const open = sol.classList.toggle('open');
+    btn.classList.toggle('open', open);
+}
+</script>
+
+</body>
+</html>

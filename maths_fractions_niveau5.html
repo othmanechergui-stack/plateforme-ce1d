@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Fractions · Niveau 5 — Défi CE1D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#00BFA5; --primary-dark:#00796B; --primary-mid:#26C6B3; --primary-bg:#E0F5F1;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#004D40 0%,#00BFA5 55%,#80CBC4 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(0,77,64,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#FF9600; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#00796B; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#004D40,#00BFA5,#80CBC4); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        /* Cheatsheet grid */
+        .cheat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin:16px 0; }
+        .cheat-item { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:13px 16px; }
+        .cheat-op { font-size:.78rem; font-weight:900; color:var(--primary-dark); text-transform:uppercase; letter-spacing:.6px; margin-bottom:5px; }
+        .cheat-formula { font-size:.92rem; font-weight:800; color:#333; font-family:'Courier New',monospace; line-height:1.6; }
+
+        .def-box { background:linear-gradient(135deg,#004D40,#00796B); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#80CBC4; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:70px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* CE1D card */
+        .ceid-card { border:2px solid #00BFA5; border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ceid-card:last-child { margin-bottom:0; }
+        .ceid-top { padding:14px 18px; background:var(--primary-bg); border-bottom:2px solid #80CBC4; }
+        .ceid-label { font-size:.73rem; font-weight:900; color:var(--primary-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ceid-stmt { font-size:.96rem; font-weight:700; line-height:1.7; }
+        .ceid-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--primary-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .ceid-btn:hover { background:var(--primary-bg); }
+        .ceid-solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid #80CBC4; animation:slideDown .3s ease; }
+        .ceid-solution.open { display:block; }
+
+        .completion { display:none; background:linear-gradient(135deg,#004D40,#00BFA5,#80CBC4); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #003330; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>½ Fractions · Défi CE1D</h1>
+            <p>Niveau 5 · Problèmes complexes style CE1D</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <span class="diff-label">Niveau 5 — Défi</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. RAPPEL LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">⭐</div>
+        <div>
+            <div class="card-title">Rappel — Tout ce qu'il faut savoir sur les fractions</div>
+            <div class="card-sub">Mini-cheatsheet · Formules clés pour le CE1D</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Avant de relever le défi, voici un résumé de toutes les techniques vues dans les niveaux 1 à 4.
+            Garde cette page sous les yeux !
+        </p>
+
+        <div class="cheat-grid">
+            <div class="cheat-item">
+                <div class="cheat-op">Simplification</div>
+                <div class="cheat-formula">a/b → (a÷PGCD) / (b÷PGCD)</div>
+            </div>
+            <div class="cheat-item">
+                <div class="cheat-op">Addition / Soustraction</div>
+                <div class="cheat-formula">Trouver le PPCM<br>convertir, puis calculer</div>
+            </div>
+            <div class="cheat-item">
+                <div class="cheat-op">Multiplication</div>
+                <div class="cheat-formula">(a/b) × (c/d) = (a×c)/(b×d)</div>
+            </div>
+            <div class="cheat-item">
+                <div class="cheat-op">Division</div>
+                <div class="cheat-formula">(a/b) ÷ (c/d) = (a/b) × (d/c)</div>
+            </div>
+            <div class="cheat-item">
+                <div class="cheat-op">Comparaison</div>
+                <div class="cheat-formula">Produit en croix :<br>a/b vs c/d → a×d vs b×c</div>
+            </div>
+            <div class="cheat-item">
+                <div class="cheat-op">Fraction d'une quantité</div>
+                <div class="cheat-formula">(p/q) × N = (p × N) / q</div>
+            </div>
+        </div>
+
+        <div class="rule-box">
+            <h3>💡 Astuce pour les problèmes à plusieurs étapes</h3>
+            <p>Lis <strong>tout le problème</strong> avant de commencer. Identifie ce qui est demandé.<br>
+            Calcule étape par étape en gardant les fractions (évite les décimaux intermédiaires).<br>
+            <strong>Vérifie</strong> que ta réponse a du sens dans le contexte.</p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM STYLE CE1D -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">✏️</div>
+        <div>
+            <div class="card-title">Exercices — QCM style CE1D</div>
+            <div class="card-sub">5 questions · Problèmes contextualisés · Toutes les notions</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Un gâteau est partagé. Clara prend <strong>3/8</strong> et Tom prend <strong>1/4</strong>. La part totale de Clara et Tom est :</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">A) 4/12</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">B) 5/8</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">C) 4/8</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">D) 1/2</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Une piscine contient <strong>2 400 litres</strong>. On en vide <strong>5/8</strong>. Combien reste-t-il ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">A) 900 L</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">B) 1 200 L</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">C) 1 500 L</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">D) 800 L</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Calcule <strong>3/4 ÷ 9/16 =</strong></div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">A) 27/64</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">B) 3/16</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">C) 3/4</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">D) 4/3</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Laquelle de ces égalités est <strong>FAUSSE</strong> ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">A) 6/9 = 2/3</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">B) 15/25 = 3/5</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">C) 4/6 = 2/4</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">D) 8/12 = 2/3</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Alexia a lu <strong>2/5</strong> d'un livre de <strong>300 pages</strong>. Combien de pages lui reste-t-il à lire ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">A) 120</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">B) 180</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">C) 150</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">D) 240</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon blue">✍️</div>
+        <div>
+            <div class="card-title">Exercices — Complète les calculs</div>
+            <div class="card-sub">3 exercices style CE1D · Réduction · Addition · Multiplication</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Un prix de 150 € est réduit de 2/5. Le nouveau prix est
+                <input class="blank" id="f1a" placeholder="?"> €.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                2/3 + 3/4 = <input class="blank" id="f2a" placeholder="?">/12 + <input class="blank" id="f2b" placeholder="?">/12 = <input class="blank" id="f2c" placeholder="?">/12.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                5/6 × 3/10 = <input class="blank" id="f3a" placeholder="?"> / <input class="blank" id="f3b" placeholder="?">
+                (forme irréductible).
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. CARTE CE1D — EXERCICES LONGS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📋</div>
+        <div>
+            <div class="card-title">Exercices style CE1D — Problèmes longs</div>
+            <div class="card-sub">3 problèmes complexes à plusieurs étapes · Type examen</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ceid-card">
+            <div class="ceid-top">
+                <div class="ceid-label">CE1D style 2025 — Budget de Léa</div>
+                <div class="ceid-stmt">
+                    Léa a économisé 840 €. Elle décide de :<br>
+                    • dépenser <strong>1/4</strong> pour des vêtements<br>
+                    • mettre <strong>1/3 de ce qui reste</strong> à la banque<br>
+                    • donner <strong>2/7 du reste</strong> à une association<br><br>
+                    a) Combien dépense-t-elle en vêtements ?<br>
+                    b) Combien met-elle à la banque ?<br>
+                    c) Combien donne-t-elle à l'association ?<br>
+                    d) Combien lui reste-t-il au final ?
+                </div>
+            </div>
+            <button class="ceid-btn" id="rbc1" onclick="toggleSolC(1)">📋 Voir la solution <span class="chevron">▼</span></button>
+            <div class="ceid-solution" id="solc1">
+                <div class="sol-step"><div class="sol-num">a</div><div class="sol-text">Vêtements : 1/4 × 840 = <strong>210 €</strong></div></div>
+                <div class="sol-step"><div class="sol-num">b</div><div class="sol-text">Reste après vêtements : 840 − 210 = 630 €. Banque : 1/3 × 630 = <strong>210 €</strong></div></div>
+                <div class="sol-step"><div class="sol-num">c</div><div class="sol-text">Reste après banque : 630 − 210 = 420 €. Association : 2/7 × 420 = <strong>120 €</strong></div></div>
+                <div class="sol-step"><div class="sol-num">d</div><div class="sol-text">Reste final : 420 − 120 = <strong>300 €</strong></div></div>
+                <div class="final-ans">✅ Léa garde <strong>300 €</strong>. (Vêtements 210 + Banque 210 + Association 120 + Reste 300 = 840 ✓)</div>
+            </div>
+        </div>
+
+        <div class="ceid-card">
+            <div class="ceid-top">
+                <div class="ceid-label">CE1D style 2024 — Calcul d'expressions</div>
+                <div class="ceid-stmt">
+                    Calcule et simplifie :<br>
+                    a) <strong>(2/3 + 1/6) × 3/5</strong><br>
+                    b) <strong>7/8 − (1/4 × 2/3)</strong>
+                </div>
+            </div>
+            <button class="ceid-btn" id="rbc2" onclick="toggleSolC(2)">📋 Voir la solution <span class="chevron">▼</span></button>
+            <div class="ceid-solution" id="solc2">
+                <div class="sol-step"><div class="sol-num">a</div><div class="sol-text">2/3 + 1/6 : PPCM(3,6)=6 → 4/6 + 1/6 = 5/6<br>Puis 5/6 × 3/5 = 15/30 = <strong>1/2</strong></div></div>
+                <div class="sol-step"><div class="sol-num">b</div><div class="sol-text">1/4 × 2/3 = 2/12 = 1/6<br>Puis 7/8 − 1/6 : PPCM(8,6)=24 → 21/24 − 4/24 = <strong>17/24</strong></div></div>
+                <div class="final-ans">✅ a) <strong>1/2</strong> &nbsp;&nbsp; b) <strong>17/24</strong></div>
+            </div>
+        </div>
+
+        <div class="ceid-card">
+            <div class="ceid-top">
+                <div class="ceid-label">CE1D style 2023 — Sport à l'école</div>
+                <div class="ceid-stmt">
+                    Dans une école, <strong>3/5 des élèves pratiquent un sport</strong>. Parmi les sportifs, <strong>4/9 font de la natation</strong> et <strong>1/3 font du football</strong>. Les autres font un autre sport.<br><br>
+                    L'école compte 540 élèves.<br>
+                    a) Combien d'élèves font de la natation ?<br>
+                    b) Combien font du football ?<br>
+                    c) Quelle fraction des sportifs fait un autre sport ?
+                </div>
+            </div>
+            <button class="ceid-btn" id="rbc3" onclick="toggleSolC(3)">📋 Voir la solution <span class="chevron">▼</span></button>
+            <div class="ceid-solution" id="solc3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Sportifs : 3/5 × 540 = <strong>324 élèves</strong></div></div>
+                <div class="sol-step"><div class="sol-num">a</div><div class="sol-text">Natation : 4/9 × 324 = <strong>144 élèves</strong></div></div>
+                <div class="sol-step"><div class="sol-num">b</div><div class="sol-text">Football : 1/3 × 324 = <strong>108 élèves</strong></div></div>
+                <div class="sol-step"><div class="sol-num">c</div><div class="sol-text">Autre sport : 324 − 144 − 108 = 72 élèves → Fraction : 72/324. PGCD(72,324)=36 → <strong>2/9</strong></div></div>
+                <div class="final-ans">✅ Natation : <strong>144</strong>, Football : <strong>108</strong>, Fraction autre sport : <strong>2/9</strong> des sportifs.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🏆 🌟 🏆</div>
+    <h2>Niveau 5 — Défi terminé !</h2>
+    <p>Tu maîtrises les fractions comme un pro CE1D !<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Félicitations !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Fractions</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_fractions_niveau1.html" class="nav-btn">Niveau 1 — Simplification</a>
+        <a href="maths_fractions_niveau2.html" class="nav-btn">Niveau 2 — Opérations</a>
+        <a href="maths_fractions_niveau3.html" class="nav-btn">Niveau 3 — Comparaison</a>
+        <a href="maths_fractions_niveau4.html" class="nav-btn">Niveau 4 — Fraction d'une quantité</a>
+        <a href="maths_fractions_niveau5.html" class="nav-btn current">▶ Niveau 5 — Défi CE1D</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:0, 3:3, 4:2, 5:1};
+
+const QCM_OK = {
+    1:"✅ 1/4 = 2/8. Donc 3/8 + 2/8 = 5/8.",
+    2:"✅ 5/8 vidé = 5/8 × 2400 = 1500 L. Reste = 2400 − 1500 = 900 L.",
+    3:"✅ Diviser par 9/16 = multiplier par 16/9. 3/4 × 16/9 = 48/36 = 4/3.",
+    4:"✅ 4/6 = 2/3 (pas 2/4 = 1/2). Produit en croix : 4×4=16 ≠ 6×2=12. Donc 4/6 ≠ 2/4.",
+    5:"✅ Pages lues : 2/5 × 300 = 120. Reste : 300 − 120 = 180 pages."
+};
+
+const QCM_ERR = {
+    1:"❌ 1/4 = 2/8. Donc 3/8 + 1/4 = 3/8 + 2/8 = 5/8.",
+    2:"❌ 5/8 de 2400 = 2400÷8×5 = 1500 L (vidé). Reste = 2400−1500 = 900 L.",
+    3:"❌ Pour diviser par 9/16, multiplie par 16/9 : 3/4 × 16/9 = 48/36 = 4/3.",
+    4:"❌ A) 6/9=2/3 ✓ (÷3), B) 15/25=3/5 ✓ (÷5), C) 4/6=2/3 ≠ 2/4=1/2 ✗ FAUSSE, D) 8/12=2/3 ✓ (÷4).",
+    5:"❌ Pages lues : 2/5 × 300 = 120. Pages restantes = 300 − 120 = 180."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['90']],
+        msgOk:"✅ Réduction = 2/5 × 150 = 60 €. Nouveau prix = 150 − 60 = 90 €.",
+        msgErr:"❌ Réduction = 2/5 × 150 = 60 €. Nouveau prix = 150 − 60 = 90 €."
+    },
+    2:{
+        fields:['f2a','f2b','f2c'],
+        accepted:[['8'],['9'],['17']],
+        msgOk:"✅ 2/3 = 8/12 et 3/4 = 9/12. Donc 8/12 + 9/12 = 17/12.",
+        msgErr:"❌ 2/3 = 8/12 (×4) et 3/4 = 9/12 (×3). Résultat = 8+9 = 17 → 17/12."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['1'],['4']],
+        msgOk:"✅ 5×3=15 et 6×10=60 → 15/60. PGCD(15,60)=15 → 1/4.",
+        msgErr:"❌ 5×3=15 et 6×10=60 → 15/60. Simplifie : 15÷15=1 et 60÷15=4 → 1/4."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_fractions_5', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m);
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleSolC(id) {
+    const panel = document.getElementById('solc' + id);
+    const btn   = document.getElementById('rbc' + id);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer la solution <span class="chevron">▼</span>'
+        : '📋 Voir la solution <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

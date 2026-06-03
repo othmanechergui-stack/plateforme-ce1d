@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique — Pression des solides · Niveau 4</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#A560D4; --primary-dark:#7B3FA8; --primary-mid:#BB6EE0; --primary-bg:#F5EEFF;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#4A148C 0%,#A560D4 55%,#CE93D8 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(74,20,140,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#A560D4; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#A560D4; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#4A148C,#A560D4,#CE93D8); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.purple { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .formula-hero { background:linear-gradient(135deg,var(--primary-bg),#E1BEE7); border:2px solid #CE93D8; border-radius:14px; padding:18px 22px; margin-bottom:20px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+        .formula-big { font-size:1.6rem; font-weight:900; color:var(--primary-dark); font-family:'Courier New',monospace; }
+        .formula-details { font-size:.9rem; color:#555; line-height:2; }
+        .formula-details strong { color:var(--primary-dark); }
+
+        /* Steps flow */
+        .steps-flow { display:flex; flex-direction:column; gap:0; margin:20px 0; }
+        .step-row { display:flex; align-items:flex-start; gap:14px; padding:14px 18px; background:#FAFAFA; border:2px solid var(--border); }
+        .step-row:first-child { border-radius:14px 14px 0 0; }
+        .step-row:last-child  { border-radius:0 0 14px 14px; }
+        .step-row:not(:first-child) { border-top:none; }
+        .step-num { width:32px; height:32px; border-radius:50%; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-size:.85rem; font-weight:900; flex-shrink:0; }
+        .step-content { flex:1; }
+        .step-content h4 { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin-bottom:4px; }
+        .step-content p  { font-size:.86rem; color:#555; line-height:1.6; }
+
+        /* Design box */
+        .design-box { background:linear-gradient(135deg,#4A148C,#7B3FA8); color:white; border-radius:14px; padding:18px 22px; margin:18px 0; }
+        .design-box h3 { font-size:1rem; font-weight:900; color:#E1BEE7; margin-bottom:10px; }
+        .design-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .design-box strong { color:#FFD54F; }
+        .design-box .formula-inline { font-family:'Courier New',monospace; font-size:1.1rem; font-weight:900; background:rgba(255,255,255,.15); border-radius:8px; padding:4px 12px; display:inline-block; margin:6px 0; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:20px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        /* Missing step exercise */
+        .gap-card { border:2px solid var(--primary); border-radius:12px; overflow:hidden; margin-bottom:16px; }
+        .gap-card:last-child { margin-bottom:0; }
+        .gap-top { padding:12px 18px; background:var(--primary-bg); border-bottom:2px solid #CE93D8; }
+        .gap-label { font-size:.72rem; font-weight:900; color:var(--primary-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .gap-steps { padding:14px 18px; display:flex; flex-direction:column; gap:8px; font-size:.9rem; }
+        .gap-line { display:flex; align-items:center; gap:10px; }
+        .gap-circle { width:22px; height:22px; border-radius:50%; background:var(--primary); color:white; font-size:.7rem; font-weight:900; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+        .gap-text { flex:1; }
+        .gap-blank { display:inline-block; border:none; border-bottom:2.5px solid var(--primary); background:transparent; font-family:inherit; font-size:.92rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .gap-blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .gap-blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .gap-verify { display:flex; gap:10px; align-items:center; padding:10px 18px; background:#FAFAFA; border-top:2px solid var(--border); }
+        .gap-btn { padding:7px 16px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.86rem; font-weight:900; cursor:pointer; box-shadow:0 3px 0 var(--primary-dark); transition:all .12s; }
+        .gap-btn:hover:not(:disabled) { transform:translateY(-1px); }
+        .gap-btn:disabled { background:#ccc; box-shadow:0 3px 0 #aaa; cursor:not-allowed; }
+        .gap-feedback { font-size:.84rem; font-weight:700; }
+        .gap-feedback.correct { color:var(--green-dark); }
+        .gap-feedback.wrong   { color:var(--red-dark); }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* QCM */
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        /* Fill in */
+        .fill-item { background:var(--orange-bg); border:2px solid #FFD08A; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--orange); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:2.5; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--orange); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:90px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--orange); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--orange-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* Calc exercises */
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* Calculator */
+        .calc-section { display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start; }
+        .calc-tip { flex:1; min-width:220px; background:var(--primary-bg); border:2px solid #CE93D8; border-radius:14px; padding:16px 18px; font-size:.88rem; color:#555; line-height:1.7; }
+        .calc-tip h4 { font-size:.92rem; font-weight:900; color:var(--primary-dark); margin-bottom:8px; }
+        .calc-tip ul  { padding-left:16px; }
+        .calc-tip li  { margin-bottom:4px; }
+        .calculator { background:#1E1E2E; border-radius:16px; padding:16px; width:280px; flex-shrink:0; box-shadow:0 6px 20px rgba(0,0,0,.25); }
+        .calc-display-wrap { background:#0D1117; border-radius:10px; padding:10px 14px; margin-bottom:12px; min-height:56px; display:flex; flex-direction:column; align-items:flex-end; justify-content:flex-end; }
+        .calc-expr { font-size:.78rem; color:#666; font-family:'Courier New',monospace; min-height:16px; word-break:break-all; text-align:right; }
+        .calc-display { font-family:'Courier New',monospace; font-size:2rem; font-weight:700; color:#7AE832; word-break:break-all; text-align:right; line-height:1.1; }
+        .calc-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; }
+        .calc-btn { padding:13px 6px; border-radius:9px; border:none; font-family:inherit; font-size:1rem; font-weight:800; cursor:pointer; transition:all .1s ease; }
+        .calc-btn:active { transform:scale(.93); }
+        .calc-btn.num   { background:#2D2D44; color:#EEE; }
+        .calc-btn.num:hover { background:#3A3A58; }
+        .calc-btn.op    { background:var(--primary); color:white; }
+        .calc-btn.op:hover { background:var(--primary-dark); }
+        .calc-btn.eq    { background:var(--green); color:white; }
+        .calc-btn.eq:hover { background:var(--green-dark); }
+        .calc-btn.clr   { background:var(--red); color:white; font-size:.85rem; }
+        .calc-btn.clr:hover { background:var(--red-dark); }
+        .calc-btn.del   { background:#444466; color:#CCC; font-size:.85rem; }
+        .calc-btn.del:hover { background:#555577; }
+        .calc-btn.zero  { grid-column:span 2; }
+
+        .completion { display:none; background:linear-gradient(135deg,#4A148C,#A560D4,#CE93D8); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #2E0070; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{opacity:0;transform:scale(.4)} 100%{opacity:1;transform:scale(1)} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+
+        @media(max-width:600px){
+            .header-inner { flex-wrap:wrap; }
+            .header-center { order:-1; flex-basis:100%; }
+            .calc-section { flex-direction:column; }
+            .calculator { width:100%; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>⚡ Pression des solides</h1>
+            <p>Physique · Niveau 4 · CE1D</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⚡ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 4 — Expert</span>
+        </div>
+        <div class="progress-labels" style="margin-top:8px;"><span>Progression</span><span id="progTxt">0 / 8 bonnes réponses</span></div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">📚</div>
+        <div>
+            <div class="card-title">La leçon — Problèmes contextualisés</div>
+            <div class="card-sub">Problèmes multi-étapes · Conception · Étape manquante</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            À ce niveau, les problèmes demandent <strong>plusieurs étapes enchaînées</strong> : calculer d'abord la force (F = m × g), puis la pression.
+            Ou encore <strong>concevoir</strong> un objet en partant d'une contrainte de pression. Il faut être méthodique.
+        </p>
+
+        <div class="formula-hero">
+            <div class="formula-big">F = m × g &nbsp;→&nbsp; P = F ÷ S</div>
+            <div class="formula-details">
+                <strong>m</strong> en kg · <strong>g = 10 N/kg</strong> · <strong>F</strong> en N · <strong>S</strong> en m²<br>
+                <strong>Résultat P</strong> en Pascal (Pa)
+            </div>
+        </div>
+
+        <!-- MÉTHODE MULTI-ÉTAPES -->
+        <div class="steps-flow">
+            <div class="step-row">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h4>Lire les données et identifier ce qui est inconnu</h4>
+                    <p>Quelles grandeurs sont données ? (masse, force, surface, pression) Quelle est la question ?</p>
+                </div>
+            </div>
+            <div class="step-row">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h4>Convertir toutes les unités</h4>
+                    <p>g → kg (÷1000) · cm² → m² (÷10 000) · si masse → force : F = m × 10</p>
+                </div>
+            </div>
+            <div class="step-row">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h4>Choisir la bonne formule et calculer</h4>
+                    <p>P = F÷S · F = P×S · S = F÷P · Si appuis multiples : diviser F par le nombre d'appuis d'abord.</p>
+                </div>
+            </div>
+            <div class="step-row">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <h4>Vérifier l'unité et la cohérence du résultat</h4>
+                    <p>Le résultat est-il en Pa, N ou m² selon la question ? L'ordre de grandeur est-il réaliste ?</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONCEPTION -->
+        <div class="design-box">
+            <h3>🔧 Nouveau : concevoir un objet à partir d'une contrainte</h3>
+            <p>
+                Parfois on te demande : <strong>« Quelle surface minimale faut-il pour ne pas dépasser une pression P_max ? »</strong><br>
+                On utilise simplement la formule inversée :
+            </p>
+            <div class="formula-inline">S_min = F ÷ P_max</div>
+            <p style="margin-top:8px;">
+                Exemple : Force = 300 N, P_max = 500 Pa<br>
+                → S_min = 300 ÷ 500 = <strong>0,6 m²</strong><br>
+                Le socle doit avoir au moins 0,6 m² pour ne pas dépasser 500 Pa.
+            </p>
+        </div>
+
+        <!-- ÉTAPE MANQUANTE -->
+        <div class="rule-box">
+            <h3>🔍 Trouver l'étape manquante dans un calcul</h3>
+            <p>
+                Un calcul incomplet te montre plusieurs lignes avec un <strong>□ à compléter</strong>.
+                Lis les lignes avant et après : quelle opération relie les deux valeurs connues ?<br>
+                <strong>Astuce :</strong> vérifie toujours que les unités correspondent à chaque étape.
+            </p>
+        </div>
+
+        <div class="trap-box">
+            <h3>🪤 Pièges du niveau 4</h3>
+            <p>
+                <strong>Piège 1 :</strong> Oublier que la <em>masse</em> doit être convertie en <em>force</em> avant P = F÷S.<br>
+                <strong>Piège 2 :</strong> Pour la surface minimale, utiliser P_max = F×S au lieu de S = F÷P_max.<br>
+                <strong>Piège 3 :</strong> Ne pas convertir les unités avant de calculer l'étape manquante.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Problèmes multi-étapes · Conception</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Un bloc de <strong>masse 8 kg</strong> repose sur une surface de <strong>0,04 m²</strong>. Quelle est la pression ? <em>(g = 10 N/kg)</em></div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">P = 8 ÷ 0,04 = 200 Pa</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">P = 80 ÷ 0,04 = 2 000 Pa</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">P = 8 × 0,04 = 0,32 Pa</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">P = 80 × 0,04 = 3,2 Pa</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Tu veux qu'un objet de <strong>450 N</strong> n'exerce pas plus de <strong>P_max = 900 Pa</strong>. Quelle surface minimale faut-il ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">S = 900 × 450 = 405 000 m²</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">S = 900 ÷ 450 = 2 m²</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">S = 450 ÷ 900 = 0,5 m²</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">S = 450 × 900 = 405 000 m²</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Dans ce calcul, quelle est l'étape manquante ?<br><code>Masse = 3 kg → F = □ N → P = F ÷ 0,05 = □ Pa</code></div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">F = 3 ÷ 10 = 0,3 N → P = 6 Pa</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">F = 3 × 10 = 30 N → P = 600 Pa</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">F = 3 + 10 = 13 N → P = 260 Pa</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">F = 3 × 100 = 300 N → P = 6 000 Pa</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Un escabeau de <strong>3 kg</strong> repose sur <strong>3 pieds</strong> (S = 10 cm² chacun). Quelle est la pression sous chaque pied ? <em>(g = 10)</em></div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">P = 30 ÷ 0,001 = 30 000 Pa</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">P = 10 ÷ 0,001 = 10 000 Pa</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">P = 10 ÷ 10 = 1 Pa</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">P = 30 ÷ 10 = 3 Pa</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Une caisse doit exercer au maximum <strong>P = 2 000 Pa</strong>. Si sa surface est <strong>0,3 m²</strong>, quelle force maximale peut-elle exercer ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">F = 2 000 ÷ 0,3 ≈ 6 667 N</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">F = 2 000 × 0,3 = 600 N</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">F = 2 000 + 0,3 = 2 000,3 N</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">F = 0,3 ÷ 2 000 = 0,00015 N</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. ÉTAPES MANQUANTES -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">🔍</div>
+        <div>
+            <div class="card-title">Étapes manquantes</div>
+            <div class="card-sub">3 calculs incomplets à compléter</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Gap 1 -->
+        <div class="gap-card">
+            <div class="gap-top">
+                <div class="gap-label">Calcul 1 — Trouver l'étape manquante</div>
+                <div style="font-size:.9rem;font-weight:700;">Masse = 5 kg. Surface = 0,25 m². Trouver P.</div>
+            </div>
+            <div class="gap-steps">
+                <div class="gap-line">
+                    <div class="gap-circle">1</div>
+                    <div class="gap-text">F = 5 × 10 = <input class="gap-blank" id="g1a" placeholder="?"> N</div>
+                </div>
+                <div class="gap-line">
+                    <div class="gap-circle">2</div>
+                    <div class="gap-text">P = <input class="gap-blank" id="g1b" placeholder="?"> ÷ 0,25 = <input class="gap-blank" id="g1c" placeholder="?"> Pa</div>
+                </div>
+            </div>
+            <div class="gap-verify">
+                <button class="gap-btn" id="gbtn1" onclick="checkGap(1)">Vérifier ✓</button>
+                <span class="gap-feedback" id="gf1"></span>
+            </div>
+        </div>
+
+        <!-- Gap 2 -->
+        <div class="gap-card">
+            <div class="gap-top">
+                <div class="gap-label">Calcul 2 — Trouver l'étape manquante</div>
+                <div style="font-size:.9rem;font-weight:700;">P_max = 500 Pa. Force = 300 N. Quelle surface minimale ?</div>
+            </div>
+            <div class="gap-steps">
+                <div class="gap-line">
+                    <div class="gap-circle">1</div>
+                    <div class="gap-text">Formule : S = F ÷ <input class="gap-blank" id="g2a" placeholder="?"></div>
+                </div>
+                <div class="gap-line">
+                    <div class="gap-circle">2</div>
+                    <div class="gap-text">S = 300 ÷ 500 = <input class="gap-blank" id="g2b" placeholder="?"> m²</div>
+                </div>
+            </div>
+            <div class="gap-verify">
+                <button class="gap-btn" id="gbtn2" onclick="checkGap(2)">Vérifier ✓</button>
+                <span class="gap-feedback" id="gf2"></span>
+            </div>
+        </div>
+
+        <!-- Gap 3 -->
+        <div class="gap-card">
+            <div class="gap-top">
+                <div class="gap-label">Calcul 3 — Trouver l'étape manquante</div>
+                <div style="font-size:.9rem;font-weight:700;">Table 3 pieds, masse = 12 kg, S_pied = 20 cm². Pression sous chaque pied ?</div>
+            </div>
+            <div class="gap-steps">
+                <div class="gap-line">
+                    <div class="gap-circle">1</div>
+                    <div class="gap-text">F_total = 12 × 10 = <input class="gap-blank" id="g3a" placeholder="?"> N</div>
+                </div>
+                <div class="gap-line">
+                    <div class="gap-circle">2</div>
+                    <div class="gap-text">F_pied = <input class="gap-blank" id="g3b" placeholder="?"> ÷ 3 = <input class="gap-blank" id="g3c" placeholder="?"> N</div>
+                </div>
+                <div class="gap-line">
+                    <div class="gap-circle">3</div>
+                    <div class="gap-text">S = 20 cm² = <input class="gap-blank" id="g3d" placeholder="?"> m²</div>
+                </div>
+                <div class="gap-line">
+                    <div class="gap-circle">4</div>
+                    <div class="gap-text">P = 40 ÷ 0,002 = <input class="gap-blank" id="g3e" placeholder="?"> Pa</div>
+                </div>
+            </div>
+            <div class="gap-verify">
+                <button class="gap-btn" id="gbtn3" onclick="checkGap(3)">Vérifier ✓</button>
+                <span class="gap-feedback" id="gf3"></span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES + CALCULATRICE -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🔢</div>
+        <div>
+            <div class="card-title">Exercices de calcul</div>
+            <div class="card-sub">3 exercices contextualisés · Calculatrice intégrée</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="calc-section" style="margin-bottom:24px;">
+            <div class="calc-tip">
+                <h4>🧮 Méthode multi-étapes</h4>
+                <ul>
+                    <li>Si masse donnée : <strong>F = m × 10</strong></li>
+                    <li>Si plusieurs pieds : <strong>F_pied = F ÷ n</strong></li>
+                    <li>Conversion : <strong>cm² ÷ 10 000 = m²</strong></li>
+                    <li>Conception : <strong>S_min = F ÷ P_max</strong></li>
+                </ul>
+            </div>
+            <div class="calculator">
+                <div class="calc-display-wrap">
+                    <div class="calc-expr" id="calcExprDisplay"></div>
+                    <div class="calc-display" id="calcDisplay">0</div>
+                </div>
+                <div class="calc-grid">
+                    <button class="calc-btn clr" onclick="calcClear()">C</button>
+                    <button class="calc-btn del" onclick="calcDel()">⌫</button>
+                    <button class="calc-btn op"  onclick="calcOper('%')">%</button>
+                    <button class="calc-btn op"  onclick="calcOper('÷')">÷</button>
+                    <button class="calc-btn num" onclick="calcDigit('7')">7</button>
+                    <button class="calc-btn num" onclick="calcDigit('8')">8</button>
+                    <button class="calc-btn num" onclick="calcDigit('9')">9</button>
+                    <button class="calc-btn op"  onclick="calcOper('×')">×</button>
+                    <button class="calc-btn num" onclick="calcDigit('4')">4</button>
+                    <button class="calc-btn num" onclick="calcDigit('5')">5</button>
+                    <button class="calc-btn num" onclick="calcDigit('6')">6</button>
+                    <button class="calc-btn op"  onclick="calcOper('-')">−</button>
+                    <button class="calc-btn num" onclick="calcDigit('1')">1</button>
+                    <button class="calc-btn num" onclick="calcDigit('2')">2</button>
+                    <button class="calc-btn num" onclick="calcDigit('3')">3</button>
+                    <button class="calc-btn op"  onclick="calcOper('+')">+</button>
+                    <button class="calc-btn num zero" onclick="calcDigit('0')">0</button>
+                    <button class="calc-btn num" onclick="calcDigit('.')">.</button>
+                    <button class="calc-btn eq"  onclick="calcEquals()">=</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Sculpture sur socle</div>
+                <div class="ex-stmt">Une sculpture de <strong>masse 15 kg</strong> est posée sur un socle carré de <strong>50 cm de côté</strong>. Calcule la pression sur le sol. <em>(g = 10)</em></div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">F = 15 × 10 = <strong>150 N</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">S = 0,50 × 0,50 = <strong>0,25 m²</strong> (50 cm = 0,50 m)</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">P = 150 ÷ 0,25 = <strong>600 Pa</strong></div></div>
+                <div class="final-ans">✅ P = <strong>600 Pa</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Conception d'un pied de machine</div>
+                <div class="ex-stmt">Une machine industrielle de <strong>2 400 N</strong> repose sur <strong>4 pieds</strong>. La pression sur le sol ne doit pas dépasser <strong>P_max = 80 000 Pa</strong>. Quelle doit être la surface minimale de chaque pied (en cm²) ?</div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">F par pied = 2 400 ÷ 4 = <strong>600 N</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">S_min = F_pied ÷ P_max = 600 ÷ 80 000 = <strong>0,0075 m²</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Convertir en cm² : 0,0075 × 10 000 = <strong>75 cm²</strong></div></div>
+                <div class="final-ans">✅ Surface minimale = <strong>75 cm²</strong> par pied (environ 8,7 cm × 8,7 cm)</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Problème complet à 5 étapes</div>
+                <div class="ex-stmt">Un réfrigérateur de <strong>masse 60 kg</strong> repose sur <strong>4 petits pieds ronds</strong> de diamètre <strong>4 cm</strong> chacun. Calcule la pression sous chaque pied. <em>(g = 10, S_disque = π × r² ≈ 3,14 × r²)</em></div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">F_total = 60 × 10 = <strong>600 N</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">F_pied = 600 ÷ 4 = <strong>150 N</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Rayon : r = 4 ÷ 2 = 2 cm = <strong>0,02 m</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">S_pied = π × r² = 3,14 × (0,02)² = 3,14 × 0,0004 = <strong>0,001256 m²</strong></div></div>
+                <div class="sol-step"><div class="sol-num">5</div><div class="sol-text">P = 150 ÷ 0,001256 ≈ <strong>119 426 Pa</strong> ≈ 120 kPa</div></div>
+                <div class="final-ans">✅ P ≈ <strong>120 000 Pa</strong> = 120 kPa sous chaque pied</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 5. EXERCICES SITUATIONNELS CE1D -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">🌍</div>
+        <div>
+            <div class="card-title">Situations réelles — Style CE1D</div>
+            <div class="card-sub">2 situations · Analyse · Enfoncement · Conception</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- ══ Situation 1 : Dinosaures calcul complet — CE1D 2025 Q10 ══ -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Situation 1 — Empreintes de dinosaures 🦕 (CE1D 2025 — calcul complet)</div>
+                <div class="ex-stmt">
+                    <strong>Contexte :</strong> Des paléontologues mesurent les empreintes laissées par trois dinosaures dans de la boue. <em>(g = 10 N/kg)</em>
+                    <br><br>
+                    <table style="border-collapse:collapse;width:100%;font-size:.9rem;margin:6px 0;">
+                        <tr style="background:#E8F5E9;">
+                            <th style="border:1.5px solid #A5D6A7;padding:6px 10px;text-align:left;">Dinosaure</th>
+                            <th style="border:1.5px solid #A5D6A7;padding:6px 10px;text-align:center;">Masse</th>
+                            <th style="border:1.5px solid #A5D6A7;padding:6px 10px;text-align:center;">Surface d'appui</th>
+                        </tr>
+                        <tr>
+                            <td style="border:1.5px solid #A5D6A7;padding:6px 10px;font-weight:700;">Camptosaurus</td>
+                            <td style="border:1.5px solid #A5D6A7;padding:6px 10px;text-align:center;">720 kg</td>
+                            <td style="border:1.5px solid #A5D6A7;padding:6px 10px;text-align:center;">500 cm²</td>
+                        </tr>
+                        <tr style="background:#F1F8E9;">
+                            <td style="border:1.5px solid #A5D6A7;padding:6px 10px;font-weight:700;">Tricératops</td>
+                            <td style="border:1.5px solid #A5D6A7;padding:6px 10px;text-align:center;">8 000 kg</td>
+                            <td style="border:1.5px solid #A5D6A7;padding:6px 10px;text-align:center;">4 000 cm²</td>
+                        </tr>
+                        <tr>
+                            <td style="border:1.5px solid #A5D6A7;padding:6px 10px;font-weight:700;">Shantungosaurus</td>
+                            <td style="border:1.5px solid #A5D6A7;padding:6px 10px;text-align:center;">14 400 kg</td>
+                            <td style="border:1.5px solid #A5D6A7;padding:6px 10px;text-align:center;">6 000 cm²</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <strong>a)</strong> Calcule la pression exercée par chacun des trois dinosaures sur la boue.<br>
+                    <strong>b)</strong> Classe les trois dinosaures du plus grand au plus petit enfoncement.<br>
+                    <strong>c)</strong> Le Shantungosaurus est le plus lourd. Est-ce lui qui s'est le plus enfoncé ? Explique.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rbs1" onclick="toggleSol('s1')">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sols1">
+                <div style="font-size:.82rem;font-weight:900;color:var(--green-dark);text-transform:uppercase;letter-spacing:.7px;margin-bottom:12px;">a) Calcul des 3 pressions</div>
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Camptosaurus : F = 720×10 = 7 200 N | S = 500 cm² = 0,050 m² → P = 7 200 ÷ 0,050 = <strong>144 000 Pa</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Tricératops : F = 8 000×10 = 80 000 N | S = 4 000 cm² = 0,40 m² → P = 80 000 ÷ 0,40 = <strong>200 000 Pa</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Shantungosaurus : F = 14 400×10 = 144 000 N | S = 6 000 cm² = 0,60 m² → P = 144 000 ÷ 0,60 = <strong>240 000 Pa</strong></div></div>
+                <div style="font-size:.82rem;font-weight:900;color:var(--green-dark);text-transform:uppercase;letter-spacing:.7px;margin:14px 0 8px;">b) Classement</div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">Shantungosaurus (240 000 Pa) &gt; Tricératops (200 000 Pa) &gt; Camptosaurus (144 000 Pa)</div></div>
+                <div style="font-size:.82rem;font-weight:900;color:var(--green-dark);text-transform:uppercase;letter-spacing:.7px;margin:14px 0 8px;">c) Analyse</div>
+                <div class="final-ans">
+                    <strong>Oui</strong>, c'est bien le Shantungosaurus qui s'enfonce le plus — mais pas uniquement parce qu'il est le plus lourd.<br>
+                    C'est le rapport F/S qui détermine l'enfoncement. Son rapport (240 000 Pa) est le plus élevé car sa surface
+                    n'a pas augmenté aussi vite que sa masse par rapport aux autres dinosaures.
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ Situation 2 : Entraînement de boxe — CE1D 2021 Q10 ══ -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Situation 2 — Entraînement de boxe 🥊 (style CE1D 2021)</div>
+                <div class="ex-stmt">
+                    <strong>Contexte :</strong> Un boxeur frappe un sac d'entraînement avec une force F = 400 N.
+                    <br>• Avec un gant de boxe : surface de contact = 180 cm²
+                    <br>• Avec le poing nu : surface de contact = 40 cm²
+                    <br><em>(g = 10 N/kg)</em>
+                    <br><br>
+                    <strong>a)</strong> Calcule la pression exercée sur le sac dans chaque cas.<br>
+                    <strong>b)</strong> Un entraîneur dit que « le gant protège le sac mais pas le boxeur ».
+                    Utilise tes résultats pour expliquer <strong>deux effets différents des forces</strong> mis en jeu.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rbs2" onclick="toggleSol('s2')">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sols2">
+                <div style="font-size:.82rem;font-weight:900;color:var(--green-dark);text-transform:uppercase;letter-spacing:.7px;margin-bottom:12px;">a) Calcul des pressions</div>
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Avec gant : S = 180 cm² = 0,018 m² → P = 400 ÷ 0,018 ≈ <strong>22 222 Pa</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Poing nu : S = 40 cm² = 0,004 m² → P = 400 ÷ 0,004 = <strong>100 000 Pa</strong></div></div>
+                <div style="font-size:.82rem;font-weight:900;color:var(--green-dark);text-transform:uppercase;letter-spacing:.7px;margin:14px 0 8px;">b) Deux effets des forces</div>
+                <div class="sol-step"><div class="sol-num">①</div><div class="sol-text"><strong>Effet déformant :</strong> Le gant réduit la pression sur le sac (22 222 Pa contre 100 000 Pa) → <strong>moins de déformation</strong> du sac. C'est ainsi qu'il « protège le sac ».</div></div>
+                <div class="sol-step"><div class="sol-num">②</div><div class="sol-text"><strong>Effet déformant sur le boxeur :</strong> Par réaction, le sac exerce la même force sur la main. Avec le gant, la pression reçue par la main est 4,5× plus faible → <strong>le boxeur est aussi protégé</strong> — l'entraîneur avait tort !</div></div>
+                <div class="final-ans">
+                    En augmentant la surface de contact, le gant réduit la pression dans les deux sens :
+                    il protège à la fois le sac <strong>et</strong> le poing du boxeur.<br>
+                    Les deux effets (déformation du sac, protection de la main) découlent du même principe : <strong>P = F ÷ S</strong>.
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ Situation 3 : Danseuses au plancher limite — CE1D 2023 Q2 étendu ══ -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Situation 3 — Quatre danseuses, un plancher fragile 💃 (style CE1D 2023)</div>
+                <div class="ex-stmt">
+                    <strong>Contexte :</strong> Un plancher de scène peut supporter <strong>P<sub>max</sub> = 15 000 Pa</strong>.
+                    Quatre danseuses de masses différentes pratiquent la même danse sur pointes (S = 30 cm²). <em>(g = 10 N/kg)</em>
+                    <br><br>
+                    <table style="border-collapse:collapse;width:100%;font-size:.9rem;margin:6px 0;">
+                        <tr style="background:#E8F5E9;">
+                            <th style="border:1.5px solid #A5D6A7;padding:6px 10px;text-align:left;">Danseuse</th>
+                            <th style="border:1.5px solid #A5D6A7;padding:6px 10px;text-align:center;">Masse</th>
+                        </tr>
+                        <tr><td style="border:1.5px solid #A5D6A7;padding:6px 10px;">Amina</td><td style="border:1.5px solid #A5D6A7;padding:6px 10px;text-align:center;">45 kg</td></tr>
+                        <tr style="background:#F1F8E9;"><td style="border:1.5px solid #A5D6A7;padding:6px 10px;">Béatrice</td><td style="border:1.5px solid #A5D6A7;padding:6px 10px;text-align:center;">50 kg</td></tr>
+                        <tr><td style="border:1.5px solid #A5D6A7;padding:6px 10px;">Clara</td><td style="border:1.5px solid #A5D6A7;padding:6px 10px;text-align:center;">55 kg</td></tr>
+                        <tr style="background:#F1F8E9;"><td style="border:1.5px solid #A5D6A7;padding:6px 10px;">Diana</td><td style="border:1.5px solid #A5D6A7;padding:6px 10px;text-align:center;">60 kg</td></tr>
+                    </table>
+                    <br>
+                    <strong>a)</strong> Calcule la pression exercée par chaque danseuse sur les pointes.<br>
+                    <strong>b)</strong> Quelles danseuses sont autorisées à pratiquer sur ce plancher ?<br>
+                    <strong>c)</strong> Pour Diana, quelle surface minimale d'appui lui permettrait de danser sans dépasser P<sub>max</sub> ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rbs3" onclick="toggleSol('s3')">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sols3">
+                <div style="font-size:.82rem;font-weight:900;color:var(--green-dark);text-transform:uppercase;letter-spacing:.7px;margin-bottom:12px;">a) Calcul des pressions (S = 30 cm² = 0,003 m²)</div>
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Amina : F = 450 N → P = 450 ÷ 0,003 = <strong>150 000 Pa</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Béatrice : F = 500 N → P = 500 ÷ 0,003 ≈ <strong>166 667 Pa</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Clara : F = 550 N → P = 550 ÷ 0,003 ≈ <strong>183 333 Pa</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">Diana : F = 600 N → P = 600 ÷ 0,003 = <strong>200 000 Pa</strong></div></div>
+                <div style="font-size:.82rem;font-weight:900;color:var(--green-dark);text-transform:uppercase;letter-spacing:.7px;margin:14px 0 8px;">b) Qui est autorisée ?</div>
+                <div class="sol-step"><div class="sol-num">5</div><div class="sol-text">Toutes exercent une pression &gt; 15 000 Pa → <strong>aucune n'est autorisée</strong> sur ce plancher avec des pointes !</div></div>
+                <div style="font-size:.82rem;font-weight:900;color:var(--green-dark);text-transform:uppercase;letter-spacing:.7px;margin:14px 0 8px;">c) Surface minimale pour Diana</div>
+                <div class="sol-step"><div class="sol-num">6</div><div class="sol-text">S<sub>min</sub> = F ÷ P<sub>max</sub> = 600 ÷ 15 000 = <strong>0,04 m²</strong> = <strong>400 cm²</strong></div></div>
+                <div class="final-ans">
+                    Diana aurait besoin d'une surface d'appui d'au moins <strong>400 cm²</strong> — soit 13× plus grande que ses pointes actuelles (30 cm²).<br>
+                    En pratique, cela revient à danser à plat plutôt que sur pointes.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 4 terminé !</h2>
+    <p>Impressionnant ! Tu gères maintenant les problèmes multi-étapes et la conception.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Dernier défi : le niveau 5 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Pression des solides</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="physique_pression_niveau1.html" class="nav-btn">Niveau 1 — P = F/S</a>
+        <a href="physique_pression_niveau2.html" class="nav-btn">Niveau 2 — Conversions</a>
+        <a href="physique_pression_niveau3.html" class="nav-btn">Niveau 3 — Pièges</a>
+        <a href="physique_pression_niveau4.html" class="nav-btn current">▶ Niveau 4 — Problèmes</a>
+        <a href="physique_pression_niveau5.html" class="nav-btn">Niveau 5 — Défi</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:2, 3:1, 4:1, 5:1};
+
+const QCM_OK = {
+    1:"✅ Parfait ! D'abord F = 8×10 = 80 N (pas 8 N !), puis P = 80 ÷ 0,04 = 2 000 Pa.",
+    2:"✅ Exact ! S_min = F ÷ P_max = 450 ÷ 900 = 0,5 m². On isole S en divisant F par P.",
+    3:"✅ Bravo ! F = masse × g = 3 × 10 = 30 N, puis P = 30 ÷ 0,05 = 600 Pa.",
+    4:"✅ Correct ! F = 3×10 = 30 N. F_pied = 30÷3 = 10 N. S = 10 cm² = 0,001 m². P = 10÷0,001 = 10 000 Pa.",
+    5:"✅ Exact ! F_max = P × S = 2 000 × 0,3 = 600 N."
+};
+
+const QCM_ERR = {
+    1:"❌ Non ! Il faut d'abord convertir la masse en force : F = 8×10 = 80 N. Puis P = 80 ÷ 0,04 = 2 000 Pa.",
+    2:"❌ Non. S_min = F ÷ P_max = 450 ÷ 900 = 0,5 m². Ne jamais multiplier F et P pour trouver S.",
+    3:"❌ Non. F = masse × g = 3 × 10 = 30 N (on multiplie par 10, pas par 100 ni on divise). P = 30 ÷ 0,05 = 600 Pa.",
+    4:"❌ Non. Étapes : F = 3×10 = 30 N → F_pied = 30÷3 = 10 N → S = 10 cm² = 0,001 m² → P = 10÷0,001 = 10 000 Pa.",
+    5:"❌ Non. Pour trouver F_max, on utilise F = P × S = 2 000 × 0,3 = 600 N."
+};
+
+/* Gap data */
+const GAP_DATA = {
+    1:{ fields:['g1a','g1b','g1c'], accepted:[['50'],['50'],['200']], msg:["50","50","200"], msgOk:"✅ F = 5×10 = 50 N · P = 50 ÷ 0,25 = 200 Pa", msgErr:"❌ Attendus : 50 N, 50, 200 Pa" },
+    2:{ fields:['g2a','g2b'], accepted:[['p','pmax','500'],['0,6','0.6','06']], msg:["P_max","0,6"], msgOk:"✅ S = F ÷ P_max = 300 ÷ 500 = 0,6 m²", msgErr:"❌ Attendus : P_max (ou 500) et 0,6 m²" },
+    3:{ fields:['g3a','g3b','g3c','g3d','g3e'], accepted:[['120'],['120'],['40'],['0,002','0.002','0002'],['20000','20 000']], msg:["120","120","40","0,002","20 000"], msgOk:"✅ F_total = 120 N · F_pied = 40 N · S = 0,002 m² · P = 20 000 Pa", msgErr:"❌ Attendus : 120 N, 120, 40 N, 0,002 m², 20 000 Pa" }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone = {};
+const gapDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_physique_4', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkGap(num) {
+    if (gapDone[num]) return;
+    const data  = GAP_DATA[num];
+    let allOk   = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m);
+        input.classList.remove('correct','wrong');
+        input.classList.add(ok ? 'correct' : 'wrong');
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('gf' + num);
+    const btn = document.getElementById('gbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'gap-feedback ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) { btn.disabled = true; gapDone[num] = true; score++; updateUI(); }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open ? '🙈 Masquer le corrigé <span class="chevron">▼</span>' : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+let calcVal = '0', calcPrev = null, calcOp = null, calcFresh = false;
+function calcRefresh() { document.getElementById('calcDisplay').textContent = calcVal; }
+function calcDigit(d) {
+    if (calcFresh) { calcVal = d === '.' ? '0.' : d; calcFresh = false; }
+    else { if (calcVal === '0' && d !== '.') calcVal = d; else if (!(d === '.' && calcVal.includes('.'))) calcVal += d; }
+    calcRefresh();
+}
+function calcOper(op) {
+    const cur = parseFloat(calcVal);
+    if (calcPrev !== null && calcOp && !calcFresh) { calcVal = String(applyOp(calcPrev, cur, calcOp)); calcRefresh(); }
+    calcPrev = parseFloat(calcVal); calcOp = op; calcFresh = true;
+    document.getElementById('calcExprDisplay').textContent = calcVal + ' ' + op;
+}
+function applyOp(a, b, op) {
+    const r = op === '+' ? a+b : op === '-' ? a-b : op === '×' ? a*b : op === '÷' ? (b ? a/b : 'Erreur') : a*b/100;
+    return typeof r === 'number' ? Math.round(r * 1e10) / 1e10 : r;
+}
+function calcEquals() {
+    if (!calcPrev && calcPrev !== 0 || !calcOp) return;
+    const cur = parseFloat(calcVal);
+    const expr = document.getElementById('calcExprDisplay').textContent;
+    calcVal = String(applyOp(calcPrev, cur, calcOp));
+    document.getElementById('calcExprDisplay').textContent = expr + ' ' + cur + ' =';
+    calcPrev = null; calcOp = null; calcFresh = true; calcRefresh();
+}
+function calcClear() { calcVal = '0'; calcPrev = null; calcOp = null; calcFresh = false; document.getElementById('calcExprDisplay').textContent = ''; calcRefresh(); }
+function calcDel() { if (calcFresh || calcVal.length <= 1) { calcVal = '0'; calcFresh = false; } else calcVal = calcVal.slice(0,-1); calcRefresh(); }
+</script>
+</body>
+</html>

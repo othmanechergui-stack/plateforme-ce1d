@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Fractions · Niveau 1 — Simplification</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#00BFA5; --primary-dark:#00796B; --primary-mid:#26C6B3; --primary-bg:#E0F5F1;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#004D40 0%,#00BFA5 55%,#80CBC4 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(0,77,64,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#00BFA5; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#00796B; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#004D40,#00BFA5,#80CBC4); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        /* Formula hero */
+        .formula-hero { background:linear-gradient(135deg,var(--primary-bg),#B2DFDB); border:2px solid #80CBC4; border-radius:14px; padding:18px 22px; margin-bottom:20px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+        .formula-big { font-size:1.6rem; font-weight:900; color:var(--primary-dark); font-family:'Courier New',monospace; }
+        .formula-details { font-size:.9rem; color:#555; line-height:2; }
+        .formula-details strong { color:var(--primary-dark); }
+
+        /* Definition box */
+        .def-box { background:linear-gradient(135deg,#004D40,#00796B); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#80CBC4; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        /* Rule box */
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        /* Trap box */
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        /* Cas particuliers */
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.8rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .cas-eq   { font-size:1.1rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        /* Examples row */
+        .examples-row { display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
+        .example-chip { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:10px; padding:8px 16px; font-size:.95rem; font-weight:800; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .example-chip span { color:#888; font-size:.75rem; font-family:inherit; font-weight:700; display:block; text-align:center; }
+
+        /* SVG wrap */
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* QCM */
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        /* Fill in */
+        .fill-item { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:70px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* Calc exercises */
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* Bonus */
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        /* Fraction display */
+        .frac-inline { display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; font-family:'Courier New',monospace; font-weight:900; line-height:1.1; margin:0 4px; }
+        .frac-inline .num { border-bottom:2px solid currentColor; padding:0 4px; }
+        .frac-inline .den { padding:0 4px; }
+
+        /* Fractions list in bonus */
+        .frac-list { display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin:14px 0; font-size:1.1rem; }
+        .frac-box { background:white; border:2px solid var(--border); border-radius:10px; padding:8px 14px; font-family:'Courier New',monospace; font-weight:900; font-size:1.1rem; text-align:center; display:flex; flex-direction:column; align-items:center; gap:0; }
+        .frac-box .n { border-bottom:2.5px solid var(--text); min-width:28px; text-align:center; }
+        .frac-box .d { min-width:28px; text-align:center; }
+
+        /* Completion */
+        .completion { display:none; background:linear-gradient(135deg,#004D40,#00BFA5,#80CBC4); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #003330; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        /* Level nav */
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>½ Fractions · Simplification</h1>
+            <p>Niveau 1 · Réduire une fraction au maximum</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 1 — Base</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Simplifier une fraction</div>
+            <div class="card-sub">Définition · PGCD · Fractions équivalentes · Cas particuliers</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Simplifier une fraction, c'est la réécrire de façon plus simple <strong>sans changer sa valeur</strong>.
+            Par exemple, <code>6/8</code> et <code>3/4</code> représentent exactement la même quantité — mais <code>3/4</code> est plus simple.
+        </p>
+
+        <!-- Définition -->
+        <div class="def-box">
+            <h3>📌 Définition — Fraction irréductible</h3>
+            <p>Une fraction est <strong>irréductible</strong> (ou simplifiée au maximum) quand son numérateur et son dénominateur
+            n'ont <strong>aucun diviseur commun autre que 1</strong>.<br>
+            On dit qu'ils sont <strong>premiers entre eux</strong>.<br>
+            Exemple : <strong>3/4</strong> est irréductible car le seul commun diviseur de 3 et 4 est 1.</p>
+        </div>
+
+        <!-- SVG 1 : 6/8 = 3/4 en barres -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 168" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="168" fill="#F5FFFD" rx="10"/>
+
+                <!-- Titre gauche -->
+                <text x="140" y="22" text-anchor="middle" font-size="19" font-weight="900" fill="#004D40" font-family="Courier New, monospace">6/8</text>
+
+                <!-- Barre 6/8 : 8 segments de 30px, à partir de x=20 -->
+                <!-- 6 teal + 2 gris -->
+                <rect x="20"  y="34" width="30" height="50" fill="#00BFA5" rx="0"/>
+                <rect x="50"  y="34" width="30" height="50" fill="#00BFA5"/>
+                <rect x="80"  y="34" width="30" height="50" fill="#00BFA5"/>
+                <rect x="110" y="34" width="30" height="50" fill="#00BFA5"/>
+                <rect x="140" y="34" width="30" height="50" fill="#00BFA5"/>
+                <rect x="170" y="34" width="30" height="50" fill="#00BFA5"/>
+                <rect x="200" y="34" width="30" height="50" fill="#CCEEE8"/>
+                <rect x="230" y="34" width="30" height="50" fill="#CCEEE8"/>
+                <!-- Bordure globale + séparateurs -->
+                <rect x="20" y="34" width="240" height="50" fill="none" stroke="#006B5E" stroke-width="1.5" rx="4"/>
+                <line x1="50"  y1="34" x2="50"  y2="84" stroke="white" stroke-width="1.5"/>
+                <line x1="80"  y1="34" x2="80"  y2="84" stroke="white" stroke-width="1.5"/>
+                <line x1="110" y1="34" x2="110" y2="84" stroke="white" stroke-width="1.5"/>
+                <line x1="140" y1="34" x2="140" y2="84" stroke="white" stroke-width="1.5"/>
+                <line x1="170" y1="34" x2="170" y2="84" stroke="white" stroke-width="1.5"/>
+                <line x1="200" y1="34" x2="200" y2="84" stroke="white" stroke-width="1.5"/>
+                <line x1="230" y1="34" x2="230" y2="84" stroke="white" stroke-width="1.5"/>
+
+                <text x="140" y="104" text-anchor="middle" font-size="11" fill="#555" font-family="Nunito, sans-serif">6 parties sur 8 colorées</text>
+
+                <!-- Division par 2 -->
+                <text x="140" y="124" text-anchor="middle" font-size="11" font-weight="900" fill="#00796B" font-family="Nunito, sans-serif">÷ 2 (numérateur et dénominateur)</text>
+
+                <!-- = -->
+                <text x="282" y="72" text-anchor="middle" font-size="32" font-weight="900" fill="#00796B" font-family="Nunito, sans-serif">=</text>
+
+                <!-- Titre droit -->
+                <text x="420" y="22" text-anchor="middle" font-size="19" font-weight="900" fill="#004D40" font-family="Courier New, monospace">3/4</text>
+
+                <!-- Barre 3/4 : 4 segments de 60px, à partir de x=300 -->
+                <rect x="300" y="34" width="60" height="50" fill="#00BFA5" rx="0"/>
+                <rect x="360" y="34" width="60" height="50" fill="#00BFA5"/>
+                <rect x="420" y="34" width="60" height="50" fill="#00BFA5"/>
+                <rect x="480" y="34" width="60" height="50" fill="#CCEEE8"/>
+                <rect x="300" y="34" width="240" height="50" fill="none" stroke="#006B5E" stroke-width="1.5" rx="4"/>
+                <line x1="360" y1="34" x2="360" y2="84" stroke="white" stroke-width="1.5"/>
+                <line x1="420" y1="34" x2="420" y2="84" stroke="white" stroke-width="1.5"/>
+                <line x1="480" y1="34" x2="480" y2="84" stroke="white" stroke-width="1.5"/>
+
+                <text x="420" y="104" text-anchor="middle" font-size="11" fill="#555" font-family="Nunito, sans-serif">3 parties sur 4 colorées</text>
+                <text x="420" y="124" text-anchor="middle" font-size="11" font-weight="700" fill="#888" font-family="Nunito, sans-serif">Même proportion !</text>
+
+                <!-- Bas : explication -->
+                <text x="280" y="152" text-anchor="middle" font-size="12" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">6 ÷ 2 = 3  et  8 ÷ 2 = 4  →  6/8 = 3/4  (même valeur, écriture plus simple)</text>
+            </svg>
+        </div>
+
+        <!-- Méthode PGCD -->
+        <div class="rule-box">
+            <h3>🔑 Méthode — Le PGCD (Plus Grand Commun Diviseur)</h3>
+            <p>Le <strong>PGCD</strong> de deux nombres, c'est le plus grand nombre qui divise les deux exactement.<br>
+            Pour simplifier une fraction, on divise le numérateur ET le dénominateur par leur PGCD.<br>
+            Le résultat est automatiquement <strong>irréductible</strong>.</p>
+        </div>
+
+        <!-- SVG 2 : PGCD de 6 et 8 -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 216" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="216" fill="#F5FFFD" rx="10"/>
+
+                <text x="280" y="22" text-anchor="middle" font-size="13" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Comment trouver le PGCD de 6 et 8 ?</text>
+
+                <!-- Ligne 1 : diviseurs de 6 -->
+                <rect x="10" y="36" width="540" height="46" fill="white" rx="8" stroke="#E0E0E0" stroke-width="1.5"/>
+                <text x="24" y="65" font-size="12" font-weight="700" fill="#555" font-family="Nunito, sans-serif">Diviseurs de 6 :</text>
+
+                <!-- Bulle 1 -->
+                <circle cx="165" cy="59" r="18" fill="#FFD54F" stroke="#F9A825" stroke-width="2"/>
+                <text x="165" y="64" text-anchor="middle" font-size="13" font-weight="900" fill="#333" font-family="Courier New, monospace">1</text>
+                <!-- Bulle 2 -->
+                <circle cx="205" cy="59" r="18" fill="#FFD54F" stroke="#F9A825" stroke-width="2"/>
+                <text x="205" y="64" text-anchor="middle" font-size="13" font-weight="900" fill="#333" font-family="Courier New, monospace">2</text>
+                <!-- Bulle 3 -->
+                <circle cx="245" cy="59" r="18" fill="#E0E0E0" stroke="#BDBDBD" stroke-width="2"/>
+                <text x="245" y="64" text-anchor="middle" font-size="13" font-weight="900" fill="#555" font-family="Courier New, monospace">3</text>
+                <!-- Bulle 6 -->
+                <circle cx="285" cy="59" r="18" fill="#E0E0E0" stroke="#BDBDBD" stroke-width="2"/>
+                <text x="285" y="64" text-anchor="middle" font-size="13" font-weight="900" fill="#555" font-family="Courier New, monospace">6</text>
+
+                <text x="340" y="57" font-size="10" fill="#888" font-family="Nunito, sans-serif">= commun</text>
+                <circle cx="332" cy="53" r="7" fill="#FFD54F" stroke="#F9A825" stroke-width="1.5"/>
+
+                <!-- Ligne 2 : diviseurs de 8 -->
+                <rect x="10" y="90" width="540" height="46" fill="white" rx="8" stroke="#E0E0E0" stroke-width="1.5"/>
+                <text x="24" y="119" font-size="12" font-weight="700" fill="#555" font-family="Nunito, sans-serif">Diviseurs de 8 :</text>
+
+                <circle cx="165" cy="113" r="18" fill="#FFD54F" stroke="#F9A825" stroke-width="2"/>
+                <text x="165" y="118" text-anchor="middle" font-size="13" font-weight="900" fill="#333" font-family="Courier New, monospace">1</text>
+                <circle cx="205" cy="113" r="18" fill="#FFD54F" stroke="#F9A825" stroke-width="2"/>
+                <text x="205" y="118" text-anchor="middle" font-size="13" font-weight="900" fill="#333" font-family="Courier New, monospace">2</text>
+                <circle cx="245" cy="113" r="18" fill="#E0E0E0" stroke="#BDBDBD" stroke-width="2"/>
+                <text x="245" y="118" text-anchor="middle" font-size="13" font-weight="900" fill="#555" font-family="Courier New, monospace">4</text>
+                <circle cx="285" cy="113" r="18" fill="#E0E0E0" stroke="#BDBDBD" stroke-width="2"/>
+                <text x="285" y="118" text-anchor="middle" font-size="13" font-weight="900" fill="#555" font-family="Courier New, monospace">8</text>
+
+                <!-- Ligne 3 : communs + PGCD -->
+                <rect x="10" y="144" width="540" height="46" fill="#FFF8E1" rx="8" stroke="#FFD54F" stroke-width="2"/>
+                <text x="24" y="173" font-size="12" font-weight="700" fill="#555" font-family="Nunito, sans-serif">Diviseurs communs :</text>
+
+                <circle cx="205" cy="167" r="18" fill="#E0F5F1" stroke="#00BFA5" stroke-width="2"/>
+                <text x="205" y="172" text-anchor="middle" font-size="13" font-weight="900" fill="#004D40" font-family="Courier New, monospace">1</text>
+                <circle cx="245" cy="167" r="18" fill="#E0F5F1" stroke="#00BFA5" stroke-width="2"/>
+                <text x="245" y="172" text-anchor="middle" font-size="13" font-weight="900" fill="#004D40" font-family="Courier New, monospace">2</text>
+
+                <text x="290" y="173" font-size="12" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">→  PGCD = </text>
+                <circle cx="395" cy="167" r="20" fill="#00BFA5" stroke="#00796B" stroke-width="3"/>
+                <text x="395" y="173" text-anchor="middle" font-size="16" font-weight="900" fill="white" font-family="Courier New, monospace">2</text>
+
+                <!-- Conclusion -->
+                <rect x="10" y="198" width="540" height="14" fill="none"/>
+                <text x="280" y="210" text-anchor="middle" font-size="12" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">6 ÷ 2 = 3   et   8 ÷ 2 = 4   →   6/8 = 3/4 ✓</text>
+            </svg>
+        </div>
+
+        <!-- Fractions équivalentes -->
+        <div class="def-box" style="background:linear-gradient(135deg,#1B5E20,#388E3C)">
+            <h3 style="color:#A5D6A7;">🔄 Fractions équivalentes</h3>
+            <p>On peut <strong>multiplier ou diviser</strong> le numérateur et le dénominateur par le <strong>même nombre</strong> sans changer la valeur.<br>
+            Exemple : <strong>1/2 = 2/4 = 3/6 = 4/8</strong> — toutes ces fractions sont identiques !</p>
+        </div>
+
+        <!-- SVG 3 : fractions équivalentes -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="200" fill="#F5FFFD" rx="10"/>
+                <text x="280" y="20" text-anchor="middle" font-size="12" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">1/2 = 2/4 = 3/6 = 4/8 — même proportion colorée</text>
+
+                <!-- Barre 1/2 : 2 segments de 200px -->
+                <text x="44" y="52" text-anchor="middle" font-size="14" font-weight="900" fill="#004D40" font-family="Courier New, monospace">1/2</text>
+                <rect x="80" y="36" width="200" height="30" fill="#00BFA5" rx="0"/>
+                <rect x="280" y="36" width="200" height="30" fill="#CCEEE8"/>
+                <rect x="80" y="36" width="400" height="30" fill="none" stroke="#006B5E" stroke-width="1.5" rx="4"/>
+                <line x1="280" y1="36" x2="280" y2="66" stroke="white" stroke-width="1.5"/>
+                <text x="500" y="56" font-size="11" fill="#00796B" font-weight="900" font-family="Nunito, sans-serif">= 50%</text>
+
+                <!-- Barre 2/4 : 4 segments de 100px -->
+                <text x="44" y="98" text-anchor="middle" font-size="14" font-weight="900" fill="#004D40" font-family="Courier New, monospace">2/4</text>
+                <rect x="80"  y="82" width="100" height="30" fill="#00BFA5"/>
+                <rect x="180" y="82" width="100" height="30" fill="#00BFA5"/>
+                <rect x="280" y="82" width="100" height="30" fill="#CCEEE8"/>
+                <rect x="380" y="82" width="100" height="30" fill="#CCEEE8"/>
+                <rect x="80"  y="82" width="400" height="30" fill="none" stroke="#006B5E" stroke-width="1.5" rx="4"/>
+                <line x1="180" y1="82" x2="180" y2="112" stroke="white" stroke-width="1.5"/>
+                <line x1="280" y1="82" x2="280" y2="112" stroke="white" stroke-width="1.5"/>
+                <line x1="380" y1="82" x2="380" y2="112" stroke="white" stroke-width="1.5"/>
+                <text x="500" y="102" font-size="11" fill="#00796B" font-weight="900" font-family="Nunito, sans-serif">= 50%</text>
+
+                <!-- Barre 3/6 : 6 segments de ~66px -->
+                <text x="44" y="144" text-anchor="middle" font-size="14" font-weight="900" fill="#004D40" font-family="Courier New, monospace">3/6</text>
+                <rect x="80"  y="128" width="67" height="30" fill="#00BFA5"/>
+                <rect x="147" y="128" width="67" height="30" fill="#00BFA5"/>
+                <rect x="214" y="128" width="66" height="30" fill="#00BFA5"/>
+                <rect x="280" y="128" width="67" height="30" fill="#CCEEE8"/>
+                <rect x="347" y="128" width="67" height="30" fill="#CCEEE8"/>
+                <rect x="414" y="128" width="66" height="30" fill="#CCEEE8"/>
+                <rect x="80"  y="128" width="400" height="30" fill="none" stroke="#006B5E" stroke-width="1.5" rx="4"/>
+                <line x1="147" y1="128" x2="147" y2="158" stroke="white" stroke-width="1.5"/>
+                <line x1="214" y1="128" x2="214" y2="158" stroke="white" stroke-width="1.5"/>
+                <line x1="280" y1="128" x2="280" y2="158" stroke="white" stroke-width="1.5"/>
+                <line x1="347" y1="128" x2="347" y2="158" stroke="white" stroke-width="1.5"/>
+                <line x1="414" y1="128" x2="414" y2="158" stroke="white" stroke-width="1.5"/>
+                <text x="500" y="148" font-size="11" fill="#00796B" font-weight="900" font-family="Nunito, sans-serif">= 50%</text>
+
+                <!-- Barre 4/8 : 8 segments de 50px -->
+                <text x="44" y="190" text-anchor="middle" font-size="14" font-weight="900" fill="#004D40" font-family="Courier New, monospace">4/8</text>
+                <rect x="80"  y="174" width="50" height="30" fill="#00BFA5"/>
+                <rect x="130" y="174" width="50" height="30" fill="#00BFA5"/>
+                <rect x="180" y="174" width="50" height="30" fill="#00BFA5"/>
+                <rect x="230" y="174" width="50" height="30" fill="#00BFA5"/>
+                <rect x="280" y="174" width="50" height="30" fill="#CCEEE8"/>
+                <rect x="330" y="174" width="50" height="30" fill="#CCEEE8"/>
+                <rect x="380" y="174" width="50" height="30" fill="#CCEEE8"/>
+                <rect x="430" y="174" width="50" height="30" fill="#CCEEE8"/>
+                <rect x="80"  y="174" width="400" height="30" fill="none" stroke="#006B5E" stroke-width="1.5" rx="4"/>
+                <line x1="130" y1="174" x2="130" y2="204" stroke="white" stroke-width="1.5"/>
+                <line x1="180" y1="174" x2="180" y2="204" stroke="white" stroke-width="1.5"/>
+                <line x1="230" y1="174" x2="230" y2="204" stroke="white" stroke-width="1.5"/>
+                <line x1="280" y1="174" x2="280" y2="204" stroke="white" stroke-width="1.5"/>
+                <line x1="330" y1="174" x2="330" y2="204" stroke="white" stroke-width="1.5"/>
+                <line x1="380" y1="174" x2="380" y2="204" stroke="white" stroke-width="1.5"/>
+                <line x1="430" y1="174" x2="430" y2="204" stroke="white" stroke-width="1.5"/>
+                <text x="500" y="194" font-size="11" fill="#00796B" font-weight="900" font-family="Nunito, sans-serif">= 50%</text>
+            </svg>
+        </div>
+
+        <!-- Cas particuliers -->
+        <p style="font-size:.95rem;font-weight:800;color:var(--primary-dark);margin-bottom:12px;">⚠️ Cas particuliers à connaître</p>
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">5/5</div>
+                <div class="cas-eq">= 1</div>
+                <div class="cas-desc">Quand numérateur = dénominateur,<br>la fraction vaut <strong>1</strong></div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">6/3</div>
+                <div class="cas-eq">= 2</div>
+                <div class="cas-desc">Quand le dénominateur divise le numérateur,<br>la fraction vaut un <strong>entier</strong></div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">0/7</div>
+                <div class="cas-eq">= 0</div>
+                <div class="cas-desc">Un numérateur nul donne toujours <strong>0</strong>,<br>peu importe le dénominateur</div>
+            </div>
+        </div>
+
+        <!-- Piège -->
+        <div class="trap-box">
+            <h3>⚠️ Piège fréquent — Simplification incomplète</h3>
+            <p>Si tu ne divises pas par le <strong>PGCD</strong> mais par un diviseur plus petit, tu obtiendras une fraction simplifiée mais pas irréductible.<br>
+            Exemple : <strong>24/36</strong> → diviser par 4 donne <strong>6/9</strong> → mais 6/9 se simplifie encore ! (÷3 → <strong>2/3</strong>)<br>
+            <strong>Toujours chercher le PGCD pour simplifier en une seule étape.</strong></p>
+        </div>
+
+        <!-- Exemples rapides -->
+        <p style="font-size:.9rem;font-weight:800;color:var(--primary-dark);margin-bottom:10px;margin-top:8px;">📌 Exemples à retenir</p>
+        <div class="examples-row">
+            <div class="example-chip">6/8 → 3/4<span>÷ 2</span></div>
+            <div class="example-chip">15/25 → 3/5<span>÷ 5</span></div>
+            <div class="example-chip">12/36 → 1/3<span>÷ 12</span></div>
+            <div class="example-chip">9/12 → 3/4<span>÷ 3</span></div>
+            <div class="example-chip">10/15 → 2/3<span>÷ 5</span></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Pièges sur la simplification incomplète</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Quelle est la forme simplifiée de <strong>4/6</strong> ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">2/3</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">2/4 — on divise par 2</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">4/6 — déjà simplifiée</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">1/3</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Quelle est la forme simplifiée de <strong>15/25</strong> ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">15/25 — déjà simplifiée</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">3/5</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">5/10 — on divise par 3</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">1/5</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Laquelle de ces fractions est <strong>déjà irréductible</strong> (impossible à simplifier) ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">4/8</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">6/9</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">5/7</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">10/15</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> On simplifie <strong>12/16</strong> en divisant par le PGCD (qui est 4). On obtient :</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">6/8 — pas encore simplifié !</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">4/6</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">3/4</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">2/4</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Laquelle de ces fractions est équivalente à <strong>2/3</strong> ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">4/5</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">6/10</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">8/12</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">3/4</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Méthode pas à pas · PGCD</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Pour simplifier <strong>6/8</strong>, on cherche le PGCD de 6 et 8.
+                Le PGCD est <input class="blank" id="f1a" placeholder="?"> .
+                Donc 6/8 = <input class="blank" id="f1b" placeholder="?">/4.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Pour simplifier <strong>15/25</strong>, le PGCD est <input class="blank" id="f2a" placeholder="?"> .
+                On obtient : 15 ÷ <input class="blank" id="f2b" placeholder="?"> = 3
+                et 25 ÷ <input class="blank" id="f2b2" placeholder="?"> = 5.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Pour simplifier <strong>12/36</strong>, le PGCD est <input class="blank" id="f3a" placeholder="?"> .
+                La fraction simplifiée est
+                <input class="blank" id="f3b" placeholder="?"> / <input class="blank" id="f3c" placeholder="?"> .
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES DE CALCUL GUIDÉ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices de simplification guidée</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Simplifier 18/24</div>
+                <div class="ex-stmt">Réduis la fraction <strong>18/24</strong> à sa forme irréductible. Montre chaque étape.</div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Lister les diviseurs de 18 : 1, 2, 3, <strong>6</strong>, 9, 18</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Lister les diviseurs de 24 : 1, 2, 3, 4, <strong>6</strong>, 8, 12, 24</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Diviseurs communs : 1, 2, 3, 6 → <strong>PGCD = 6</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">Diviser numérateur ET dénominateur par 6 :<br>18 ÷ 6 = <strong>3</strong> &nbsp;et&nbsp; 24 ÷ 6 = <strong>4</strong></div></div>
+                <div class="final-ans">✅ 18/24 = <strong>3/4</strong> &nbsp;(vérification : 3 et 4 n'ont pas de diviseur commun autre que 1 ✓)</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Simplifier 36/60</div>
+                <div class="ex-stmt">Réduis la fraction <strong>36/60</strong> à sa forme irréductible. Attention aux simplifications incomplètes !</div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Diviseurs de 36 : 1, 2, 3, 4, 6, 9, <strong>12</strong>, 18, 36</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Diviseurs de 60 : 1, 2, 3, 4, 5, 6, 10, <strong>12</strong>, 15, 20, 30, 60</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>PGCD = 12</strong> (le plus grand commun)</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">36 ÷ 12 = <strong>3</strong> &nbsp;et&nbsp; 60 ÷ 12 = <strong>5</strong></div></div>
+                <div class="sol-step"><div class="sol-num" style="background:#E53935">!</div><div class="sol-text" style="color:#B71C1C;font-weight:700;">Attention : 36 ÷ 6 = 6 et 60 ÷ 6 = 10 → 6/10 n'est PAS irréductible (÷2 → 3/5). Toujours diviser par le PGCD !</div></div>
+                <div class="final-ans">✅ 36/60 = <strong>3/5</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Simplifier 72/90</div>
+                <div class="ex-stmt">Réduis la fraction <strong>72/90</strong> à sa forme irréductible. PGCD à trouver parmi : 2, 3, 6, 9, 18.</div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">72 = 2 × 36 = 2 × 4 × 9 = 8 × 9 &nbsp;→ diviseurs incluent 1, 2, 3, 6, 8, 9, <strong>18</strong>, 24, 36, 72</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">90 = 2 × 45 = 2 × 9 × 5 &nbsp;→ diviseurs incluent 1, 2, 3, 5, 6, 9, 10, 15, <strong>18</strong>, 30, 45, 90</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>PGCD = 18</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">72 ÷ 18 = <strong>4</strong> &nbsp;et&nbsp; 90 ÷ 18 = <strong>5</strong></div></div>
+                <div class="final-ans">✅ 72/90 = <strong>4/5</strong></div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Classer par ordre de simplification</div>
+                <div class="bonus-stmt">
+                    Remets ces 5 fractions dans l'ordre, de celle qui <strong>nécessite la moins grande simplification</strong>
+                    (PGCD = 1, déjà irréductible) à celle qui <strong>nécessite la plus grande</strong> :
+                    <div class="frac-list" style="margin-top:12px;">
+                        <div class="frac-box"><div class="n">3</div><div class="d">7</div></div>
+                        <div class="frac-box"><div class="n">4</div><div class="d">6</div></div>
+                        <div class="frac-box"><div class="n">9</div><div class="d">15</div></div>
+                        <div class="frac-box"><div class="n">8</div><div class="d">12</div></div>
+                        <div class="frac-box"><div class="n">10</div><div class="d">20</div></div>
+                    </div>
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>3/7</strong> → PGCD(3,7) = <strong>1</strong> → déjà irréductible ✓</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>4/6</strong> → PGCD(4,6) = <strong>2</strong> → 4÷2=2, 6÷2=3 → 2/3</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>9/15</strong> → PGCD(9,15) = <strong>3</strong> → 9÷3=3, 15÷3=5 → 3/5</div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text"><strong>8/12</strong> → PGCD(8,12) = <strong>4</strong> → 8÷4=2, 12÷4=3 → 2/3</div></div>
+                <div class="bonus-step"><div class="bonus-num">5</div><div class="sol-text"><strong>10/20</strong> → PGCD(10,20) = <strong>10</strong> → 10÷10=1, 20÷10=2 → 1/2</div></div>
+                <div class="bonus-ans">
+                    Ordre (du moins simplifié au plus) :<br>
+                    <strong>3/7</strong> (×1) → <strong>4/6</strong> (×2) → <strong>9/15</strong> (×3) → <strong>8/12</strong> (×4) → <strong>10/20</strong> (×10)<br>
+                    Remarque : 4/6 et 8/12 donnent toutes les deux 2/3 — elles sont équivalentes !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 1 terminé !</h2>
+    <p>Bravo ! Tu sais maintenant simplifier une fraction grâce au PGCD.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue vers le niveau 2 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Fractions</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_fractions_niveau1.html" class="nav-btn current">▶ Niveau 1 — Simplification</a>
+        <a href="maths_fractions_niveau2.html" class="nav-btn">Niveau 2 — Opérations</a>
+        <a href="maths_fractions_niveau3.html" class="nav-btn">Niveau 3 — Comparaison</a>
+        <a href="maths_fractions_niveau4.html" class="nav-btn">Niveau 4 — Fraction d'une quantité</a>
+        <a href="maths_fractions_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:1, 3:2, 4:2, 5:2};
+
+const QCM_OK = {
+    1:"✅ Exact ! PGCD(4,6) = 2. On divise : 4÷2 = 2 et 6÷2 = 3. Donc 4/6 = 2/3.",
+    2:"✅ Bravo ! PGCD(15,25) = 5. On divise : 15÷5 = 3 et 25÷5 = 5. Donc 15/25 = 3/5.",
+    3:"✅ Parfait ! 5 et 7 sont premiers entre eux (PGCD = 1). La fraction 5/7 est donc déjà irréductible.",
+    4:"✅ Exact ! PGCD(12,16) = 4. On divise : 12÷4 = 3 et 16÷4 = 4. On obtient 3/4 (et pas 6/8 qui se simplifie encore !).",
+    5:"✅ Oui ! 8/12 = 2/3 car 8÷4 = 2 et 12÷4 = 3. Vérifie : 2×4 = 8 ✓ et 3×4 = 12 ✓"
+};
+
+const QCM_ERR = {
+    1:"❌ Non. PGCD(4,6) = 2. On divise les deux par 2 : 4÷2 = 2 et 6÷2 = 3. Donc 4/6 = 2/3 (et non 2/4).",
+    2:"❌ Non. PGCD(15,25) = 5 car 5 divise 15 (15÷5=3) et 25 (25÷5=5). La forme simplifiée est 3/5.",
+    3:"❌ Vérifie : 4/8 → PGCD=4, 6/9 → PGCD=3, 10/15 → PGCD=5. Seule 5/7 a PGCD=1 (5 et 7 sont premiers entre eux).",
+    4:"❌ Non. 6/8 n'est pas irréductible : PGCD(6,8)=2 → encore simplifiable en 3/4. Divise par le PGCD(12,16)=4 : 12÷4=3 et 16÷4=4.",
+    5:"❌ Non. 6/10 = 3/5 ≠ 2/3. 4/5 et 3/4 ≠ 2/3. Seule 8/12 convient : 8÷4=2 et 12÷4=3 → 2/3 ✓"
+};
+
+/* Trou 2 a 3 champs (f2a, f2b, f2b2) mais on ne compte que 1 point */
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['2'],['3']],
+        msgOk:"✅ PGCD(6,8) = 2. On divise : 6÷2 = 3 et 8÷2 = 4. Donc 6/8 = 3/4.",
+        msgErr:"❌ Attendus : PGCD = 2 et numérateur = 3. (6÷2 = 3 et 8÷2 = 4)"
+    },
+    2:{
+        fields:['f2a','f2b','f2b2'],
+        accepted:[['5'],['5'],['5']],
+        msgOk:"✅ PGCD(15,25) = 5. 15÷5 = 3 et 25÷5 = 5. Donc 15/25 = 3/5.",
+        msgErr:"❌ Attendus : PGCD = 5 (dans les trois cases). 15÷5 = 3 et 25÷5 = 5."
+    },
+    3:{
+        fields:['f3a','f3b','f3c'],
+        accepted:[['12'],['1'],['3']],
+        msgOk:"✅ PGCD(12,36) = 12. 12÷12 = 1 et 36÷12 = 3. Donc 12/36 = 1/3.",
+        msgErr:"❌ Attendus : PGCD = 12, numérateur = 1, dénominateur = 3. (12÷12 = 1 et 36÷12 = 3)"
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_fractions_1', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m);
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

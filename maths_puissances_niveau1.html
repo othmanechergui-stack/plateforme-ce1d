@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Puissances · Niveau 1 — Définition &amp; Calcul</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#8E24AA; --primary-dark:#4A148C; --primary-mid:#AB47BC; --primary-bg:#F3E5F5;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#4A148C 0%,#8E24AA 55%,#CE93D8 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(74,20,140,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#8E24AA; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#4A148C; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#4A148C,#8E24AA,#CE93D8); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.purple { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .formula-hero { background:linear-gradient(135deg,var(--primary-bg),#E1BEE7); border:2px solid #CE93D8; border-radius:14px; padding:18px 22px; margin-bottom:20px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+        .formula-big { font-size:2rem; font-weight:900; color:var(--primary-dark); font-family:'Courier New',monospace; letter-spacing:2px; }
+        .formula-details { font-size:.9rem; color:#555; line-height:2.1; }
+        .formula-details strong { color:var(--primary-dark); }
+
+        .def-box { background:linear-gradient(135deg,#4A148C,#6A1B9A); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#CE93D8; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.8; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.8; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #CE93D8; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-formula { font-size:1.4rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .cas-eq   { font-size:1rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.8rem; color:#555; line-height:1.5; }
+
+        .pow-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin:18px 0; }
+        .pow-cell { background:var(--primary-bg); border:2px solid #CE93D8; border-radius:10px; padding:10px 6px; text-align:center; }
+        .pow-cell.dark  { background:#6A1B9A; border-color:#4A148C; }
+        .pow-cell .pow-formula { font-size:.85rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .pow-cell.dark .pow-formula { color:#CE93D8; }
+        .pow-cell .pow-val { font-size:1.1rem; font-weight:900; color:#4A148C; }
+        .pow-cell.dark .pow-val { color:white; }
+
+        .examples-row { display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
+        .example-chip { background:var(--primary-bg); border:2px solid #CE93D8; border-radius:10px; padding:8px 16px; font-size:.95rem; font-weight:800; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .example-chip span { color:#888; font-size:.75rem; font-family:inherit; font-weight:700; display:block; text-align:center; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* QCM */
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        /* Fill in */
+        .fill-item { background:var(--primary-bg); border:2px solid #CE93D8; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:70px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* Guided exercises */
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* Bonus */
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        /* Completion */
+        .completion { display:none; background:linear-gradient(135deg,#4A148C,#8E24AA,#CE93D8); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #2D0062; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        /* Level nav */
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+
+        @media(max-width:600px){
+            .header-inner { flex-wrap:wrap; }
+            .header-center { order:-1; flex-basis:100%; }
+            .opts.short { grid-template-columns:1fr 1fr; }
+            .pow-grid { grid-template-columns:repeat(3,1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>xⁿ Puissances · Définition &amp; Calcul</h1>
+            <p>Niveau 1 · aⁿ = a×a×…×a · Base · Exposant · Cas particuliers</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 1 — Base</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- ══ 1. LEÇON ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">📖</div>
+        <div>
+            <div class="card-title">La leçon — Définition et calcul des puissances</div>
+            <div class="card-sub">aⁿ · Base · Exposant · Cas particuliers · Puissances de 10 · Négatifs</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Une <strong>puissance</strong> est une façon compacte d'écrire une multiplication répétée.
+            Au lieu d'écrire 2 × 2 × 2 × 2 × 2, on écrit <code>2⁵</code>. C'est plus court — et très utile en physique,
+            chimie, et dans tout le programme CE1D !
+        </p>
+
+        <!-- Formule héro -->
+        <div class="formula-hero">
+            <div class="formula-big">aⁿ</div>
+            <div class="formula-details">
+                <strong>a</strong> = la <strong>base</strong> (le nombre qu'on multiplie)<br>
+                <strong>n</strong> = l'<strong>exposant</strong> (combien de fois on multiplie)<br>
+                <strong>aⁿ = a × a × a × … × a</strong> (n facteurs)<br>
+                Exemple : <strong>2⁴ = 2 × 2 × 2 × 2 = 16</strong>
+            </div>
+        </div>
+
+        <!-- SVG 1 : 2³ décomposé en cube 3D -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 600 210" xmlns="http://www.w3.org/2000/svg" style="max-width:600px;width:100%">
+                <rect x="0" y="0" width="600" height="210" fill="#FAF0FF" rx="10"/>
+                <text x="300" y="20" text-anchor="middle" font-size="13" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Visualisation de 2³ = 2 × 2 × 2 = 8</text>
+
+                <!-- Côté gauche : décomposition textuelle -->
+                <text x="30" y="55" font-size="13" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Étape 1 :</text>
+                <rect x="30" y="62" width="55" height="30" rx="6" fill="#CE93D8" stroke="#8E24AA" stroke-width="2"/>
+                <text x="57" y="82" text-anchor="middle" font-size="13" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">2¹=2</text>
+                <text x="90" y="80" font-size="11" fill="#888" font-family="Nunito,sans-serif">← 1 facteur</text>
+
+                <text x="30" y="115" font-size="13" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Étape 2 :</text>
+                <rect x="30" y="122" width="55" height="30" rx="6" fill="#AB47BC" stroke="#8E24AA" stroke-width="2"/>
+                <rect x="88" y="122" width="55" height="30" rx="6" fill="#AB47BC" stroke="#8E24AA" stroke-width="2"/>
+                <text x="57" y="142" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Courier New,monospace">2×2</text>
+                <text x="115" y="142" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Courier New,monospace">=4</text>
+                <text x="150" y="140" font-size="11" fill="#888" font-family="Nunito,sans-serif">← 2 facteurs</text>
+
+                <text x="30" y="175" font-size="13" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Étape 3 :</text>
+                <rect x="30" y="182" width="40" height="24" rx="5" fill="#7B1FA2" stroke="#4A148C" stroke-width="2"/>
+                <rect x="72" y="182" width="40" height="24" rx="5" fill="#7B1FA2" stroke="#4A148C" stroke-width="2"/>
+                <rect x="114" y="182" width="40" height="24" rx="5" fill="#7B1FA2" stroke="#4A148C" stroke-width="2"/>
+                <rect x="156" y="182" width="40" height="24" rx="5" fill="#7B1FA2" stroke="#4A148C" stroke-width="2"/>
+                <rect x="198" y="182" width="40" height="24" rx="5" fill="#4A148C" stroke="#2D0062" stroke-width="2"/>
+                <rect x="240" y="182" width="40" height="24" rx="5" fill="#4A148C" stroke="#2D0062" stroke-width="2"/>
+                <rect x="282" y="182" width="40" height="24" rx="5" fill="#4A148C" stroke="#2D0062" stroke-width="2"/>
+                <rect x="324" y="182" width="40" height="24" rx="5" fill="#4A148C" stroke="#2D0062" stroke-width="2"/>
+                <text x="200" y="170" font-size="11" fill="#888" font-family="Nunito,sans-serif">← 8 cubes = 2×2×2 = 2³ ✓</text>
+
+                <!-- Séparateur -->
+                <line x1="375" y1="30" x2="375" y2="200" stroke="#CE93D8" stroke-width="1.5" stroke-dasharray="5,4"/>
+
+                <!-- Cube 3D isométrique -->
+                <!-- Face avant (rectangle) -->
+                <rect x="395" y="65" width="100" height="100" rx="0" fill="#CE93D8"/>
+                <!-- Quadrillage face avant (2×2) -->
+                <line x1="445" y1="65" x2="445" y2="165" stroke="#8E24AA" stroke-width="1.5"/>
+                <line x1="395" y1="115" x2="495" y2="115" stroke="#8E24AA" stroke-width="1.5"/>
+                <rect x="395" y="65" width="100" height="100" fill="none" stroke="#4A148C" stroke-width="2"/>
+
+                <!-- Face droite (parallélogramme) -->
+                <polygon points="495,65 540,38 540,138 495,165" fill="#9C27B0"/>
+                <line x1="495" y1="115" x2="540" y2="88" stroke="#7B1FA2" stroke-width="1.5"/>
+                <line x1="517" y1="51" x2="517" y2="151" stroke="#7B1FA2" stroke-width="1.5"/>
+                <polygon points="495,65 540,38 540,138 495,165" fill="none" stroke="#4A148C" stroke-width="2"/>
+
+                <!-- Face supérieure (parallélogramme) -->
+                <polygon points="395,65 440,38 540,38 495,65" fill="#E1BEE7"/>
+                <line x1="417" y1="51" x2="517" y2="51" stroke="#AB47BC" stroke-width="1.5"/>
+                <line x1="445" y1="65" x2="490" y2="38" stroke="#AB47BC" stroke-width="1.5"/>
+                <polygon points="395,65 440,38 540,38 495,65" fill="none" stroke="#4A148C" stroke-width="2"/>
+
+                <!-- Flèches dimensions -->
+                <text x="445" y="178" text-anchor="middle" font-size="11" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">2</text>
+                <text x="555" y="105" text-anchor="middle" font-size="11" font-weight="900" fill="#6A1B9A" font-family="Nunito,sans-serif">2</text>
+                <text x="470" y="33" text-anchor="middle" font-size="11" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">2</text>
+
+                <text x="467" y="200" text-anchor="middle" font-size="12" font-weight="900" fill="#6A1B9A" font-family="Nunito,sans-serif">2³ = 8 petits cubes</text>
+            </svg>
+        </div>
+
+        <!-- Cas particuliers -->
+        <div class="def-box">
+            <h3>📌 Cas particuliers à connaître absolument</h3>
+            <p>
+                • <strong>a¹ = a</strong> &nbsp;→ l'exposant 1 laisse le nombre inchangé. Ex : 7¹ = 7<br>
+                • <strong>a⁰ = 1</strong> &nbsp;→ tout nombre (≠ 0) élevé à 0 vaut 1. Ex : 5⁰ = 1, 999⁰ = 1<br>
+                • <strong>a²</strong> = le <strong>carré</strong> de a &nbsp;(= a × a)<br>
+                • <strong>a³</strong> = le <strong>cube</strong> de a &nbsp;(= a × a × a)
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-formula">7¹</div>
+                <div class="cas-eq">= 7</div>
+                <div class="cas-desc">Exposant 1 : le nombre lui-même</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-formula">5⁰</div>
+                <div class="cas-eq">= 1</div>
+                <div class="cas-desc">Exposant 0 : toujours 1<br>(sauf 0⁰ indéfini)</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-formula">6²</div>
+                <div class="cas-eq">= 36</div>
+                <div class="cas-desc">Carré = côté × côté<br>(aire d'un carré de côté 6)</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-formula">3³</div>
+                <div class="cas-eq">= 27</div>
+                <div class="cas-desc">Cube = côté³<br>(volume d'un cube de côté 3)</div>
+            </div>
+        </div>
+
+        <!-- Puissances de 10 -->
+        <div class="rule-box">
+            <h3>🔟 Puissances de 10 — La règle des zéros</h3>
+            <p>
+                10ⁿ s'obtient en écrivant <strong>1 suivi de n zéros</strong> :<br><br>
+                10⁰ = 1 &nbsp;·&nbsp; 10¹ = 10 &nbsp;·&nbsp; 10² = 100 &nbsp;·&nbsp; 10³ = 1 000 &nbsp;·&nbsp; 10⁴ = 10 000 &nbsp;·&nbsp; 10⁶ = 1 000 000<br><br>
+                💡 Chaque exposant supplémentaire = multiplier par 10 = ajouter un zéro.
+            </p>
+        </div>
+
+        <!-- SVG 2 : Puissances de 2 - barres proportionnelles -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 600 235" xmlns="http://www.w3.org/2000/svg" style="max-width:600px;width:100%">
+                <rect x="0" y="0" width="600" height="235" fill="#FAF0FF" rx="10"/>
+                <text x="300" y="20" text-anchor="middle" font-size="13" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Croissance des puissances de 2 (2⁰ → 2⁶)</text>
+
+                <!-- Barres : max=64, max_width=430, x_start=120 -->
+                <!-- 2⁰=1 → 6.7px -->
+                <text x="110" y="51" text-anchor="end" font-size="11" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">2⁰ = 1</text>
+                <rect x="115" y="38" width="7" height="20" rx="3" fill="#E1BEE7" stroke="#CE93D8" stroke-width="1"/>
+                <text x="127" y="51" font-size="10" fill="#888" font-family="Nunito,sans-serif">1</text>
+
+                <!-- 2¹=2 → 13.4px -->
+                <text x="110" y="81" text-anchor="end" font-size="11" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">2¹ = 2</text>
+                <rect x="115" y="68" width="13" height="20" rx="3" fill="#CE93D8" stroke="#AB47BC" stroke-width="1"/>
+                <text x="133" y="81" font-size="10" fill="#888" font-family="Nunito,sans-serif">2</text>
+
+                <!-- 2²=4 → 26.9px -->
+                <text x="110" y="111" text-anchor="end" font-size="11" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">2² = 4</text>
+                <rect x="115" y="98" width="27" height="20" rx="3" fill="#AB47BC" stroke="#8E24AA" stroke-width="1"/>
+                <text x="147" y="111" font-size="10" fill="#888" font-family="Nunito,sans-serif">4</text>
+
+                <!-- 2³=8 → 53.8px -->
+                <text x="110" y="141" text-anchor="end" font-size="11" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">2³ = 8</text>
+                <rect x="115" y="128" width="54" height="20" rx="3" fill="#8E24AA" stroke="#6A1B9A" stroke-width="1"/>
+                <text x="174" y="141" font-size="10" fill="#888" font-family="Nunito,sans-serif">8</text>
+
+                <!-- 2⁴=16 → 107.5px -->
+                <text x="110" y="171" text-anchor="end" font-size="11" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">2⁴ = 16</text>
+                <rect x="115" y="158" width="107" height="20" rx="3" fill="#7B1FA2" stroke="#6A1B9A" stroke-width="1"/>
+                <text x="227" y="171" font-size="10" fill="#888" font-family="Nunito,sans-serif">16</text>
+
+                <!-- 2⁵=32 → 215px -->
+                <text x="110" y="201" text-anchor="end" font-size="11" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">2⁵ = 32</text>
+                <rect x="115" y="188" width="215" height="20" rx="3" fill="#6A1B9A" stroke="#4A148C" stroke-width="1"/>
+                <text x="335" y="201" font-size="10" fill="#888" font-family="Nunito,sans-serif">32</text>
+
+                <!-- 2⁶=64 → 430px -->
+                <text x="110" y="231" text-anchor="end" font-size="11" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">2⁶ = 64</text>
+                <rect x="115" y="218" width="430" height="20" rx="3" fill="#4A148C" stroke="#2D0062" stroke-width="1.5"/>
+                <text x="550" y="231" font-size="10" fill="#4A148C" font-weight="900" font-family="Nunito,sans-serif">64</text>
+
+                <!-- Flèche "×2 à chaque fois" -->
+                <text x="575" y="115" font-size="10" font-weight="900" fill="#8E24AA" font-family="Nunito,sans-serif" writing-mode="tb">× 2</text>
+                <text x="575" y="160" font-size="9" fill="#AB47BC" font-family="Nunito,sans-serif" writing-mode="tb">chaque</text>
+                <text x="585" y="160" font-size="9" fill="#AB47BC" font-family="Nunito,sans-serif" writing-mode="tb">fois !</text>
+            </svg>
+        </div>
+
+        <!-- Puissances négatives -->
+        <div class="def-box">
+            <h3>📌 Puissances négatives — a⁻ⁿ = 1/aⁿ</h3>
+            <p>
+                Un exposant <strong>négatif</strong> donne l'inverse (le dénominateur d'une fraction) :<br><br>
+                <strong>a⁻ⁿ = 1 / aⁿ</strong><br><br>
+                • <strong>2⁻¹</strong> = 1/2¹ = 1/2 = 0,5<br>
+                • <strong>10⁻²</strong> = 1/10² = 1/100 = 0,01<br>
+                • <strong>3⁻³</strong> = 1/3³ = 1/27<br><br>
+                💡 L'exposant négatif n'est PAS un nombre négatif — c'est un inverse !
+            </p>
+        </div>
+
+        <!-- Carrés et cubes parfaits -->
+        <p style="font-size:.95rem;font-weight:800;color:var(--primary-dark);margin-bottom:12px;">📋 Carrés et cubes parfaits à connaître par cœur</p>
+
+        <!-- SVG 4 : Grille des carrés parfaits -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 600 165" xmlns="http://www.w3.org/2000/svg" style="max-width:600px;width:100%">
+                <rect x="0" y="0" width="600" height="165" fill="#FAF0FF" rx="10"/>
+                <text x="300" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Carrés parfaits (1² à 10²) — à mémoriser !</text>
+
+                <!-- Ligne 1: 1² à 5² -->
+                <!-- Cell width=108, height=55, gap=6, x_start=6 -->
+                <rect x="6"   y="26" width="108" height="55" rx="8" fill="#F3E5F5" stroke="#CE93D8" stroke-width="2"/>
+                <text x="60"  y="50" text-anchor="middle" font-size="14" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">1² = 1</text>
+                <text x="60"  y="67" text-anchor="middle" font-size="10" fill="#888" font-weight="700" font-family="Nunito,sans-serif">un carré</text>
+
+                <rect x="120" y="26" width="108" height="55" rx="8" fill="#EDE7F6" stroke="#CE93D8" stroke-width="2"/>
+                <text x="174" y="50" text-anchor="middle" font-size="14" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">2² = 4</text>
+                <text x="174" y="67" text-anchor="middle" font-size="10" fill="#888" font-weight="700" font-family="Nunito,sans-serif">deux × deux</text>
+
+                <rect x="234" y="26" width="108" height="55" rx="8" fill="#E1BEE7" stroke="#AB47BC" stroke-width="2"/>
+                <text x="288" y="50" text-anchor="middle" font-size="14" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">3² = 9</text>
+                <text x="288" y="67" text-anchor="middle" font-size="10" fill="#888" font-weight="700" font-family="Nunito,sans-serif">trois × trois</text>
+
+                <rect x="348" y="26" width="108" height="55" rx="8" fill="#CE93D8" stroke="#8E24AA" stroke-width="2"/>
+                <text x="402" y="50" text-anchor="middle" font-size="14" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">4² = 16</text>
+                <text x="402" y="67" text-anchor="middle" font-size="10" fill="#555" font-weight="700" font-family="Nunito,sans-serif">quatre × quatre</text>
+
+                <rect x="462" y="26" width="132" height="55" rx="8" fill="#BA68C8" stroke="#7B1FA2" stroke-width="2"/>
+                <text x="528" y="50" text-anchor="middle" font-size="14" font-weight="900" fill="white" font-family="Courier New,monospace">5² = 25</text>
+                <text x="528" y="67" text-anchor="middle" font-size="10" fill="#EDE7F6" font-weight="700" font-family="Nunito,sans-serif">cinq × cinq</text>
+
+                <!-- Ligne 2: 6² à 10² -->
+                <rect x="6"   y="90" width="108" height="55" rx="8" fill="#AB47BC" stroke="#7B1FA2" stroke-width="2"/>
+                <text x="60"  y="114" text-anchor="middle" font-size="14" font-weight="900" fill="white" font-family="Courier New,monospace">6² = 36</text>
+                <text x="60"  y="131" text-anchor="middle" font-size="10" fill="#F3E5F5" font-weight="700" font-family="Nunito,sans-serif">six × six</text>
+
+                <rect x="120" y="90" width="108" height="55" rx="8" fill="#9C27B0" stroke="#6A1B9A" stroke-width="2"/>
+                <text x="174" y="114" text-anchor="middle" font-size="14" font-weight="900" fill="white" font-family="Courier New,monospace">7² = 49</text>
+                <text x="174" y="131" text-anchor="middle" font-size="10" fill="#F3E5F5" font-weight="700" font-family="Nunito,sans-serif">sept × sept</text>
+
+                <rect x="234" y="90" width="108" height="55" rx="8" fill="#8E24AA" stroke="#6A1B9A" stroke-width="2"/>
+                <text x="288" y="114" text-anchor="middle" font-size="14" font-weight="900" fill="white" font-family="Courier New,monospace">8² = 64</text>
+                <text x="288" y="131" text-anchor="middle" font-size="10" fill="#F3E5F5" font-weight="700" font-family="Nunito,sans-serif">huit × huit</text>
+
+                <rect x="348" y="90" width="108" height="55" rx="8" fill="#7B1FA2" stroke="#4A148C" stroke-width="2"/>
+                <text x="402" y="114" text-anchor="middle" font-size="14" font-weight="900" fill="white" font-family="Courier New,monospace">9² = 81</text>
+                <text x="402" y="131" text-anchor="middle" font-size="10" fill="#F3E5F5" font-weight="700" font-family="Nunito,sans-serif">neuf × neuf</text>
+
+                <rect x="462" y="90" width="132" height="55" rx="8" fill="#4A148C" stroke="#2D0062" stroke-width="2"/>
+                <text x="528" y="114" text-anchor="middle" font-size="14" font-weight="900" fill="white" font-family="Courier New,monospace">10² = 100</text>
+                <text x="528" y="131" text-anchor="middle" font-size="10" fill="#CE93D8" font-weight="700" font-family="Nunito,sans-serif">dix × dix</text>
+            </svg>
+        </div>
+
+        <div class="pow-grid">
+            <div class="pow-cell"><div class="pow-formula">1³</div><div class="pow-val">= 1</div></div>
+            <div class="pow-cell"><div class="pow-formula">2³</div><div class="pow-val">= 8</div></div>
+            <div class="pow-cell dark"><div class="pow-formula">3³</div><div class="pow-val">= 27</div></div>
+            <div class="pow-cell dark"><div class="pow-formula">4³</div><div class="pow-val">= 64</div></div>
+            <div class="pow-cell dark"><div class="pow-formula">5³</div><div class="pow-val">= 125</div></div>
+        </div>
+
+        <!-- SVG 3 : (-2)² vs -2² -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 155" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="155" fill="#FFF8F0" rx="10"/>
+                <text x="280" y="20" text-anchor="middle" font-size="13" font-weight="900" fill="#E65100" font-family="Nunito,sans-serif">⚠️ Piège numéro 1 — Parenthèses et puissances</text>
+
+                <!-- Gauche : (−2)² -->
+                <rect x="15" y="30" width="245" height="110" rx="10" fill="#C8E6C9" stroke="#388E3C" stroke-width="2"/>
+                <text x="137" y="57" text-anchor="middle" font-size="13" font-weight="900" fill="#1B5E20" font-family="Nunito,sans-serif">Avec parenthèses ✓</text>
+                <text x="137" y="85" text-anchor="middle" font-size="22" font-weight="900" fill="#1B5E20" font-family="Courier New,monospace">(−2)²</text>
+                <text x="137" y="107" text-anchor="middle" font-size="12" fill="#2E7D32" font-weight="700" font-family="Nunito,sans-serif">= (−2) × (−2)</text>
+                <text x="137" y="128" text-anchor="middle" font-size="17" font-weight="900" fill="#1B5E20" font-family="Courier New,monospace">= +4</text>
+
+                <!-- Droite : −2² -->
+                <rect x="300" y="30" width="245" height="110" rx="10" fill="#FFCDD2" stroke="#C62828" stroke-width="2"/>
+                <text x="422" y="57" text-anchor="middle" font-size="13" font-weight="900" fill="#B71C1C" font-family="Nunito,sans-serif">Sans parenthèses ✗</text>
+                <text x="422" y="85" text-anchor="middle" font-size="22" font-weight="900" fill="#B71C1C" font-family="Courier New,monospace">−2²</text>
+                <text x="422" y="107" text-anchor="middle" font-size="12" fill="#C62828" font-weight="700" font-family="Nunito,sans-serif">= −(2 × 2) = −(4)</text>
+                <text x="422" y="128" text-anchor="middle" font-size="17" font-weight="900" fill="#B71C1C" font-family="Courier New,monospace">= −4</text>
+
+                <!-- ≠ au milieu -->
+                <text x="280" y="95" text-anchor="middle" font-size="22" font-weight="900" fill="#E65100" font-family="Nunito,sans-serif">≠</text>
+            </svg>
+        </div>
+
+        <!-- Piège 2³ ≠ 2×3 -->
+        <div class="trap-box">
+            <h3>⚠️ Les 2 pièges les plus fréquents au CE1D</h3>
+            <p>
+                ❌ <strong>2³ = 2 × 3 = 6</strong> — FAUX ! L'exposant n'est PAS un multiplicateur.<br>
+                ✅ <strong>2³ = 2 × 2 × 2 = 8</strong> (multiplier la base par elle-même 3 fois)<br><br>
+                ❌ <strong>5⁰ = 0</strong> ou <strong>5⁰ = 5</strong> — FAUX ! Tout nombre à la puissance 0 vaut 1.<br>
+                ✅ <strong>5⁰ = 1</strong> (c'est une règle universelle pour a ≠ 0)
+            </p>
+        </div>
+
+        <div class="examples-row">
+            <div class="example-chip">3⁴ = 81<span>3×3×3×3</span></div>
+            <div class="example-chip">2⁰ = 1<span>exposant 0</span></div>
+            <div class="example-chip">10³ = 1000<span>3 zéros</span></div>
+            <div class="example-chip">10⁻² = 0,01<span>1/100</span></div>
+            <div class="example-chip">(-3)² = 9<span>signe inclus</span></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 2. QCM ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Pièges classiques CE1D sur les puissances</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Combien vaut <strong>2³</strong> ? ⚠️ Attention au piège !</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">A) 6</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">B) 8</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">C) 9</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">D) 4</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Combien vaut <strong>5⁰</strong> ? ⚠️ Autre piège classique !</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">A) 5</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">B) 50</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">C) 1</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">D) 0</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Combien vaut <strong>(−3)²</strong> ? ⚠️ Attention aux signes !</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">A) −9</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">B) +9</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">C) −6</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">D) +6</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Combien vaut <strong>10⁻²</strong> ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">A) 100</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">B) −100</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">C) 0,01</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">D) −0,01</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Combien vaut <strong>4² + 3²</strong> ? ⚠️ Ne confonds pas avec (4+3)² !</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">A) 49</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">B) 25</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">C) 14</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">D) 7</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 3. TEXTES À TROUS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Définitions et cas particuliers</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                4³ signifie multiplier 4 par lui-même <input class="blank" id="f1a" placeholder="?"> fois.
+                Donc 4³ = 4 × 4 × 4 = <input class="blank" id="f1b" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Cas particuliers : 2⁰ = <input class="blank" id="f2a" placeholder="?"> (exposant 0 → toujours 1)
+                et 2¹ = <input class="blank" id="f2b" placeholder="?"> (exposant 1 → le nombre lui-même).
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Puissances négatives : a⁻ⁿ = 1/aⁿ.
+                Donc 3⁻² = 1/3² = 1/<input class="blank" id="f3a" placeholder="?">
+                et 2⁻³ = 1/2³ = 1/<input class="blank" id="f3b" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 4. EXERCICES GUIDÉS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices de calcul guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Ex 1 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Style CE1D 2023</div>
+                <div class="ex-stmt">Calcule, en détaillant chaque étape :<br><br><strong>2⁵ − 3² + 4⁰</strong></div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>2⁵</strong> = 2×2×2×2×2 = 4×2×2×2 = 8×2×2 = 16×2 = <strong>32</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>3²</strong> = 3×3 = <strong>9</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>4⁰</strong> = <strong>1</strong> (tout nombre à la puissance 0 vaut 1)</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">32 − 9 + 1 = 23 + 1 = <strong>24</strong></div></div>
+                <div class="final-ans">✅ 2⁵ − 3² + 4⁰ = 32 − 9 + 1 = <strong>24</strong></div>
+            </div>
+        </div>
+
+        <!-- Ex 2 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Contextualisé · Biologie</div>
+                <div class="ex-stmt">
+                    Un virus se double toutes les heures. Au départ, on en compte <strong>1 seul</strong>.<br>
+                    Combien y en a-t-il après <strong>6 heures</strong> ? Exprime le résultat comme une puissance de 2.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Après 1h : 1 × 2 = 2¹ = 2 virus</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Après 2h : 2 × 2 = 2² = 4 virus</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Après 3h : 4 × 2 = 2³ = 8 virus</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">Le modèle : après n heures → <strong>2ⁿ</strong> virus</div></div>
+                <div class="sol-step"><div class="sol-num">5</div><div class="sol-text">Après 6h : <strong>2⁶</strong> = 64 virus<br>2⁶ = 2×2×2×2×2×2 = 4×4×4 = 16×4 = 64</div></div>
+                <div class="final-ans">✅ Après 6 heures : <strong>2⁶ = 64 virus</strong></div>
+            </div>
+        </div>
+
+        <!-- Ex 3 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Vrai ou Faux · Style CE1D</div>
+                <div class="ex-stmt">
+                    Pour chaque affirmation, dis si elle est VRAIE ou FAUSSE et justifie :<br><br>
+                    <strong>a)</strong> (−2)⁴ = 16<br>
+                    <strong>b)</strong> −2⁴ = 16<br>
+                    <strong>c)</strong> 2³ + 3³ = 5³
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">a</div><div class="sol-text"><strong>VRAI</strong> — (−2)⁴ = (−2)×(−2)×(−2)×(−2). 4 facteurs négatifs (nombre pair) → résultat positif.<br>(−2)×(−2) = +4, puis 4×4 = <strong>+16</strong> ✓</div></div>
+                <div class="sol-step"><div class="sol-num">b</div><div class="sol-text"><strong>FAUX</strong> — Sans parenthèses, le carré ne touche que le 2 (pas le −).<br>−2⁴ = −(2⁴) = −(16) = <strong>−16</strong> ✗ (et non +16)</div></div>
+                <div class="sol-step"><div class="sol-num">c</div><div class="sol-text"><strong>FAUX</strong> — 2³ + 3³ = 8 + 27 = 35, mais 5³ = 125.<br>35 ≠ 125. Les puissances ne se distribuent PAS sur l'addition !</div></div>
+                <div class="final-ans">✅ a) VRAI (+16) &nbsp;·&nbsp; b) FAUX (−16) &nbsp;·&nbsp; c) FAUX (35 ≠ 125)</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Classer du plus petit au plus grand</div>
+                <div class="bonus-stmt">
+                    Sans calculatrice, remets ces expressions dans l'ordre <strong>croissant</strong> :<br><br>
+                    <code>3²</code> &nbsp;·&nbsp; <code>2³</code> &nbsp;·&nbsp; <code>(−4)²</code> &nbsp;·&nbsp; <code>5¹</code> &nbsp;·&nbsp; <code>1¹⁰</code>
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>1¹⁰</strong> = 1 (1 multiplié par lui-même autant de fois qu'on veut = toujours 1)</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>5¹</strong> = 5 (exposant 1 = le nombre lui-même)</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>2³</strong> = 2×2×2 = 8</div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text"><strong>3²</strong> = 3×3 = 9</div></div>
+                <div class="bonus-step"><div class="bonus-num">5</div><div class="sol-text"><strong>(−4)²</strong> = (−4)×(−4) = +16 (attention : positif car parenthèses et exposant pair !)</div></div>
+                <div class="bonus-ans">
+                    Ordre croissant :<br>
+                    <strong>1¹⁰ (=1) &lt; 5¹ (=5) &lt; 2³ (=8) &lt; 3² (=9) &lt; (−4)² (=16)</strong><br>
+                    Remarque : 2³ = 8 &lt; 3² = 9 — les deux se ressemblent mais ne s'égalisent pas !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ COMPLETION ══ -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 1 terminé !</h2>
+    <p>Bravo ! Tu maîtrises la définition des puissances et les cas particuliers.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue vers le niveau 2 !</p>
+</div>
+
+<!-- ══ NAVIGATION ══ -->
+<div class="level-nav">
+    <h3>📚 Navigation — Puissances</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_puissances_niveau1.html" class="nav-btn current">▶ Niveau 1 — Définition &amp; calcul</a>
+        <a href="maths_puissances_niveau2.html" class="nav-btn">Niveau 2 — Règles de calcul</a>
+        <a href="maths_puissances_niveau3.html" class="nav-btn">Niveau 3 — Notation scientifique</a>
+        <a href="maths_puissances_niveau4.html" class="nav-btn">Niveau 4 — Expressions mélangées</a>
+        <a href="maths_puissances_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+/* ── QCM ── */
+// Q1: 2³=8 → B (index 1) ; piège: A)6=2×3
+// Q2: 5⁰=1 → C (index 2) ; piège: A)5, D)0
+// Q3: (−3)²=+9 → B (index 1) ; piège: A)−9
+// Q4: 10⁻²=0,01 → C (index 2) ; piège: A)100 (confondre exposant négatif et inverse)
+// Q5: 4²+3²=16+9=25 → B (index 1) ; piège: A)49=(4+3)²
+const QCM_CORRECT = {1:1, 2:2, 3:1, 4:2, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! 2³ = 2×2×2 = 4×2 = 8. L'exposant dit combien de fois multiplier la base — ce n'est PAS un multiplicateur !",
+    2:"✅ Parfait ! a⁰ = 1 pour tout a ≠ 0. Donc 5⁰ = 1. Ni 0, ni 5 !",
+    3:"✅ Bravo ! (−3)² = (−3)×(−3). Deux négatifs → positif → +9. Les parenthèses incluent le signe.",
+    4:"✅ Exact ! a⁻ⁿ = 1/aⁿ. Donc 10⁻² = 1/10² = 1/100 = 0,01. L'exposant négatif donne un inverse, pas un négatif !",
+    5:"✅ Parfait ! 4²+3² = 16+9 = 25. Piège : (4+3)² = 7² = 49 ≠ 25. On calcule CHAQUE carré séparément."
+};
+
+const QCM_ERR = {
+    1:"❌ Piège classique ! 2³ ≠ 2×3 = 6. L'exposant dit de multiplier la BASE par elle-même : 2×2×2 = 8.",
+    2:"❌ Piège ! a⁰ = 1 pour tout a ≠ 0. Ce n'est ni 0 ni le nombre lui-même. 5⁰ = 1 — règle universelle.",
+    3:"❌ (−3)² = (−3)×(−3). Deux nombres négatifs multipliés → résultat positif. (+9), pas (−9).",
+    4:"❌ L'exposant négatif ne rend PAS le résultat négatif ! a⁻ⁿ = 1/aⁿ. 10⁻² = 1/100 = 0,01.",
+    5:"❌ 4²+3² ≠ (4+3)². On calcule : 4²=16, 3²=9, total=25. Et non 7²=49. Les exposants ne se distribuent pas sur l'addition !"
+};
+
+/* ── Textes à trous ── */
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['3'],['64']],
+        msgOk:"✅ 4³ = 4×4×4 (3 fois). 4×4=16, puis 16×4=64.",
+        msgErr:"❌ L'exposant 3 = multiplier 3 fois. 4³=4×4×4=16×4=64."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['1'],['2']],
+        msgOk:"✅ a⁰=1 pour tout a≠0, donc 2⁰=1. Et a¹=a, donc 2¹=2.",
+        msgErr:"❌ Règles : a⁰=1 (tout exposant 0 → 1) et a¹=a (exposant 1 → le nombre). 2⁰=1 et 2¹=2."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['9'],['8']],
+        msgOk:"✅ 3⁻² = 1/3² = 1/9 et 2⁻³ = 1/2³ = 1/8. Les puissances négatives donnent des fractions !",
+        msgErr:"❌ a⁻ⁿ = 1/aⁿ. 3⁻² = 1/3² = 1/9 (car 3²=9). Et 2⁻³ = 1/2³ = 1/8 (car 2³=8)."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_puissances_1', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m);
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

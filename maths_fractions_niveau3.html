@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Fractions · Niveau 3 — Comparaison</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#00BFA5; --primary-dark:#00796B; --primary-mid:#26C6B3; --primary-bg:#E0F5F1;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#004D40 0%,#00BFA5 55%,#80CBC4 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(0,77,64,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#FF9600; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#00796B; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#004D40,#00BFA5,#80CBC4); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#004D40,#00796B); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#80CBC4; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .examples-row { display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
+        .example-chip { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:10px; padding:8px 16px; font-size:.95rem; font-weight:800; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .example-chip span { color:#888; font-size:.75rem; font-family:inherit; font-weight:700; display:block; text-align:center; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:70px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* CE1D card */
+        .ceid-card { border:2px solid #00BFA5; border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ceid-card:last-child { margin-bottom:0; }
+        .ceid-top { padding:14px 18px; background:var(--primary-bg); border-bottom:2px solid #80CBC4; }
+        .ceid-label { font-size:.73rem; font-weight:900; color:var(--primary-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ceid-stmt { font-size:.96rem; font-weight:700; line-height:1.7; }
+        .ceid-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--primary-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .ceid-btn:hover { background:var(--primary-bg); }
+        .ceid-solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid #80CBC4; animation:slideDown .3s ease; }
+        .ceid-solution.open { display:block; }
+
+        .completion { display:none; background:linear-gradient(135deg,#004D40,#00BFA5,#80CBC4); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #003330; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>½ Fractions · Comparaison</h1>
+            <p>Niveau 3 · Comparer et ordonner des fractions</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 3 — Avancé</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📏</div>
+        <div>
+            <div class="card-title">La leçon — Comparer des fractions</div>
+            <div class="card-sub">Même dénominateur · Produit en croix · Fractions négatives</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Comment savoir quelle fraction est plus grande ? Il existe plusieurs méthodes selon la situation.
+            Choisis la plus adaptée !
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Comparer deux fractions — 3 méthodes</h3>
+            <p>
+            <strong>Méthode 1 (même dénominateur)</strong> : réduire au PPCM, puis comparer les numérateurs.<br>
+            Exemple : 1/3 vs 1/4 → PPCM=12 → 4/12 vs 3/12 → <strong>1/3 > 1/4</strong><br><br>
+            <strong>Méthode 2 (décimales)</strong> : convertir en décimal et comparer.<br>
+            Exemple : 3/4 = 0,75 et 2/3 ≈ 0,667 → <strong>3/4 > 2/3</strong><br><br>
+            <strong>Méthode 3 (produit en croix)</strong> : a/b vs c/d → comparer <strong>a×d</strong> et <strong>b×c</strong>.<br>
+            Exemple : 3/4 vs 5/7 → 3×7=21 et 4×5=20 → 21 > 20 → <strong>3/4 > 5/7</strong>
+            </p>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔑 Fractions équivalentes — Produit en croix</h3>
+            <p>a/b = c/d si et seulement si <strong>a × d = b × c</strong> (produit en croix).<br>
+            Exemple : 4/6 = 2/3 car 4×3 = 12 = 6×2 ✓</p>
+        </div>
+
+        <!-- SVG droite numérique -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 100" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="100" fill="#F5FFFD" rx="10"/>
+                <text x="280" y="16" text-anchor="middle" font-size="11" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Droite numérique — position des fractions</text>
+
+                <!-- Droite -->
+                <line x1="30" y1="55" x2="530" y2="55" stroke="#00BFA5" stroke-width="3"/>
+                <polygon points="530,50 540,55 530,60" fill="#00BFA5"/>
+
+                <!-- Graduations -->
+                <!-- -1/2 à x=80, 0 à x=180, 1/4 à x=230, 1/2 à x=280, 3/4 à x=330, 1 à x=380 -->
+                <line x1="80"  y1="48" x2="80"  y2="62" stroke="#004D40" stroke-width="2"/>
+                <line x1="180" y1="45" x2="180" y2="65" stroke="#004D40" stroke-width="2.5"/>
+                <line x1="230" y1="48" x2="230" y2="62" stroke="#004D40" stroke-width="2"/>
+                <line x1="280" y1="48" x2="280" y2="62" stroke="#004D40" stroke-width="2"/>
+                <line x1="330" y1="48" x2="330" y2="62" stroke="#004D40" stroke-width="2"/>
+                <line x1="380" y1="45" x2="380" y2="65" stroke="#004D40" stroke-width="2.5"/>
+
+                <text x="80"  y="80" text-anchor="middle" font-size="10" font-weight="700" fill="#E53935" font-family="Courier New, monospace">-1/2</text>
+                <text x="180" y="80" text-anchor="middle" font-size="11" font-weight="900" fill="#004D40" font-family="Courier New, monospace">0</text>
+                <text x="230" y="80" text-anchor="middle" font-size="10" font-weight="700" fill="#00796B" font-family="Courier New, monospace">1/4</text>
+                <text x="280" y="80" text-anchor="middle" font-size="10" font-weight="700" fill="#00796B" font-family="Courier New, monospace">1/2</text>
+                <text x="330" y="80" text-anchor="middle" font-size="10" font-weight="700" fill="#00796B" font-family="Courier New, monospace">3/4</text>
+                <text x="380" y="80" text-anchor="middle" font-size="11" font-weight="900" fill="#004D40" font-family="Courier New, monospace">1</text>
+
+                <!-- Points -->
+                <circle cx="80"  cy="55" r="5" fill="#E53935"/>
+                <circle cx="180" cy="55" r="6" fill="#004D40"/>
+                <circle cx="230" cy="55" r="5" fill="#00BFA5"/>
+                <circle cx="280" cy="55" r="5" fill="#00BFA5"/>
+                <circle cx="330" cy="55" r="5" fill="#00BFA5"/>
+                <circle cx="380" cy="55" r="6" fill="#004D40"/>
+            </svg>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Attention aux fractions négatives !</h3>
+            <p>Sur la droite numérique, les fractions négatives sont à <strong>gauche</strong> de 0.<br>
+            <strong>−1/3 &lt; −1/4</strong> car |−1/3| > |−1/4| (−1/3 est plus éloigné de 0 vers la gauche).<br>
+            Astuce : convertis en décimal pour ne pas te tromper : −1/3 ≈ −0,333 et −1/4 = −0,250 → −0,333 &lt; −0,250.</p>
+        </div>
+
+        <div class="examples-row">
+            <div class="example-chip">3/4 > 5/7<span>21 > 20 (produit en croix)</span></div>
+            <div class="example-chip">-2/3 > -3/4<span>-0,667 > -0,750</span></div>
+            <div class="example-chip">4/6 = 2/3<span>4×3 = 6×2 = 12</span></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">✏️</div>
+        <div>
+            <div class="card-title">Exercices — QCM</div>
+            <div class="card-sub">5 questions · Comparer et ordonner des fractions</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Laquelle est la plus grande : <strong>3/4 ou 5/7</strong> ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">A) 3/4</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">B) 5/7</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">C) Elles sont égales</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">D) Impossible à dire</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Ordonne de la plus petite à la plus grande : <strong>1/3, 2/5, 3/10</strong></div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(2,0)">A) 1/3, 2/5, 3/10</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">B) 2/5, 1/3, 3/10</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">C) 3/10, 1/3, 2/5</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">D) 3/10, 2/5, 1/3</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> <strong>2/3</strong> et <strong>4/6</strong> sont-elles égales ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">A) Non, 4/6 est plus grande</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">B) Oui, elles sont équivalentes</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">C) Non, 2/3 est plus grande</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">D) On ne peut pas savoir</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Laquelle est la plus grande : <strong>−2/3 ou −3/4</strong> ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">A) −2/3</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">B) −3/4</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">C) Elles sont égales</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">D) Impossible à dire</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Quelle fraction est strictement entre <strong>1/2</strong> et <strong>3/4</strong> avec un dénominateur de 8 ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">A) 3/8</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">B) 7/8</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">C) 5/8</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">D) 2/8</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon blue">✍️</div>
+        <div>
+            <div class="card-title">Exercices — Complète les comparaisons</div>
+            <div class="card-sub">3 exercices · Fractions équivalentes · Produit en croix · Ordre</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                3/5 = <input class="blank" id="f1a" placeholder="?">/20
+                (complète pour avoir le même dénominateur).
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Produit en croix : 4/6 et 2/3 sont-elles égales ?
+                4×3 = <input class="blank" id="f2a" placeholder="?"> et 6×2 = <input class="blank" id="f2b" placeholder="?"> .
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Place dans l'ordre croissant : 2/3, 3/5, 7/15. Le PPCM est
+                <input class="blank" id="f3a" placeholder="?"> et la plus petite est
+                <input class="blank" id="f3b" placeholder="?">/15.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">🧮</div>
+        <div>
+            <div class="card-title">Exercices — Comparaison guidée</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Comparer deux fractions</div>
+                <div class="ex-stmt">Compare <strong>5/8</strong> et <strong>3/5</strong></div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Produit en croix : 5×5 = <strong>25</strong> et 8×3 = <strong>24</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">25 > 24 donc <strong>5/8 > 3/5</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Vérification : PPCM(8,5)=40 → 5/8=25/40 et 3/5=24/40 → 25/40 > 24/40 ✓</div></div>
+                <div class="final-ans">✅ 5/8 > 3/5 (par produit en croix : 5×5=25 > 8×3=24)</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Ordonner 4 fractions</div>
+                <div class="ex-stmt">Ordonne du plus grand au plus petit : <strong>2/3, 3/4, 5/7, 7/10</strong></div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">PPCM(3,4,7,10) = <strong>420</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">2/3 = 280/420 &nbsp;|&nbsp; 3/4 = 315/420 &nbsp;|&nbsp; 5/7 = 300/420 &nbsp;|&nbsp; 7/10 = 294/420</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Ordre décroissant : 315 > 300 > 294 > 280</div></div>
+                <div class="final-ans">✅ Ordre décroissant : <strong>3/4 > 5/7 > 7/10 > 2/3</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Trouver une fraction intercalée</div>
+                <div class="ex-stmt">Trouve une fraction entre <strong>1/3</strong> et <strong>1/2</strong> avec dénominateur 12</div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Convertir : 1/3 = <strong>4/12</strong> et 1/2 = <strong>6/12</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">La fraction à trouver doit être entre 4/12 et 6/12</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>5/12</strong> est bien entre 4/12 et 6/12 ✓</div></div>
+                <div class="final-ans">✅ Une fraction entre 1/3 et 1/2 avec dénominateur 12 : <strong>5/12</strong></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 5. CARTE CE1D -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📋</div>
+        <div>
+            <div class="card-title">Exercices style CE1D</div>
+            <div class="card-sub">Problèmes type examen · Comparaison en contexte</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ceid-card">
+            <div class="ceid-top">
+                <div class="ceid-label">CE1D style 2023 — Comparaison en contexte</div>
+                <div class="ceid-stmt">
+                    Une classe compte 28 élèves. 3/7 sont des filles. Une autre classe de 30 élèves compte 2/5 de filles.<br>
+                    Dans quelle classe la proportion de filles est-elle plus grande ?
+                </div>
+            </div>
+            <button class="ceid-btn" id="rbc1" onclick="toggleSolC(1)">📋 Voir la solution <span class="chevron">▼</span></button>
+            <div class="ceid-solution" id="solc1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Classe A : 3/7 ≈ <strong>0,429</strong> (3 ÷ 7)</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Classe B : 2/5 = <strong>0,400</strong> (2 ÷ 5)</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Produit en croix : 3×5=<strong>15</strong> et 7×2=<strong>14</strong> → 15 > 14 → 3/7 > 2/5</div></div>
+                <div class="final-ans">✅ La classe A (3/7 ≈ 42,9%) a une plus grande proportion de filles que la classe B (2/5 = 40%).</div>
+            </div>
+        </div>
+
+        <div class="ceid-card">
+            <div class="ceid-top">
+                <div class="ceid-label">CE1D style 2022 — Ordonner des fractions</div>
+                <div class="ceid-stmt">
+                    Ordonne ces quatre fractions de la plus petite à la plus grande : <strong>1/2, 3/8, 5/6, 2/3</strong>
+                </div>
+            </div>
+            <button class="ceid-btn" id="rbc2" onclick="toggleSolC(2)">📋 Voir la solution <span class="chevron">▼</span></button>
+            <div class="ceid-solution" id="solc2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">PPCM(2,8,6,3) = <strong>24</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">1/2 = 12/24 &nbsp;|&nbsp; 3/8 = 9/24 &nbsp;|&nbsp; 5/6 = 20/24 &nbsp;|&nbsp; 2/3 = 16/24</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Ordre croissant : 9/24 &lt; 12/24 &lt; 16/24 &lt; 20/24</div></div>
+                <div class="final-ans">✅ Ordre croissant : <strong>3/8 &lt; 1/2 &lt; 2/3 &lt; 5/6</strong></div>
+            </div>
+        </div>
+
+        <div class="ceid-card">
+            <div class="ceid-top">
+                <div class="ceid-label">CE1D style 2024 — Vrai ou Faux</div>
+                <div class="ceid-stmt">
+                    Détermine si chaque inégalité est VRAIE ou FAUSSE. Justifie par produit en croix.<br>
+                    a) 7/8 &gt; 5/6 &nbsp;&nbsp; b) −3/4 &lt; −2/3
+                </div>
+            </div>
+            <button class="ceid-btn" id="rbc3" onclick="toggleSolC(3)">📋 Voir la solution <span class="chevron">▼</span></button>
+            <div class="ceid-solution" id="solc3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) 7/8 vs 5/6</strong> : produit en croix → 7×6=<strong>42</strong> et 8×5=<strong>40</strong> → 42 > 40 → 7/8 > 5/6 → <strong>VRAI ✓</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) −3/4 vs −2/3</strong> : −3/4 = −0,750 et −2/3 ≈ −0,667 → −0,750 &lt; −0,667 → <strong>VRAI ✓</strong></div></div>
+                <div class="final-ans">✅ Les deux inégalités sont VRAIES. Pour les fractions négatives : le moins négatif est le plus grand.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 3 terminé !</h2>
+    <p>Tu sais maintenant comparer et ordonner des fractions.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue vers le niveau 4 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Fractions</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_fractions_niveau1.html" class="nav-btn">Niveau 1 — Simplification</a>
+        <a href="maths_fractions_niveau2.html" class="nav-btn">Niveau 2 — Opérations</a>
+        <a href="maths_fractions_niveau3.html" class="nav-btn current">▶ Niveau 3 — Comparaison</a>
+        <a href="maths_fractions_niveau4.html" class="nav-btn">Niveau 4 — Fraction d'une quantité</a>
+        <a href="maths_fractions_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:2, 3:1, 4:0, 5:2};
+
+const QCM_OK = {
+    1:"✅ 3/4 = 21/28 et 5/7 = 20/28. Donc 3/4 > 5/7.",
+    2:"✅ PPCM=30 : 1/3=10/30, 2/5=12/30, 3/10=9/30. Ordre : 9/30 < 10/30 < 12/30.",
+    3:"✅ 4/6 = 4÷2 / 6÷2 = 2/3. Ou produit en croix : 2×6=12=3×4. Elles sont équivalentes !",
+    4:"✅ −2/3 ≈ −0,667 et −3/4 = −0,750. Sur la droite numérique, −2/3 est plus à droite → −2/3 > −3/4.",
+    5:"✅ 1/2 = 4/8 et 3/4 = 6/8. La fraction 5/8 est bien strictement entre les deux."
+};
+
+const QCM_ERR = {
+    1:"❌ Ramène au même dénominateur (28) : 3/4=21/28 et 5/7=20/28. Donc 3/4 > 5/7.",
+    2:"❌ PPCM=30 : 1/3=10/30, 2/5=12/30, 3/10=9/30. Ordre croissant : 3/10 < 1/3 < 2/5.",
+    3:"❌ Simplifie 4/6 : PGCD(4,6)=2 → 4÷2=2 et 6÷2=3 → 2/3. Oui, elles sont égales.",
+    4:"❌ Convertis : −2/3 ≈ −0,667 et −3/4 = −0,750. Le nombre le moins négatif est le plus grand : −2/3 > −3/4.",
+    5:"❌ Convertis : 1/2=4/8 et 3/4=6/8. La seule option entre 4/8 et 6/8 est 5/8."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['12']],
+        msgOk:"✅ 5×4=20, donc le numérateur est aussi multiplié par 4 : 3×4=12. Donc 3/5=12/20.",
+        msgErr:"❌ 5×4=20, donc on multiplie aussi le numérateur par 4 : 3×4=12. Réponse : 12."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['12'],['12']],
+        msgOk:"✅ Les produits en croix sont égaux (4×3=12=6×2), donc 4/6 = 2/3.",
+        msgErr:"❌ 4×3=12 et 6×2=12. Les deux produits sont égaux → les fractions sont équivalentes."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['15'],['7']],
+        msgOk:"✅ PPCM=15. 2/3=10/15, 3/5=9/15, 7/15=7/15. Ordre : 7/15 < 3/5 < 2/3.",
+        msgErr:"❌ PPCM(3,5,15)=15. Les fractions converties : 2/3=10/15, 3/5=9/15, 7/15=7/15. La plus petite est 7/15."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_fractions_3', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m);
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleSolC(id) {
+    const panel = document.getElementById('solc' + id);
+    const btn   = document.getElementById('rbc' + id);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer la solution <span class="chevron">▼</span>'
+        : '📋 Voir la solution <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

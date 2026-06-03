@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Puissances · Niveau 3 — Notation scientifique</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#8E24AA; --primary-dark:#4A148C; --primary-mid:#AB47BC; --primary-bg:#F3E5F5;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#4A148C 0%,#8E24AA 55%,#CE93D8 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(74,20,140,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#8E24AA; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#4A148C; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#4A148C,#8E24AA,#CE93D8); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.purple { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .formula-hero { background:linear-gradient(135deg,var(--primary-bg),#E1BEE7); border:2px solid #CE93D8; border-radius:14px; padding:18px 22px; margin-bottom:20px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+        .formula-big { font-size:1.7rem; font-weight:900; color:var(--primary-dark); font-family:'Courier New',monospace; letter-spacing:1px; white-space:nowrap; }
+        .formula-details { font-size:.9rem; color:#555; line-height:2.1; }
+        .formula-details strong { color:var(--primary-dark); }
+
+        .def-box { background:linear-gradient(135deg,#4A148C,#6A1B9A); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#CE93D8; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.8; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.8; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .steps-box { background:#FFFDE7; border:2px solid #FFD54F; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .steps-box h3 { font-size:.95rem; font-weight:900; color:#E65100; margin-bottom:10px; }
+        .step-row { display:flex; gap:12px; margin-bottom:8px; align-items:flex-start; font-size:.92rem; }
+        .step-row:last-child { margin-bottom:0; }
+        .step-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .step-text { padding-top:3px; color:#333; line-height:1.6; }
+        .step-text strong { color:#E65100; }
+
+        .examples-row { display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
+        .example-chip { background:var(--primary-bg); border:2px solid #CE93D8; border-radius:10px; padding:8px 16px; font-size:.95rem; font-weight:800; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .example-chip span { color:#888; font-size:.75rem; font-family:inherit; font-weight:700; display:block; text-align:center; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* QCM */
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        /* Fill in */
+        .fill-item { background:var(--primary-bg); border:2px solid #CE93D8; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* Guided exercises */
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* Bonus */
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        /* Completion */
+        .completion { display:none; background:linear-gradient(135deg,#4A148C,#8E24AA,#CE93D8); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #2D0062; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        /* Level nav */
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+
+        @media(max-width:600px){
+            .header-inner { flex-wrap:wrap; }
+            .header-center { order:-1; flex-basis:100%; }
+            .opts.short { grid-template-columns:1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>xⁿ Puissances · Notation scientifique</h1>
+            <p>Niveau 3 · a × 10ⁿ · Grands et petits nombres · Opérations</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 3 — Avancé</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- ══ 1. LEÇON ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">📖</div>
+        <div>
+            <div class="card-title">La leçon — La notation scientifique</div>
+            <div class="card-sub">a × 10ⁿ · Conversion · Grands nombres · Petits nombres · Opérations</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            En physique, chimie, astronomie… les nombres peuvent être <em>immenses</em> (distance Terre-Soleil = 150 000 000 km)
+            ou <em>minuscules</em> (diamètre d'un atome = 0,0000001 mm). Pour éviter d'écrire des dizaines de zéros,
+            les scientifiques utilisent la <strong>notation scientifique</strong> : une façon compacte et précise d'écrire n'importe quel nombre.
+        </p>
+
+        <!-- Formule héro -->
+        <div class="formula-hero">
+            <div class="formula-big">a × 10ⁿ</div>
+            <div class="formula-details">
+                <strong>a</strong> = la <strong>mantisse</strong> : un nombre avec <strong>1 ≤ a &lt; 10</strong><br>
+                <strong>n</strong> = l'<strong>exposant</strong> : un entier (positif, négatif ou nul)<br>
+                <strong>Règle d'or :</strong> le premier chiffre de a est toujours non nul<br>
+                Exemple : <strong>3 400 = 3,4 × 10³</strong> &nbsp;·&nbsp; <strong>0,0056 = 5,6 × 10⁻³</strong>
+            </div>
+        </div>
+
+        <!-- SVG 1 : Structure de la notation scientifique -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 600 190" xmlns="http://www.w3.org/2000/svg" style="max-width:600px;width:100%">
+                <rect x="0" y="0" width="600" height="190" fill="#FAF0FF" rx="10"/>
+                <text x="300" y="20" text-anchor="middle" font-size="13" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Structure d'un nombre en notation scientifique</text>
+
+                <!-- Nombre en clair -->
+                <text x="300" y="55" text-anchor="middle" font-size="26" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">6,02 × 10²³</text>
+
+                <!-- Flèche mantisse -->
+                <line x1="185" y1="65" x2="185" y2="100" stroke="#8E24AA" stroke-width="2"/>
+                <text x="185" y="115" text-anchor="middle" font-size="11" font-weight="900" fill="#8E24AA" font-family="Nunito,sans-serif">MANTISSE</text>
+                <text x="185" y="130" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito,sans-serif">1 ≤ a &lt; 10</text>
+                <text x="185" y="145" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito,sans-serif">(ici : 6,02)</text>
+
+                <!-- Flèche ×10 -->
+                <line x1="300" y1="65" x2="300" y2="100" stroke="#1565C0" stroke-width="2"/>
+                <text x="300" y="115" text-anchor="middle" font-size="11" font-weight="900" fill="#1565C0" font-family="Nunito,sans-serif">BASE</text>
+                <text x="300" y="130" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito,sans-serif">toujours 10</text>
+
+                <!-- Flèche exposant -->
+                <line x1="415" y1="58" x2="415" y2="100" stroke="#E65100" stroke-width="2"/>
+                <text x="415" y="115" text-anchor="middle" font-size="11" font-weight="900" fill="#E65100" font-family="Nunito,sans-serif">EXPOSANT</text>
+                <text x="415" y="130" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito,sans-serif">entier quelconque</text>
+                <text x="415" y="145" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito,sans-serif">(ici : 23)</text>
+
+                <!-- Contexte réel -->
+                <rect x="80" y="158" width="440" height="24" rx="6" fill="#EDE7F6"/>
+                <text x="300" y="174" text-anchor="middle" font-size="11" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Exemple réel : constante d'Avogadro = 6,02 × 10²³ molécules/mol</text>
+            </svg>
+        </div>
+
+        <!-- Comment convertir un grand nombre -->
+        <div class="def-box">
+            <h3>📌 Grand nombre → notation scientifique : l'exposant est POSITIF</h3>
+            <p>
+                Un grand nombre (≥ 10) a un exposant <strong>positif</strong>.<br>
+                L'exposant = le nombre de positions qu'on déplace la virgule vers la <strong>gauche</strong>.<br><br>
+                Exemple : <strong>47 000 = ?</strong><br>
+                On place la virgule après le premier chiffre : 4,7000<br>
+                On a bougé la virgule de <strong>4 positions</strong> vers la gauche → exposant = <strong>4</strong><br>
+                Donc : <strong>47 000 = 4,7 × 10⁴</strong>
+            </p>
+        </div>
+
+        <!-- SVG 2 : Déplacement de la virgule (grand nombre) -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="max-width:600px;width:100%">
+                <rect x="0" y="0" width="600" height="200" fill="#FAF0FF" rx="10"/>
+                <text x="300" y="20" text-anchor="middle" font-size="13" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Comment convertir : 384 000 → notation scientifique</text>
+
+                <!-- Chiffres du nombre -->
+                <text x="80"  y="80" text-anchor="middle" font-size="28" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">3</text>
+                <text x="120" y="80" text-anchor="middle" font-size="28" font-weight="900" fill="#7B1FA2" font-family="Courier New,monospace">8</text>
+                <text x="160" y="80" text-anchor="middle" font-size="28" font-weight="900" fill="#7B1FA2" font-family="Courier New,monospace">4</text>
+                <text x="200" y="80" text-anchor="middle" font-size="28" font-weight="900" fill="#AB47BC" font-family="Courier New,monospace">0</text>
+                <text x="240" y="80" text-anchor="middle" font-size="28" font-weight="900" fill="#AB47BC" font-family="Courier New,monospace">0</text>
+                <text x="280" y="80" text-anchor="middle" font-size="28" font-weight="900" fill="#CE93D8" font-family="Courier New,monospace">0</text>
+                <!-- virgule originale (à la fin) -->
+                <text x="296" y="80" font-size="20" font-weight="900" fill="#CE93D8" font-family="Courier New,monospace">,</text>
+
+                <!-- Flèches de déplacement de la virgule vers la gauche -->
+                <path d="M 295,90 C 275,105 255,105 235,90" stroke="#E65100" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+                <text x="265" y="115" text-anchor="middle" font-size="10" fill="#E65100" font-weight="700" font-family="Nunito,sans-serif">1</text>
+                <path d="M 235,90 C 215,105 195,105 175,90" stroke="#E65100" stroke-width="2" fill="none"/>
+                <text x="205" y="115" text-anchor="middle" font-size="10" fill="#E65100" font-weight="700" font-family="Nunito,sans-serif">2</text>
+                <path d="M 175,90 C 155,105 135,105 115,90" stroke="#E65100" stroke-width="2" fill="none"/>
+                <text x="145" y="115" text-anchor="middle" font-size="10" fill="#E65100" font-weight="700" font-family="Nunito,sans-serif">3</text>
+                <path d="M 115,90 C 95,105 78,105 78,90" stroke="#E65100" stroke-width="2.5" fill="none"/>
+                <text x="95" y="115" text-anchor="middle" font-size="10" fill="#E65100" font-weight="700" font-family="Nunito,sans-serif">4</text>
+                <path d="M 77,90 C 77,75 90,70 100,68" stroke="#E65100" stroke-width="2.5" fill="none"/>
+                <text x="65"  y="115" text-anchor="middle" font-size="10" fill="#E65100" font-weight="700" font-family="Nunito,sans-serif">5</text>
+
+                <!-- Virgule nouvelle position (après le 3) -->
+                <text x="96" y="80" font-size="20" font-weight="900" fill="#E65100" font-family="Courier New,monospace">,</text>
+                <text x="80"  y="145" text-anchor="middle" font-size="10" fill="#4A148C" font-weight="900" font-family="Nunito,sans-serif">↑ virgule</text>
+
+                <!-- Résultat -->
+                <rect x="350" y="40" width="230" height="110" rx="10" fill="#4A148C"/>
+                <text x="465" y="70" text-anchor="middle" font-size="12" font-weight="900" fill="#CE93D8" font-family="Nunito,sans-serif">5 positions vers la gauche</text>
+                <text x="465" y="100" text-anchor="middle" font-size="20" font-weight="900" fill="white" font-family="Courier New,monospace">3,84 × 10⁵</text>
+                <text x="465" y="130" text-anchor="middle" font-size="11" font-weight="900" fill="#CE93D8" font-family="Nunito,sans-serif">exposant = +5 ✓</text>
+
+                <text x="300" y="175" text-anchor="middle" font-size="12" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">384 000 = 3,84 × 10⁵ — Déplace la virgule de 5 positions vers la GAUCHE</text>
+            </svg>
+        </div>
+
+        <!-- Comment convertir un petit nombre -->
+        <div class="rule-box">
+            <h3>🔬 Petit nombre → notation scientifique : l'exposant est NÉGATIF</h3>
+            <p>
+                Un petit nombre (entre 0 et 1) a un exposant <strong>négatif</strong>.<br>
+                L'exposant = l'opposé du nombre de positions vers la <strong>droite</strong>.<br><br>
+                Exemple : <strong>0,0084 = ?</strong><br>
+                On place la virgule après le premier chiffre non nul : 8,4<br>
+                On a bougé la virgule de <strong>3 positions</strong> vers la droite → exposant = <strong>−3</strong><br>
+                Donc : <strong>0,0084 = 8,4 × 10⁻³</strong>
+            </p>
+        </div>
+
+        <!-- Méthode résumée en étapes -->
+        <div class="steps-box">
+            <h3>📋 Méthode en 3 étapes pour convertir N'IMPORTE QUEL nombre</h3>
+            <div class="step-row"><div class="step-num">1</div><div class="step-text">Repère le <strong>premier chiffre non nul</strong> du nombre. Place la virgule juste après lui → tu obtiens la mantisse a.</div></div>
+            <div class="step-row"><div class="step-num">2</div><div class="step-text">Compte combien de positions tu as déplacé la virgule.<br>Vers la <strong>gauche</strong> → exposant <strong>positif</strong> &nbsp;|&nbsp; Vers la <strong>droite</strong> → exposant <strong>négatif</strong>.</div></div>
+            <div class="step-row"><div class="step-num">3</div><div class="step-text">Écris le résultat sous la forme <strong>a × 10ⁿ</strong> et vérifie que 1 ≤ a &lt; 10.</div></div>
+        </div>
+
+        <!-- Opérations avec la notation scientifique -->
+        <div class="def-box">
+            <h3>✖️ Opérations en notation scientifique</h3>
+            <p>
+                Pour <strong>multiplier</strong> : on multiplie les mantisses, on additionne les exposants (règle 1 !) :<br>
+                <strong>(3 × 10⁴) × (2 × 10³) = (3×2) × 10^(4+3) = 6 × 10⁷</strong><br><br>
+                Pour <strong>diviser</strong> : on divise les mantisses, on soustrait les exposants (règle 3 !) :<br>
+                <strong>(8 × 10⁶) ÷ (4 × 10²) = (8÷4) × 10^(6−2) = 2 × 10⁴</strong><br><br>
+                ⚠️ Si le résultat n'est pas en forme standard (mantisse ≥ 10 ou &lt; 1), il faut l'ajuster !<br>
+                Ex : <strong>15 × 10³ = 1,5 × 10⁴</strong> (on multiplie par 10, donc on diminue l'exposant de 1).
+            </p>
+        </div>
+
+        <!-- SVG 3 : Droite numérique des puissances de 10 -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 600 175" xmlns="http://www.w3.org/2000/svg" style="max-width:600px;width:100%">
+                <rect x="0" y="0" width="600" height="175" fill="#FAF0FF" rx="10"/>
+                <text x="300" y="18" text-anchor="middle" font-size="13" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Droite des puissances de 10 — du minuscule au gigantesque</text>
+
+                <!-- Axe horizontal -->
+                <line x1="20" y1="75" x2="580" y2="75" stroke="#8E24AA" stroke-width="2.5"/>
+                <!-- Flèche droite -->
+                <polygon points="580,72 590,75 580,78" fill="#8E24AA"/>
+
+                <!-- Points sur l'axe : 10⁻³, 10⁻², 10⁻¹, 10⁰, 10¹, 10², 10³, 10⁴, 10⁵, 10⁶ -->
+                <!-- x positions: 30, 90, 150, 210, 270, 330, 390, 450, 510, 570 -->
+                <!-- Exposants: -3, -2, -1, 0, 1, 2, 3, 4, 5, 6 -->
+
+                <!-- 10⁻³ -->
+                <line x1="35" y1="68" x2="35" y2="82" stroke="#CE93D8" stroke-width="2"/>
+                <text x="35" y="62" text-anchor="middle" font-size="9" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">10⁻³</text>
+                <text x="35" y="96" text-anchor="middle" font-size="8" fill="#666" font-family="Nunito,sans-serif">0,001</text>
+
+                <!-- 10⁻² -->
+                <line x1="95" y1="68" x2="95" y2="82" stroke="#CE93D8" stroke-width="2"/>
+                <text x="95" y="62" text-anchor="middle" font-size="9" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">10⁻²</text>
+                <text x="95" y="96" text-anchor="middle" font-size="8" fill="#666" font-family="Nunito,sans-serif">0,01</text>
+
+                <!-- 10⁻¹ -->
+                <line x1="155" y1="68" x2="155" y2="82" stroke="#AB47BC" stroke-width="2"/>
+                <text x="155" y="62" text-anchor="middle" font-size="9" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">10⁻¹</text>
+                <text x="155" y="96" text-anchor="middle" font-size="8" fill="#666" font-family="Nunito,sans-serif">0,1</text>
+
+                <!-- 10⁰ -->
+                <line x1="215" y1="62" x2="215" y2="88" stroke="#8E24AA" stroke-width="3"/>
+                <text x="215" y="56" text-anchor="middle" font-size="10" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">10⁰=1</text>
+                <text x="215" y="102" text-anchor="middle" font-size="8" fill="#4A148C" font-weight="900" font-family="Nunito,sans-serif">un</text>
+
+                <!-- 10¹ -->
+                <line x1="275" y1="68" x2="275" y2="82" stroke="#8E24AA" stroke-width="2"/>
+                <text x="275" y="62" text-anchor="middle" font-size="9" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">10¹</text>
+                <text x="275" y="96" text-anchor="middle" font-size="8" fill="#666" font-family="Nunito,sans-serif">10</text>
+
+                <!-- 10² -->
+                <line x1="335" y1="68" x2="335" y2="82" stroke="#7B1FA2" stroke-width="2"/>
+                <text x="335" y="62" text-anchor="middle" font-size="9" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">10²</text>
+                <text x="335" y="96" text-anchor="middle" font-size="8" fill="#666" font-family="Nunito,sans-serif">100</text>
+
+                <!-- 10³ -->
+                <line x1="395" y1="68" x2="395" y2="82" stroke="#7B1FA2" stroke-width="2"/>
+                <text x="395" y="62" text-anchor="middle" font-size="9" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">10³</text>
+                <text x="395" y="96" text-anchor="middle" font-size="8" fill="#666" font-family="Nunito,sans-serif">1 000</text>
+
+                <!-- 10⁴ -->
+                <line x1="455" y1="68" x2="455" y2="82" stroke="#6A1B9A" stroke-width="2"/>
+                <text x="455" y="62" text-anchor="middle" font-size="9" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">10⁴</text>
+                <text x="455" y="96" text-anchor="middle" font-size="8" fill="#666" font-family="Nunito,sans-serif">10 000</text>
+
+                <!-- 10⁵ -->
+                <line x1="515" y1="68" x2="515" y2="82" stroke="#4A148C" stroke-width="2"/>
+                <text x="515" y="62" text-anchor="middle" font-size="9" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">10⁵</text>
+                <text x="515" y="96" text-anchor="middle" font-size="8" fill="#666" font-family="Nunito,sans-serif">100 000</text>
+
+                <!-- Annotations contextuelles -->
+                <rect x="15" y="110" width="160" height="55" rx="6" fill="#E3F2FD" stroke="#1565C0" stroke-width="1.5"/>
+                <text x="95" y="127" text-anchor="middle" font-size="10" font-weight="900" fill="#0D47A1" font-family="Nunito,sans-serif">⚡ Très petit</text>
+                <text x="95" y="142" text-anchor="middle" font-size="9" fill="#1565C0" font-family="Nunito,sans-serif">Atome : ~10⁻¹⁰ m</text>
+                <text x="95" y="156" text-anchor="middle" font-size="9" fill="#1565C0" font-family="Nunito,sans-serif">Virus : ~10⁻⁷ m</text>
+
+                <rect x="415" y="110" width="170" height="55" rx="6" fill="#FCE4EC" stroke="#C2185B" stroke-width="1.5"/>
+                <text x="500" y="127" text-anchor="middle" font-size="10" font-weight="900" fill="#880E4F" font-family="Nunito,sans-serif">🌍 Très grand</text>
+                <text x="500" y="142" text-anchor="middle" font-size="9" fill="#C2185B" font-family="Nunito,sans-serif">Terre-Lune : 3,84×10⁵ km</text>
+                <text x="500" y="156" text-anchor="middle" font-size="9" fill="#C2185B" font-family="Nunito,sans-serif">Terre-Soleil : 1,5×10⁸ km</text>
+            </svg>
+        </div>
+
+        <!-- SVG 4 : Tableau exemples réels -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 600 210" xmlns="http://www.w3.org/2000/svg" style="max-width:600px;width:100%">
+                <rect x="0" y="0" width="600" height="210" fill="#FAF0FF" rx="10"/>
+                <text x="300" y="18" text-anchor="middle" font-size="13" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Exemples réels — notation scientifique au CE1D et au-delà</text>
+
+                <!-- En-têtes -->
+                <rect x="10" y="25" width="580" height="28" rx="4" fill="#4A148C"/>
+                <text x="110" y="44" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito,sans-serif">Objet / Mesure</text>
+                <text x="310" y="44" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito,sans-serif">Nombre décimal</text>
+                <text x="490" y="44" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito,sans-serif">Notation scient.</text>
+
+                <!-- Ligne 1 -->
+                <rect x="10" y="53" width="580" height="28" rx="0" fill="#F3E5F5"/>
+                <text x="110" y="71" text-anchor="middle" font-size="10" font-weight="700" fill="#333" font-family="Nunito,sans-serif">🌍 Rayon de la Terre</text>
+                <text x="310" y="71" text-anchor="middle" font-size="10" font-weight="700" fill="#555" font-family="Courier New,monospace">6 371 000 m</text>
+                <text x="490" y="71" text-anchor="middle" font-size="11" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">6,371 × 10⁶ m</text>
+
+                <!-- Ligne 2 -->
+                <rect x="10" y="81" width="580" height="28" rx="0" fill="white"/>
+                <text x="110" y="99" text-anchor="middle" font-size="10" font-weight="700" fill="#333" font-family="Nunito,sans-serif">☀️ Dist. Terre-Soleil</text>
+                <text x="310" y="99" text-anchor="middle" font-size="10" font-weight="700" fill="#555" font-family="Courier New,monospace">150 000 000 km</text>
+                <text x="490" y="99" text-anchor="middle" font-size="11" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">1,5 × 10⁸ km</text>
+
+                <!-- Ligne 3 -->
+                <rect x="10" y="109" width="580" height="28" rx="0" fill="#F3E5F5"/>
+                <text x="110" y="127" text-anchor="middle" font-size="10" font-weight="700" fill="#333" font-family="Nunito,sans-serif">🦠 Taille d'un virus</text>
+                <text x="310" y="127" text-anchor="middle" font-size="10" font-weight="700" fill="#555" font-family="Courier New,monospace">0,00000012 m</text>
+                <text x="490" y="127" text-anchor="middle" font-size="11" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">1,2 × 10⁻⁷ m</text>
+
+                <!-- Ligne 4 -->
+                <rect x="10" y="137" width="580" height="28" rx="0" fill="white"/>
+                <text x="110" y="155" text-anchor="middle" font-size="10" font-weight="700" fill="#333" font-family="Nunito,sans-serif">⚡ Vitesse de la lumière</text>
+                <text x="310" y="155" text-anchor="middle" font-size="10" font-weight="700" fill="#555" font-family="Courier New,monospace">300 000 000 m/s</text>
+                <text x="490" y="155" text-anchor="middle" font-size="11" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">3 × 10⁸ m/s</text>
+
+                <!-- Ligne 5 -->
+                <rect x="10" y="165" width="580" height="28" rx="0" fill="#F3E5F5"/>
+                <text x="110" y="183" text-anchor="middle" font-size="10" font-weight="700" fill="#333" font-family="Nunito,sans-serif">⚗️ Masse d'un électron</text>
+                <text x="310" y="183" text-anchor="middle" font-size="10" font-weight="700" fill="#555" font-family="Courier New,monospace">0,000...91 kg (31 zéros)</text>
+                <text x="490" y="183" text-anchor="middle" font-size="11" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">9,1 × 10⁻³¹ kg</text>
+            </svg>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Les 2 pièges les plus fréquents</h3>
+            <p>
+                ❌ <strong>34 × 10² = notation scientifique</strong> — FAUX ! La mantisse doit être entre 1 et 10.<br>
+                ✅ 34 × 10² = 3,4 × 10³ (on divise la mantisse par 10, on augmente l'exposant de 1).<br><br>
+                ❌ <strong>0,52 × 10⁴ = notation scientifique</strong> — FAUX ! La mantisse doit être ≥ 1.<br>
+                ✅ 0,52 × 10⁴ = 5,2 × 10³ (on multiplie la mantisse par 10, on diminue l'exposant de 1).
+            </p>
+        </div>
+
+        <div class="examples-row">
+            <div class="example-chip">3400 = 3,4×10³<span>virgule 3× gauche</span></div>
+            <div class="example-chip">0,0056 = 5,6×10⁻³<span>virgule 3× droite</span></div>
+            <div class="example-chip">1,5×10² = 150<span>← lire</span></div>
+            <div class="example-chip">(4×10³)×(2×10²) = 8×10⁵<span>× mantisses, + exp.</span></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 2. QCM ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Conversion et opérations · Style CE1D</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Écris <strong>3 400</strong> en notation scientifique correcte.</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">A) 3,4 × 10³</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">B) 34 × 10²</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">C) 0,34 × 10⁴</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">D) 3,4 × 10⁴</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Combien vaut <strong>5,2 × 10⁴</strong> ? (Écris le nombre en entier.)</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">A) 520</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">B) 5 200</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">C) 52 000</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">D) 520 000</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Écris <strong>0,0076</strong> en notation scientifique. ⚠️ Exposant négatif !</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">A) 7,6 × 10⁻²</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">B) 7,6 × 10⁻³</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">C) 76 × 10⁻⁴</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">D) 0,76 × 10⁻²</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Calcule <strong>(4 × 10³) × (2 × 10²)</strong> en notation scientifique.</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">A) 8 × 10⁵</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">B) 8 × 10⁶</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">C) 6 × 10⁵</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">D) 8 × 10⁷</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> La distance Terre-Soleil est environ 150 000 000 km. En notation scientifique :</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">A) 15 × 10⁷ km</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">B) 1,5 × 10⁸ km</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">C) 1,5 × 10⁷ km</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">D) 150 × 10⁶ km</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 3. TEXTES À TROUS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Conversion et opérations · Compléter les blancs</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1 — Grand nombre</div>
+            <div class="fill-sentence">
+                47 000 = <input class="blank" id="f1a" placeholder="?"> × 10⁴
+                et donc 4,7 × 10⁴ = <input class="blank" id="f1b" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2 — Lire la notation scientifique</div>
+            <div class="fill-sentence">
+                830 000 = <input class="blank" id="f2a" placeholder="?"> × 10⁵
+                et 8,3 × 10⁵ = <input class="blank" id="f2b" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3 — Multiplier en notation scientifique</div>
+            <div class="fill-sentence">
+                (2 × 10³) × (3 × 10⁴) = <input class="blank" id="f3a" placeholder="?"> × 10<input class="blank" id="f3b" placeholder="?" style="width:55px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 4. EXERCICES GUIDÉS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices de calcul guidés</div>
+            <div class="card-sub">3 exercices avec corrigé · + 1 bonus · Contextes réels CE1D</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Ex 1 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Petit nombre · Exposant négatif</div>
+                <div class="ex-stmt">
+                    Écris <strong>0,000045</strong> en notation scientifique. Détaille chaque étape.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Le premier chiffre non nul est <strong>4</strong>. On place la virgule juste après lui → mantisse = <strong>4,5</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">On compte les positions : 0,000045 → 0,00004,5 — la virgule se déplace de <strong>5 positions vers la droite</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Vers la droite → exposant <strong>négatif</strong> = <strong>−5</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">Vérification : 4,5 × 10⁻⁵ = 4,5 ÷ 100 000 = 0,000045 ✓ et 1 ≤ 4,5 &lt; 10 ✓</div></div>
+                <div class="final-ans">✅ 0,000045 = <strong>4,5 × 10⁻⁵</strong></div>
+            </div>
+        </div>
+
+        <!-- Ex 2 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Problème de physique · Style CE1D</div>
+                <div class="ex-stmt">
+                    La lumière voyage à <strong>3 × 10⁵ km/s</strong>. La distance Terre-Lune est <strong>3,84 × 10⁵ km</strong>.<br>
+                    En combien de secondes la lumière atteint-elle la Lune ? Donne le résultat en notation scientifique.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Formule : <strong>temps = distance ÷ vitesse</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">temps = (3,84 × 10⁵) ÷ (3 × 10⁵)</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">On divise les mantisses : 3,84 ÷ 3 = <strong>1,28</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">On soustrait les exposants : 10^(5−5) = 10⁰ = <strong>1</strong></div></div>
+                <div class="sol-step"><div class="sol-num">5</div><div class="sol-text">Résultat : <strong>1,28 × 10⁰ = 1,28 × 1 = 1,28 s</strong></div></div>
+                <div class="final-ans">✅ La lumière atteint la Lune en <strong>1,28 secondes</strong> (environ 1,28 × 10⁰ s)</div>
+            </div>
+        </div>
+
+        <!-- Ex 3 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Division · Ajustement du résultat</div>
+                <div class="ex-stmt">
+                    Calcule et exprime en notation scientifique correcte (mantisse entre 1 et 10) :<br><br>
+                    <strong>(9 × 10⁷) ÷ (3 × 10⁴)</strong>
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">On divise les mantisses : 9 ÷ 3 = <strong>3</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">On soustrait les exposants : 10^(7−4) = <strong>10³</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Résultat : <strong>3 × 10³</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">Vérification : 1 ≤ 3 &lt; 10 → la notation est déjà correcte ✓</div></div>
+                <div class="final-ans">✅ (9 × 10⁷) ÷ (3 × 10⁴) = <strong>3 × 10³ = 3 000</strong></div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Résultat à ajuster</div>
+                <div class="bonus-stmt">
+                    Calcule et exprime en notation scientifique correcte :<br><br>
+                    <code>(5 × 10³) × (6 × 10⁴)</code><br><br>
+                    ⚠️ Attention : le résultat intermédiaire n'est pas encore en forme correcte !
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text">Mantisses : 5 × 6 = <strong>30</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text">Exposants : 10^(3+4) = <strong>10⁷</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text">Résultat intermédiaire : <strong>30 × 10⁷</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text">⚠️ Problème : 30 ≥ 10, la mantisse n'est pas correcte ! On ajuste : 30 = 3 × 10¹</div></div>
+                <div class="bonus-step"><div class="bonus-num">5</div><div class="sol-text">Donc : 30 × 10⁷ = (3 × 10¹) × 10⁷ = <strong>3 × 10⁸</strong></div></div>
+                <div class="bonus-ans">
+                    (5 × 10³) × (6 × 10⁴) = 30 × 10⁷ = <strong>3 × 10⁸</strong><br>
+                    Toujours vérifier : 1 ≤ mantisse &lt; 10 avant de conclure !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ COMPLETION ══ -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 3 terminé !</h2>
+    <p>Bravo ! Tu maîtrises la notation scientifique et ses applications réelles.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue vers le niveau 4 !</p>
+</div>
+
+<!-- ══ NAVIGATION ══ -->
+<div class="level-nav">
+    <h3>📚 Navigation — Puissances</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_puissances_niveau1.html" class="nav-btn">Niveau 1 — Définition &amp; calcul</a>
+        <a href="maths_puissances_niveau2.html" class="nav-btn">Niveau 2 — Règles de calcul</a>
+        <a href="maths_puissances_niveau3.html" class="nav-btn current">▶ Niveau 3 — Notation scientifique</a>
+        <a href="maths_puissances_niveau4.html" class="nav-btn">Niveau 4 — Expressions mélangées</a>
+        <a href="maths_puissances_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+/* ── QCM ──
+   Q1 : 3400 = 3,4×10³ → A (index 0) ; piège B=34×10² (mantisse ≥10), D=3,4×10⁴ (exposant faux)
+   Q2 : 5,2×10⁴ = 52000 → C (index 2) ; piège B=5200 (exposant 3), D=520000 (exposant 5)
+   Q3 : 0,0076 = 7,6×10⁻³ → B (index 1) ; piège A=10⁻² (1 position de moins), C=76×10⁻⁴ (mantisse ≥10)
+   Q4 : (4×10³)×(2×10²) = 8×10⁵ → A (index 0) ; piège B=8×10⁶ (3×2=6 non, 3+2+1=6? non), C=6×10⁵ (4+2=6 mantisses)
+   Q5 : 150 000 000 = 1,5×10⁸ → B (index 1) ; piège A=15×10⁷ (mantisse ≥10), C=1,5×10⁷ (exposant faux)
+*/
+const QCM_CORRECT = {1:0, 2:2, 3:1, 4:0, 5:1};
+
+const QCM_OK = {
+    1:"✅ 3 400 = 3,4 × 10³. La virgule se déplace de 3 positions vers la gauche. Mantisse 3,4 ∈ [1;10[ ✓",
+    2:"✅ 5,2 × 10⁴ = 5,2 × 10 000 = 52 000. L'exposant +4 signifie que la virgule avance de 4 positions vers la droite.",
+    3:"✅ 0,0076 = 7,6 × 10⁻³. La virgule se déplace de 3 positions vers la droite → exposant −3. Et 1 ≤ 7,6 &lt; 10 ✓",
+    4:"✅ Mantisses : 4×2=8. Exposants : 3+2=5. Résultat : 8×10⁵. Et 1 ≤ 8 &lt; 10 → notation correcte ✓",
+    5:"✅ 150 000 000 : la virgule se déplace de 8 positions vers la gauche → 1,5×10⁸. A et D ont une mantisse ≥10, donc incorrects."
+};
+
+const QCM_ERR = {
+    1:"❌ Piège ! 34×10² a une mantisse ≥10 (pas correcte). 0,34×10⁴ a une mantisse <1 (pas correcte). 3,4×10⁴ correspond à 34 000, pas 3 400. La bonne réponse est 3,4×10³.",
+    2:"❌ 5,2×10⁴ = 5,2 × 10 000. On déplace la virgule de 4 positions vers la droite : 5,2000 → 52 000. Pas 5 200 (×10³) ni 520 000 (×10⁵).",
+    3:"❌ 0,0076 : le premier chiffre non nul est 7. La virgule se déplace de 3 positions vers la droite → exposant −3. 7,6×10⁻² donnerait 0,076 (trop grand).",
+    4:"❌ On multiplie les mantisses : 4×2=8. On ADDITIONNE les exposants : 3+2=5. Donc 8×10⁵. 8×10⁶ serait une erreur d'exposant.",
+    5:"❌ 150 000 000 : on compte 8 chiffres après le 1 (ou 8 positions de la virgule vers la gauche) → 1,5×10⁸. 1,5×10⁷ donnerait 15 000 000 (10 fois trop petit)."
+};
+
+/* ── Textes à trous ──
+   Trou1 : 47000 = [4,7→'47'] × 10⁴ et 4,7×10⁴ = [47000]
+   Trou2 : 830000 = [8,3→'83'] × 10⁵ et 8,3×10⁵ = [830000]
+   Trou3 : (2×10³)×(3×10⁴) = [6] × 10[7]
+   Note : norm() retire les virgules/points, donc '4,7'→'47', '8,3'→'83'
+*/
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['47'],['47000']],
+        msgOk:"✅ 47 000 = 4,7 × 10⁴ (virgule 4 positions gauche). Et 4,7 × 10⁴ = 47 000 ✓",
+        msgErr:"❌ 47 000 : le premier chiffre non nul est 4. Mantisse = 4,7. Virgule bouge 4× gauche → 10⁴. Donc 4,7 × 10⁴ = 47 000."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['83'],['830000']],
+        msgOk:"✅ 830 000 = 8,3 × 10⁵ (virgule 5 positions gauche). Et 8,3 × 10⁵ = 830 000 ✓",
+        msgErr:"❌ 830 000 : mantisse = 8,3. La virgule bouge de 5 positions vers la gauche → 10⁵. Donc 8,3 × 10⁵. Et 8,3 × 10⁵ = 830 000."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['6'],['7']],
+        msgOk:"✅ (2×3) × 10^(3+4) = 6 × 10⁷. Et 1 ≤ 6 < 10, la notation est correcte !",
+        msgErr:"❌ Mantisses : 2×3=6. Exposants (règle 1) : 3+4=7. Résultat : 6 × 10⁷."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_puissances_3', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m);
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

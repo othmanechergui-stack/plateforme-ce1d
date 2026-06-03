@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique — Pression des solides · Niveau 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#1CB0F6; --primary-dark:#0892D0; --primary-mid:#45C0F7; --primary-bg:#E8F4FD;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --purple:#A560D4; --purple-bg:#F5EEFF;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        /* ── HEADER ── */
+        header { background:linear-gradient(135deg,#0D47A1 0%,#1CB0F6 55%,#81D4FA 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(13,71,161,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        /* ── PROGRESS BAR ── */
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#0D47A1,#1CB0F6,#81D4FA); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        /* ── DIFFICULTY BADGE ── */
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#1CB0F6; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#1CB0F6; }
+
+        /* ── MAIN ── */
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        /* ── CARDS ── */
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.purple { background:var(--purple-bg); }
+        .card-icon.red    { background:var(--red-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        /* ── LESSON ── */
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .formula-hero {
+            background:linear-gradient(135deg,var(--primary-bg),#B3E5FC);
+            border:2px solid #81D4FA;
+            border-radius:14px;
+            padding:18px 22px;
+            margin-bottom:20px;
+            display:flex;
+            align-items:center;
+            gap:20px;
+            flex-wrap:wrap;
+        }
+        .formula-big { font-size:2.2rem; font-weight:900; color:var(--primary-dark); font-family:'Courier New',monospace; letter-spacing:-1px; }
+        .formula-details { font-size:.9rem; color:#555; line-height:2; }
+        .formula-details strong { color:var(--primary-dark); }
+
+        /* Triangle de formule */
+        .formula-trio {
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:12px;
+            margin:20px 0;
+        }
+        .trio-card {
+            border-radius:12px;
+            padding:14px 16px;
+            text-align:center;
+            border:2px solid;
+        }
+        .trio-card.find-f { background:#FFF8E1; border-color:#FFD54F; }
+        .trio-card.find-p { background:var(--primary-bg); border-color:#81D4FA; }
+        .trio-card.find-s { background:var(--green-bg); border-color:#A5D6A7; }
+        .trio-card .trio-title { font-size:.78rem; font-weight:900; text-transform:uppercase; letter-spacing:.6px; margin-bottom:8px; }
+        .trio-card.find-f .trio-title { color:#F57F17; }
+        .trio-card.find-p .trio-title { color:var(--primary-dark); }
+        .trio-card.find-s .trio-title { color:var(--green-dark); }
+        .trio-formula { font-size:1.4rem; font-weight:900; font-family:'Courier New',monospace; }
+        .trio-card.find-f .trio-formula { color:#F57F17; }
+        .trio-card.find-p .trio-formula { color:var(--primary-dark); }
+        .trio-card.find-s .trio-formula { color:var(--green-dark); }
+        .trio-desc { font-size:.78rem; color:#666; margin-top:5px; }
+
+        /* Conversion table */
+        .conv-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; margin:16px 0; }
+        .conv-card { border-radius:12px; padding:13px 16px; display:flex; align-items:center; gap:12px; }
+        .conv-card.surface { background:#F3E5F5; border-left:4px solid #AB47BC; }
+        .conv-card.masse   { background:#E8F5E9; border-left:4px solid #43A047; }
+        .conv-card.poids   { background:#FFF3E0; border-left:4px solid #FF9800; }
+        .conv-icon { font-size:1.5rem; }
+        .conv-text h4 { font-size:.85rem; font-weight:900; margin-bottom:2px; }
+        .conv-text p  { font-size:.8rem; color:#555; }
+        .conv-text code { font-size:.8rem; }
+
+        .def-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; margin-bottom:22px; }
+        .def-chip { border-radius:12px; padding:12px 16px; display:flex; align-items:center; gap:10px; }
+        .def-chip.blue   { background:var(--blue-bg);   border-left:4px solid var(--blue); }
+        .def-chip.orange { background:var(--orange-bg); border-left:4px solid var(--orange); }
+        .def-chip.green  { background:var(--green-bg);  border-left:4px solid var(--green); }
+        .def-chip.red    { background:var(--red-bg);    border-left:4px solid var(--red); }
+        .def-chip .chip-icon { font-size:1.4rem; }
+        .def-chip h4 { font-size:.88rem; font-weight:900; margin-bottom:2px; }
+        .def-chip p  { font-size:.8rem; color:#555; }
+
+        /* Trap box */
+        .trap-box {
+            background:linear-gradient(135deg,#B71C1C,#D32F2F);
+            color:white;
+            border-radius:14px;
+            padding:14px 20px;
+            margin:16px 0;
+        }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        /* SVG containers */
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* Rule box */
+        .rule-box {
+            background:linear-gradient(135deg,#1A237E,#283593);
+            color:white;
+            border-radius:14px;
+            padding:16px 20px;
+            margin:20px 0;
+        }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        /* ── QCM ── */
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        /* ── FILL IN ── */
+        .fill-item { background:var(--orange-bg); border:2px solid #FFD08A; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--orange); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:2.5; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--orange); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:90px; outline:none; transition:border-color .2s,background .2s; }
+        .blank:focus   { border-bottom-color:var(--orange-dark); }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--orange); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--orange-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 6px 0 var(--orange-dark); }
+        .verify-btn:active:not(:disabled){ transform:translateY(2px);  box-shadow:0 2px 0 var(--orange-dark); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* ── CALC EXERCISES ── */
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+        .warn-ans  { margin-top:10px; padding:10px 14px; background:#FFF3E0; border-left:4px solid var(--orange); border-radius:10px; font-size:.88rem; font-weight:700; color:var(--orange-dark); }
+
+        /* ── CALCULATOR ── */
+        .calc-section { display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start; }
+        .calc-tip { flex:1; min-width:220px; background:var(--primary-bg); border:2px solid #81D4FA; border-radius:14px; padding:16px 18px; font-size:.88rem; color:#555; line-height:1.7; }
+        .calc-tip h4 { font-size:.92rem; font-weight:900; color:var(--primary-dark); margin-bottom:8px; }
+        .calc-tip ul  { padding-left:16px; }
+        .calc-tip li  { margin-bottom:4px; }
+        .calculator { background:#1E1E2E; border-radius:16px; padding:16px; width:280px; flex-shrink:0; box-shadow:0 6px 20px rgba(0,0,0,.25); }
+        .calc-display-wrap { background:#0D1117; border-radius:10px; padding:10px 14px; margin-bottom:12px; min-height:56px; display:flex; flex-direction:column; align-items:flex-end; justify-content:flex-end; }
+        .calc-expr { font-size:.78rem; color:#666; font-family:'Courier New',monospace; min-height:16px; word-break:break-all; text-align:right; }
+        .calc-display { font-family:'Courier New',monospace; font-size:2rem; font-weight:700; color:#7AE832; word-break:break-all; text-align:right; line-height:1.1; }
+        .calc-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; }
+        .calc-btn { padding:13px 6px; border-radius:9px; border:none; font-family:inherit; font-size:1rem; font-weight:800; cursor:pointer; transition:all .1s ease; text-align:center; }
+        .calc-btn:active { transform:scale(.93); }
+        .calc-btn.num   { background:#2D2D44; color:#EEE; }
+        .calc-btn.num:hover { background:#3A3A58; }
+        .calc-btn.op    { background:var(--primary); color:white; }
+        .calc-btn.op:hover { background:var(--primary-dark); }
+        .calc-btn.eq    { background:var(--green); color:white; }
+        .calc-btn.eq:hover { background:var(--green-dark); }
+        .calc-btn.clr   { background:var(--orange); color:white; font-size:.85rem; }
+        .calc-btn.clr:hover { background:var(--orange-dark); }
+        .calc-btn.del   { background:#444466; color:#CCC; font-size:.85rem; }
+        .calc-btn.del:hover { background:#555577; }
+        .calc-btn.zero  { grid-column:span 2; }
+
+        /* ── COMPLETION ── */
+        .completion { display:none; background:linear-gradient(135deg,#0D47A1,#1CB0F6,#81D4FA); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #0A2E6E; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{opacity:0;transform:scale(.4)} 100%{opacity:1;transform:scale(1)} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        /* ── NAV ── */
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+
+        @media(max-width:600px){
+            .header-inner { flex-wrap:wrap; }
+            .header-center { order:-1; flex-basis:100%; }
+            .calc-section { flex-direction:column; }
+            .calculator { width:100%; }
+            .formula-trio { grid-template-columns:1fr; }
+            .conv-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>⚡ Pression des solides</h1>
+            <p>Physique · Niveau 2 · CE1D</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⚡ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<!-- ═══ PROGRESS ═══ -->
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <div class="diff-pip off"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 2 — Intermédiaire</span>
+        </div>
+        <div class="progress-labels" style="margin-top:8px;"><span>Progression</span><span id="progTxt">0 / 8 bonnes réponses</span></div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+    </div>
+</div>
+
+<main>
+
+<!-- ══════════════════════════════════════
+     1. LEÇON
+══════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon blue">📚</div>
+        <div>
+            <div class="card-title">La leçon — Formules inversées &amp; Conversions</div>
+            <div class="card-sub">F = P×S · S = F÷P · Convertir cm², g, kg</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Tu connais déjà <strong>P = F ÷ S</strong>. Mais parfois c'est la <strong>force</strong> ou la <strong>surface</strong> qui est inconnue.
+            Il faut alors utiliser les formules inversées. Et attention : les unités doivent toujours être en <strong>m²</strong>, <strong>kg</strong> et <strong>N</strong> avant de calculer !
+        </p>
+
+        <!-- FORMULE PRINCIPALE -->
+        <div class="formula-hero">
+            <div class="formula-big">P = F / S</div>
+            <div class="formula-details">
+                Rappel : <strong>P</strong> en Pascal (Pa) · <strong>F</strong> en Newton (N) · <strong>S</strong> en m²<br>
+                <span style="color:var(--primary-dark);font-weight:900;">On peut isoler F ou S → formules inversées</span>
+            </div>
+        </div>
+
+        <!-- TRIANGLE SVG -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="max-width:420px;width:100%">
+                <defs>
+                    <filter id="shadow"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#0001"/></filter>
+                </defs>
+                <!-- Grand triangle -->
+                <polygon points="210,20 390,175 30,175" fill="#E3F2FD" stroke="#1CB0F6" stroke-width="2.5" filter="url(#shadow)"/>
+                <!-- Ligne horizontale séparatrice -->
+                <line x1="120" y1="110" x2="300" y2="110" stroke="#1CB0F6" stroke-width="2.5"/>
+                <!-- Ligne verticale séparatrice (bas) -->
+                <line x1="210" y1="110" x2="210" y2="175" stroke="#1CB0F6" stroke-width="2.5"/>
+
+                <!-- F en haut -->
+                <rect x="175" y="46" width="70" height="48" rx="10" fill="#FFD54F" opacity=".85"/>
+                <text x="210" y="79" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="28" fill="#E65100">F</text>
+
+                <!-- P en bas gauche -->
+                <rect x="62" y="118" width="96" height="44" rx="10" fill="#81D4FA" opacity=".8"/>
+                <text x="110" y="147" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="28" fill="#0D47A1">P</text>
+
+                <!-- S en bas droite -->
+                <rect x="262" y="118" width="96" height="44" rx="10" fill="#A5D6A7" opacity=".8"/>
+                <text x="310" y="147" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="28" fill="#1B5E20">S</text>
+
+                <!-- Annotations -->
+                <text x="210" y="193" text-anchor="middle" font-family="Nunito,sans-serif" font-size="11" font-weight="700" fill="#555">👆 Cache la grandeur cherchée pour obtenir la formule</text>
+            </svg>
+        </div>
+
+        <!-- 3 CARTES FORMULES -->
+        <div class="formula-trio">
+            <div class="trio-card find-f">
+                <div class="trio-title">🔍 Trouver F</div>
+                <div class="trio-formula">F = P × S</div>
+                <div class="trio-desc">Cache le F dans le triangle<br>→ P × S</div>
+            </div>
+            <div class="trio-card find-p">
+                <div class="trio-title">🔍 Trouver P</div>
+                <div class="trio-formula">P = F ÷ S</div>
+                <div class="trio-desc">Cache le P dans le triangle<br>→ F ÷ S</div>
+            </div>
+            <div class="trio-card find-s">
+                <div class="trio-title">🔍 Trouver S</div>
+                <div class="trio-formula">S = F ÷ P</div>
+                <div class="trio-desc">Cache le S dans le triangle<br>→ F ÷ P</div>
+            </div>
+        </div>
+
+        <!-- CONVERSIONS D'UNITÉS -->
+        <div class="rule-box">
+            <h3>⚠️ Conversions obligatoires avant tout calcul</h3>
+            <p>Les formules ne fonctionnent qu'avec les bonnes unités. Si les données sont en <strong>cm²</strong>, <strong>g</strong> ou <strong>mm²</strong>, il FAUT convertir d'abord.</p>
+        </div>
+
+        <div class="conv-grid">
+            <div class="conv-card surface">
+                <div class="conv-icon">▭</div>
+                <div class="conv-text">
+                    <h4>Surface : cm² → m²</h4>
+                    <p>÷ 10 000 (car 1 m = 100 cm, donc 1 m² = 100×100 = 10 000 cm²)</p>
+                    <p><code>50 cm² = 50 ÷ 10 000 = 0,005 m²</code></p>
+                </div>
+            </div>
+            <div class="conv-card masse">
+                <div class="conv-icon">⚖️</div>
+                <div class="conv-text">
+                    <h4>Masse : g → kg</h4>
+                    <p>÷ 1 000 (car 1 kg = 1 000 g)</p>
+                    <p><code>400 g = 400 ÷ 1 000 = 0,4 kg</code></p>
+                </div>
+            </div>
+            <div class="conv-card poids">
+                <div class="conv-icon">🌍</div>
+                <div class="conv-text">
+                    <h4>Poids (force) : kg → N</h4>
+                    <p>× 10 (sur Terre : g = 10 N/kg)</p>
+                    <p><code>0,4 kg → F = 0,4 × 10 = 4 N</code></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PIÈGE -->
+        <div class="trap-box">
+            <h3>🪤 Pièges classiques à éviter !</h3>
+            <p>
+                <strong>Piège 1 :</strong> Oublier de convertir cm² → m² avant de diviser.<br>
+                Ex : P = 400 ÷ <strong>50</strong> = 8 Pa ← <strong>FAUX</strong> · Correct : P = 400 ÷ <strong>0,005</strong> = 80 000 Pa<br><br>
+                <strong>Piège 2 :</strong> Confondre <em>masse</em> (en kg) et <em>poids/force</em> (en N).<br>
+                La masse ne s'utilise pas directement dans P = F/S. Il faut d'abord calculer F = masse × 10.
+            </p>
+        </div>
+
+        <!-- EXEMPLE COMMENTÉ SVG -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 520 170" xmlns="http://www.w3.org/2000/svg" style="max-width:520px;width:100%">
+                <!-- Fond -->
+                <rect x="5" y="5" width="510" height="160" rx="14" fill="#F8FBFF" stroke="#90D5F5" stroke-width="2"/>
+                <text x="260" y="28" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="13" fill="#0D47A1">Exemple : P = 3000 Pa, S = 200 cm²  →  trouver F</text>
+
+                <!-- Étape 1 -->
+                <rect x="20" y="38" width="26" height="26" rx="6" fill="#1CB0F6"/>
+                <text x="33" y="56" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="13" fill="white">1</text>
+                <text x="56" y="56" font-family="Nunito,sans-serif" font-size="12" font-weight="700" fill="#333">Convertir S : 200 cm² ÷ 10 000 =</text>
+                <rect x="260" y="40" width="80" height="22" rx="6" fill="#AB47BC" opacity=".15"/>
+                <text x="300" y="56" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="13" fill="#6A1B9A">0,02 m²</text>
+
+                <!-- Étape 2 -->
+                <rect x="20" y="74" width="26" height="26" rx="6" fill="#1CB0F6"/>
+                <text x="33" y="92" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="13" fill="white">2</text>
+                <text x="56" y="92" font-family="Nunito,sans-serif" font-size="12" font-weight="700" fill="#333">Formule inversée : F = P × S</text>
+
+                <!-- Étape 3 -->
+                <rect x="20" y="110" width="26" height="26" rx="6" fill="#1CB0F6"/>
+                <text x="33" y="128" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="13" fill="white">3</text>
+                <text x="56" y="128" font-family="Nunito,sans-serif" font-size="12" font-weight="700" fill="#333">Calcul : F = 3 000 × 0,02 =</text>
+                <rect x="264" y="112" width="70" height="22" rx="6" fill="#58CC02" opacity=".2"/>
+                <text x="299" y="128" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="13" fill="#2E7D32">60 N</text>
+
+                <!-- Résultat final -->
+                <rect x="20" y="143" width="480" height="18" rx="6" fill="#E3F2FD"/>
+                <text x="260" y="156" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="12" fill="#0D47A1">✅ Réponse : F = 60 N  (si tu avais oublié la conversion : F = 3000 × 200 = 600 000 N — absurde !)</text>
+            </svg>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     2. QCM
+══════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon blue">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Formules inversées &amp; conversions</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Q1 -->
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> La pression est <strong>P = 500 Pa</strong> et la surface est <strong>S = 2 m²</strong>. Quelle est la force F ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">F = 500 + 2 = 502 N</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">F = 500 × 2 = 1 000 N</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">F = 500 ÷ 2 = 250 N</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">F = 2 ÷ 500 = 0,004 N</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q2 -->
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Une force de <strong>F = 600 N</strong> produit une pression de <strong>P = 200 Pa</strong>. Quelle est la surface S ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">S = 600 × 200 = 120 000 m²</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">S = 200 ÷ 600 ≈ 0,33 m²</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">S = 600 ÷ 200 = 3 m²</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">S = 600 − 200 = 400 m²</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q3 -->
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Une surface de <strong>50 cm²</strong> vaut combien en m² ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">50 m²</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">0,50 m²</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">0,005 m²</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">5 000 m²</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q4 -->
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Un objet a une masse de <strong>400 g</strong>. Quelle est la force (poids) qu'il exerce ? <em>(g = 10 N/kg)</em></div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">F = 400 N</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">F = 4 N</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">F = 40 N</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">F = 4 000 N</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q5 -->
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Un élève calcule la pression d'une boîte de <strong>500 N</strong> sur <strong>100 cm²</strong> comme ceci : <code>P = 500 ÷ 100 = 5 Pa</code>. Qu'a-t-il oublié ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Rien, son calcul est correct.</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Il fallait multiplier et non diviser.</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Il a oublié de convertir 100 cm² en m² (= 0,01 m²). La vraie réponse est 50 000 Pa.</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Il fallait d'abord convertir 500 N en kg.</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     3. TEXTES À TROUS
+══════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Conversions &amp; formules inversées</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Trou 1 -->
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Pour trouver la force F à partir de P et S, on utilise la formule
+                F =
+                <input type="text" class="blank" id="f1a" placeholder="?" style="width:55px"> ×
+                <input type="text" class="blank" id="f1b" placeholder="?" style="width:55px">.
+                (les deux lettres, dans n'importe quel ordre)
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <!-- Trou 2 -->
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Une surface de <strong>300 cm²</strong> vaut
+                <input type="text" class="blank" id="f2a" placeholder="?" style="width:70px"> m²
+                car on divise par
+                <input type="text" class="blank" id="f2b" placeholder="?" style="width:80px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <!-- Trou 3 -->
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Une brique de masse <strong>200 g</strong> exerce une force de
+                <input type="text" class="blank" id="f3a" placeholder="?" style="width:55px"> N
+                car : masse = 200 g =
+                <input type="text" class="blank" id="f3b" placeholder="?" style="width:55px"> kg,
+                puis F = 0,2 × 10 = 2 N.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     4. EXERCICES NUMÉRIQUES + CALCULATRICE
+══════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🔢</div>
+        <div>
+            <div class="card-title">Exercices de calcul</div>
+            <div class="card-sub">3 exercices · Formules inversées · Conversions · Calculatrice</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- CALCULATRICE -->
+        <div class="calc-section" style="margin-bottom:24px;">
+            <div class="calc-tip">
+                <h4>🧮 Rappel — Formules inversées</h4>
+                <ul>
+                    <li><strong>Chercher F ?</strong> → F = P × S</li>
+                    <li><strong>Chercher S ?</strong> → S = F ÷ P</li>
+                    <li><strong>Chercher P ?</strong> → P = F ÷ S</li>
+                </ul>
+                <p style="margin-top:8px;font-size:.83rem;color:#666;"><strong>Toujours convertir d'abord :</strong><br>cm² ÷ 10 000 → m² · g ÷ 1 000 → kg · kg × 10 → N</p>
+            </div>
+            <div class="calculator">
+                <div class="calc-display-wrap">
+                    <div class="calc-expr" id="calcExprDisplay"></div>
+                    <div class="calc-display" id="calcDisplay">0</div>
+                </div>
+                <div class="calc-grid">
+                    <button class="calc-btn clr" onclick="calcClear()">C</button>
+                    <button class="calc-btn del" onclick="calcDel()">⌫</button>
+                    <button class="calc-btn op"  onclick="calcOper('%')">%</button>
+                    <button class="calc-btn op"  onclick="calcOper('÷')">÷</button>
+                    <button class="calc-btn num" onclick="calcDigit('7')">7</button>
+                    <button class="calc-btn num" onclick="calcDigit('8')">8</button>
+                    <button class="calc-btn num" onclick="calcDigit('9')">9</button>
+                    <button class="calc-btn op"  onclick="calcOper('×')">×</button>
+                    <button class="calc-btn num" onclick="calcDigit('4')">4</button>
+                    <button class="calc-btn num" onclick="calcDigit('5')">5</button>
+                    <button class="calc-btn num" onclick="calcDigit('6')">6</button>
+                    <button class="calc-btn op"  onclick="calcOper('-')">−</button>
+                    <button class="calc-btn num" onclick="calcDigit('1')">1</button>
+                    <button class="calc-btn num" onclick="calcDigit('2')">2</button>
+                    <button class="calc-btn num" onclick="calcDigit('3')">3</button>
+                    <button class="calc-btn op"  onclick="calcOper('+')">+</button>
+                    <button class="calc-btn num zero" onclick="calcDigit('0')">0</button>
+                    <button class="calc-btn num" onclick="calcDigit('.')">.</button>
+                    <button class="calc-btn eq"  onclick="calcEquals()">=</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exercice 1 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Trouver la force</div>
+                <div class="ex-stmt">
+                    La pression sous un meuble est <strong>P = 2 000 Pa</strong> et sa surface de contact est <strong>S = 0,5 m²</strong>.
+                    Calcule la force F exercée par ce meuble.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step">
+                    <div class="sol-num">1</div>
+                    <div class="sol-text"><strong>Données :</strong> P = 2 000 Pa · S = 0,5 m² · F = ?</div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">2</div>
+                    <div class="sol-text"><strong>Conversions :</strong> S est déjà en m² ✓ Pas de conversion nécessaire.</div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">3</div>
+                    <div class="sol-text"><strong>Formule inversée :</strong> F = P × S</div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">4</div>
+                    <div class="sol-text"><strong>Application :</strong> F = 2 000 × 0,5</div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">5</div>
+                    <div class="sol-text"><strong>Résultat :</strong> F = <strong>1 000 N</strong></div>
+                </div>
+                <div class="final-ans">✅ F = <strong>1 000 N</strong></div>
+            </div>
+        </div>
+
+        <!-- Exercice 2 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Trouver la surface</div>
+                <div class="ex-stmt">
+                    Une statue de musée exerce une force de <strong>F = 600 N</strong> sur le sol.
+                    Pour ne pas abîmer le parquet, la pression ne doit pas dépasser <strong>P = 1 500 Pa</strong>.
+                    Quelle surface minimale S faut-il pour le socle ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step">
+                    <div class="sol-num">1</div>
+                    <div class="sol-text"><strong>Données :</strong> F = 600 N · P = 1 500 Pa · S = ?</div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">2</div>
+                    <div class="sol-text"><strong>Formule inversée :</strong> S = F ÷ P</div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">3</div>
+                    <div class="sol-text"><strong>Application :</strong> S = 600 ÷ 1 500</div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">4</div>
+                    <div class="sol-text"><strong>Résultat :</strong> S = <strong>0,4 m²</strong></div>
+                </div>
+                <div class="final-ans">✅ S = <strong>0,4 m²</strong> = 4 000 cm²<br>Le socle doit faire au moins 0,4 m² (= 63 cm × 63 cm environ).</div>
+            </div>
+        </div>
+
+        <!-- Exercice 3 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Conversion complète (masse + surface)</div>
+                <div class="ex-stmt">
+                    Une brique de <strong>masse 500 g</strong> repose sur sa plus petite face qui mesure <strong>8 cm × 10 cm</strong>.
+                    Calcule la pression exercée sur le sol. <em>(g = 10 N/kg)</em>
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step">
+                    <div class="sol-num">1</div>
+                    <div class="sol-text"><strong>Convertir la masse :</strong> m = 500 g ÷ 1 000 = <strong>0,5 kg</strong></div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">2</div>
+                    <div class="sol-text"><strong>Calculer la force (poids) :</strong> F = m × g = 0,5 × 10 = <strong>5 N</strong></div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">3</div>
+                    <div class="sol-text"><strong>Calculer la surface :</strong> S = 8 cm × 10 cm = 80 cm² → 80 ÷ 10 000 = <strong>0,008 m²</strong></div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">4</div>
+                    <div class="sol-text"><strong>Formule :</strong> P = F ÷ S = 5 ÷ 0,008</div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">5</div>
+                    <div class="sol-text"><strong>Résultat :</strong> P = <strong>625 Pa</strong></div>
+                </div>
+                <div class="final-ans">✅ P = <strong>625 Pa</strong></div>
+                <div class="warn-ans">⚠️ Erreur fréquente : utiliser 500 N (au lieu de 5 N) et 80 m² (au lieu de 0,008 m²) → on obtient P = 6,25 Pa, ce qui est 100× trop petit !</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ COMPLETION ══ -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 2 terminé !</h2>
+    <p>Bravo ! Tu maîtrises maintenant les formules inversées et les conversions.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue vers le niveau 3.</p>
+</div>
+
+
+<!-- ══ NAVIGATION ══ -->
+<div class="level-nav">
+    <h3>📚 Navigation — Pression des solides</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="physique_pression_niveau1.html" class="nav-btn">Niveau 1 — P = F/S</a>
+        <a href="physique_pression_niveau2.html" class="nav-btn current">▶ Niveau 2 — Conversions</a>
+        <a href="physique_pression_niveau3.html" class="nav-btn">Niveau 3 — Pièges</a>
+        <a href="physique_pression_niveau4.html" class="nav-btn">Niveau 4 — Problèmes</a>
+        <a href="physique_pression_niveau5.html" class="nav-btn">Niveau 5 — Défi</a>
+    </div>
+</div>
+
+</main>
+
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════ -->
+<script>
+/* ─── QCM ─── */
+const QCM_CORRECT = {1:1, 2:2, 3:2, 4:2, 5:2};
+
+const QCM_OK = {
+    1:"✅ Exact ! F = P × S = 500 × 2 = 1 000 N. Quand P et S sont connues, on multiplie pour trouver F.",
+    2:"✅ Parfait ! S = F ÷ P = 600 ÷ 200 = 3 m². On isole S en divisant F par P.",
+    3:"✅ Bravo ! 50 cm² ÷ 10 000 = 0,005 m². Il faut toujours diviser par 10 000 pour passer de cm² à m².",
+    4:"✅ Correct ! 400 g = 0,4 kg, puis F = 0,4 × 10 = 4 N. Attention à bien convertir g → kg d'abord !",
+    5:"✅ Exact ! L'erreur est d'avoir utilisé 100 cm² directement. Il fallait convertir : 100 cm² = 0,01 m², donc P = 500 ÷ 0,01 = 50 000 Pa."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Pour trouver F, on utilise F = P × S (pas division ni addition). F = 500 × 2 = 1 000 N.",
+    2:"❌ Non. Pour trouver S, on utilise S = F ÷ P = 600 ÷ 200 = 3 m². Ne pas multiplier F et P !",
+    3:"❌ Non. 1 m² = 100 × 100 = 10 000 cm². Donc 50 cm² ÷ 10 000 = 0,005 m². Pas ÷100, pas ×10.",
+    4:"❌ Attention ! La masse est 400 g = 0,4 kg. Puis F = 0,4 × 10 = 4 N. Ne pas oublier g → kg d'abord !",
+    5:"❌ Non. L'erreur de l'élève est bien une conversion oubliée : 100 cm² ≠ 100 m². La bonne valeur est 0,01 m², donc P = 50 000 Pa."
+};
+
+/* ─── FILL IN ─── */
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['p','pression'],['s','surface']],
+        symmetric:true,
+        msgOk:"✅ Parfait ! F = P × S. En couvrant le F dans le triangle, tu vois P × S.",
+        msgErr:"❌ Attendus : « P » et « S » (dans n'importe quel ordre). F = P × S."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['0,03','0.03','003'],['10000','10 000']],
+        symmetric:false,
+        msgOk:"✅ Bravo ! 300 cm² ÷ 10 000 = 0,03 m².",
+        msgErr:"❌ Attendus : 0,03 m² et 10 000."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['2'],['0,2','0.2']],
+        symmetric:false,
+        msgOk:"✅ Exact ! 200 g = 0,2 kg, puis F = 0,2 × 10 = 2 N.",
+        msgErr:"❌ Attendus : 2 N et 0,2 kg. Pense à la conversion g → kg (÷1000)."
+    }
+};
+
+/* ─── ÉTAT ─── */
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase()
+            .normalize('NFD').replace(/[̀-ͯ]/g,'')
+            .replace(/[^a-z0-9]/g,'');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_physique_2', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = (clickedIdx === correct);
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk = true;
+
+    if (data.symmetric) {
+        /* Les deux blancs peuvent être dans n'importe quel ordre */
+        const vals = data.fields.map(id => norm(document.getElementById(id).value));
+        const opts0 = data.accepted[0].map(norm);
+        const opts1 = data.accepted[1].map(norm);
+        const ok0 = (opts0.some(m => vals[0] === m) && opts1.some(m => vals[1] === m)) ||
+                    (opts1.some(m => vals[0] === m) && opts0.some(m => vals[1] === m));
+        data.fields.forEach(id => {
+            document.getElementById(id).classList.remove('correct','wrong');
+            document.getElementById(id).classList.add(ok0 ? 'correct' : 'wrong');
+        });
+        allOk = ok0;
+    } else {
+        data.fields.forEach((id, i) => {
+            const input   = document.getElementById(id);
+            const val     = norm(input.value);
+            const matches = data.accepted[i].map(norm);
+            const ok      = matches.some(m => val === m);
+            input.classList.remove('correct','wrong');
+            input.classList.add(ok ? 'correct' : 'wrong');
+            if (!ok) allOk = false;
+        });
+    }
+
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) { btn.disabled = true; fillDone[num] = true; score++; updateUI(); }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+/* ─── CALCULATRICE ─── */
+let calcVal   = '0';
+let calcPrev  = null;
+let calcOp    = null;
+let calcFresh = false;
+
+function calcRefresh() {
+    document.getElementById('calcDisplay').textContent = calcVal;
+}
+
+function calcDigit(d) {
+    if (calcFresh) { calcVal = (d === '.') ? '0.' : d; calcFresh = false; }
+    else {
+        if (calcVal === '0' && d !== '.') calcVal = d;
+        else if (!(d === '.' && calcVal.includes('.'))) calcVal += d;
+    }
+    calcRefresh();
+}
+
+function calcOper(op) {
+    const cur = parseFloat(calcVal);
+    if (calcPrev !== null && calcOp && !calcFresh) {
+        calcVal = String(applyOp(calcPrev, cur, calcOp));
+        calcRefresh();
+    }
+    calcPrev  = parseFloat(calcVal);
+    calcOp    = op;
+    calcFresh = true;
+    document.getElementById('calcExprDisplay').textContent = calcVal + ' ' + op;
+}
+
+function applyOp(a, b, op) {
+    switch(op) {
+        case '+': return round(a + b);
+        case '-': return round(a - b);
+        case '×': return round(a * b);
+        case '÷': return b !== 0 ? round(a / b) : 'Erreur';
+        case '%': return round(a * b / 100);
+    }
+}
+
+function round(n) {
+    return Math.round(n * 1e10) / 1e10;
+}
+
+function calcEquals() {
+    if (calcPrev === null || !calcOp) return;
+    const cur = parseFloat(calcVal);
+    const expr = document.getElementById('calcExprDisplay').textContent;
+    const result = applyOp(calcPrev, cur, calcOp);
+    document.getElementById('calcExprDisplay').textContent = expr + ' ' + cur + ' =';
+    calcVal   = String(result);
+    calcPrev  = null;
+    calcOp    = null;
+    calcFresh = true;
+    calcRefresh();
+}
+
+function calcClear() {
+    calcVal = '0'; calcPrev = null; calcOp = null; calcFresh = false;
+    document.getElementById('calcExprDisplay').textContent = '';
+    calcRefresh();
+}
+
+function calcDel() {
+    if (calcFresh || calcVal.length <= 1) { calcVal = '0'; calcFresh = false; }
+    else calcVal = calcVal.slice(0, -1);
+    calcRefresh();
+}
+</script>
+</body>
+</html>

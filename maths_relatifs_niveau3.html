@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Nombres Relatifs · Niveau 3 — Règles de signe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#1E88E5; --primary-dark:#1565C0; --primary-mid:#42A5F5; --primary-bg:#E3F2FD;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#0D47A1 0%,#1E88E5 55%,#90CAF9 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(13,71,161,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#FF9600; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#D07A00; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#0D47A1,#1E88E5,#90CAF9); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.blue   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#0D47A1,#1565C0); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.8; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.8; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .examples-row { display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
+        .example-chip { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:10px; padding:8px 16px; font-size:.95rem; font-weight:800; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .example-chip span { color:#888; font-size:.75rem; font-family:inherit; font-weight:700; display:block; text-align:center; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* QCM */
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        /* Fill in */
+        .fill-item { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:70px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* Guided exercises */
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* Calculatrice */
+        .calc-wrap { background:linear-gradient(135deg,#0D47A1,#1565C0); border-radius:14px; padding:18px; }
+        .calc-screen { background:#0A1628; color:#90CAF9; font-family:'Courier New',monospace; font-size:1.4rem; font-weight:900; border-radius:10px; padding:12px 16px; margin-bottom:12px; text-align:right; min-height:52px; word-break:break-all; }
+        .calc-screen .calc-expr { font-size:.8rem; color:#546E7A; display:block; min-height:18px; }
+        .calc-btns { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; }
+        .calc-btn { padding:12px 4px; border-radius:10px; border:none; cursor:pointer; font-family:'Nunito',sans-serif; font-size:1rem; font-weight:900; transition:all .1s ease; }
+        .calc-btn:active { transform:scale(.93); }
+        .calc-btn.num   { background:#1E3A5F; color:white; }
+        .calc-btn.num:hover { background:#26527A; }
+        .calc-btn.op    { background:#FF9600; color:white; }
+        .calc-btn.op:hover { background:#FFB74D; }
+        .calc-btn.eq    { background:#58CC02; color:white; grid-column:span 2; }
+        .calc-btn.eq:hover { background:#76D92B; }
+        .calc-btn.clr   { background:#E53935; color:white; }
+        .calc-btn.clr:hover { background:#EF5350; }
+        .calc-btn.neg   { background:#7B1FA2; color:white; }
+        .calc-btn.neg:hover { background:#9C27B0; }
+
+        /* Completion */
+        .completion { display:none; background:linear-gradient(135deg,#0D47A1,#1E88E5,#90CAF9); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #0A2F6E; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        /* Level nav */
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+
+        @media(max-width:600px){
+            .header-inner { flex-wrap:wrap; }
+            .header-center { order:-1; flex-basis:100%; }
+            .opts.short { grid-template-columns:1fr 1fr; }
+            .calc-btns { gap:5px; }
+            .calc-btn { padding:10px 2px; font-size:.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>± Nombres Relatifs · Multiplier &amp; Diviser</h1>
+            <p>Niveau 3 · Règles des signes · (−)×(−)=+ · Pièges des puissances</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 3 — Avancé</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- ══ 1. LEÇON ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon blue">✖️</div>
+        <div>
+            <div class="card-title">La leçon — Multiplier et diviser des relatifs</div>
+            <div class="card-sub">Règle des signes · Tableau · Puissances</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Pour multiplier ou diviser des relatifs, pas besoin de droite graduée : il suffit de connaître
+            <strong>la règle des signes</strong>. Les valeurs absolues se multiplient/divisent normalement,
+            et le signe s'obtient par une règle simple.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 La règle des signes — Multiplication et Division</h3>
+            <p>
+                • <strong>Même signe</strong> → résultat <strong>positif</strong> (+)<br>
+                &nbsp;&nbsp;&nbsp;(+) × (+) = + &nbsp;·&nbsp; (−) × (−) = +<br><br>
+                • <strong>Signes différents</strong> → résultat <strong>négatif</strong> (−)<br>
+                &nbsp;&nbsp;&nbsp;(+) × (−) = − &nbsp;·&nbsp; (−) × (+) = −<br><br>
+                💡 La même règle s'applique pour la division ÷.
+            </p>
+        </div>
+
+        <!-- SVG 1 : Tableau des signes -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg" style="max-width:500px;width:100%">
+                <rect x="0" y="0" width="500" height="220" fill="#EEF5FF" rx="10"/>
+                <text x="250" y="22" text-anchor="middle" font-size="13" font-weight="900" fill="#0D47A1" font-family="Nunito,sans-serif">Tableau des signes — × et ÷</text>
+
+                <!-- En-tête gauche -->
+                <rect x="20" y="35" width="100" height="50" rx="6" fill="#1565C0"/>
+                <text x="70" y="56" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito,sans-serif">1er</text>
+                <text x="70" y="72" text-anchor="middle" font-size="11" fill="white" font-family="Nunito,sans-serif">nombre</text>
+                <rect x="20" y="35" width="100" height="50" rx="0" fill="none" stroke="#90CAF9" stroke-width="1"/>
+                <!-- Ligne diagonale dans en-tête -->
+                <text x="55" y="56" text-anchor="middle" font-size="10" fill="#90CAF9" font-family="Nunito,sans-serif">×/÷</text>
+                <line x1="20" y1="85" x2="120" y2="35" stroke="#90CAF9" stroke-width="1" opacity="0.5"/>
+                <text x="95" y="50" text-anchor="middle" font-size="10" fill="#90CAF9" font-family="Nunito,sans-serif">2ème</text>
+
+                <!-- En-têtes colonnes -->
+                <rect x="130" y="35" width="160" height="50" rx="6" fill="#1565C0"/>
+                <text x="210" y="65" text-anchor="middle" font-size="22" font-weight="900" fill="#90CAF9" font-family="Courier New,monospace">+</text>
+                <rect x="300" y="35" width="180" height="50" rx="6" fill="#1565C0"/>
+                <text x="390" y="65" text-anchor="middle" font-size="22" font-weight="900" fill="#90CAF9" font-family="Courier New,monospace">−</text>
+
+                <!-- En-têtes lignes -->
+                <rect x="20" y="95" width="100" height="55" rx="6" fill="#1565C0"/>
+                <text x="70" y="128" text-anchor="middle" font-size="22" font-weight="900" fill="#90CAF9" font-family="Courier New,monospace">+</text>
+                <rect x="20" y="160" width="100" height="55" rx="6" fill="#1565C0"/>
+                <text x="70" y="193" text-anchor="middle" font-size="22" font-weight="900" fill="#90CAF9" font-family="Courier New,monospace">−</text>
+
+                <!-- Cellule ++ = + (vert) -->
+                <rect x="130" y="95" width="160" height="55" rx="6" fill="#1B5E20"/>
+                <text x="210" y="130" text-anchor="middle" font-size="28" font-weight="900" fill="#A5D6A7" font-family="Courier New,monospace">+</text>
+                <text x="210" y="146" text-anchor="middle" font-size="9" fill="#81C784" font-weight="700" font-family="Nunito,sans-serif">positif ✓</text>
+
+                <!-- Cellule +- = - (rouge) -->
+                <rect x="300" y="95" width="180" height="55" rx="6" fill="#B71C1C"/>
+                <text x="390" y="130" text-anchor="middle" font-size="28" font-weight="900" fill="#FFCDD2" font-family="Courier New,monospace">−</text>
+                <text x="390" y="146" text-anchor="middle" font-size="9" fill="#EF9A9A" font-weight="700" font-family="Nunito,sans-serif">négatif ✗</text>
+
+                <!-- Cellule -+ = - (rouge) -->
+                <rect x="130" y="160" width="160" height="55" rx="6" fill="#B71C1C"/>
+                <text x="210" y="195" text-anchor="middle" font-size="28" font-weight="900" fill="#FFCDD2" font-family="Courier New,monospace">−</text>
+                <text x="210" y="211" text-anchor="middle" font-size="9" fill="#EF9A9A" font-weight="700" font-family="Nunito,sans-serif">négatif ✗</text>
+
+                <!-- Cellule -- = + (vert) -->
+                <rect x="300" y="160" width="180" height="55" rx="6" fill="#1B5E20"/>
+                <text x="390" y="195" text-anchor="middle" font-size="28" font-weight="900" fill="#A5D6A7" font-family="Courier New,monospace">+</text>
+                <text x="390" y="211" text-anchor="middle" font-size="9" fill="#81C784" font-weight="700" font-family="Nunito,sans-serif">positif ✓</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>💡 Astuce — Compter le nombre de signes −</h3>
+            <p>
+                Dans un produit de plusieurs nombres relatifs :<br><br>
+                • <strong>Nombre pair de facteurs négatifs</strong> → résultat <strong>positif</strong><br>
+                &nbsp;&nbsp;&nbsp;Ex : (−2) × (−3) × (−4) × (−1) → 4 négatifs (pair) → <strong>+24</strong><br><br>
+                • <strong>Nombre impair de facteurs négatifs</strong> → résultat <strong>négatif</strong><br>
+                &nbsp;&nbsp;&nbsp;Ex : (−2) × (−3) × (−4) → 3 négatifs (impair) → <strong>−24</strong>
+            </p>
+        </div>
+
+        <div class="examples-row">
+            <div class="example-chip">(−4) × (−3) = +12<span>même signe → +</span></div>
+            <div class="example-chip">(+6) × (−5) = −30<span>signes diff → −</span></div>
+            <div class="example-chip">(−18) ÷ (−3) = +6<span>même signe → +</span></div>
+            <div class="example-chip">(+20) ÷ (−4) = −5<span>signes diff → −</span></div>
+        </div>
+
+        <div class="def-box">
+            <h3>📌 Puissances d'un nombre relatif</h3>
+            <p>
+                Pour calculer (−a)ⁿ, on applique la règle des signes n fois :<br><br>
+                • <strong>n pair</strong> → (−a)ⁿ est <strong>positif</strong><br>
+                &nbsp;&nbsp;&nbsp;(−3)² = (−3)×(−3) = <strong>+9</strong><br>
+                &nbsp;&nbsp;&nbsp;(−2)⁴ = (−2)×(−2)×(−2)×(−2) = <strong>+16</strong><br><br>
+                • <strong>n impair</strong> → (−a)ⁿ est <strong>négatif</strong><br>
+                &nbsp;&nbsp;&nbsp;(−3)³ = (−3)×(−3)×(−3) = (+9)×(−3) = <strong>−27</strong>
+            </p>
+        </div>
+
+        <!-- SVG 2 : Piège (−3)² vs −3² -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 150" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="150" fill="#FFF3E0" rx="10"/>
+                <text x="280" y="20" text-anchor="middle" font-size="13" font-weight="900" fill="#E65100" font-family="Nunito,sans-serif">⚠️ Piège numéro 1 des relatifs</text>
+
+                <!-- Gauche : (−3)² -->
+                <rect x="15" y="30" width="245" height="105" rx="10" fill="#C8E6C9" stroke="#388E3C" stroke-width="2"/>
+                <text x="137" y="55" text-anchor="middle" font-size="13" font-weight="900" fill="#1B5E20" font-family="Nunito,sans-serif">Avec parenthèses</text>
+                <text x="137" y="82" text-anchor="middle" font-size="22" font-weight="900" fill="#1B5E20" font-family="Courier New,monospace">(−3)²</text>
+                <text x="137" y="104" text-anchor="middle" font-size="12" fill="#2E7D32" font-weight="700" font-family="Nunito,sans-serif">= (−3) × (−3)</text>
+                <text x="137" y="126" text-anchor="middle" font-size="16" font-weight="900" fill="#1B5E20" font-family="Courier New,monospace">= +9 ✓</text>
+
+                <!-- Droite : −3² -->
+                <rect x="300" y="30" width="245" height="105" rx="10" fill="#FFCDD2" stroke="#C62828" stroke-width="2"/>
+                <text x="422" y="55" text-anchor="middle" font-size="13" font-weight="900" fill="#B71C1C" font-family="Nunito,sans-serif">Sans parenthèses</text>
+                <text x="422" y="82" text-anchor="middle" font-size="22" font-weight="900" fill="#B71C1C" font-family="Courier New,monospace">−3²</text>
+                <text x="422" y="104" text-anchor="middle" font-size="12" fill="#C62828" font-weight="700" font-family="Nunito,sans-serif">= −(3 × 3) = −(9)</text>
+                <text x="422" y="126" text-anchor="middle" font-size="16" font-weight="900" fill="#B71C1C" font-family="Courier New,monospace">= −9 ✗</text>
+
+                <!-- VS au milieu -->
+                <text x="280" y="92" text-anchor="middle" font-size="18" font-weight="900" fill="#E65100" font-family="Nunito,sans-serif">≠</text>
+            </svg>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Les pièges des puissances</h3>
+            <p>
+                ❌ <strong>(−3)² = −9</strong> — FAUX ! Le carré s'applique à (−3) entier → (+9).<br>
+                ✅ <strong>(−3)² = +9</strong><br><br>
+                ❌ <strong>−3² = +9</strong> — FAUX ! Sans parenthèses, le carré ne touche que 3, le − reste devant.<br>
+                ✅ <strong>−3² = −9</strong><br><br>
+                💡 Règle simple : les <strong>parenthèses incluent le signe</strong> dans la puissance.
+                Sans parenthèses, le − est en dehors.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 2. QCM ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">✏️</div>
+        <div>
+            <div class="card-title">Exercices — QCM</div>
+            <div class="card-sub">5 questions · Règles des signes et puissances</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Combien vaut (−4) × (−3) ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">A) −12</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">B) +12</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">C) −7</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">D) +7</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Combien vaut (−6) ÷ (−2) ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">A) −3</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">B) +3</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">C) −12</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">D) +12</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Combien vaut (−3)² ? ⚠️ Attention au piège !</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">A) −9</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">B) +9</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">C) −6</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">D) +6</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Combien vaut −3² ? ⚠️ Lis bien — sans parenthèses !</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">A) −9</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">B) +9</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">C) −6</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">D) +6</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Combien vaut (−2) × (+5) × (−3) ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">A) −30</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">B) +30</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">C) +10</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">D) −10</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 3. TEXTES À TROUS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">📝</div>
+        <div>
+            <div class="card-title">Exercices — Textes à trous</div>
+            <div class="card-sub">3 exercices · Appliquer les règles des signes</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                (−5) × (+4) : signes différents → résultat négatif.
+                Valeur absolue : 5 × 4 = <input class="blank" id="f1a" placeholder="?">.
+                Résultat : <input class="blank" id="f1b" placeholder="?">.
+            </div>
+            <button class="verify-btn" onclick="checkFill(1)">Vérifier</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                (−12) ÷ (−4) = <input class="blank" id="f2a" placeholder="?"> (même signe →&nbsp;positif).
+                Mais (−12) ÷ (+4) = <input class="blank" id="f2b" placeholder="?"> (signes diff →&nbsp;négatif).
+            </div>
+            <button class="verify-btn" onclick="checkFill(2)">Vérifier</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                (−2)² = (−2) × (−2) = <input class="blank" id="f3a" placeholder="?">.
+                Mais −2² = −(2 × 2) = <input class="blank" id="f3b" placeholder="?">.
+            </div>
+            <button class="verify-btn" onclick="checkFill(3)">Vérifier</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 4. EXERCICES GUIDÉS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon blue">🎯</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Ex 1 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Produit de plusieurs relatifs</div>
+                <div class="ex-stmt">
+                    Calcule, en montrant chaque étape :<br><br>
+                    <strong>(−3) × (+4) × (−2)</strong>
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Étape 1 :</strong> (−3) × (+4)<br>Signes différents → résultat négatif. Valeur : 3 × 4 = 12. Résultat : <strong>−12</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Étape 2 :</strong> (−12) × (−2)<br>Même signe (−) → résultat positif. Valeur : 12 × 2 = 24. Résultat : <strong>+24</strong></div></div>
+                <div class="sol-step"><div class="sol-num">💡</div><div class="sol-text">Vérification rapide : on a <strong>2 facteurs négatifs</strong> (nombre pair → positif). ✓</div></div>
+                <div class="final-ans">✅ (−3) × (+4) × (−2) = <strong>+24</strong></div>
+            </div>
+        </div>
+
+        <!-- Ex 2 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Piège des puissances CE1D</div>
+                <div class="ex-stmt">
+                    Calcule et explique la différence :<br><br>
+                    <strong>a) (−4)²</strong><br>
+                    <strong>b) −4²</strong><br><br>
+                    <em style="font-size:.85rem;color:#888;">Ces deux expressions semblent identiques mais donnent des résultats opposés.</em>
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">a</div><div class="sol-text"><strong>(−4)²</strong> : les parenthèses incluent le signe dans la puissance.<br>(−4)² = (−4) × (−4) = même signe → <strong>+16</strong></div></div>
+                <div class="sol-step"><div class="sol-num">b</div><div class="sol-text"><strong>−4²</strong> : sans parenthèses, le carré ne s'applique qu'à 4, le − reste en dehors.<br>−4² = −(4²) = −(4 × 4) = <strong>−16</strong></div></div>
+                <div class="sol-step"><div class="sol-num">⚠️</div><div class="sol-text">La différence entre +16 et −16 ne vient que des parenthèses ! C'est un piège classique au CE1D.</div></div>
+                <div class="final-ans">✅ a) (−4)² = <strong>+16</strong> &nbsp;·&nbsp; b) −4² = <strong>−16</strong></div>
+            </div>
+        </div>
+
+        <!-- Ex 3 CE1D -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Style CE1D · Argent de poche</div>
+                <div class="ex-stmt">
+                    Chaque semaine, Léa dépense 6€ de plus qu'elle ne gagne (variation = −6€/semaine).<br>
+                    Son frère Thomas gagne 4€ par semaine (variation = +4€/semaine).<br><br>
+                    <strong>a)</strong> Quelle est la variation du budget de Léa après 5 semaines ?<br>
+                    <strong>b)</strong> Quelle est la variation du budget de Thomas après 3 semaines ?<br>
+                    <strong>c)</strong> Quelle est la différence entre leurs variations ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">a</div><div class="sol-text">Variation Léa = (−6) × 5<br>Signes différents → négatif. 6 × 5 = 30. → <strong>−30€</strong></div></div>
+                <div class="sol-step"><div class="sol-num">b</div><div class="sol-text">Variation Thomas = (+4) × 3<br>Même signe → positif. 4 × 3 = 12. → <strong>+12€</strong></div></div>
+                <div class="sol-step"><div class="sol-num">c</div><div class="sol-text">Différence = variation Thomas − variation Léa = (+12) − (−30)<br>= 12 + 30 (soustraire un négatif = ajouter) → <strong>+42€</strong></div></div>
+                <div class="final-ans">✅ a) −30€ &nbsp;·&nbsp; b) +12€ &nbsp;·&nbsp; c) différence de +42€</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 5. CALCULATRICE ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon blue">🧮</div>
+        <div>
+            <div class="card-title">Calculatrice — Nombres relatifs</div>
+            <div class="card-sub">Pour vérifier tes calculs · Utilise +/− pour les négatifs</div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="calc-wrap">
+            <div class="calc-screen">
+                <span class="calc-expr" id="calcExpr"></span>
+                <span id="calcDisplay">0</span>
+            </div>
+            <div class="calc-btns">
+                <button class="calc-btn clr" onclick="calcClear()">C</button>
+                <button class="calc-btn neg" onclick="calcNeg()">+/−</button>
+                <button class="calc-btn op"  onclick="calcOp('÷')">÷</button>
+                <button class="calc-btn op"  onclick="calcOp('×')">×</button>
+
+                <button class="calc-btn num" onclick="calcDigit('7')">7</button>
+                <button class="calc-btn num" onclick="calcDigit('8')">8</button>
+                <button class="calc-btn num" onclick="calcDigit('9')">9</button>
+                <button class="calc-btn op"  onclick="calcOp('−')">−</button>
+
+                <button class="calc-btn num" onclick="calcDigit('4')">4</button>
+                <button class="calc-btn num" onclick="calcDigit('5')">5</button>
+                <button class="calc-btn num" onclick="calcDigit('6')">6</button>
+                <button class="calc-btn op"  onclick="calcOp('+')">+</button>
+
+                <button class="calc-btn num" onclick="calcDigit('1')">1</button>
+                <button class="calc-btn num" onclick="calcDigit('2')">2</button>
+                <button class="calc-btn num" onclick="calcDigit('3')">3</button>
+                <button class="calc-btn num" onclick="calcDigit('0')">0</button>
+
+                <button class="calc-btn eq" onclick="calcEquals()">=</button>
+                <button class="calc-btn num" onclick="calcDigit('.')">.</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ══ COMPLETION ══ -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 3 terminé !</h2>
+    <p>Bravo ! Tu maîtrises la multiplication et la division des relatifs.<br>Tu as gagné <strong id="finalXP">0</strong> XP !</p>
+</div>
+
+<!-- ══ NAVIGATION ══ -->
+<div class="level-nav">
+    <h3>📚 Navigation — Nombres Relatifs</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_relatifs_niveau1.html" class="nav-btn">Niveau 1 — Introduction</a>
+        <a href="maths_relatifs_niveau2.html" class="nav-btn">Niveau 2 — Opérations</a>
+        <a href="maths_relatifs_niveau3.html" class="nav-btn current">▶ Niveau 3 — Règles de signe</a>
+        <a href="maths_relatifs_niveau4.html" class="nav-btn">Niveau 4 — Problèmes</a>
+        <a href="maths_relatifs_niveau5.html" class="nav-btn">Niveau 5 — Défi</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+/* ── QCM ── */
+const QCM_CORRECT = {1:1, 2:1, 3:1, 4:0, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! (−4) × (−3) : même signe → positif. 4×3=12 → +12.",
+    2:"✅ Parfait ! (−6) ÷ (−2) : même signe → positif. 6÷2=3 → +3.",
+    3:"✅ Bravo ! (−3)² = (−3)×(−3) = même signe → +9. Les parenthèses incluent le signe.",
+    4:"✅ Exact ! −3² = −(3²) = −9. Sans parenthèses, le carré ne touche que 3, le − reste devant.",
+    5:"✅ Parfait ! 2 facteurs négatifs (pair) → positif. 2×5×3=30 → +30."
+};
+
+const QCM_ERR = {
+    1:"❌ Même signe (−) et (−) → résultat positif ! (−4)×(−3) = +12.",
+    2:"❌ Même signe (−) et (−) → résultat positif ! 6÷2=3 → +3.",
+    3:"❌ Piège ! (−3)² = (−3)×(−3). Deux négatifs → positif → +9. Les parenthèses incluent le signe.",
+    4:"❌ Piège ! Sans parenthèses, −3² = −(3²) = −9. Le − est en dehors du carré.",
+    5:"❌ Compte les − : 2 facteurs négatifs (pair) → résultat positif. 2×5×3=30 → +30."
+};
+
+/* ── Textes à trous ── */
+const FILL_DATA = {
+    1:{fields:['f1a','f1b'], accepted:[['20'],['-20','−20']],
+       msgOk:"✅ (−5)×(+4) : 5×4=20, signes différents → résultat −20.",
+       msgErr:"❌ Valeur absolue : 5×4=20. Signes différents (−) et (+) → résultat négatif : −20."},
+    2:{fields:['f2a','f2b'], accepted:[['+3','3'],['-3','−3']],
+       msgOk:"✅ (−12)÷(−4)=+3 (même signe) et (−12)÷(+4)=−3 (signes différents).",
+       msgErr:"❌ Même signe → +3. Signes diff → −3. La règle des signes s'applique aussi à la division !"},
+    3:{fields:['f3a','f3b'], accepted:[['+4','4'],['-4','−4']],
+       msgOk:"✅ (−2)²=(−2)×(−2)=+4 (même signe). Mais −2²=−(2²)=−4 (− en dehors).",
+       msgErr:"❌ (−2)²=(−2)×(−2)=+4. Et −2²=−(2×2)=−4. Les parenthèses changent tout !"}
+};
+
+const TOTAL = 8;
+let score = 0;
+const qcmDone = {};
+const fillDone = {};
+
+function norm(s){ return s.trim().replace(/\s+/g,'').replace('−','-'); }
+
+function updateBar(){
+    const pct = Math.round((score/TOTAL)*100);
+    const bar = document.getElementById('barFill');
+    bar.style.width = pct+'%';
+    bar.classList.toggle('has-progress', score>0);
+    document.getElementById('progTxt').textContent = score+' / '+TOTAL+' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if(score >= Math.ceil(TOTAL * 0.8)){
+        localStorage.setItem('edu_completed_relatifs_3','1');
+        document.getElementById('finalXP').textContent = xp;
+        document.getElementById('completionBanner').classList.add('show');
+    }
+}
+
+function checkQCM(q, chosen){
+    if(qcmDone[q]) return;
+    qcmDone[q] = true;
+    const correct = QCM_CORRECT[q];
+    const isOk = (chosen === correct);
+    if(isOk) score++;
+    const btns = document.querySelectorAll('#q'+q+' .opt-btn');
+    btns.forEach((b,i) => {
+        b.disabled = true;
+        if(i === correct) b.classList.add(isOk ? 'correct' : 'show-correct');
+        if(i === chosen && !isOk) b.classList.add('wrong');
+    });
+    const fb = document.getElementById('qf'+q);
+    fb.className = 'q-feedback '+(isOk?'correct':'wrong');
+    fb.innerHTML = isOk ? QCM_OK[q] : QCM_ERR[q];
+    updateBar();
+}
+
+function checkFill(n){
+    if(fillDone[n]) return;
+    const d = FILL_DATA[n];
+    let allOk = true;
+    d.fields.forEach((id,i) => {
+        const inp = document.getElementById(id);
+        const val = norm(inp.value);
+        const ok  = d.accepted[i].map(norm).includes(val);
+        inp.disabled = true;
+        inp.classList.add(ok ? 'correct' : 'wrong');
+        if(!ok) allOk = false;
+    });
+    if(allOk){ score++; fillDone[n] = true; }
+    const fb = document.getElementById('ff'+n);
+    fb.className = 'fill-feedback show '+(allOk?'correct':'wrong');
+    fb.innerHTML = allOk ? d.msgOk : d.msgErr;
+    document.querySelector('#ff'+n).previousElementSibling.disabled = true;
+    updateBar();
+}
+
+function toggleSol(num){
+    const btn = document.getElementById('rb'+num);
+    const sol = document.getElementById('sol'+num);
+    const open = sol.classList.toggle('open');
+    btn.classList.toggle('open', open);
+}
+
+/* ── Calculatrice ── */
+let calcCurrent = '0';
+let calcPrev = '';
+let calcOper = '';
+let calcFresh = true;
+
+function calcUpdate(){
+    document.getElementById('calcDisplay').textContent = calcCurrent;
+    document.getElementById('calcExpr').textContent = calcPrev + (calcOper ? ' ' + calcOper : '');
+}
+
+function calcDigit(d){
+    if(calcFresh){ calcCurrent = '0'; calcFresh = false; }
+    if(d === '.' && calcCurrent.includes('.')) return;
+    calcCurrent = calcCurrent === '0' && d !== '.' ? d : calcCurrent + d;
+    calcUpdate();
+}
+
+function calcOp(op){
+    if(calcOper && !calcFresh) calcEquals();
+    calcPrev = calcCurrent;
+    calcOper = op;
+    calcFresh = true;
+    calcUpdate();
+}
+
+function calcNeg(){
+    calcCurrent = calcCurrent.startsWith('-') ? calcCurrent.slice(1) : '-' + calcCurrent;
+    calcUpdate();
+}
+
+function calcEquals(){
+    if(!calcOper || !calcPrev) return;
+    const a = parseFloat(calcPrev);
+    const b = parseFloat(calcCurrent);
+    let result;
+    if(calcOper === '+') result = a + b;
+    else if(calcOper === '−') result = a - b;
+    else if(calcOper === '×') result = a * b;
+    else if(calcOper === '÷') result = b !== 0 ? a / b : 'Erreur';
+    calcCurrent = result === 'Erreur' ? 'Erreur' : String(Math.round(result * 1e10) / 1e10);
+    calcPrev = '';
+    calcOper = '';
+    calcFresh = true;
+    calcUpdate();
+}
+
+function calcClear(){
+    calcCurrent = '0'; calcPrev = ''; calcOper = ''; calcFresh = true;
+    calcUpdate();
+}
+</script>
+
+</body>
+</html>

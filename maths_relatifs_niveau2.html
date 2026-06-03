@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Nombres Relatifs · Niveau 2 — Addition et Soustraction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#1E88E5; --primary-dark:#1565C0; --primary-mid:#42A5F5; --primary-bg:#E3F2FD;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#0D47A1 0%,#1E88E5 55%,#90CAF9 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(13,71,161,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#FF9600; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#D07A00; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#0D47A1,#1E88E5,#90CAF9); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.blue   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#0D47A1,#1565C0); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.8; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.8; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .examples-row { display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
+        .example-chip { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:10px; padding:8px 16px; font-size:.95rem; font-weight:800; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .example-chip span { color:#888; font-size:.75rem; font-family:inherit; font-weight:700; display:block; text-align:center; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* QCM */
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        /* Fill in */
+        .fill-item { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:70px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* Guided exercises */
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* Calculatrice */
+        .calc-wrap { background:linear-gradient(135deg,#0D47A1,#1565C0); border-radius:14px; padding:18px; }
+        .calc-screen { background:#0A1628; color:#90CAF9; font-family:'Courier New',monospace; font-size:1.4rem; font-weight:900; border-radius:10px; padding:12px 16px; margin-bottom:12px; text-align:right; min-height:52px; word-break:break-all; }
+        .calc-screen .calc-expr { font-size:.8rem; color:#546E7A; display:block; min-height:18px; }
+        .calc-btns { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; }
+        .calc-btn { padding:12px 4px; border-radius:10px; border:none; cursor:pointer; font-family:'Nunito',sans-serif; font-size:1rem; font-weight:900; transition:all .1s ease; }
+        .calc-btn:active { transform:scale(.93); }
+        .calc-btn.num   { background:#1E3A5F; color:white; }
+        .calc-btn.num:hover { background:#26527A; }
+        .calc-btn.op    { background:#FF9600; color:white; }
+        .calc-btn.op:hover { background:#FFB74D; }
+        .calc-btn.eq    { background:#58CC02; color:white; grid-column:span 2; }
+        .calc-btn.eq:hover { background:#76D92B; }
+        .calc-btn.clr   { background:#E53935; color:white; }
+        .calc-btn.clr:hover { background:#EF5350; }
+        .calc-btn.neg   { background:#7B1FA2; color:white; }
+        .calc-btn.neg:hover { background:#9C27B0; }
+
+        /* Completion */
+        .completion { display:none; background:linear-gradient(135deg,#0D47A1,#1E88E5,#90CAF9); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #0A2F6E; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        /* Level nav */
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+
+        /* SVG animation */
+        @keyframes drawArrow { from { stroke-dashoffset:300; } to { stroke-dashoffset:0; } }
+        .anim-arrow { stroke-dasharray:300; stroke-dashoffset:300; animation:drawArrow 1.2s ease forwards; }
+        .anim-arrow-2 { stroke-dasharray:300; stroke-dashoffset:300; animation:drawArrow 1.2s ease 0.8s forwards; }
+
+        @media(max-width:600px){
+            .header-inner { flex-wrap:wrap; }
+            .header-center { order:-1; flex-basis:100%; }
+            .opts.short { grid-template-columns:1fr 1fr; }
+            .calc-btns { gap:5px; }
+            .calc-btn { padding:10px 2px; font-size:.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>± Nombres Relatifs · Addition &amp; Soustraction</h1>
+            <p>Niveau 2 · Règles des signes · a − (−b) = a + b</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 2 — Intermédiaire</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- ══ 1. LEÇON ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon blue">➕</div>
+        <div>
+            <div class="card-title">La leçon — Additionner et soustraire des relatifs</div>
+            <div class="card-sub">Règles des signes · Déplacements · Soustraction = addition de l'opposé</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Additionner et soustraire des nombres relatifs, c'est comme se déplacer sur la droite graduée :
+            ajouter un positif = aller à <strong>droite</strong>, ajouter un négatif = aller à <strong>gauche</strong>.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Règle 1 — Même signe : on additionne</h3>
+            <p>
+                Quand deux nombres ont le <strong>même signe</strong>, on additionne leurs valeurs absolues et on garde ce signe.<br><br>
+                • <strong>(+4) + (+3)</strong> = +(4+3) = <strong>+7</strong><br>
+                • <strong>(−4) + (−3)</strong> = −(4+3) = <strong>−7</strong><br><br>
+                💡 Deux dettes qui s'accumulent = une dette encore plus grande.
+            </p>
+        </div>
+
+        <div class="def-box">
+            <h3>📌 Règle 2 — Signes différents : on soustrait</h3>
+            <p>
+                Quand deux nombres ont des <strong>signes différents</strong>, on soustrait les valeurs absolues (grande − petite) et on garde le signe du nombre qui a la <strong>plus grande valeur absolue</strong>.<br><br>
+                • <strong>(+8) + (−5)</strong> → |8|&gt;|5| → +(8−5) = <strong>+3</strong><br>
+                • <strong>(−8) + (+5)</strong> → |8|&gt;|5| → −(8−5) = <strong>−3</strong>
+            </p>
+        </div>
+
+        <!-- SVG 1 : Droite graduée avec déplacements animés -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="max-width:600px;width:100%">
+                <rect x="0" y="0" width="600" height="180" fill="#EEF5FF" rx="10"/>
+                <text x="300" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#0D47A1" font-family="Nunito,sans-serif">Déplacements sur la droite graduée</text>
+
+                <!-- Axe -->
+                <line x1="30" y1="80" x2="568" y2="80" stroke="#1E88E5" stroke-width="2"/>
+                <polygon points="568,75 580,80 568,85" fill="#1E88E5"/>
+
+                <!-- Graduations de −8 à +8 -->
+                <g font-size="10" font-weight="700" font-family="Courier New,monospace" fill="#1565C0">
+                    <line x1="30"  y1="75" x2="30"  y2="85" stroke="#1565C0" stroke-width="1.5"/>
+                    <text x="30"  y="98" text-anchor="middle">−8</text>
+                    <line x1="96"  y1="75" x2="96"  y2="85" stroke="#1565C0" stroke-width="1.5"/>
+                    <text x="96"  y="98" text-anchor="middle">−6</text>
+                    <line x1="162" y1="75" x2="162" y2="85" stroke="#1565C0" stroke-width="1.5"/>
+                    <text x="162" y="98" text-anchor="middle">−4</text>
+                    <line x1="228" y1="75" x2="228" y2="85" stroke="#1565C0" stroke-width="1.5"/>
+                    <text x="228" y="98" text-anchor="middle">−2</text>
+                    <line x1="294" y1="72" x2="294" y2="88" stroke="#0D47A1" stroke-width="2.5"/>
+                    <text x="294" y="98" text-anchor="middle" fill="#0D47A1" font-weight="900">0</text>
+                    <line x1="360" y1="75" x2="360" y2="85" stroke="#1565C0" stroke-width="1.5"/>
+                    <text x="360" y="98" text-anchor="middle">+2</text>
+                    <line x1="426" y1="75" x2="426" y2="85" stroke="#1565C0" stroke-width="1.5"/>
+                    <text x="426" y="98" text-anchor="middle">+4</text>
+                    <line x1="492" y1="75" x2="492" y2="85" stroke="#1565C0" stroke-width="1.5"/>
+                    <text x="492" y="98" text-anchor="middle">+6</text>
+                    <!-- petites graduations -->
+                    <line x1="63"  y1="77" x2="63"  y2="83" stroke="#90CAF9" stroke-width="1"/>
+                    <line x1="129" y1="77" x2="129" y2="83" stroke="#90CAF9" stroke-width="1"/>
+                    <line x1="195" y1="77" x2="195" y2="83" stroke="#90CAF9" stroke-width="1"/>
+                    <line x1="261" y1="77" x2="261" y2="83" stroke="#90CAF9" stroke-width="1"/>
+                    <line x1="327" y1="77" x2="327" y2="83" stroke="#90CAF9" stroke-width="1"/>
+                    <line x1="393" y1="77" x2="393" y2="83" stroke="#90CAF9" stroke-width="1"/>
+                    <line x1="459" y1="77" x2="459" y2="83" stroke="#90CAF9" stroke-width="1"/>
+                    <line x1="525" y1="77" x2="525" y2="83" stroke="#90CAF9" stroke-width="1"/>
+                </g>
+
+                <!-- Exemple 1 : −3 + 5 = +2 (flèche orange vers droite) -->
+                <!-- Point départ −3 -->
+                <circle cx="195" cy="80" r="7" fill="#FF9600"/>
+                <text x="195" y="65" text-anchor="middle" font-size="10" font-weight="900" fill="#D07A00" font-family="Nunito,sans-serif">−3</text>
+                <!-- Flèche de −3 à +2 (déplacement +5) -->
+                <path d="M 195 60 Q 327 40 360 60" stroke="#FF9600" stroke-width="2.5" fill="none" class="anim-arrow"/>
+                <polygon points="358,55 365,63 355,65" fill="#FF9600"/>
+                <text x="277" y="38" text-anchor="middle" font-size="11" font-weight="900" fill="#D07A00" font-family="Nunito,sans-serif">+5 →</text>
+                <!-- Point arrivée +2 -->
+                <circle cx="360" cy="80" r="7" fill="#58CC02"/>
+                <text x="360" y="65" text-anchor="middle" font-size="10" font-weight="900" fill="#46A302" font-family="Nunito,sans-serif">+2</text>
+                <text x="277" y="113" text-anchor="middle" font-size="10" font-weight="800" fill="#D07A00" font-family="Nunito,sans-serif">(−3) + (+5) = +2</text>
+
+                <!-- Exemple 2 : +4 + (−6) = −2 (flèche rouge vers gauche) -->
+                <!-- Point départ +4 -->
+                <circle cx="426" cy="80" r="7" fill="#1E88E5"/>
+                <text x="426" y="148" text-anchor="middle" font-size="10" font-weight="900" fill="#1565C0" font-family="Nunito,sans-serif">+4</text>
+                <!-- Flèche de +4 à −2 (déplacement −6) -->
+                <path d="M 426 130 Q 327 150 228 130" stroke="#E53935" stroke-width="2.5" fill="none" class="anim-arrow-2"/>
+                <polygon points="230,125 222,133 232,135" fill="#E53935"/>
+                <text x="327" y="170" text-anchor="middle" font-size="11" font-weight="900" fill="#B71C1C" font-family="Nunito,sans-serif">← −6</text>
+                <!-- Point arrivée −2 -->
+                <circle cx="228" cy="80" r="7" fill="#E53935"/>
+                <text x="228" y="148" text-anchor="middle" font-size="10" font-weight="900" fill="#B71C1C" font-family="Nunito,sans-serif">−2</text>
+                <text x="327" y="120" text-anchor="middle" font-size="10" font-weight="800" fill="#B71C1C" font-family="Nunito,sans-serif">(+4) + (−6) = −2</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔄 Soustraction = addition de l'opposé</h3>
+            <p>
+                Soustraire un nombre, c'est <strong>ajouter son opposé</strong>.<br>
+                L'opposé de b est −b, l'opposé de −b est +b.<br><br>
+                <strong>a − b = a + (−b)</strong><br>
+                <strong>a − (−b) = a + b</strong><br><br>
+                Exemples :<br>
+                • <strong>7 − (−3)</strong> = 7 + 3 = <strong>10</strong><br>
+                • <strong>−3 − (−5)</strong> = −3 + 5 = <strong>+2</strong> &nbsp;← piège classique !<br>
+                • <strong>−4 − (+6)</strong> = −4 + (−6) = <strong>−10</strong>
+            </p>
+        </div>
+
+        <!-- SVG 2 : Transformation soustraction → addition opposé -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 120" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="120" fill="#FFF8F0" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#D07A00" font-family="Nunito,sans-serif">Transformer une soustraction en addition</text>
+
+                <!-- Ligne 1 : −3 − (−5) -->
+                <rect x="20" y="28" width="240" height="38" rx="8" fill="#FFCDD2" stroke="#E53935" stroke-width="2"/>
+                <text x="140" y="52" text-anchor="middle" font-size="16" font-weight="900" fill="#B71C1C" font-family="Courier New,monospace">−3 − (−5)</text>
+                <text x="20" y="80" font-size="10" fill="#888" font-weight="700" font-family="Nunito,sans-serif">Forme originale</text>
+
+                <!-- Flèche de transformation -->
+                <line x1="265" y1="47" x2="295" y2="47" stroke="#FF9600" stroke-width="3"/>
+                <polygon points="294,43 302,47 294,51" fill="#FF9600"/>
+                <text x="280" y="42" text-anchor="middle" font-size="9" font-weight="900" fill="#D07A00" font-family="Nunito,sans-serif">opposé</text>
+                <text x="280" y="65" text-anchor="middle" font-size="9" fill="#D07A00" font-weight="700" font-family="Nunito,sans-serif">de −5</text>
+
+                <!-- Ligne 2 : −3 + (+5) -->
+                <rect x="300" y="28" width="240" height="38" rx="8" fill="#C8E6C9" stroke="#388E3C" stroke-width="2"/>
+                <text x="420" y="52" text-anchor="middle" font-size="16" font-weight="900" fill="#1B5E20" font-family="Courier New,monospace">−3 + 5 = +2</text>
+                <text x="300" y="80" font-size="10" fill="#888" font-weight="700" font-family="Nunito,sans-serif">Forme simplifiée</text>
+
+                <text x="280" y="105" text-anchor="middle" font-size="11" font-weight="900" fill="#0D47A1" font-family="Nunito,sans-serif">⚠️ Deux − côte à côte → se transforment en + !</text>
+            </svg>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Pièges classiques</h3>
+            <p>
+                ❌ <strong>−3 − (−5) = −8</strong> — FAUX ! On ne soustrait pas, on transforme en addition.<br>
+                ✅ <strong>−3 − (−5) = −3 + 5 = +2</strong><br><br>
+                ❌ <strong>−4 + (−3) = +7</strong> — FAUX ! Deux négatifs ne s'annulent pas.<br>
+                ✅ <strong>−4 + (−3) = −7</strong> (même signe → on additionne et garde le −)<br><br>
+                ❌ <strong>5 − (−2) = 3</strong> — FAUX ! Soustraire un négatif = ajouter.<br>
+                ✅ <strong>5 − (−2) = 5 + 2 = 7</strong>
+            </p>
+        </div>
+
+        <div class="examples-row">
+            <div class="example-chip">(−5) + (−3) = −8<span>même signe</span></div>
+            <div class="example-chip">(+7) + (−4) = +3<span>signes diff.</span></div>
+            <div class="example-chip">6 − (−2) = 8<span>opposé</span></div>
+            <div class="example-chip">−4 − (+3) = −7<span>composé</span></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 2. QCM ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">✏️</div>
+        <div>
+            <div class="card-title">Exercices — QCM</div>
+            <div class="card-sub">5 questions · Pièges sur les additions et soustractions</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Combien vaut (−4) + (−3) ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">A) −7</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">B) +7</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">C) −1</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">D) +1</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Combien vaut (−8) + (+5) ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">A) +3</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">B) −3</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">C) +13</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">D) −13</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Combien vaut (−3) − (−5) ? ⚠️ Attention au piège !</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">A) −8</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">B) +8</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">C) +2</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">D) −2</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Combien vaut 7 − (−3) ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">A) 4</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">B) −4</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">C) 10</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">D) −10</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Combien vaut (−6) − (+4) ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">A) −10</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">B) +10</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">C) −2</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">D) +2</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 3. TEXTES À TROUS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">📝</div>
+        <div>
+            <div class="card-title">Exercices — Textes à trous</div>
+            <div class="card-sub">3 exercices · Règles pas à pas</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Pour (−5) + (−3) : mêmes signes, donc on additionne 5 + 3 =
+                <input class="blank" id="f1a" placeholder="?"> et on garde le signe −.
+                Résultat : <input class="blank" id="f1b" placeholder="?">.
+            </div>
+            <button class="verify-btn" onclick="checkFill(1)">Vérifier</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                −3 − (−7) = −3 + <input class="blank" id="f2a" placeholder="?"> = <input class="blank" id="f2b" placeholder="?">.
+                (Soustraire −7 revient à ajouter son opposé.)
+            </div>
+            <button class="verify-btn" onclick="checkFill(2)">Vérifier</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Pour (−9) + (+4) : signes différents, on soustrait 9 − 4 =
+                <input class="blank" id="f3a" placeholder="?">
+                et on garde le signe de −9. Résultat :
+                <input class="blank" id="f3b" placeholder="?">.
+            </div>
+            <button class="verify-btn" onclick="checkFill(3)">Vérifier</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 4. EXERCICES GUIDÉS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon blue">🎯</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Ex 1 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Calcul enchaîné</div>
+                <div class="ex-stmt">
+                    Calcule, en montrant chaque étape :<br><br>
+                    <strong>(−7) + (+3) + (−2)</strong>
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">On traite de gauche à droite. D'abord : (−7) + (+3).<br>Signes différents → soustrait : 7 − 3 = 4, signe de −7 (|−7|&gt;|3|) → <strong>−4</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Ensuite : (−4) + (−2).<br>Même signe (−) → additionne : 4 + 2 = 6, garde le signe − → <strong>−6</strong></div></div>
+                <div class="final-ans">✅ (−7) + (+3) + (−2) = <strong>−6</strong></div>
+            </div>
+        </div>
+
+        <!-- Ex 2 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Le piège classique CE1D</div>
+                <div class="ex-stmt">
+                    Calcule en détaillant toutes les étapes :<br><br>
+                    <strong>−3 − (−5)</strong><br><br>
+                    <em style="font-size:.85rem;color:#888;">Erreur fréquente : −3 − (−5) ≠ −8. Montre pourquoi.</em>
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Transformer la soustraction :</strong> soustraire (−5) = ajouter l'opposé de −5.<br>L'opposé de −5 est <strong>+5</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">−3 − (−5) = −3 + 5</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Signes différents → soustrait : 5 − 3 = 2, signe de +5 (|+5|&gt;|−3|) → <strong>+2</strong></div></div>
+                <div class="sol-step"><div class="sol-num">⚠️</div><div class="sol-text">L'erreur −3 − (−5) = −8 vient d'avoir additionné les valeurs absolues comme si les deux signes − s'additionnaient. Non ! Deux − côte à côte → +.</div></div>
+                <div class="final-ans">✅ −3 − (−5) = −3 + 5 = <strong>+2</strong> (pas −8 !)</div>
+            </div>
+        </div>
+
+        <!-- Ex 3 CE1D -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Style CE1D · Températures en Belgique</div>
+                <div class="ex-stmt">
+                    Un matin de janvier à Bruxelles, il fait <strong>−8°C</strong>. Dans l'après-midi, la température <strong>monte de 12°C</strong>.<br>
+                    Le lendemain matin, elle a <strong>baissé de 5°C</strong> par rapport à l'après-midi.<br><br>
+                    <strong>a)</strong> Quelle est la température l'après-midi ?<br>
+                    <strong>b)</strong> Quelle est la température le lendemain matin ?<br>
+                    <strong>c)</strong> Quelle est la différence de température entre le lendemain matin et le matin du premier jour ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">a</div><div class="sol-text">Température après-midi = −8 + 12.<br>Signes différents → 12 − 8 = 4, signe de +12 → <strong>+4°C</strong></div></div>
+                <div class="sol-step"><div class="sol-num">b</div><div class="sol-text">Température lendemain matin = 4 − 5.<br>Signes différents → 5 − 4 = 1, signe de −5 → <strong>−1°C</strong></div></div>
+                <div class="sol-step"><div class="sol-num">c</div><div class="sol-text">Différence = température finale − température initiale = −1 − (−8) = −1 + 8 = <strong>+7°C</strong><br>Il fait 7°C de plus le lendemain matin que le matin du premier jour.</div></div>
+                <div class="final-ans">✅ a) +4°C &nbsp;·&nbsp; b) −1°C &nbsp;·&nbsp; c) +7°C de différence</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 5. CALCULATRICE ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon blue">🧮</div>
+        <div>
+            <div class="card-title">Calculatrice — Nombres relatifs</div>
+            <div class="card-sub">Pour vérifier tes calculs · Utilise +/− pour les négatifs</div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="calc-wrap">
+            <div class="calc-screen">
+                <span class="calc-expr" id="calcExpr"></span>
+                <span id="calcDisplay">0</span>
+            </div>
+            <div class="calc-btns">
+                <button class="calc-btn clr" onclick="calcClear()">C</button>
+                <button class="calc-btn neg" onclick="calcNeg()">+/−</button>
+                <button class="calc-btn op"  onclick="calcOp('÷')">÷</button>
+                <button class="calc-btn op"  onclick="calcOp('×')">×</button>
+
+                <button class="calc-btn num" onclick="calcDigit('7')">7</button>
+                <button class="calc-btn num" onclick="calcDigit('8')">8</button>
+                <button class="calc-btn num" onclick="calcDigit('9')">9</button>
+                <button class="calc-btn op"  onclick="calcOp('−')">−</button>
+
+                <button class="calc-btn num" onclick="calcDigit('4')">4</button>
+                <button class="calc-btn num" onclick="calcDigit('5')">5</button>
+                <button class="calc-btn num" onclick="calcDigit('6')">6</button>
+                <button class="calc-btn op"  onclick="calcOp('+')">+</button>
+
+                <button class="calc-btn num" onclick="calcDigit('1')">1</button>
+                <button class="calc-btn num" onclick="calcDigit('2')">2</button>
+                <button class="calc-btn num" onclick="calcDigit('3')">3</button>
+                <button class="calc-btn num" onclick="calcDigit('0')">0</button>
+
+                <button class="calc-btn eq" onclick="calcEquals()">=</button>
+                <button class="calc-btn num" onclick="calcDigit('.')">.</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ══ COMPLETION ══ -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 2 terminé !</h2>
+    <p>Bravo ! Tu maîtrises l'addition et la soustraction des relatifs.<br>Tu as gagné <strong id="finalXP">0</strong> XP !</p>
+</div>
+
+<!-- ══ NAVIGATION ══ -->
+<div class="level-nav">
+    <h3>📚 Navigation — Nombres Relatifs</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_relatifs_niveau1.html" class="nav-btn">Niveau 1 — Introduction</a>
+        <a href="maths_relatifs_niveau2.html" class="nav-btn current">▶ Niveau 2 — Opérations</a>
+        <a href="maths_relatifs_niveau3.html" class="nav-btn">Niveau 3 — Règles de signe</a>
+        <a href="maths_relatifs_niveau4.html" class="nav-btn">Niveau 4 — Problèmes</a>
+        <a href="maths_relatifs_niveau5.html" class="nav-btn">Niveau 5 — Défi</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+/* ── QCM ── */
+const QCM_CORRECT = {1:0, 2:1, 3:2, 4:2, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! (−4) + (−3) : même signe → −(4+3) = −7.",
+    2:"✅ Parfait ! (−8) + (+5) : signes différents, |−8|&gt;|+5| → −(8−5) = −3.",
+    3:"✅ Bravo ! −3 − (−5) = −3 + 5 = +2. Deux − côte à côte → +. C'est le piège le plus classique !",
+    4:"✅ Exact ! 7 − (−3) = 7 + 3 = 10. Soustraire un négatif = ajouter.",
+    5:"✅ Parfait ! (−6) − (+4) = −6 + (−4) = −10. Même signe → on additionne."
+};
+
+const QCM_ERR = {
+    1:"❌ Même signe (−) → on additionne les valeurs absolues : 4+3=7, et on garde le − → −7.",
+    2:"❌ Signes différents : |−8|=8 &gt; |+5|=5 → on soustrait 8−5=3 et on garde le signe de −8 → −3.",
+    3:"❌ Piège ! −3 − (−5) ≠ −8. On transforme : −3 − (−5) = −3 + 5 = +2. Deux − côte à côte → +.",
+    4:"❌ 7 − (−3) = 7 + 3 = 10. Soustraire un négatif revient à ajouter son opposé positif.",
+    5:"❌ (−6) − (+4) = −6 + (−4). Même signe → −(6+4) = −10."
+};
+
+/* ── Textes à trous ── */
+const FILL_DATA = {
+    1:{fields:['f1a','f1b'], accepted:[['8'],['-8','−8']],
+       msgOk:"✅ (−5) + (−3) = −(5+3) = −8. Même signe → on additionne et on garde le −.",
+       msgErr:"❌ Même signe → additionne : 5+3=8, garde le − → résultat = −8."},
+    2:{fields:['f2a','f2b'], accepted:[['7'],['4']],
+       msgOk:"✅ −3 − (−7) = −3 + 7 = +4. L'opposé de −7 est +7.",
+       msgErr:"❌ −3 − (−7) = −3 + 7 (opposé de −7). Signes différents → 7−3=4, signe + → résultat = 4."},
+    3:{fields:['f3a','f3b'], accepted:[['5'],['-5','−5']],
+       msgOk:"✅ (−9) + (+4) : 9−4=5, signe de −9 → résultat = −5.",
+       msgErr:"❌ Signes différents → soustrait : 9−4=5. |−9|&gt;|+4| donc on garde le signe − → −5."}
+};
+
+const TOTAL = 8;
+let score = 0;
+const qcmDone = {};
+const fillDone = {};
+
+function norm(s){ return s.trim().replace(/\s+/g,'').replace('−','-'); }
+
+function updateBar(){
+    const pct = Math.round((score/TOTAL)*100);
+    const bar = document.getElementById('barFill');
+    bar.style.width = pct+'%';
+    bar.classList.toggle('has-progress', score>0);
+    document.getElementById('progTxt').textContent = score+' / '+TOTAL+' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if(score >= Math.ceil(TOTAL * 0.8)){
+        localStorage.setItem('edu_completed_relatifs_2','1');
+        document.getElementById('finalXP').textContent = xp;
+        document.getElementById('completionBanner').classList.add('show');
+    }
+}
+
+function checkQCM(q, chosen){
+    if(qcmDone[q]) return;
+    qcmDone[q] = true;
+    const correct = QCM_CORRECT[q];
+    const isOk = (chosen === correct);
+    if(isOk) score++;
+    const btns = document.querySelectorAll('#q'+q+' .opt-btn');
+    btns.forEach((b,i) => {
+        b.disabled = true;
+        if(i === correct) b.classList.add(isOk ? 'correct' : 'show-correct');
+        if(i === chosen && !isOk) b.classList.add('wrong');
+    });
+    const fb = document.getElementById('qf'+q);
+    fb.className = 'q-feedback '+(isOk?'correct':'wrong');
+    fb.innerHTML = isOk ? QCM_OK[q] : QCM_ERR[q];
+    updateBar();
+}
+
+function checkFill(n){
+    if(fillDone[n]) return;
+    const d = FILL_DATA[n];
+    let allOk = true;
+    d.fields.forEach((id,i) => {
+        const inp = document.getElementById(id);
+        const val = norm(inp.value);
+        const ok  = d.accepted[i].map(norm).includes(val);
+        inp.disabled = true;
+        inp.classList.add(ok ? 'correct' : 'wrong');
+        if(!ok) allOk = false;
+    });
+    if(allOk){ score++; fillDone[n] = true; }
+    const fb = document.getElementById('ff'+n);
+    fb.className = 'fill-feedback show '+(allOk?'correct':'wrong');
+    fb.innerHTML = allOk ? d.msgOk : d.msgErr;
+    document.querySelector('#ff'+n).previousElementSibling.disabled = true;
+    updateBar();
+}
+
+function toggleSol(num){
+    const btn = document.getElementById('rb'+num);
+    const sol = document.getElementById('sol'+num);
+    const open = sol.classList.toggle('open');
+    btn.classList.toggle('open', open);
+}
+
+/* ── Calculatrice ── */
+let calcCurrent = '0';
+let calcPrev = '';
+let calcOper = '';
+let calcFresh = true;
+
+function calcUpdate(){
+    document.getElementById('calcDisplay').textContent = calcCurrent;
+    document.getElementById('calcExpr').textContent = calcPrev + (calcOper ? ' ' + calcOper : '');
+}
+
+function calcDigit(d){
+    if(calcFresh){ calcCurrent = '0'; calcFresh = false; }
+    if(d === '.' && calcCurrent.includes('.')) return;
+    calcCurrent = calcCurrent === '0' && d !== '.' ? d : calcCurrent + d;
+    calcUpdate();
+}
+
+function calcOp(op){
+    if(calcOper && !calcFresh) calcEquals();
+    calcPrev = calcCurrent;
+    calcOper = op;
+    calcFresh = true;
+    calcUpdate();
+}
+
+function calcNeg(){
+    calcCurrent = calcCurrent.startsWith('-') ? calcCurrent.slice(1) : '-' + calcCurrent;
+    calcUpdate();
+}
+
+function calcEquals(){
+    if(!calcOper || !calcPrev) return;
+    const a = parseFloat(calcPrev);
+    const b = parseFloat(calcCurrent);
+    let result;
+    if(calcOper === '+') result = a + b;
+    else if(calcOper === '−') result = a - b;
+    else if(calcOper === '×') result = a * b;
+    else if(calcOper === '÷') result = b !== 0 ? a / b : 'Erreur';
+    calcCurrent = result === 'Erreur' ? 'Erreur' : String(Math.round(result * 1e10) / 1e10);
+    calcPrev = '';
+    calcOper = '';
+    calcFresh = true;
+    calcUpdate();
+}
+
+function calcClear(){
+    calcCurrent = '0'; calcPrev = ''; calcOper = ''; calcFresh = true;
+    calcUpdate();
+}
+</script>
+
+</body>
+</html>

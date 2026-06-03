@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcul Algébrique — Niveau 5 · Mode Défi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --red:#E84040; --red-dark:#B01010; --red-bg:#FFEBEB;
+            --gold:#FFD900; --gold-dark:#C8A800;
+            --purple:#A560D4; --purple-bg:#F5EEFF;
+            --bg:#F2F2F2; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#B01010 0%,#E84040 55%,#FF7070 100%); color:white; padding:16px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(176,16,16,.4); }
+        .header-inner { max-width:820px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .header-left  { display:flex; align-items:center; gap:14px; }
+        .level-badge  { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.5); border-radius:12px; padding:6px 14px; font-weight:900; font-size:.9rem; white-space:nowrap; text-align:center; line-height:1.2; }
+        .level-badge span { font-size:1.3rem; display:block; }
+        .header-left h1 { font-size:1.3rem; font-weight:900; }
+        .header-left p  { font-size:.8rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:7px 18px; font-weight:900; font-size:1rem; white-space:nowrap; display:flex; align-items:center; gap:6px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:14px 20px; }
+        .progress-inner { max-width:820px; margin:0 auto; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.8rem; font-weight:700; color:var(--text-light); margin-bottom:7px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:18px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#B01010,#E84040,#FF9090); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:6px; top:50%; transform:translateY(-50%); font-size:11px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:820px; margin:0 auto; padding:28px 16px 48px; display:flex; flex-direction:column; gap:28px; }
+
+        /* ─── RULES BANNER ─── */
+        .rules-banner { background:linear-gradient(135deg,#1A1A2E,#2D2D44); color:white; border-radius:var(--radius); padding:20px 24px; display:flex; gap:16px; align-items:flex-start; }
+        .rules-icon { font-size:2rem; flex-shrink:0; }
+        .rules-banner h2 { font-size:1rem; font-weight:900; color:#FF9090; margin-bottom:8px; }
+        .rules-banner p  { font-size:.88rem; color:#CCC; line-height:1.7; }
+        .timer-rules { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+        .rule-chip { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2); border-radius:50px; padding:4px 12px; font-size:.8rem; font-weight:700; color:white; }
+
+        /* ─── CARD ─── */
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:18px 22px 16px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0; }
+        .card-icon.red  { background:var(--red-bg); }
+        .card-icon.gold { background:#FFFBE6; }
+        .card-title { font-size:1.15rem; font-weight:900; }
+        .card-sub   { font-size:.82rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        /* ─── QUESTION WITH TIMER ─── */
+        .qcm-item { margin-bottom:28px; }
+        .qcm-item:last-child { margin-bottom:0; }
+
+        .q-header { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }
+        .q-num { display:inline-flex; align-items:center; background:var(--red); color:white; border-radius:5px; padding:3px 10px; font-size:.85rem; font-weight:900; gap:4px; }
+        .q-num.boss { background:var(--gold-dark); }
+
+        /* Timer */
+        .timer-wrap { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+        .timer-num  { font-size:1.1rem; font-weight:900; color:var(--red-dark); min-width:28px; text-align:right; transition:color .3s; }
+        .timer-num.urgent { color:var(--red); animation:pulse .5s ease infinite alternate; }
+        @keyframes pulse { from{opacity:1} to{opacity:.4} }
+        .timer-bar-bg { width:100px; height:10px; background:var(--border); border-radius:50px; overflow:hidden; }
+        .timer-bar    { height:100%; width:100%; border-radius:50px; background:var(--green); transition:width 1s linear, background .5s; }
+        .timer-bar.urgent { background:var(--red); }
+        .timer-done .timer-bar   { background:var(--border); }
+        .timer-done .timer-num   { color:var(--text-light); }
+
+        .q-text { font-size:1rem; font-weight:700; padding:11px 15px; background:#F8F8F8; border-radius:10px; border-left:4px solid var(--red); margin-bottom:12px; font-family:'Courier New',monospace; letter-spacing:.3px; }
+
+        .opts { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; }
+        .opt-btn { padding:13px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.98rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:center; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--red); background:var(--red-bg); transform:translateY(-2px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:9px; padding:9px 13px; border-radius:8px; font-size:.88rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:24px 0; }
+
+        /* ─── SCORE FINAL ─── */
+        .score-card { display:none; background:linear-gradient(135deg,#1A1A2E,#2D2D44); color:white; border-radius:var(--radius); padding:36px 24px; text-align:center; box-shadow:0 8px 0 rgba(0,0,0,.3); }
+        .score-card.show { display:block; animation:bounceIn .7s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{opacity:0;transform:scale(.3)} 100%{opacity:1;transform:scale(1)} }
+        .score-stars   { font-size:3rem; margin-bottom:12px; letter-spacing:4px; }
+        .score-title   { font-size:2rem; font-weight:900; margin-bottom:8px; }
+        .score-result  { font-size:1.2rem; color:#FFD900; font-weight:900; margin-bottom:6px; }
+        .score-msg     { font-size:1rem; opacity:.85; margin-bottom:16px; }
+        .score-xp      { background:rgba(255,217,0,.2); border:2px solid var(--gold); border-radius:12px; display:inline-block; padding:10px 24px; font-weight:900; font-size:1.1rem; color:var(--gold); }
+
+        /* ─── NAV ─── */
+        .level-nav { background:white; border-radius:var(--radius); padding:18px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.85rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:12px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .nav-btn.current{ background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+
+        @media(max-width:580px){ .header-inner{flex-direction:column;gap:8px} .opts{grid-template-columns:1fr} .card-body{padding:16px} .timer-bar-bg{width:70px} }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="header-left">
+            <div class="level-badge"><span>5</span>NIV.</div>
+            <div>
+                <h1>🏆 Mode Défi</h1>
+                <p>Niveau 5 — Timer 45 s · 3 pièges combinés · Score final</p>
+            </div>
+        </div>
+        <div class="xp-badge" id="xpBadge">⚡ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels"><span>Progression</span><span id="progTxt">0 / 8 questions</span></div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+    </div>
+</div>
+
+<main>
+
+    <div class="rules-banner">
+        <div class="rules-icon">⏱</div>
+        <div>
+            <h2>Règles du mode défi</h2>
+            <p>Chaque question a un timer de <strong>45 secondes</strong>. Le timer de la question suivante démarre automatiquement dès que tu répondsou que le temps est écoulé. Les questions boss (6–8) sont plus longues — réfléchis vite !</p>
+            <div class="timer-rules">
+                <span class="rule-chip">⚡ 45 s par question</span>
+                <span class="rule-chip">🔴 Temps = 0 → raté</span>
+                <span class="rule-chip">🏆 Score final avec étoiles</span>
+                <span class="rule-chip">👑 Q6–Q8 : questions boss</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════ QUESTIONS 1–5 ══════════ -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-icon red">🎯</div>
+            <div>
+                <div class="card-title">Questions Défi</div>
+                <div class="card-sub">5 questions · Expressions longues à 3 règles combinées</div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <!-- Q1 -->
+            <div class="qcm-item" id="qi1">
+                <div class="q-header">
+                    <span class="q-num">Q1</span>
+                    <div class="timer-wrap">
+                        <div class="timer-bar-bg"><div class="timer-bar" id="tbar1"></div></div>
+                        <div class="timer-num" id="tnum1">45</div>
+                    </div>
+                </div>
+                <div class="q-text">3 + 2 × (4 + 1)² − 100 ÷ (2 × 5²) = ?</div>
+                <div class="opts" id="q1">
+                    <button class="opt-btn" onclick="checkQCM(1,0)">51</button>
+                    <button class="opt-btn" onclick="checkQCM(1,1)">53</button>
+                    <button class="opt-btn" onclick="checkQCM(1,2)">49</button>
+                </div>
+                <div class="q-feedback" id="qf1"></div>
+            </div>
+
+            <hr class="q-divider">
+
+            <!-- Q2 -->
+            <div class="qcm-item" id="qi2">
+                <div class="q-header">
+                    <span class="q-num">Q2</span>
+                    <div class="timer-wrap">
+                        <div class="timer-bar-bg"><div class="timer-bar" id="tbar2"></div></div>
+                        <div class="timer-num" id="tnum2">—</div>
+                    </div>
+                </div>
+                <div class="q-text">(2 + 3)² × (10 − 8) − 3² × 4 = ?</div>
+                <div class="opts" id="q2">
+                    <button class="opt-btn" onclick="checkQCM(2,0)">18</button>
+                    <button class="opt-btn" onclick="checkQCM(2,1)">14</button>
+                    <button class="opt-btn" onclick="checkQCM(2,2)">50</button>
+                </div>
+                <div class="q-feedback" id="qf2"></div>
+            </div>
+
+            <hr class="q-divider">
+
+            <!-- Q3 -->
+            <div class="qcm-item" id="qi3">
+                <div class="q-header">
+                    <span class="q-num">Q3</span>
+                    <div class="timer-wrap">
+                        <div class="timer-bar-bg"><div class="timer-bar" id="tbar3"></div></div>
+                        <div class="timer-num" id="tnum3">—</div>
+                    </div>
+                </div>
+                <div class="q-text">120 ÷ (2³ × 3) + (5 − 2)² × 4 = ?</div>
+                <div class="opts" id="q3">
+                    <button class="opt-btn" onclick="checkQCM(3,0)">46</button>
+                    <button class="opt-btn" onclick="checkQCM(3,1)">38</button>
+                    <button class="opt-btn" onclick="checkQCM(3,2)">41</button>
+                </div>
+                <div class="q-feedback" id="qf3"></div>
+            </div>
+
+            <hr class="q-divider">
+
+            <!-- Q4 -->
+            <div class="qcm-item" id="qi4">
+                <div class="q-header">
+                    <span class="q-num">Q4</span>
+                    <div class="timer-wrap">
+                        <div class="timer-bar-bg"><div class="timer-bar" id="tbar4"></div></div>
+                        <div class="timer-num" id="tnum4">—</div>
+                    </div>
+                </div>
+                <div class="q-text">(4² − 7) × 3 + 48 ÷ (4 × 2²) = ?</div>
+                <div class="opts" id="q4">
+                    <button class="opt-btn" onclick="checkQCM(4,0)">30</button>
+                    <button class="opt-btn" onclick="checkQCM(4,1)">24</button>
+                    <button class="opt-btn" onclick="checkQCM(4,2)">36</button>
+                </div>
+                <div class="q-feedback" id="qf4"></div>
+            </div>
+
+            <hr class="q-divider">
+
+            <!-- Q5 -->
+            <div class="qcm-item" id="qi5">
+                <div class="q-header">
+                    <span class="q-num">Q5</span>
+                    <div class="timer-wrap">
+                        <div class="timer-bar-bg"><div class="timer-bar" id="tbar5"></div></div>
+                        <div class="timer-num" id="tnum5">—</div>
+                    </div>
+                </div>
+                <div class="q-text">2 × (3 + 4)² − (5² − 3 × 8) = ?</div>
+                <div class="opts" id="q5">
+                    <button class="opt-btn" onclick="checkQCM(5,0)">99</button>
+                    <button class="opt-btn" onclick="checkQCM(5,1)">97</button>
+                    <button class="opt-btn" onclick="checkQCM(5,2)">95</button>
+                </div>
+                <div class="q-feedback" id="qf5"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══════════ QUESTIONS BOSS 6–8 ══════════ -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-icon gold">👑</div>
+            <div>
+                <div class="card-title">Questions Boss</div>
+                <div class="card-sub">3 questions · Niveau maximum · 45 s chacune</div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <!-- Q6 -->
+            <div class="qcm-item" id="qi6">
+                <div class="q-header">
+                    <span class="q-num boss">Q6 👑</span>
+                    <div class="timer-wrap">
+                        <div class="timer-bar-bg"><div class="timer-bar" id="tbar6"></div></div>
+                        <div class="timer-num" id="tnum6">—</div>
+                    </div>
+                </div>
+                <div class="q-text">((6 + 2)² − 28) × 3 ÷ (2 + 1) = ?</div>
+                <div class="opts" id="q6">
+                    <button class="opt-btn" onclick="checkQCM(6,0)">108</button>
+                    <button class="opt-btn" onclick="checkQCM(6,1)">36</button>
+                    <button class="opt-btn" onclick="checkQCM(6,2)">12</button>
+                </div>
+                <div class="q-feedback" id="qf6"></div>
+            </div>
+
+            <hr class="q-divider">
+
+            <!-- Q7 -->
+            <div class="qcm-item" id="qi7">
+                <div class="q-header">
+                    <span class="q-num boss">Q7 👑</span>
+                    <div class="timer-wrap">
+                        <div class="timer-bar-bg"><div class="timer-bar" id="tbar7"></div></div>
+                        <div class="timer-num" id="tnum7">—</div>
+                    </div>
+                </div>
+                <div class="q-text">4² × (3 − 1)³ − 5 × (2² + 4) = ?</div>
+                <div class="opts" id="q7">
+                    <button class="opt-btn" onclick="checkQCM(7,0)">88</button>
+                    <button class="opt-btn" onclick="checkQCM(7,1)">80</button>
+                    <button class="opt-btn" onclick="checkQCM(7,2)">72</button>
+                </div>
+                <div class="q-feedback" id="qf7"></div>
+            </div>
+
+            <hr class="q-divider">
+
+            <!-- Q8 -->
+            <div class="qcm-item" id="qi8">
+                <div class="q-header">
+                    <span class="q-num boss">Q8 👑</span>
+                    <div class="timer-wrap">
+                        <div class="timer-bar-bg"><div class="timer-bar" id="tbar8"></div></div>
+                        <div class="timer-num" id="tnum8">—</div>
+                    </div>
+                </div>
+                <div class="q-text">(2³ + 1) × (10 − 3²) + 5 × 4 = ?</div>
+                <div class="opts" id="q8">
+                    <button class="opt-btn" onclick="checkQCM(8,0)">45</button>
+                    <button class="opt-btn" onclick="checkQCM(8,1)">39</button>
+                    <button class="opt-btn" onclick="checkQCM(8,2)">29</button>
+                </div>
+                <div class="q-feedback" id="qf8"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══════════ SCORE FINAL ══════════ -->
+    <div class="score-card" id="scoreFinal">
+        <div class="score-stars" id="scoreStars">⭐⭐⭐</div>
+        <div class="score-title" id="scoreTitle">Résultat final</div>
+        <div class="score-result" id="scoreResult"></div>
+        <div class="score-msg"   id="scoreMsg"></div>
+        <div class="score-xp">⚡ <span id="finalXP">0</span> XP gagnés</div>
+    </div>
+
+    <div class="level-nav">
+    <h3>📚 Navigation — Calcul Algébrique</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="module_calcul_algebrique.html" class="nav-btn">Niveau 1 — Introduction</a>
+        <a href="calc_niveau2.html" class="nav-btn">Niveau 2 — Règles combinées</a>
+        <a href="calc_niveau3.html" class="nav-btn">Niveau 3 — Pièges</a>
+        <a href="calc_niveau4.html" class="nav-btn">Niveau 4 — Complexe</a>
+        <a href="calc_niveau5.html" class="nav-btn current">▶ Niveau 5 — Défi</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+    const TOTAL = 8;
+    const TIMER_SECS = 45;
+    const QCM_CORRECT = {1:0, 2:1, 3:2, 4:0, 5:1, 6:1, 7:0, 8:2};
+
+    const QCM_OK = {
+        1:"✅ Excellent ! (4+1)²=25, 2×25=50, 5²=25, 2×25=50, 100÷50=2 → 3+50−2=51",
+        2:"✅ Parfait ! (2+3)²=25, 25×2=50, 3²×4=36 → 50−36=14",
+        3:"✅ Bravo ! 2³=8, 8×3=24, 120÷24=5, (5−2)²=9, 9×4=36 → 5+36=41",
+        4:"✅ Super ! 4²=16, (16−7)=9, 9×3=27, 2²=4, 4×4=16, 48÷16=3 → 27+3=30",
+        5:"✅ Juste ! (3+4)²=49, 2×49=98, 5²=25, 3×8=24, (25−24)=1 → 98−1=97",
+        6:"✅ Boss vaincu ! (6+2)²=64, 64−28=36, (2+1)=3, 36×3=108, 108÷3=36",
+        7:"✅ Impressionnant ! 4²=16, (3−1)³=8, 16×8=128, 2²=4, (4+4)=8, 5×8=40 → 128−40=88",
+        8:"✅ Parfait ! 2³=8, (8+1)=9, 3²=9, (10−9)=1, 9×1=9, 5×4=20 → 9+20=29"
+    };
+    const QCM_ERR = {
+        1:"❌ Détail : (4+1)²=25 puis 2×25=50, et 2×5²=50 donc 100÷50=2. Résultat : 3+50−2=51.",
+        2:"❌ Détail : (2+3)²=25, ×(10−8)=×2=50. Puis 3²×4=9×4=36. Donc 50−36=14.",
+        3:"❌ Détail : 2³=8, ×3=24, 120÷24=5. (5−2)²=9, ×4=36. Donc 5+36=41.",
+        4:"❌ Détail : (4²−7)=9, ×3=27. 4×2²=16, 48÷16=3. Donc 27+3=30.",
+        5:"❌ Détail : (3+4)²=49, 2×49=98. (5²−3×8)=(25−24)=1. Donc 98−1=97.",
+        6:"❌ Détail : (6+2)²=64, 64−28=36, (2+1)=3. Puis 36×3÷3=36 (gauche à droite).",
+        7:"❌ Détail : 4²=16, (3−1)³=2³=8, 16×8=128. 2²=4, (4+4)=8, 5×8=40. Donc 128−40=88.",
+        8:"❌ Détail : (2³+1)=(8+1)=9. (10−3²)=(10−9)=1. 9×1=9. 5×4=20. Donc 9+20=29."
+    };
+
+    let score = 0;
+    let activeInterval = null;
+    let currentQ = 0;
+    const qcmDone = {};
+
+    /* ─── Démarrage du timer pour la question qNum ─── */
+    function startTimer(qNum) {
+        if (activeInterval) clearInterval(activeInterval);
+        currentQ = qNum;
+
+        const bar = document.getElementById('tbar' + qNum);
+        const num = document.getElementById('tnum' + qNum);
+        if (!bar || !num) return;
+
+        let remaining = TIMER_SECS;
+        bar.style.width = '100%';
+        bar.style.background = 'var(--green)';
+        bar.classList.remove('urgent');
+        num.textContent = remaining;
+        num.classList.remove('urgent');
+
+        activeInterval = setInterval(() => {
+            remaining--;
+            const pct = (remaining / TIMER_SECS) * 100;
+            bar.style.width = pct + '%';
+            num.textContent = remaining;
+
+            if (remaining <= 10) {
+                bar.classList.add('urgent');
+                num.classList.add('urgent');
+            }
+
+            if (remaining <= 0) {
+                clearInterval(activeInterval);
+                timeOut(qNum);
+            }
+        }, 1000);
+    }
+
+    /* ─── Temps écoulé ─── */
+    function timeOut(qNum) {
+        if (qcmDone[qNum]) return;
+        qcmDone[qNum] = true;
+
+        const correct = QCM_CORRECT[qNum];
+        const btns = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+        btns.forEach(b => b.disabled = true);
+        btns[correct].classList.add('show-correct');
+
+        const fb = document.getElementById('qf' + qNum);
+        fb.textContent = '⏱ Temps écoulé ! La bonne réponse est révélée en vert.';
+        fb.className = 'q-feedback wrong';
+
+        markTimerDone(qNum);
+        scheduleNext(qNum);
+        checkCompletion();
+    }
+
+    function markTimerDone(qNum) {
+        const num = document.getElementById('tnum' + qNum);
+        const bar = document.getElementById('tbar' + qNum);
+        if (num) { num.textContent = '✗'; num.classList.remove('urgent'); num.style.color = '#aaa'; }
+        if (bar) { bar.style.width = '0%'; bar.classList.remove('urgent'); }
+    }
+
+    function scheduleNext(qNum) {
+        if (qNum < TOTAL) setTimeout(() => startTimer(qNum + 1), 600);
+    }
+
+    /* ─── Réponse cliquée ─── */
+    function checkQCM(qNum, clickedIdx) {
+        if (qcmDone[qNum]) return;
+        qcmDone[qNum] = true;
+        clearInterval(activeInterval);
+
+        const correct = QCM_CORRECT[qNum];
+        const isOk    = (clickedIdx === correct);
+        const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+        const fb      = document.getElementById('qf' + qNum);
+
+        btns.forEach(b => b.disabled = true);
+        btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+        if (!isOk) btns[correct].classList.add('show-correct');
+
+        fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+        fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+
+        markTimerDone(qNum);
+        if (isOk) { score++; updateUI(); }
+        scheduleNext(qNum);
+        checkCompletion();
+    }
+
+    /* ─── UI ─── */
+    function updateUI() {
+        const pct = Math.round((score / TOTAL) * 100);
+        const bar = document.getElementById('barFill');
+        bar.style.width = pct + '%';
+        if (pct > 0) bar.classList.add('has-progress');
+        document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' questions';
+        document.getElementById('xpVal').textContent = score * 20;
+        const badge = document.getElementById('xpBadge');
+        badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    }
+
+    /* ─── Résultat final ─── */
+    function checkCompletion() {
+        if (Object.keys(qcmDone).length < TOTAL) return;
+        setTimeout(showFinal, 800);
+    }
+
+    function showFinal() {
+        localStorage.setItem('edu_completed_calcul_5', '1');
+        const xp = score * 20;
+        document.getElementById('finalXP').textContent = xp;
+        document.getElementById('xpVal').textContent = xp;
+
+        let stars, title, msg;
+        if      (score === 8) { stars='🌟🌟🌟'; title='Génie des maths !';          msg='Score parfait ! Tu maîtrises PEMDAS à la perfection. Respect total.'; }
+        else if (score >= 6)  { stars='⭐⭐⭐';  title='Excellent !';               msg='Tu fais partie des meilleurs. Encore un petit effort pour la perfection !'; }
+        else if (score >= 4)  { stars='⭐⭐';    title='Très bien !';               msg='Bonne performance ! Relis les niveaux 3 et 4 pour viser plus haut.'; }
+        else if (score >= 2)  { stars='⭐';      title='En cours de maîtrise…';     msg='C\'est un bon départ. Reprends les niveaux précédents et réessaie !'; }
+        else                  { stars='💪';      title='Continue les efforts !';    msg='Le mode défi est difficile. Reviens après avoir revu les niveaux 1 à 4 !'; }
+
+        document.getElementById('scoreStars').textContent  = stars;
+        document.getElementById('scoreTitle').textContent  = title;
+        document.getElementById('scoreResult').textContent = score + ' / 8 bonnes réponses';
+        document.getElementById('scoreMsg').textContent    = msg;
+
+        const card = document.getElementById('scoreFinal');
+        card.classList.add('show');
+        setTimeout(() => card.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+
+    /* ─── Démarrage ─── */
+    window.addEventListener('load', () => startTimer(1));
+</script>
+</body>
+</html>

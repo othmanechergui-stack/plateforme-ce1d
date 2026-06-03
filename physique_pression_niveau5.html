@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique — Pression des solides · Niveau 5 — Défi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#E53935; --primary-dark:#B71C1C; --primary-mid:#EF5350; --primary-bg:#FFEBEE;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#7F0000 0%,#E53935 55%,#FF8A80 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(183,28,28,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#E53935; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#E53935; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#7F0000,#E53935,#FF8A80); transition:width .7s cubic-bezier(.34,1.56,.64,1); }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        /* Intro card */
+        .intro-card { background:linear-gradient(135deg,#7F0000,#E53935); color:white; border-radius:var(--radius); padding:28px 28px 24px; text-align:center; box-shadow:0 4px 20px rgba(183,28,28,.3); }
+        .intro-card h2 { font-size:1.5rem; font-weight:900; margin-bottom:8px; }
+        .intro-card p  { font-size:.95rem; opacity:.92; line-height:1.8; margin-bottom:18px; }
+        .rules-row { display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-bottom:22px; }
+        .rule-chip { background:rgba(255,255,255,.18); border:1.5px solid rgba(255,255,255,.35); border-radius:50px; padding:6px 16px; font-size:.88rem; font-weight:800; }
+        .start-btn { background:white; color:#B71C1C; border:none; border-radius:50px; padding:14px 36px; font-family:inherit; font-size:1.05rem; font-weight:900; cursor:pointer; box-shadow:0 5px 0 rgba(0,0,0,.2); transition:all .12s; }
+        .start-btn:hover { transform:translateY(-2px); box-shadow:0 7px 0 rgba(0,0,0,.2); }
+
+        /* Challenge arena */
+        .arena { display:none; }
+        .arena.active { display:block; }
+
+        .arena-top { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); margin-bottom:20px; }
+        .arena-header { display:flex; align-items:center; justify-content:space-between; padding:16px 22px; background:linear-gradient(135deg,#7F0000,#E53935); color:white; }
+        .q-counter { font-size:1rem; font-weight:900; }
+        .q-counter span { font-size:1.4rem; }
+        .timer-ring { position:relative; width:64px; height:64px; }
+        .timer-ring svg { transform:rotate(-90deg); }
+        .timer-ring circle.bg   { fill:none; stroke:rgba(255,255,255,.25); stroke-width:5; }
+        .timer-ring circle.prog { fill:none; stroke:white; stroke-width:5; stroke-dasharray:163; stroke-dashoffset:0; transition:stroke-dashoffset .9s linear, stroke .3s; stroke-linecap:round; }
+        .timer-ring circle.prog.urgent { stroke:#FFD54F; }
+        .timer-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:1.2rem; font-weight:900; color:white; }
+
+        .q-body { padding:24px 24px 20px; }
+        .q-type-badge { display:inline-block; font-size:.7rem; font-weight:900; text-transform:uppercase; letter-spacing:.8px; border-radius:6px; padding:2px 10px; margin-bottom:12px; }
+        .q-type-badge.standard  { background:#E3F2FD; color:#1565C0; }
+        .q-type-badge.error     { background:#FFF3E0; color:#E65100; }
+        .q-type-badge.conversion{ background:#F3E5F5; color:#6A1B9A; }
+        .q-question { font-size:1.05rem; font-weight:700; line-height:1.7; margin-bottom:18px; }
+        .q-question code { background:rgba(0,0,0,.07); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.95rem; font-weight:700; }
+
+        .error-calc { background:#FFF8E1; border:2px solid #FFD08A; border-radius:12px; padding:14px 18px; margin-bottom:16px; font-family:'Courier New',monospace; font-size:.92rem; line-height:2; }
+        .error-calc .wrong-line { background:#FFCDD2; border-radius:5px; padding:1px 6px; text-decoration:underline wavy #E53935; }
+
+        .opts-grid { display:grid; grid-template-columns:1fr; gap:10px; }
+        .opts-grid.two-col { grid-template-columns:1fr 1fr; }
+        .opt { padding:13px 16px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s; text-align:left; }
+        .opt:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt:disabled { cursor:not-allowed; }
+        .opt.correct      { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt.wrong        { background:var(--red-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .opt.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+
+        .q-explain { display:none; margin-top:14px; padding:12px 16px; border-radius:10px; font-size:.9rem; font-weight:700; line-height:1.6; }
+        .q-explain.correct { display:block; background:var(--green-bg); color:var(--green-dark); border-left:4px solid var(--green); }
+        .q-explain.wrong   { display:block; background:var(--primary-bg); color:var(--primary-dark); border-left:4px solid var(--primary); }
+
+        .next-btn { display:none; width:100%; padding:13px; margin-top:16px; border-radius:12px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:1rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s; }
+        .next-btn:hover { transform:translateY(-2px); }
+        .next-btn.show { display:block; }
+
+        /* Results */
+        .results { display:none; }
+        .results.show { display:block; }
+        .result-hero { background:linear-gradient(135deg,#7F0000,#E53935); color:white; border-radius:var(--radius); padding:32px 24px; text-align:center; margin-bottom:20px; box-shadow:0 4px 20px rgba(183,28,28,.3); }
+        .result-stars { font-size:2.4rem; margin-bottom:8px; letter-spacing:4px; }
+        .result-hero h2 { font-size:1.6rem; font-weight:900; margin-bottom:8px; }
+        .result-hero .score-big { font-size:3.5rem; font-weight:900; line-height:1; }
+        .result-hero .score-sub { font-size:1rem; opacity:.85; margin-top:6px; }
+        .result-hero .xp-won { margin-top:14px; background:rgba(255,255,255,.2); border-radius:50px; display:inline-block; padding:6px 22px; font-size:1rem; font-weight:900; }
+
+        .recap-card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); margin-bottom:20px; }
+        .recap-header { padding:16px 22px; border-bottom:2px solid var(--border); font-size:1rem; font-weight:900; }
+        .recap-list { list-style:none; padding:0; }
+        .recap-item { display:flex; align-items:flex-start; gap:12px; padding:14px 22px; border-bottom:1px solid var(--border); font-size:.9rem; }
+        .recap-item:last-child { border-bottom:none; }
+        .recap-icon { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.85rem; flex-shrink:0; margin-top:1px; }
+        .recap-icon.ok  { background:var(--green-bg); }
+        .recap-icon.bad { background:var(--primary-bg); }
+        .recap-text { flex:1; }
+        .recap-text strong { display:block; font-size:.88rem; font-weight:900; margin-bottom:3px; }
+        .recap-text em { font-style:normal; font-size:.84rem; color:#666; }
+
+        /* Common */
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+
+        .completion { display:none; text-align:center; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border:3px solid var(--green); border-radius:var(--radius); padding:30px 20px; }
+        .completion.show { display:block; animation:slideDown .5s ease; }
+        .completion .stars { font-size:2.5rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.4rem; font-weight:900; color:var(--green-dark); margin-bottom:10px; }
+        .completion p  { font-size:.95rem; color:#333; line-height:1.8; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:translateY(0)} }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.95rem; font-weight:900; margin-bottom:14px; color:var(--text-light); text-transform:uppercase; letter-spacing:.5px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>⚡ Mode Défi — Pression</h1>
+            <p>Niveau 5 · Timer 45 secondes · 10 questions</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 répondues</span>
+            <span id="progPct">0 %</span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <span class="diff-label">Niveau Défi</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- INTRO -->
+<div class="intro-card" id="introCard">
+    <h2>⚡ Mode Défi</h2>
+    <p>Teste toutes tes connaissances sur la pression des solides.<br>
+       Chaque question a <strong>45 secondes</strong> — réfléchis vite mais avec méthode !</p>
+    <div class="rules-row">
+        <div class="rule-chip">⏱ 45 s / question</div>
+        <div class="rule-chip">10 questions</div>
+        <div class="rule-chip">🔍 Trouve l'erreur</div>
+        <div class="rule-chip">🧮 Calcul complet</div>
+    </div>
+    <button class="start-btn" onclick="startChallenge()">▶ Commencer le défi</button>
+</div>
+
+<!-- ARENA (questions one by one) -->
+<div class="arena" id="arenaSection">
+
+    <div class="arena-top" id="arenaCard">
+        <div class="arena-header">
+            <div class="q-counter">Question <span id="qNumDisplay">1</span> / 10</div>
+            <div class="timer-ring">
+                <svg width="64" height="64" viewBox="0 0 64 64">
+                    <circle class="bg"   cx="32" cy="32" r="26"/>
+                    <circle class="prog" cx="32" cy="32" r="26" id="timerCircle"/>
+                </svg>
+                <div class="timer-text" id="timerText">45</div>
+            </div>
+        </div>
+        <div class="q-body" id="qBody">
+            <!-- injected by JS -->
+        </div>
+    </div>
+
+</div>
+
+<!-- RESULTS -->
+<div class="results" id="resultsSection">
+
+    <div class="result-hero" id="resultHero">
+        <div class="result-stars" id="resultStars"></div>
+        <h2 id="resultTitle"></h2>
+        <div class="score-big" id="resultScore"></div>
+        <div class="score-sub">bonnes réponses sur 10</div>
+        <div class="xp-won" id="resultXP"></div>
+    </div>
+
+    <div class="recap-card" id="recapCard">
+        <div class="recap-header">📋 Récapitulatif détaillé</div>
+        <ul class="recap-list" id="recapList"></ul>
+    </div>
+
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Pression des solides</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="physique_pression_niveau1.html" class="nav-btn">Niveau 1 — P = F/S</a>
+        <a href="physique_pression_niveau2.html" class="nav-btn">Niveau 2 — Conversions</a>
+        <a href="physique_pression_niveau3.html" class="nav-btn">Niveau 3 — Pièges</a>
+        <a href="physique_pression_niveau4.html" class="nav-btn">Niveau 4 — Problèmes</a>
+        <a href="physique_pression_niveau5.html" class="nav-btn current">▶ Niveau 5 — Défi</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+/* ──────────────────────────────────────────────────────────────────────────
+   QUESTIONS DATA
+   type: 'qcm' | 'error'
+   correct: index of correct answer (0-based)
+   opts: array of option texts
+   errorCalc (optional): HTML shown in a monospace box before options
+────────────────────────────────────────────────────────────────────────── */
+const QUESTIONS = [
+    {
+        id: 1,
+        typeBadge: 'standard',
+        typeName: 'Situation réelle',
+        text: 'Emma (50 kg) marche dans la neige <strong>sans raquettes</strong> (S_pieds = 300 cm²), puis <strong>avec raquettes</strong> (S = 2 000 cm²). Dans quel cas exerce-t-elle la plus grande pression ? <em>(g = 10)</em>',
+        opts: [
+            'Avec raquettes — la surface est plus grande donc la pression est plus grande',
+            'Sans raquettes — P ≈ 16 667 Pa contre 2 500 Pa avec raquettes',
+            'Identique dans les deux cas, car la masse ne change pas',
+            'Avec raquettes — P = 500 × 2 000 = 1 000 000 Pa'
+        ],
+        twoCol: false,
+        correct: 1,
+        ok:  '✅ Exact ! F = 500 N. Sans raquettes : P = 500 ÷ 0,03 ≈ 16 667 Pa. Avec raquettes : P = 500 ÷ 0,2 = 2 500 Pa. Plus la surface est petite, plus la pression est grande → plus d\'enfoncement.',
+        err: '❌ Sans raquettes : S = 300 cm² = 0,03 m² → P ≈ 16 667 Pa. Avec raquettes : S = 0,2 m² → P = 2 500 Pa. La surface plus petite concentre la force → pression plus grande.'
+    },
+    {
+        id: 2,
+        typeBadge: 'error',
+        typeName: 'Trouve l\'erreur',
+        text: 'Une caisse de <strong>masse 6 kg</strong> est posée sur <strong>2 supports</strong> (S = 30 cm² chacun). Ci-dessous, un élève a fait le calcul — <strong>trouve la ligne fausse</strong> :',
+        errorCalc: `Ligne A : F = 6 × 10 = 60 N<br>
+Ligne B : F par support = 60 ÷ 2 = 60 N<br>
+Ligne C : S = 30 cm² = 0,003 m²<br>
+Ligne D : P = 30 ÷ 0,003 = 10 000 Pa`,
+        opts: [
+            'Ligne A — la force totale est fausse',
+            'Ligne B — la force par support est fausse',
+            'Ligne C — la conversion cm² → m² est fausse',
+            'Ligne D — le calcul de P est faux'
+        ],
+        twoCol: false,
+        correct: 1,
+        ok:  '✅ Oui ! Ligne B : F_support = 60 ÷ 2 = 30 N (et non 60 N). Et donc P = 30 ÷ 0,003 = 10 000 Pa est le bon résultat final.',
+        err: '❌ La faute est à la Ligne B : F par support = 60 ÷ 2 = 30 N, pas 60 N. On divise le poids par le nombre de supports !'
+    },
+    {
+        id: 3,
+        typeBadge: 'conversion',
+        typeName: 'Conversion + calcul',
+        text: 'Un objet de <strong>masse 500 g</strong> repose sur une surface de <strong>0,5 m²</strong>. Calcule la pression. <em>(g = 10)</em>',
+        opts: [
+            'P = 5 000 ÷ 0,5 = 10 000 Pa',
+            'P = 500 ÷ 0,5 = 1 000 Pa',
+            'P = 5 ÷ 0,5 = 10 Pa',
+            'P = 5 000 × 0,5 = 2 500 Pa'
+        ],
+        twoCol: true,
+        correct: 2,
+        ok:  '✅ Parfait ! 500 g = 0,5 kg → F = 0,5 × 10 = 5 N → P = 5 ÷ 0,5 = 10 Pa. Attention à bien convertir les grammes en kg !',
+        err: '❌ Il fallait d\'abord convertir : 500 g ÷ 1 000 = 0,5 kg → F = 0,5 × 10 = 5 N → P = 5 ÷ 0,5 = 10 Pa.'
+    },
+    {
+        id: 4,
+        typeBadge: 'standard',
+        typeName: 'Formule inversée',
+        text: 'Un objet exerce une pression de <strong>8 000 Pa</strong> avec une force de <strong>400 N</strong>. Quelle est la surface de contact ?',
+        opts: [
+            'S = 8 000 × 400 = 3 200 000 m²',
+            'S = 8 000 ÷ 400 = 20 m²',
+            'S = 400 ÷ 8 000 = 0,05 m²',
+            'S = 400 × 8 000 = 3 200 000 m²'
+        ],
+        twoCol: true,
+        correct: 2,
+        ok:  '✅ Bien ! On isole S dans P = F ÷ S → S = F ÷ P = 400 ÷ 8 000 = 0,05 m².',
+        err: '❌ Pour trouver S : P = F ÷ S → S = F ÷ P = 400 ÷ 8 000 = 0,05 m². On divise F par P !'
+    },
+    {
+        id: 5,
+        typeBadge: 'error',
+        typeName: 'Trouve l\'erreur',
+        text: 'Un réfrigérateur de <strong>80 kg</strong> sur <strong>4 pieds</strong> de <strong>50 cm²</strong> chacun. Un élève calcule la pression — <strong>quelle étape contient l\'erreur ?</strong>',
+        errorCalc: `Étape 1 : F = 80 × 10 = 800 N<br>
+Étape 2 : F par pied = 800 ÷ 4 = 200 N<br>
+Étape 3 : S = 50 cm² = 0,5 m²<br>
+Étape 4 : P = 200 ÷ 0,5 = 400 Pa`,
+        opts: [
+            'Étape 1 — la force totale est fausse',
+            'Étape 2 — la division par le nombre de pieds est fausse',
+            'Étape 3 — la conversion cm² → m² est fausse',
+            'Étape 4 — le calcul de P est faux'
+        ],
+        twoCol: false,
+        correct: 2,
+        ok:  '✅ Exact ! Étape 3 : 50 cm² ÷ 10 000 = 0,005 m² (pas 0,5 m²). Donc P = 200 ÷ 0,005 = 40 000 Pa.',
+        err: '❌ L\'erreur est à l\'Étape 3 : 50 cm² ÷ 10 000 = 0,005 m² (et non 0,5 m²). La bonne pression est 200 ÷ 0,005 = 40 000 Pa.'
+    },
+    {
+        id: 6,
+        typeBadge: 'standard',
+        typeName: 'Problème multi-étapes',
+        text: 'Une armoire de <strong>masse 75 kg</strong> repose sur <strong>4 pieds carrés</strong> de <strong>5 cm de côté</strong>. Calcule la pression sous chaque pied. <em>(g = 10)</em>',
+        opts: [
+            'P = 750 ÷ 4 = 187,5 Pa',
+            'P = 750 ÷ 0,01 = 75 000 Pa',
+            'P = 187,5 ÷ 0,0025 = 75 000 Pa',
+            'P = 750 ÷ 0,0025 = 300 000 Pa'
+        ],
+        twoCol: true,
+        correct: 2,
+        ok:  '✅ Bravo ! F = 750 N → F_pied = 750÷4 = 187,5 N → S_pied = 5 cm × 5 cm = 25 cm² = 0,0025 m² → P = 187,5 ÷ 0,0025 = 75 000 Pa.',
+        err: '❌ Étapes : F_total = 75×10 = 750 N → F_pied = 750÷4 = 187,5 N → S = 5×5 = 25 cm² = 0,0025 m² → P = 187,5 ÷ 0,0025 = 75 000 Pa.'
+    },
+    {
+        id: 7,
+        typeBadge: 'error',
+        typeName: 'Trouve l\'erreur',
+        text: 'On cherche la <strong>force</strong> exercée par un objet : P = 12 000 Pa, S = 0,03 m². <strong>Quelle ligne est fausse dans ce raisonnement ?</strong>',
+        errorCalc: `Ligne A : P = F ÷ S → F = P ÷ S<br>
+Ligne B : F = 12 000 ÷ 0,03 = 400 000 N<br>
+Ligne C : F = P × S = 12 000 × 0,03 = 360 N`,
+        opts: [
+            'Ligne A — la formule inversée est fausse',
+            'Ligne B — la formule utilisée est fausse (c\'est F = P × S)',
+            'Ligne C — le calcul de la multiplication est faux',
+            'Aucune erreur, les deux méthodes donnent le même résultat'
+        ],
+        twoCol: false,
+        correct: 1,
+        ok:  '✅ Oui ! Ligne A et B sont fausses ensemble : pour trouver F, il faut F = P × S (pas F = P ÷ S). F = 12 000 × 0,03 = 360 N.',
+        err: '❌ Ligne B est fausse : F = P × S (pas P ÷ S !). La bonne formule : F = 12 000 × 0,03 = 360 N. La Ligne C est la bonne réponse.'
+    },
+    {
+        id: 8,
+        typeBadge: 'standard',
+        typeName: 'Conception (défi final)',
+        text: 'Une machine de <strong>1 200 N</strong> doit exercer au maximum <strong>P_max = 60 000 Pa</strong>. Elle repose sur <strong>3 pieds identiques</strong>. Quelle surface minimale (en cm²) doit avoir <strong>chaque pied</strong> ?',
+        opts: [
+            'S_pied = 1 200 ÷ 60 000 = 0,02 m² = 200 cm²',
+            'S_pied = 400 ÷ 60 000 ≈ 0,0067 m² ≈ 66,7 cm²',
+            'S_pied = 60 000 ÷ 1 200 = 50 cm²',
+            'S_pied = 60 000 × 3 = 180 000 cm²'
+        ],
+        twoCol: false,
+        correct: 1,
+        ok:  '✅ Parfait ! F_pied = 1 200 ÷ 3 = 400 N. S_min = F_pied ÷ P_max = 400 ÷ 60 000 ≈ 0,00667 m² = 66,7 cm². Méthode complète maîtrisée !',
+        err: '❌ F_pied = 1 200 ÷ 3 = 400 N (diviser par le nb de pieds !). S_min = 400 ÷ 60 000 ≈ 0,00667 m² × 10 000 ≈ 66,7 cm².'
+    },
+    {
+        id: 9,
+        typeBadge: 'standard',
+        typeName: 'Comparer l\'enfoncement',
+        text: 'Deux boîtes sont posées sur de la vase.<br>• Boîte A : masse <strong>2 kg</strong>, surface <strong>40 cm²</strong><br>• Boîte B : masse <strong>7 kg</strong>, surface <strong>700 cm²</strong><br>Laquelle s\'enfonce le plus dans la vase ? <em>(g = 10)</em>',
+        opts: [
+            'Boîte B, car elle est plus lourde (7 kg > 2 kg)',
+            'Boîte A — P_A = 5 000 Pa contre P_B = 1 000 Pa',
+            'Identique, la vase ne dépend pas de la pression',
+            'Boîte B — P_B = 7 000 Pa contre P_A = 500 Pa'
+        ],
+        twoCol: false,
+        correct: 1,
+        ok:  '✅ Oui ! A : F = 20 N, S = 0,004 m² → P = 5 000 Pa. B : F = 70 N, S = 0,07 m² → P = 1 000 Pa. La boîte A s\'enfonce plus malgré son poids plus faible — c\'est la pression qui compte, pas la masse seule !',
+        err: '❌ Calcul : A → F = 20 N, S = 0,004 m², P = 5 000 Pa. B → F = 70 N, S = 0,07 m², P = 1 000 Pa. La boîte A a une pression 5× plus grande → elle s\'enfonce plus. La masse seule ne suffit pas !'
+    },
+    {
+        id: 10,
+        typeBadge: 'standard',
+        typeName: 'Situation CE1D',
+        text: 'Un professeur dit : <em>"Pour qu\'un objet s\'enfonce moins dans le sol, il suffit qu\'il soit moins lourd."</em><br>Un élève répond : <em>"Non, il faut aussi regarder la surface."</em><br>Qui a raison ? Quelle réponse est correcte ?',
+        opts: [
+            'Le professeur a raison — seule la masse détermine l\'enfoncement',
+            'L\'élève a raison — la pression P = F ÷ S dépend de la force ET de la surface',
+            'Ni l\'un ni l\'autre — c\'est la densité qui compte',
+            'Le professeur a raison si l\'objet est plus dense'
+        ],
+        twoCol: false,
+        correct: 1,
+        ok:  '✅ L\'élève a raison ! La formule P = F ÷ S montre que la pression dépend de deux facteurs : la force (liée à la masse) ET la surface de contact. Un objet léger avec une petite surface peut exercer plus de pression qu\'un objet lourd avec une grande surface.',
+        err: '❌ L\'élève a raison. P = F ÷ S : la pression dépend de la force ET de la surface. Un objet léger sur une petite surface peut s\'enfoncer plus qu\'un objet lourd sur une grande surface. Exemple : talon aiguille vs semelle plate.'
+    }
+];
+
+/* ──────────────────────────────────────────────────────────────────────────
+   STATE
+────────────────────────────────────────────────────────────────────────── */
+let currentQ    = 0;
+let score       = 0;
+let answered    = 0;
+let timerInterval = null;
+let timeLeft    = 45;
+const CIRCUMFERENCE = 2 * Math.PI * 26; // ≈ 163.4
+
+const results = []; // {qIdx, ok, chosen, correct}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   HELPERS
+────────────────────────────────────────────────────────────────────────── */
+function updateProgressBar() {
+    const pct = Math.round((answered / 10) * 100);
+    document.getElementById('barFill').style.width = pct + '%';
+    document.getElementById('progTxt').textContent = answered + ' / 10 répondues';
+    document.getElementById('progPct').textContent = pct + ' %';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   TIMER
+────────────────────────────────────────────────────────────────────────── */
+function startTimer() {
+    timeLeft = 45;
+    updateTimerDisplay(45);
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay(timeLeft);
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            timeExpired();
+        }
+    }, 1000);
+}
+
+function stopTimer() {
+    clearInterval(timerInterval);
+}
+
+function updateTimerDisplay(t) {
+    document.getElementById('timerText').textContent = t;
+    const circle = document.getElementById('timerCircle');
+    const offset = CIRCUMFERENCE * (1 - t / 45);
+    circle.style.strokeDashoffset = offset;
+    if (t <= 10) {
+        circle.classList.add('urgent');
+    } else {
+        circle.classList.remove('urgent');
+    }
+}
+
+function timeExpired() {
+    // Force an incorrect "timeout" answer
+    const q = QUESTIONS[currentQ];
+    results.push({ qIdx: currentQ, ok: false, timeout: true });
+    answered++;
+    updateProgressBar();
+    revealAnswer(null, q.correct, false, '⏱ Temps écoulé ! ' + q.err.replace('❌ ',''));
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   RENDER QUESTION
+────────────────────────────────────────────────────────────────────────── */
+function renderQuestion(idx) {
+    const q = QUESTIONS[idx];
+    document.getElementById('qNumDisplay').textContent = idx + 1;
+
+    let html = '';
+    // Type badge
+    html += `<div class="q-type-badge ${q.typeBadge}">${q.typeName}</div>`;
+    // Question text
+    html += `<div class="q-question">${q.text}</div>`;
+    // Error calc box if present
+    if (q.errorCalc) {
+        html += `<div class="error-calc">${q.errorCalc}</div>`;
+    }
+    // Options
+    const colClass = q.twoCol ? 'opts-grid two-col' : 'opts-grid';
+    html += `<div class="${colClass}" id="optsGrid">`;
+    q.opts.forEach((opt, i) => {
+        html += `<button class="opt" id="opt${i}" onclick="pickAnswer(${i})">${opt}</button>`;
+    });
+    html += `</div>`;
+    // Explain
+    html += `<div class="q-explain" id="qExplain"></div>`;
+    // Next button
+    const isLast = (idx === QUESTIONS.length - 1);
+    html += `<button class="next-btn" id="nextBtn" onclick="${isLast ? 'showResults()' : 'nextQuestion()'}">${isLast ? '🏁 Voir les résultats' : 'Question suivante →'}</button>`;
+
+    document.getElementById('qBody').innerHTML = html;
+    startTimer();
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   ANSWER HANDLING
+────────────────────────────────────────────────────────────────────────── */
+function pickAnswer(chosen) {
+    stopTimer();
+    const q = QUESTIONS[currentQ];
+    const isOk = (chosen === q.correct);
+    if (isOk) score++;
+    results.push({ qIdx: currentQ, ok: isOk, chosen: chosen, timeout: false });
+    answered++;
+    updateProgressBar();
+    revealAnswer(chosen, q.correct, isOk, isOk ? q.ok : q.err);
+}
+
+function revealAnswer(chosen, correct, isOk, msg) {
+    // Disable all options
+    const btns = document.querySelectorAll('#optsGrid .opt');
+    btns.forEach(b => b.disabled = true);
+    if (chosen !== null && chosen !== undefined) {
+        btns[chosen].classList.add(isOk ? 'correct' : 'wrong');
+    }
+    if (!isOk) {
+        btns[correct].classList.add('show-correct');
+    }
+    // Show explanation
+    const ex = document.getElementById('qExplain');
+    ex.textContent = msg;
+    ex.className = 'q-explain ' + (isOk ? 'correct' : 'wrong');
+    // Show next button
+    document.getElementById('nextBtn').classList.add('show');
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   NAVIGATION
+────────────────────────────────────────────────────────────────────────── */
+function startChallenge() {
+    document.getElementById('introCard').style.display = 'none';
+    document.getElementById('arenaSection').classList.add('active');
+    currentQ = 0;
+    renderQuestion(0);
+}
+
+function nextQuestion() {
+    currentQ++;
+    renderQuestion(currentQ);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   RESULTS
+────────────────────────────────────────────────────────────────────────── */
+function showResults() {
+    stopTimer();
+    document.getElementById('arenaSection').style.display = 'none';
+    const res = document.getElementById('resultsSection');
+    res.classList.add('show');
+
+    // Stars
+    let stars = '';
+    let title = '';
+    if      (score === 10)       { stars = '🌟🌟🌟'; title = 'Score parfait ! Exceptionnel !'; }
+    else if (score >= 8)         { stars = '⭐⭐⭐'; title = 'Excellent travail !'; }
+    else if (score >= 5)         { stars = '⭐⭐'; title = 'Bien joué, continue !'; }
+    else if (score >= 3)         { stars = '⭐'; title = 'À retravailler !'; }
+    else                         { stars = '💪'; title = 'Courage, relis les leçons !'; }
+
+    document.getElementById('resultStars').textContent = stars;
+    document.getElementById('resultTitle').textContent = title;
+    document.getElementById('resultScore').textContent = score;
+    document.getElementById('resultXP').textContent = '⭐ + ' + (score * 15) + ' XP';
+
+    // Recap list
+    const list = document.getElementById('recapList');
+    list.innerHTML = '';
+    results.forEach((r, i) => {
+        const q = QUESTIONS[r.qIdx];
+        const li = document.createElement('li');
+        li.className = 'recap-item';
+        const iconClass = r.ok ? 'ok' : 'bad';
+        const iconText  = r.ok ? '✅' : '❌';
+        const detail = r.timeout
+            ? '<em>Temps écoulé. ' + q.err.replace('❌ ','') + '</em>'
+            : (r.ok
+                ? '<em>' + q.ok.replace('✅ ','') + '</em>'
+                : '<em>' + q.err.replace('❌ ','') + '</em>');
+        li.innerHTML = `
+            <div class="recap-icon ${iconClass}">${iconText}</div>
+            <div class="recap-text">
+                <strong>Q${i+1} — ${q.typeName}</strong>
+                ${detail}
+            </div>`;
+        list.appendChild(li);
+    });
+
+    // Save to localStorage
+    if (score >= Math.ceil(10 * 0.8)) {
+        localStorage.setItem('edu_completed_physique_5', '1');
+    }
+
+    // Update progress bar to 100%
+    document.getElementById('barFill').style.width = '100%';
+    document.getElementById('progTxt').textContent = '10 / 10 répondues';
+    document.getElementById('progPct').textContent = '100 %';
+    document.getElementById('xpVal').textContent = score * 15;
+
+    setTimeout(() => res.scrollIntoView({ behavior:'smooth', block:'start' }), 300);
+}
+</script>
+</body>
+</html>

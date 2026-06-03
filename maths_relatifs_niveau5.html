@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Nombres Relatifs · Niveau 5 — Défi CE1D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#1E88E5; --primary-dark:#1565C0; --primary-mid:#42A5F5; --primary-bg:#E3F2FD;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --gold:#FDD835; --gold-dark:#F9A825;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#0D47A1 0%,#1E88E5 55%,#90CAF9 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(13,71,161,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#FF9600; }
+        .diff-pip.off { background:#DDD; }
+        .diff-pip.gold { background:#FDD835; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#D07A00; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#0D47A1,#1E88E5,#90CAF9); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        /* Timer */
+        .timer-bar { background:linear-gradient(135deg,#E65100,#FF9600); padding:10px 20px; }
+        .timer-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .timer-label { color:white; font-size:.82rem; font-weight:900; }
+        .timer-display { color:white; font-size:1.3rem; font-weight:900; font-family:'Courier New',monospace; min-width:65px; text-align:center; }
+        .timer-display.urgent { color:#FFD54F; animation:timerPulse .5s ease infinite alternate; }
+        @keyframes timerPulse { from{transform:scale(1)} to{transform:scale(1.1)} }
+        .timer-bg { flex:1; background:rgba(0,0,0,.2); border-radius:50px; height:10px; }
+        .timer-fill { height:100%; border-radius:50px; background:white; transition:width 1s linear; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.blue   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.gold   { background:#FFF9C4; }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        /* Context banner CE1D */
+        .ced-banner { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:12px; padding:14px 20px; margin-bottom:22px; display:flex; align-items:center; gap:14px; }
+        .ced-logo { font-size:2rem; flex-shrink:0; }
+        .ced-text h4 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:3px; }
+        .ced-text p  { font-size:.82rem; opacity:.9; }
+
+        /* QCM */
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        /* Fill in */
+        .fill-item { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:70px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* Guided exercises */
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* Stars recap */
+        .stars-recap { display:none; background:linear-gradient(135deg,#0D47A1,#1E88E5,#90CAF9); color:white; border-radius:var(--radius); padding:36px 24px; text-align:center; box-shadow:0 6px 0 #0A2F6E; }
+        .stars-recap.show { display:block; animation:bounceIn .7s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .stars-row { font-size:3rem; margin-bottom:12px; letter-spacing:8px; }
+        .star-empty { opacity:.3; }
+        .recap-title { font-size:1.9rem; font-weight:900; margin-bottom:8px; }
+        .recap-sub { font-size:.98rem; opacity:.92; margin-bottom:18px; }
+        .recap-stats { display:flex; justify-content:center; gap:24px; flex-wrap:wrap; }
+        .stat-chip { background:rgba(255,255,255,.2); border:2px solid rgba(255,255,255,.35); border-radius:50px; padding:8px 20px; font-weight:900; font-size:.95rem; }
+
+        /* Calculatrice */
+        .calc-wrap { background:linear-gradient(135deg,#0D47A1,#1565C0); border-radius:14px; padding:18px; }
+        .calc-screen { background:#0A1628; color:#90CAF9; font-family:'Courier New',monospace; font-size:1.4rem; font-weight:900; border-radius:10px; padding:12px 16px; margin-bottom:12px; text-align:right; min-height:52px; word-break:break-all; }
+        .calc-screen .calc-expr { font-size:.8rem; color:#546E7A; display:block; min-height:18px; }
+        .calc-btns { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; }
+        .calc-btn { padding:12px 4px; border-radius:10px; border:none; cursor:pointer; font-family:'Nunito',sans-serif; font-size:1rem; font-weight:900; transition:all .1s ease; }
+        .calc-btn:active { transform:scale(.93); }
+        .calc-btn.num   { background:#1E3A5F; color:white; }
+        .calc-btn.num:hover { background:#26527A; }
+        .calc-btn.op    { background:#FF9600; color:white; }
+        .calc-btn.op:hover { background:#FFB74D; }
+        .calc-btn.eq    { background:#58CC02; color:white; grid-column:span 2; }
+        .calc-btn.eq:hover { background:#76D92B; }
+        .calc-btn.clr   { background:#E53935; color:white; }
+        .calc-btn.clr:hover { background:#EF5350; }
+        .calc-btn.neg   { background:#7B1FA2; color:white; }
+        .calc-btn.neg:hover { background:#9C27B0; }
+
+        /* Level nav */
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+
+        @media(max-width:600px){
+            .header-inner { flex-wrap:wrap; }
+            .header-center { order:-1; flex-basis:100%; }
+            .opts.short { grid-template-columns:1fr 1fr; }
+            .calc-btns { gap:5px; }
+            .calc-btn { padding:10px 2px; font-size:.9rem; }
+            .recap-stats { gap:12px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>± Nombres Relatifs · Défi CE1D 🏆</h1>
+            <p>Niveau 5 · Problèmes contextualisés · Conditions d'examen</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip gold"></div>
+            <div class="diff-pip gold"></div>
+            <div class="diff-pip gold"></div>
+            <div class="diff-pip gold"></div>
+            <div class="diff-pip gold"></div>
+            <span class="diff-label" style="color:#D07A00;">Niveau 5 — Défi 🏆</span>
+        </div>
+    </div>
+</div>
+
+<!-- Timer -->
+<div class="timer-bar">
+    <div class="timer-inner">
+        <span class="timer-label">⏱ Temps restant</span>
+        <div class="timer-bg"><div class="timer-fill" id="timerFill" style="width:100%"></div></div>
+        <span class="timer-display" id="timerDisplay">5:00</span>
+    </div>
+</div>
+
+<main>
+
+<!-- ══ Intro CE1D ══ -->
+<div class="ced-banner">
+    <div class="ced-logo">📋</div>
+    <div class="ced-text">
+        <h4>Défi — Conditions CE1D belge</h4>
+        <p>Tu as <strong>5 minutes</strong> pour répondre à toutes les questions.
+        Les exercices sont contextualisés comme au vrai examen. Utilise la calculatrice si besoin. Bonne chance !</p>
+    </div>
+</div>
+
+
+<!-- ══ 1. QCM ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon gold">🏆</div>
+        <div>
+            <div class="card-title">QCM — Problèmes contextualisés</div>
+            <div class="card-sub">5 questions · Style examen CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Q1 -->
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span>
+                Un sous-marin est à une profondeur de <strong>−12 m</strong>. Il monte de <strong>7 m</strong>, puis
+                descend encore de <strong>3 m</strong>. À quelle profondeur se trouve-t-il ?
+            </div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">A) −8 m</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">B) −22 m</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">C) +8 m</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">D) −2 m</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q2 -->
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span>
+                Il fait <strong>−6°C</strong> à Bruxelles. La température monte de <strong>2°C par heure</strong>
+                pendant <strong>3 heures</strong>. Quelle est la température après ces 3 heures ?
+            </div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">A) −12°C</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">B) 0°C</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">C) +6°C</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">D) −6°C</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q3 -->
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span>
+                Un plongeur est à <strong>−8 m</strong>. Il descend de <strong>5 m</strong> supplémentaires,
+                puis remonte de <strong>9 m</strong>. À quelle profondeur est-il maintenant ?
+            </div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">A) −4 m</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">B) +4 m</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">C) −22 m</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">D) +6 m</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q4 -->
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span>
+                Dans un jeu, chaque bonne réponse rapporte <strong>+5 points</strong> et chaque mauvaise
+                réponse enlève <strong>3 points</strong>. Sarah a <strong>4 bonnes</strong> et
+                <strong>6 mauvaises</strong> réponses. Quel est son score final ?
+            </div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">A) −2 pts</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">B) +2 pts</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">C) +38 pts</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">D) −38 pts</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q5 -->
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span>
+                Calcule (style CE1D) : <strong>−(−3 + 7)² ÷ 4</strong>
+            </div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">A) +4</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">B) −4</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">C) +1</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">D) −1</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 2. TEXTES À TROUS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">📝</div>
+        <div>
+            <div class="card-title">Exercices — Textes à trous · CE1D</div>
+            <div class="card-sub">3 exercices contextualisés · Montre les étapes</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1 — Météo</div>
+            <div class="fill-sentence">
+                Ce soir à Bruxelles : −4°C. La nuit, la température monte de 2°C par heure.
+                En 3h : 3 × 2 = <input class="blank" id="f1a" placeholder="?"> °C de hausse.
+                Température finale : −4 + 6 = <input class="blank" id="f1b" placeholder="?"> °C.
+            </div>
+            <button class="verify-btn" onclick="checkFill(1)">Vérifier</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2 — Plongée</div>
+            <div class="fill-sentence">
+                Un plongeur est à −20 m. Il remonte à la vitesse de 4 m/min.
+                Après 3 min : 4 × 3 = <input class="blank" id="f2a" placeholder="?"> m de remontée.
+                Position : −20 + 12 = <input class="blank" id="f2b" placeholder="?"> m.
+            </div>
+            <button class="verify-btn" onclick="checkFill(2)">Vérifier</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3 — Jeu de points</div>
+            <div class="fill-sentence">
+                Noah : 3 bonnes (×5 pts) et 4 mauvaises (×(−2) pts).
+                3 × 5 = 15 pts et 4 × (−2) = <input class="blank" id="f3a" placeholder="?"> pts.
+                Score total : 15 + (−8) = <input class="blank" id="f3b" placeholder="?"> pts.
+            </div>
+            <button class="verify-btn" onclick="checkFill(3)">Vérifier</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 3. EXERCICE GUIDÉ BONUS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🎯</div>
+        <div>
+            <div class="card-title">Exercice guidé — Vrai défi CE1D</div>
+            <div class="card-sub">Problème complet multi-étapes · Corrigé disponible</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice Bonus — CE1D 2024 (adapté)</div>
+                <div class="ex-stmt">
+                    Une entreprise relève ses bénéfices mensuels (en milliers €) sur 4 mois :<br>
+                    Jan : <strong>+8</strong> · Fév : <strong>−5</strong> · Mars : <strong>−3</strong> · Avr : <strong>+6</strong><br><br>
+                    <strong>a)</strong> Calcule le bénéfice total sur les 4 mois.<br>
+                    <strong>b)</strong> Quel est le bénéfice moyen mensuel ?<br>
+                    <strong>c)</strong> Le mois de mai est deux fois moins bon que janvier. Quel est le bénéfice en mai ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">a</div><div class="sol-text">Bénéfice total = (+8) + (−5) + (−3) + (+6)<br>= (8 + 6) + (−5 − 3) = 14 + (−8) = <strong>+6 milliers €</strong></div></div>
+                <div class="sol-step"><div class="sol-num">b</div><div class="sol-text">Bénéfice moyen = total ÷ nombre de mois = 6 ÷ 4 = <strong>+1,5 milliers € par mois</strong></div></div>
+                <div class="sol-step"><div class="sol-num">c</div><div class="sol-text">"Deux fois moins bon que janvier" → janvier = +8, donc mai = +8 ÷ 2 = <strong>+4 milliers €</strong><br>
+                (Attention : "deux fois moins bon" ≠ "−2 fois janvier" — il faut diviser par 2, pas multiplier par −2)</div></div>
+                <div class="final-ans">✅ a) +6 milliers € &nbsp;·&nbsp; b) +1,5 milliers €/mois &nbsp;·&nbsp; c) +4 milliers €</div>
+            </div>
+        </div>
+
+        <div class="ex-card" style="margin-top:15px;">
+            <div class="ex-top">
+                <div class="ex-label">Exercice Bonus 2 — Expression complexe</div>
+                <div class="ex-stmt">
+                    Calcule en montrant toutes les étapes :<br><br>
+                    <strong>(−2)³ + [(−4 + 1)² − 5] × (−3)</strong>
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Crochets — parenthèse intérieure :</strong> −4 + 1 = −3</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Crochets — puissance :</strong> (−3)² = +9</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Crochets — soustraction :</strong> 9 − 5 = +4 → crochets = [+4]</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Puissance hors crochets :</strong> (−2)³ = (−2)×(−2)×(−2) = −8</div></div>
+                <div class="sol-step"><div class="sol-num">5</div><div class="sol-text"><strong>Multiplication :</strong> [+4] × (−3) = −12</div></div>
+                <div class="sol-step"><div class="sol-num">6</div><div class="sol-text"><strong>Addition finale :</strong> −8 + (−12) = −20</div></div>
+                <div class="final-ans">✅ (−2)³ + [(−4+1)²−5]×(−3) = <strong>−20</strong></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ CALCULATRICE ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon blue">🧮</div>
+        <div>
+            <div class="card-title">Calculatrice — Nombres relatifs</div>
+            <div class="card-sub">Pour vérifier tes calculs · Utilise +/− pour les négatifs</div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="calc-wrap">
+            <div class="calc-screen">
+                <span class="calc-expr" id="calcExpr"></span>
+                <span id="calcDisplay">0</span>
+            </div>
+            <div class="calc-btns">
+                <button class="calc-btn clr" onclick="calcClear()">C</button>
+                <button class="calc-btn neg" onclick="calcNeg()">+/−</button>
+                <button class="calc-btn op"  onclick="calcOp('÷')">÷</button>
+                <button class="calc-btn op"  onclick="calcOp('×')">×</button>
+
+                <button class="calc-btn num" onclick="calcDigit('7')">7</button>
+                <button class="calc-btn num" onclick="calcDigit('8')">8</button>
+                <button class="calc-btn num" onclick="calcDigit('9')">9</button>
+                <button class="calc-btn op"  onclick="calcOp('−')">−</button>
+
+                <button class="calc-btn num" onclick="calcDigit('4')">4</button>
+                <button class="calc-btn num" onclick="calcDigit('5')">5</button>
+                <button class="calc-btn num" onclick="calcDigit('6')">6</button>
+                <button class="calc-btn op"  onclick="calcOp('+')">+</button>
+
+                <button class="calc-btn num" onclick="calcDigit('1')">1</button>
+                <button class="calc-btn num" onclick="calcDigit('2')">2</button>
+                <button class="calc-btn num" onclick="calcDigit('3')">3</button>
+                <button class="calc-btn num" onclick="calcDigit('0')">0</button>
+
+                <button class="calc-btn eq" onclick="calcEquals()">=</button>
+                <button class="calc-btn num" onclick="calcDigit('.')">.</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ══ STARS RECAP ══ -->
+<div class="stars-recap" id="starsRecap">
+    <div class="stars-row" id="starsRow"></div>
+    <div class="recap-title" id="recapTitle"></div>
+    <div class="recap-sub" id="recapSub"></div>
+    <div class="recap-stats">
+        <div class="stat-chip">📊 <span id="finalScore">0</span> / 8 réponses</div>
+        <div class="stat-chip">⏱ <span id="finalTime">0:00</span> restant</div>
+        <div class="stat-chip">⭐ <span id="finalXP">0</span> XP gagnés</div>
+    </div>
+</div>
+
+<!-- ══ NAVIGATION ══ -->
+<div class="level-nav">
+    <h3>📚 Navigation — Nombres Relatifs</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_relatifs_niveau1.html" class="nav-btn">Niveau 1 — Introduction</a>
+        <a href="maths_relatifs_niveau2.html" class="nav-btn">Niveau 2 — Opérations</a>
+        <a href="maths_relatifs_niveau3.html" class="nav-btn">Niveau 3 — Règles de signe</a>
+        <a href="maths_relatifs_niveau4.html" class="nav-btn">Niveau 4 — Problèmes</a>
+        <a href="maths_relatifs_niveau5.html" class="nav-btn current">▶ Niveau 5 — Défi 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+/* ── Timer ── */
+const TIMER_TOTAL = 300; // 5 minutes en secondes
+let timerLeft = TIMER_TOTAL;
+let timerStopped = false;
+let timerStartTime = Date.now();
+
+function formatTime(s){
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function tickTimer(){
+    if(timerStopped) return;
+    const elapsed = Math.floor((Date.now() - timerStartTime) / 1000);
+    timerLeft = Math.max(0, TIMER_TOTAL - elapsed);
+    const disp = document.getElementById('timerDisplay');
+    const fill = document.getElementById('timerFill');
+    disp.textContent = formatTime(timerLeft);
+    fill.style.width = (timerLeft / TIMER_TOTAL * 100) + '%';
+    if(timerLeft <= 60) { disp.classList.add('urgent'); }
+    else { disp.classList.remove('urgent'); }
+    if(timerLeft === 0){
+        timerStopped = true;
+        showStars();
+    } else {
+        setTimeout(tickTimer, 1000);
+    }
+}
+setTimeout(tickTimer, 1000);
+
+/* ── QCM ── */
+// Q1: −12+7−3 = −8 → index 0
+// Q2: −6 + 2×3 = −6+6 = 0 → index 1
+// Q3: −8−5+9 = −13+9 = −4 → index 0
+// Q4: 4×5 + 6×(−3) = 20−18 = +2 → index 1
+// Q5: −(−3+7)²÷4 = −(4)²÷4 = −16÷4 = −4 → index 1
+const QCM_CORRECT = {1:0, 2:1, 3:0, 4:1, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! −12 + 7 = −5, puis −5 − 3 = −8 m.",
+    2:"✅ Parfait ! D'abord × : 2×3=6. Puis −6+6 = 0°C.",
+    3:"✅ Bravo ! −8 − 5 = −13, puis −13 + 9 = −4 m.",
+    4:"✅ Exact ! 4×5=20 et 6×(−3)=−18. Total = 20+(−18) = +2 pts.",
+    5:"✅ Parfait ! Parenthèses : −3+7=+4. Puissance : 4²=16. Le − devant : −16. Division : −16÷4=−4."
+};
+
+const QCM_ERR = {
+    1:"❌ −12+7=−5, puis −5−3=−8. Attention à bien traiter chaque opération dans l'ordre.",
+    2:"❌ Priorités ! D'abord 2×3=6, puis −6+6=0°C. On ne fait pas (−6+2)×3.",
+    3:"❌ −8−5=−13 (descente), puis −13+9=−4m (remontée).",
+    4:"❌ 4×(+5)=+20 (bonnes) et 6×(−3)=−18 (mauvaises). 20+(−18)=+2 pts.",
+    5:"❌ Parenthèses : (−3+7)=+4. Puissance : (4)²=16. − devant : −16. Division : −16÷4=−4."
+};
+
+/* ── Textes à trous ── */
+const FILL_DATA = {
+    1:{fields:['f1a','f1b'], accepted:[['6'],['+2','2']],
+       msgOk:"✅ 3×2=6°C de hausse, puis −4+6=+2°C. Il fait 2°C !",
+       msgErr:"❌ 3×2=6 (hausse totale). Puis −4+6=+2°C."},
+    2:{fields:['f2a','f2b'], accepted:[['12'],['-8','−8']],
+       msgOk:"✅ 4×3=12m de remontée, puis −20+12=−8m. Le plongeur est à 8m de profondeur.",
+       msgErr:"❌ 4×3=12m (remontée). Puis −20+12=−8m."},
+    3:{fields:['f3a','f3b'], accepted:[['-8','−8'],['7','+7']],
+       msgOk:"✅ 4×(−2)=−8pts, puis 15+(−8)=+7 pts. Score de Noah : 7 points.",
+       msgErr:"❌ 4×(−2)=−8pts. Score = 15+(−8)=+7pts."}
+};
+
+const TOTAL = 8;
+let score = 0;
+const qcmDone = {};
+const fillDone = {};
+
+function norm(s){ return s.trim().replace(/\s+/g,'').replace('−','-'); }
+
+function updateBar(){
+    const pct = Math.round((score/TOTAL)*100);
+    const bar = document.getElementById('barFill');
+    bar.style.width = pct+'%';
+    bar.classList.toggle('has-progress', score>0);
+    document.getElementById('progTxt').textContent = score+' / '+TOTAL+' bonnes réponses';
+    const xp = score * 20; // niveau 5 : 20 XP par point
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if(score >= Math.ceil(TOTAL * 0.8)){
+        localStorage.setItem('edu_completed_relatifs_5','1');
+        timerStopped = true;
+        showStars();
+    }
+}
+
+function showStars(){
+    timerStopped = true;
+    const xp = score * 20;
+    const recap = document.getElementById('starsRecap');
+    const starsRow = document.getElementById('starsRow');
+    const title = document.getElementById('recapTitle');
+    const sub = document.getElementById('recapSub');
+    document.getElementById('finalScore').textContent = score;
+    document.getElementById('finalTime').textContent = formatTime(timerLeft);
+    document.getElementById('finalXP').textContent = xp;
+
+    let stars, starsHtml, titleTxt, subTxt;
+    if(score >= 8){
+        stars = 3; titleTxt = 'Score parfait ! 🏆'; subTxt = 'Tu maîtrises totalement les nombres relatifs. CE1D, tu es prêt(e) !';
+    } else if(score >= 6){
+        stars = 2; titleTxt = 'Très bien !'; subTxt = 'Bonne maîtrise des relatifs. Quelques révisions et tu seras prêt(e) pour le CE1D !';
+    } else {
+        stars = 1; titleTxt = 'Continue tes efforts !'; subTxt = 'Relis les niveaux précédents et réessaie. Tu vas y arriver !';
+    }
+
+    starsHtml = '';
+    for(let i=1;i<=3;i++){
+        starsHtml += i<=stars ? '⭐' : '<span class="star-empty">⭐</span>';
+    }
+    starsRow.innerHTML = starsHtml;
+    title.textContent = titleTxt;
+    sub.textContent = subTxt;
+    recap.classList.add('show');
+    recap.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function checkQCM(q, chosen){
+    if(qcmDone[q]) return;
+    qcmDone[q] = true;
+    const correct = QCM_CORRECT[q];
+    const isOk = (chosen === correct);
+    if(isOk) score++;
+    const btns = document.querySelectorAll('#q'+q+' .opt-btn');
+    btns.forEach((b,i) => {
+        b.disabled = true;
+        if(i === correct) b.classList.add(isOk ? 'correct' : 'show-correct');
+        if(i === chosen && !isOk) b.classList.add('wrong');
+    });
+    const fb = document.getElementById('qf'+q);
+    fb.className = 'q-feedback '+(isOk?'correct':'wrong');
+    fb.innerHTML = isOk ? QCM_OK[q] : QCM_ERR[q];
+    updateBar();
+}
+
+function checkFill(n){
+    if(fillDone[n]) return;
+    const d = FILL_DATA[n];
+    let allOk = true;
+    d.fields.forEach((id,i) => {
+        const inp = document.getElementById(id);
+        const val = norm(inp.value);
+        const ok  = d.accepted[i].map(norm).includes(val);
+        inp.disabled = true;
+        inp.classList.add(ok ? 'correct' : 'wrong');
+        if(!ok) allOk = false;
+    });
+    if(allOk){ score++; fillDone[n] = true; }
+    const fb = document.getElementById('ff'+n);
+    fb.className = 'fill-feedback show '+(allOk?'correct':'wrong');
+    fb.innerHTML = allOk ? d.msgOk : d.msgErr;
+    document.querySelector('#ff'+n).previousElementSibling.disabled = true;
+    updateBar();
+}
+
+function toggleSol(num){
+    const btn = document.getElementById('rb'+num);
+    const sol = document.getElementById('sol'+num);
+    const open = sol.classList.toggle('open');
+    btn.classList.toggle('open', open);
+}
+
+/* ── Calculatrice ── */
+let calcCurrent = '0';
+let calcPrev = '';
+let calcOper = '';
+let calcFresh = true;
+
+function calcUpdate(){
+    document.getElementById('calcDisplay').textContent = calcCurrent;
+    document.getElementById('calcExpr').textContent = calcPrev + (calcOper ? ' ' + calcOper : '');
+}
+
+function calcDigit(d){
+    if(calcFresh){ calcCurrent = '0'; calcFresh = false; }
+    if(d === '.' && calcCurrent.includes('.')) return;
+    calcCurrent = calcCurrent === '0' && d !== '.' ? d : calcCurrent + d;
+    calcUpdate();
+}
+
+function calcOp(op){
+    if(calcOper && !calcFresh) calcEquals();
+    calcPrev = calcCurrent;
+    calcOper = op;
+    calcFresh = true;
+    calcUpdate();
+}
+
+function calcNeg(){
+    calcCurrent = calcCurrent.startsWith('-') ? calcCurrent.slice(1) : '-' + calcCurrent;
+    calcUpdate();
+}
+
+function calcEquals(){
+    if(!calcOper || !calcPrev) return;
+    const a = parseFloat(calcPrev);
+    const b = parseFloat(calcCurrent);
+    let result;
+    if(calcOper === '+') result = a + b;
+    else if(calcOper === '−') result = a - b;
+    else if(calcOper === '×') result = a * b;
+    else if(calcOper === '÷') result = b !== 0 ? a / b : 'Erreur';
+    calcCurrent = result === 'Erreur' ? 'Erreur' : String(Math.round(result * 1e10) / 1e10);
+    calcPrev = '';
+    calcOper = '';
+    calcFresh = true;
+    calcUpdate();
+}
+
+function calcClear(){
+    calcCurrent = '0'; calcPrev = ''; calcOper = ''; calcFresh = true;
+    calcUpdate();
+}
+</script>
+
+</body>
+</html>

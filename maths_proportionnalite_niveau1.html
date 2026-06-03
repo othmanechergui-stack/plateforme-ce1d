@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Proportionnalité · Niveau 1 — Tableaux</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#A560D4; --primary-dark:#7C3DA6; --primary-mid:#B47FDC; --primary-bg:#F5EEFF;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#4A148C 0%,#A560D4 55%,#CE93D8 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(74,20,140,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#A560D4; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#7C3DA6; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#4A148C,#A560D4,#CE93D8); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.purple { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        /* Definition / Rule / Trap boxes */
+        .def-box { background:linear-gradient(135deg,#4A148C,#7C3DA6); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#CE93D8; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        /* Method boxes */
+        .method-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0; }
+        @media(max-width:580px) { .method-grid { grid-template-columns:1fr; } }
+        .method-card { border:2.5px solid var(--primary); border-radius:12px; padding:14px 16px; background:var(--primary-bg); }
+        .method-card h4 { font-size:.85rem; font-weight:900; color:var(--primary-dark); margin-bottom:8px; text-transform:uppercase; letter-spacing:.5px; }
+        .method-card p  { font-size:.88rem; line-height:1.7; color:#444; }
+        .method-card code { background:rgba(165,96,212,.15); color:var(--primary-dark); }
+
+        /* SVG wrap */
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* Examples row */
+        .examples-row { display:flex; gap:12px; flex-wrap:wrap; margin:14px 0; }
+        .example-chip { background:var(--primary-bg); border:2px solid #CE93D8; border-radius:10px; padding:8px 16px; font-size:.95rem; font-weight:800; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .example-chip span { color:#888; font-size:.75rem; font-family:inherit; font-weight:700; display:block; text-align:center; }
+
+        /* QCM */
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        /* Tableau affiché dans QCM */
+        .mini-table { border-collapse:collapse; margin:10px auto; font-size:.9rem; }
+        .mini-table th { background:var(--primary); color:white; padding:5px 14px; text-align:center; font-weight:900; }
+        .mini-table td { border:1.5px solid #CE93D8; padding:5px 14px; text-align:center; font-weight:700; background:var(--primary-bg); }
+        .mini-table td:first-child { background:var(--primary-bg); font-weight:900; color:var(--primary-dark); }
+
+        /* Fill in */
+        .fill-item { background:var(--primary-bg); border:2px solid #CE93D8; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:70px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* Calc exercises */
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-num.purple { background:var(--primary); }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .sol-divider { font-size:.78rem; font-weight:900; color:var(--primary-dark); text-transform:uppercase; letter-spacing:.7px; margin:14px 0 8px; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* Completion */
+        .completion { display:none; background:linear-gradient(135deg,#4A148C,#A560D4,#CE93D8); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #38006B; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        /* Level nav */
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+
+        @media(max-width:580px){ .header-inner{flex-direction:column;gap:8px} .opts{grid-template-columns:1fr} .card-body{padding:16px} }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>% Proportionnalité · Tableaux</h1>
+            <p>Niveau 1 · Coefficient · 4ème proportionnelle · Règle de trois</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 1 — Base</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- ══ 1. LEÇON ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">📖</div>
+        <div>
+            <div class="card-title">La leçon — Tableaux de proportionnalité</div>
+            <div class="card-sub">Définition · Coefficient · 4ème proportionnelle · Produit en croix · Règle de trois</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            La proportionnalité est partout autour de nous : le prix d'un article selon la quantité achetée,
+            la distance parcourue selon le temps, une recette adaptée selon le nombre de personnes…
+            Savoir reconnaître et utiliser un tableau de proportionnalité, c'est une compétence clé au CE1D.
+        </p>
+
+        <!-- DÉFINITION -->
+        <div class="def-box">
+            <h3>📌 Définition — Grandeurs proportionnelles</h3>
+            <p>Deux grandeurs sont <strong>proportionnelles</strong> si leur rapport (quotient) est <strong>constant</strong>.<br>
+            Ce rapport s'appelle le <strong>coefficient de proportionnalité k</strong>.<br><br>
+            Si y est proportionnel à x, alors : <strong>y = k × x</strong> pour toutes les valeurs du tableau.<br>
+            → Si x double, y double. Si x triple, y triple.</p>
+        </div>
+
+        <!-- SVG 1 : Tableau de proportionnalité avec flèches coefficient -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="210" fill="#FAF0FF" rx="10"/>
+                <text x="280" y="22" text-anchor="middle" font-size="13" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Tableau de proportionnalité — Pizzas / Prix</text>
+
+                <!-- En-tête violet -->
+                <rect x="14"  y="32" width="130" height="38" fill="#7C3DA6" rx="5"/>
+                <rect x="150" y="32" width="82"  height="38" fill="#7C3DA6" rx="5"/>
+                <rect x="238" y="32" width="82"  height="38" fill="#7C3DA6" rx="5"/>
+                <rect x="326" y="32" width="82"  height="38" fill="#7C3DA6" rx="5"/>
+                <rect x="414" y="32" width="82"  height="38" fill="#7C3DA6" rx="5"/>
+                <text x="79"  y="56" text-anchor="middle" font-size="12" fill="white" font-weight="900" font-family="Nunito,sans-serif">Pizzas (x)</text>
+                <text x="191" y="56" text-anchor="middle" font-size="16" fill="white" font-weight="900" font-family="Courier New,monospace">1</text>
+                <text x="279" y="56" text-anchor="middle" font-size="16" fill="white" font-weight="900" font-family="Courier New,monospace">2</text>
+                <text x="367" y="56" text-anchor="middle" font-size="16" fill="white" font-weight="900" font-family="Courier New,monospace">3</text>
+                <text x="455" y="56" text-anchor="middle" font-size="16" fill="white" font-weight="900" font-family="Courier New,monospace">4</text>
+
+                <!-- Ligne des y -->
+                <rect x="14"  y="76" width="130" height="38" fill="#F3E5F5" rx="5"/>
+                <rect x="150" y="76" width="82"  height="38" fill="white" stroke="#CE93D8" stroke-width="1.5" rx="5"/>
+                <rect x="238" y="76" width="82"  height="38" fill="white" stroke="#CE93D8" stroke-width="1.5" rx="5"/>
+                <rect x="326" y="76" width="82"  height="38" fill="white" stroke="#CE93D8" stroke-width="1.5" rx="5"/>
+                <rect x="414" y="76" width="82"  height="38" fill="white" stroke="#CE93D8" stroke-width="1.5" rx="5"/>
+                <text x="79"  y="100" text-anchor="middle" font-size="12" fill="#4A148C" font-weight="900" font-family="Nunito,sans-serif">Prix € (y)</text>
+                <text x="191" y="100" text-anchor="middle" font-size="16" fill="#A560D4" font-weight="900" font-family="Courier New,monospace">5</text>
+                <text x="279" y="100" text-anchor="middle" font-size="16" fill="#A560D4" font-weight="900" font-family="Courier New,monospace">10</text>
+                <text x="367" y="100" text-anchor="middle" font-size="16" fill="#A560D4" font-weight="900" font-family="Courier New,monospace">15</text>
+                <text x="455" y="100" text-anchor="middle" font-size="16" fill="#A560D4" font-weight="900" font-family="Courier New,monospace">20</text>
+
+                <!-- Flèche × k (vers le bas) entre x=1 et y=5 -->
+                <line x1="191" y1="71" x2="191" y2="74" stroke="#A560D4" stroke-width="2"/>
+                <polygon points="191,76 187,70 195,70" fill="#A560D4"/>
+                <rect x="200" y="52" width="54" height="22" fill="#FFD54F" rx="6"/>
+                <text x="227" y="66" text-anchor="middle" font-size="12" fill="#4A148C" font-weight="900" font-family="Nunito,sans-serif">× k = 5</text>
+
+                <!-- Flèche ÷ k (vers le haut) à droite du tableau -->
+                <line x1="510" y1="95" x2="510" y2="38" stroke="#CE93D8" stroke-width="2" stroke-dasharray="4,3"/>
+                <polygon points="510,34 506,42 514,42" fill="#CE93D8"/>
+                <text x="530" y="72" text-anchor="middle" font-size="11" fill="#7C3DA6" font-weight="900" font-family="Nunito,sans-serif">÷ 5</text>
+
+                <!-- Légende en bas -->
+                <text x="280" y="132" text-anchor="middle" font-size="12" fill="#555" font-family="Nunito,sans-serif">→ Rapport y ÷ x = 5/1 = 10/2 = 15/3 = 20/4 = <tspan font-weight="900" fill="#A560D4">5</tspan> (constant ✓)</text>
+
+                <!-- Vérification des rapports -->
+                <rect x="14" y="142" width="120" height="24" fill="#E8F5E9" rx="5" stroke="#66BB6A" stroke-width="1.5"/>
+                <rect x="150" y="142" width="82"  height="24" fill="#E8F5E9" rx="5" stroke="#66BB6A" stroke-width="1.5"/>
+                <rect x="238" y="142" width="82"  height="24" fill="#E8F5E9" rx="5" stroke="#66BB6A" stroke-width="1.5"/>
+                <rect x="326" y="142" width="82"  height="24" fill="#E8F5E9" rx="5" stroke="#66BB6A" stroke-width="1.5"/>
+                <rect x="414" y="142" width="82"  height="24" fill="#E8F5E9" rx="5" stroke="#66BB6A" stroke-width="1.5"/>
+                <text x="79"  y="159" text-anchor="middle" font-size="11" fill="#2E7D32" font-weight="900" font-family="Nunito,sans-serif">Rapport y/x</text>
+                <text x="191" y="159" text-anchor="middle" font-size="12" fill="#2E7D32" font-weight="900" font-family="Courier New,monospace">5/1=5</text>
+                <text x="279" y="159" text-anchor="middle" font-size="12" fill="#2E7D32" font-weight="900" font-family="Courier New,monospace">10/2=5</text>
+                <text x="367" y="159" text-anchor="middle" font-size="12" fill="#2E7D32" font-weight="900" font-family="Courier New,monospace">15/3=5</text>
+                <text x="455" y="159" text-anchor="middle" font-size="12" fill="#2E7D32" font-weight="900" font-family="Courier New,monospace">20/4=5</text>
+
+                <text x="280" y="195" text-anchor="middle" font-size="12" fill="#2E7D32" font-weight="900" font-family="Nunito,sans-serif">✅ Tous les rapports sont égaux → tableau proportionnel, k = 5</text>
+            </svg>
+        </div>
+
+        <!-- RECONNAÎTRE UN TABLEAU -->
+        <div class="rule-box">
+            <h3>🔍 Comment reconnaître un tableau proportionnel ?</h3>
+            <p>Calcule <strong>tous les rapports y ÷ x</strong> (ou x ÷ y). S'ils sont <strong>tous égaux</strong>, le tableau est proportionnel.<br>
+            Le coefficient k = y ÷ x est la valeur constante de ce rapport.</p>
+        </div>
+
+        <!-- PIÈGE -->
+        <div class="trap-box">
+            <h3>⚠️ Piège classique — Différences égales ≠ Proportionnalité !</h3>
+            <p>Un tableau où les <strong>différences</strong> entre les valeurs sont constantes n'est PAS forcément proportionnel.<br>
+            Exemple : x = 2, 4, 6 et y = 5, 7, 9 (on ajoute 2 à chaque fois).<br>
+            Vérifie les rapports : <strong>5÷2 = 2,5</strong> mais <strong>7÷4 = 1,75</strong> — différents ! → <strong>PAS proportionnel !</strong></p>
+        </div>
+
+        <!-- SVG 2 : Produit en croix -->
+        <p style="font-size:.95rem;font-weight:900;color:var(--primary-dark);margin:20px 0 4px;">📐 Trouver la 4ème proportionnelle</p>
+        <p style="font-size:.9rem;color:#555;margin-bottom:12px;">Quand on connaît 3 valeurs d'un tableau proportionnel et qu'on cherche la 4ème, on peut utiliser deux méthodes :</p>
+
+        <div class="method-grid">
+            <div class="method-card">
+                <h4>Méthode 1 — Par le coefficient</h4>
+                <p>1. Calcule <code>k = y₁ ÷ x₁</code><br>
+                2. Applique : <code>y₂ = k × x₂</code><br><br>
+                <em>Ex : si x=3 → y=12, alors k=12÷3=4.<br>
+                Pour x=7 : y = 4 × 7 = <strong>28</strong></em></p>
+            </div>
+            <div class="method-card">
+                <h4>Méthode 2 — Produit en croix</h4>
+                <p>Si <code>x₁/y₁ = x₂/y₂</code>, alors :<br>
+                <code>x₁ × y₂ = x₂ × y₁</code><br><br>
+                <em>Ex : 3/12 = 7/? → 3 × ? = 7 × 12 = 84 → ? = 84÷3 = <strong>28</strong></em></p>
+            </div>
+        </div>
+
+        <!-- SVG 2 : Produit en croix visuel -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 170" xmlns="http://www.w3.org/2000/svg" style="max-width:500px;width:100%">
+                <rect x="0" y="0" width="560" height="170" fill="#FAF0FF" rx="10"/>
+                <text x="280" y="22" text-anchor="middle" font-size="13" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Le produit en croix</text>
+
+                <!-- Égalité de fractions -->
+                <text x="100" y="70" text-anchor="middle" font-size="36" fill="#A560D4" font-weight="900" font-family="Courier New,monospace">a</text>
+                <line x1="60" y1="80" x2="140" y2="80" stroke="#A560D4" stroke-width="3"/>
+                <text x="100" y="110" text-anchor="middle" font-size="36" fill="#A560D4" font-weight="900" font-family="Courier New,monospace">b</text>
+
+                <text x="200" y="90" text-anchor="middle" font-size="24" fill="#888" font-weight="900" font-family="Nunito,sans-serif">=</text>
+
+                <text x="310" y="70" text-anchor="middle" font-size="36" fill="#A560D4" font-weight="900" font-family="Courier New,monospace">c</text>
+                <line x1="270" y1="80" x2="350" y2="80" stroke="#A560D4" stroke-width="3"/>
+                <text x="310" y="110" text-anchor="middle" font-size="36" fill="#A560D4" font-weight="900" font-family="Courier New,monospace">d</text>
+
+                <!-- Flèches croisées -->
+                <line x1="115" y1="65" x2="295" y2="105" stroke="#FF6B00" stroke-width="2.5" stroke-dasharray="5,3"/>
+                <polygon points="295,105 283,100 286,112" fill="#FF6B00"/>
+
+                <line x1="115" y1="105" x2="295" y2="65" stroke="#1565C0" stroke-width="2.5" stroke-dasharray="5,3"/>
+                <polygon points="295,65 283,67 287,79" fill="#1565C0"/>
+
+                <!-- Formule -->
+                <rect x="390" y="55" width="155" height="50" fill="#FFD54F" rx="10"/>
+                <text x="468" y="76" text-anchor="middle" font-size="13" fill="#4A148C" font-weight="900" font-family="Nunito,sans-serif">a × d = b × c</text>
+                <text x="468" y="95" text-anchor="middle" font-size="11" fill="#7C3DA6" font-weight:700; font-family="Nunito,sans-serif">(produits en croix)</text>
+
+                <text x="280" y="148" text-anchor="middle" font-size="12" fill="#555" font-family="Nunito,sans-serif">→ Pour trouver d inconnu : d = b × c ÷ a</text>
+            </svg>
+        </div>
+
+        <!-- SVG 3 : Exemple concret pommes -->
+        <p style="font-size:.95rem;font-weight:900;color:var(--primary-dark);margin:18px 0 6px;">🍎 Exemple concret — 3 pommes coûtent 1,50 € → 7 pommes coûtent ?</p>
+
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="200" fill="#FFF8E1" rx="10"/>
+                <text x="280" y="22" text-anchor="middle" font-size="13" font-weight="900" fill="#E65100" font-family="Nunito,sans-serif">🍎 Règle de trois — Exemple</text>
+
+                <!-- Tableau -->
+                <rect x="60"  y="34" width="140" height="34" fill="#FF9600" rx="4"/>
+                <rect x="206" y="34" width="100" height="34" fill="#FF9600" rx="4"/>
+                <rect x="312" y="34" width="100" height="34" fill="#FF9600" rx="4"/>
+
+                <text x="130" y="56" text-anchor="middle" font-size="12" fill="white" font-weight="900" font-family="Nunito,sans-serif">Nb pommes</text>
+                <text x="256" y="56" text-anchor="middle" font-size="14" fill="white" font-weight="900" font-family="Courier New,monospace">3</text>
+                <text x="362" y="56" text-anchor="middle" font-size="14" fill="white" font-weight="900" font-family="Courier New,monospace">7</text>
+
+                <rect x="60"  y="72" width="140" height="34" fill="#FFF3E0" rx="4" stroke="#FFB74D" stroke-width="1.5"/>
+                <rect x="206" y="72" width="100" height="34" fill="white" rx="4" stroke="#FFB74D" stroke-width="1.5"/>
+                <rect x="312" y="72" width="100" height="34" fill="#FFEE58" rx="4" stroke="#F9A825" stroke-width="2"/>
+
+                <text x="130" y="93" text-anchor="middle" font-size="12" fill="#E65100" font-weight="900" font-family="Nunito,sans-serif">Prix (€)</text>
+                <text x="256" y="93" text-anchor="middle" font-size="14" fill="#E65100" font-weight="900" font-family="Courier New,monospace">1,50</text>
+                <text x="362" y="93" text-anchor="middle" font-size="16" fill="#E65100" font-weight="900" font-family="Courier New,monospace">?</text>
+
+                <!-- Méthode 1 -->
+                <rect x="14" y="120" width="258" height="66" fill="#E3F2FD" rx="8" stroke="#42A5F5" stroke-width="1.5"/>
+                <text x="143" y="136" text-anchor="middle" font-size="11" fill="#1565C0" font-weight="900" font-family="Nunito,sans-serif">Méthode 1 — Coefficient</text>
+                <text x="143" y="153" text-anchor="middle" font-size="11" fill="#1565C0" font-family="Nunito,sans-serif">k = 1,50 ÷ 3 = 0,50 €/pomme</text>
+                <text x="143" y="169" text-anchor="middle" font-size="11" fill="#1565C0" font-weight="900" font-family="Nunito,sans-serif">7 pommes : 7 × 0,50 = 3,50 €</text>
+
+                <!-- Méthode 2 -->
+                <rect x="286" y="120" width="260" height="66" fill="#F3E5F5" rx="8" stroke="#CE93D8" stroke-width="1.5"/>
+                <text x="416" y="136" text-anchor="middle" font-size="11" fill="#4A148C" font-weight="900" font-family="Nunito,sans-serif">Méthode 2 — Produit en croix</text>
+                <text x="416" y="153" text-anchor="middle" font-size="11" fill="#4A148C" font-family="Nunito,sans-serif">3 × ? = 7 × 1,50 = 10,50</text>
+                <text x="416" y="169" text-anchor="middle" font-size="11" fill="#4A148C" font-weight="900" font-family="Nunito,sans-serif">? = 10,50 ÷ 3 = 3,50 €</text>
+
+                <text x="280" y="198" text-anchor="middle" font-size="13" fill="#2E7D32" font-weight="900" font-family="Nunito,sans-serif">✅ 7 pommes coûtent 3,50 €</text>
+            </svg>
+        </div>
+
+        <!-- RÈGLE DE TROIS -->
+        <div class="def-box" style="margin-top:16px;">
+            <h3>📏 La règle de trois</h3>
+            <p>La <strong>règle de trois</strong> est une procédure pour trouver la 4ème proportionnelle :<br>
+            1. Écrire les données en tableau (2 grandeurs, 2 valeurs connues + 1 inconnue)<br>
+            2. Identifier si les grandeurs sont proportionnelles (même sens ou sens inverse)<br>
+            3. Appliquer le produit en croix : <strong>valeur cherchée = (valeur2 × valeur3) ÷ valeur1</strong></p>
+        </div>
+
+        <!-- Exemples rapides -->
+        <p style="font-size:.9rem;font-weight:900;color:var(--primary-dark);margin:16px 0 8px;">📌 Exemples à retenir</p>
+        <div class="examples-row">
+            <div class="example-chip">2 billets → 8 €<span>5 billets → 20 € (k=4)</span></div>
+            <div class="example-chip">3 kg → 12 L<span>7 kg → 28 L (k=4)</span></div>
+            <div class="example-chip">4 h → 240 km<span>7 h → 420 km (k=60)</span></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 2. QCM ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Pièges sur la proportionnalité · Style CE1D</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Le tableau suivant est-il proportionnel ? Si oui, quel est le coefficient k ?
+                <table class="mini-table" style="margin-top:8px">
+                    <tr><th>x</th><th>3</th><th>6</th><th>9</th></tr>
+                    <tr><td>y</td><td>9</td><td>18</td><td>27</td></tr>
+                </table>
+            </div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">✅ Oui, k = 3</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">✅ Oui, k = 1/3</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">❌ Non, les écarts ne sont pas égaux</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">❌ Non, les rapports ne sont pas constants</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> <strong>Piège !</strong> Le tableau ci-dessous est-il proportionnel ?
+                <table class="mini-table" style="margin-top:8px">
+                    <tr><th>x</th><th>2</th><th>4</th><th>6</th></tr>
+                    <tr><td>y</td><td>4</td><td>6</td><td>8</td></tr>
+                </table>
+            </div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(2,0)">Oui — on ajoute toujours 2, donc c'est proportionnel</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">Oui — le coefficient est 2 (4÷2 = 2)</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">Non — les rapports y÷x ne sont pas tous égaux</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">On ne peut pas savoir sans plus d'informations</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Dans un tableau proportionnel, quand x = 4 on a y = 10. Quelle est la valeur de y quand x = 6 ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">12</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">14</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">15</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">16</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> La propriété du produit en croix dit que si a/b = c/d, alors :</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">a + d = b + c</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">a ÷ d = b ÷ c</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">a × d = b × c</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">a × b = c × d</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Un robinet remplit 120 litres en 3 heures. Combien de litres remplit-il en 5 heures (même débit) ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">180 L</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">200 L</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">240 L</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">150 L</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 3. TEXTES À TROUS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Coefficient · Produit en croix · Règle de trois</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1 — Coefficient de proportionnalité</div>
+            <div class="fill-sentence">
+                Dans un tableau proportionnel, quand x = 5 on a y = 15.
+                Le coefficient k = y ÷ x = <input class="blank" id="f1a" placeholder="?"> .
+                Pour x = 8, on calcule y = 8 × k = <input class="blank" id="f1b" placeholder="?"> .
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2 — Produit en croix</div>
+            <div class="fill-sentence">
+                4 livres coûtent 24 €. Pour trouver le prix de 7 livres par produit en croix :
+                4 × prix = 7 × 24 = <input class="blank" id="f2a" placeholder="?"> .
+                Donc le prix de 7 livres = <input class="blank" id="f2b" placeholder="?"> €.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3 — Règle de trois</div>
+            <div class="fill-sentence">
+                Une voiture roule à vitesse constante. Elle fait 180 km en
+                <input class="blank" id="f3a" placeholder="?"> h (à 60 km/h).
+                En 4 heures, elle parcourra <input class="blank" id="f3b" placeholder="?"> km.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 4. EXERCICES GUIDÉS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices de 4ème proportionnelle — Corrigés détaillés</div>
+            <div class="card-sub">3 exercices · Les deux méthodes : coefficient ET produit en croix · Style CE1D</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- EX 1 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Recette de cuisine (CE1D)</div>
+                <div class="ex-stmt">
+                    Une recette pour <strong>4 personnes</strong> nécessite <strong>300 g de farine</strong>.
+                    Combien de grammes de farine faut-il pour adapter la recette à <strong>7 personnes</strong> ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-divider">Méthode 1 — Par le coefficient</div>
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Coefficient k = 300 ÷ 4 = <strong>75 g par personne</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Pour 7 personnes : 75 × 7 = <strong>525 g</strong></div></div>
+                <div class="sol-divider">Méthode 2 — Produit en croix</div>
+                <div class="sol-step"><div class="sol-num purple">A</div><div class="sol-text">On pose : 4 personnes → 300 g et 7 personnes → ? g</div></div>
+                <div class="sol-step"><div class="sol-num purple">B</div><div class="sol-text">Produit en croix : 4 × ? = 7 × 300 = 2 100</div></div>
+                <div class="sol-step"><div class="sol-num purple">C</div><div class="sol-text">? = 2 100 ÷ 4 = <strong>525 g</strong></div></div>
+                <div class="final-ans">✅ Pour 7 personnes, il faut <strong>525 g de farine</strong>.</div>
+            </div>
+        </div>
+
+        <!-- EX 2 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Vitesse et distance (CE1D)</div>
+                <div class="ex-stmt">
+                    Un train roule à vitesse constante. Il parcourt <strong>240 km en 3 heures</strong>.
+                    Quelle distance parcourt-il en <strong>4 heures et demie</strong> ?
+                    <em>(4 h 30 = 4,5 h)</em>
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-divider">Méthode 1 — Par le coefficient</div>
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">k = vitesse = 240 ÷ 3 = <strong>80 km/h</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">En 4,5 h : 80 × 4,5 = <strong>360 km</strong></div></div>
+                <div class="sol-divider">Méthode 2 — Produit en croix</div>
+                <div class="sol-step"><div class="sol-num purple">A</div><div class="sol-text">3 h → 240 km &nbsp; et &nbsp; 4,5 h → ? km</div></div>
+                <div class="sol-step"><div class="sol-num purple">B</div><div class="sol-text">3 × ? = 4,5 × 240 = 1 080</div></div>
+                <div class="sol-step"><div class="sol-num purple">C</div><div class="sol-text">? = 1 080 ÷ 3 = <strong>360 km</strong></div></div>
+                <div class="final-ans">✅ En 4h30, le train parcourt <strong>360 km</strong>.</div>
+            </div>
+        </div>
+
+        <!-- EX 3 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Prix au marché (style CE1D)</div>
+                <div class="ex-stmt">
+                    Au marché, <strong>5 oranges coûtent 3,50 €</strong>.
+                    <br><strong>a)</strong> Quel est le prix unitaire d'une orange ?
+                    <br><strong>b)</strong> Combien coûtent <strong>12 oranges</strong> ?
+                    <br><strong>c)</strong> Avec <strong>10 €</strong>, combien d'oranges peut-on acheter au maximum ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-divider">a) Prix unitaire</div>
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">k = 3,50 ÷ 5 = <strong>0,70 €/orange</strong></div></div>
+                <div class="sol-divider">b) Prix de 12 oranges</div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Méthode coefficient : 12 × 0,70 = <strong>8,40 €</strong></div></div>
+                <div class="sol-step"><div class="sol-num purple">✓</div><div class="sol-text">Vérification produit en croix : 5 × ? = 12 × 3,50 = 42 → ? = 42 ÷ 5 = <strong>8,40 €</strong> ✓</div></div>
+                <div class="sol-divider">c) Nombre d'oranges avec 10 €</div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Nombre d'oranges = 10 ÷ 0,70 ≈ 14,28… → on arrondit à <strong>14 oranges au maximum</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">Vérification : 14 × 0,70 = 9,80 € ≤ 10 ✓ &nbsp; et &nbsp; 15 × 0,70 = 10,50 € > 10 ✗</div></div>
+                <div class="final-ans">✅ a) 0,70 €/orange · b) 8,40 € pour 12 oranges · c) 14 oranges maximum avec 10 €</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ COMPLETION ══ -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 1 terminé !</h2>
+    <p>Bravo ! Tu maîtrises les tableaux de proportionnalité, le coefficient k et le produit en croix.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue vers le niveau 2 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Proportionnalité</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_proportionnalite_niveau1.html" class="nav-btn current">▶ Niveau 1 — Tableaux</a>
+        <span class="nav-btn locked">🔒 Niveau 2</span>
+        <span class="nav-btn locked">🔒 Niveau 3</span>
+        <span class="nav-btn locked">🔒 Niveau 4</span>
+        <span class="nav-btn locked">🔒 Niveau 5</span>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:2, 3:2, 4:2, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! Vérifie les rapports y÷x : 9÷3 = 3, 18÷6 = 3, 27÷9 = 3. Tous égaux → proportionnel avec k = 3.",
+    2:"✅ Très bien repéré ! Ce tableau N'est PAS proportionnel. Les rapports y÷x : 4÷2=2, 6÷4=1,5, 8÷6≈1,33 → différents ! Les différences sont constantes (+2), mais ce n'est pas ça la proportionnalité.",
+    3:"✅ Parfait ! k = 10÷4 = 2,5. Pour x=6 : y = 6 × 2,5 = 15. (Ou produit en croix : 4×y = 6×10 = 60 → y = 60÷4 = 15.)",
+    4:"✅ Exact ! Le produit en croix : si a/b = c/d, alors les produits diagonaux sont égaux : a×d = b×c. C'est la propriété fondamentale !",
+    5:"✅ Bravo ! k = 120÷3 = 40 L/h. En 5h : 40×5 = 200 L. Ou produit en croix : 3×? = 5×120 = 600 → ? = 600÷3 = 200 L."
+};
+
+const QCM_ERR = {
+    1:"❌ Vérifie les rapports y÷x : 9÷3=3, 18÷6=3, 27÷9=3 → tous égaux à 3. C'est bien proportionnel avec k=3 (et non 1/3 qui serait x÷y).",
+    2:"❌ Piège ! Même si les différences sont constantes (+2), ce n'est PAS proportionnel. Les rapports y÷x : 4÷2=2, 6÷4=1,5, 8÷6≈1,33 → différents ! Il faut que les RAPPORTS soient constants, pas les différences.",
+    3:"❌ Le coefficient k = 10÷4 = 2,5. Pour x=6 : y = 6 × 2,5 = 15. (Attention : 12=6×2 serait faux car k≠2 ici.)",
+    4:"❌ Le produit en croix, c'est les termes en diagonale qui se multiplient : a×d = b×c. Ce n'est pas une addition, ni une division, ni a×b.",
+    5:"❌ Le débit est 120÷3 = 40 L/h. En 5 heures : 40×5 = 200 L. (180 serait 3×60 ÷ 1h, ce n'est pas le bon calcul.)"
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['3'],['24']],
+        msgOk:"✅ k = 15÷5 = 3. Pour x=8 : y = 8×3 = 24. ✓",
+        msgErr:"❌ Attendus : k = 3 (car 15÷5=3) et y = 24 (car 8×3=24)."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['168'],['42']],
+        msgOk:"✅ Produit en croix : 4 × prix = 7 × 24 = 168. Donc prix = 168 ÷ 4 = 42 €.",
+        msgErr:"❌ Attendus : 168 (= 7×24) et 42 (= 168÷4). 4 × prix = 168 → prix = 42 €."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['3'],['240']],
+        msgOk:"✅ 180÷60 = 3 heures. En 4 heures : 60×4 = 240 km. ✓",
+        msgErr:"❌ Attendus : 3 heures (car 180÷60=3) et 240 km (car 60×4=240)."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_proportionnalite_1', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m);
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+document.querySelectorAll('.blank').forEach(input => {
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') checkFill(parseInt(input.id.charAt(1))); });
+});
+</script>
+</body>
+</html>

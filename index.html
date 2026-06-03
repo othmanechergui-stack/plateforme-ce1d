@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MonSite — Apprendre autrement</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F0F2F5;
+            --white: #FFFFFF;
+            --text: #3C3C3C;
+            --text-light: #888;
+            --border: #E0E0E0;
+            --radius: 18px;
+            --green: #58CC02; --green-dark: #46A302; --green-bg: #F0FBE4;
+            --blue: #1CB0F6;  --blue-dark: #0892D0;  --blue-bg: #E8F4FD;
+            --orange: #FF9600; --orange-dark: #D07A00; --orange-bg: #FFF3E0;
+            --purple: #A560D4; --purple-dark: #7C3DA6; --purple-bg: #F5EEFF;
+            --red: #FF4B4B;    --red-dark: #CC0000;    --red-bg: #FFEBEB;
+            --teal: #00C9A7;   --teal-dark: #009B80;   --teal-bg: #E0F7F3;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ═══ HEADER ═══ */
+        header {
+            background: white;
+            border-bottom: 2px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 12px rgba(0,0,0,.08);
+        }
+
+        .header-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 42px; height: 42px;
+            background: linear-gradient(135deg, var(--green), #7AE832);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 3px 0 var(--green-dark);
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--text);
+            letter-spacing: -.5px;
+        }
+
+        .logo-text span { color: var(--green); }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-xp {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #FFFBE6;
+            border: 2px solid #FFD900;
+            border-radius: 50px;
+            padding: 6px 14px;
+            font-weight: 900;
+            font-size: .95rem;
+            color: #9A7200;
+        }
+
+        .header-streak {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #FFF3E0;
+            border: 2px solid #FF9600;
+            border-radius: 50px;
+            padding: 6px 14px;
+            font-weight: 900;
+            font-size: .95rem;
+            color: var(--orange-dark);
+        }
+
+        /* ═══ HERO ═══ */
+        .hero {
+            background: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%);
+            color: white;
+            padding: 36px 20px 32px;
+        }
+
+        .hero-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .hero-avatar {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, var(--green), #7AE832);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.2rem;
+            flex-shrink: 0;
+            box-shadow: 0 0 0 4px rgba(88,204,2,.3), 0 0 0 8px rgba(88,204,2,.1);
+        }
+
+        .hero-content { flex: 1; }
+
+        .hero-greeting {
+            font-size: 1.6rem;
+            font-weight: 900;
+            margin-bottom: 4px;
+        }
+
+        .hero-sub {
+            font-size: .9rem;
+            opacity: .75;
+            margin-bottom: 16px;
+        }
+
+        .hero-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .stat-chip {
+            background: rgba(255,255,255,.12);
+            border: 1.5px solid rgba(255,255,255,.2);
+            border-radius: 50px;
+            padding: 5px 14px;
+            font-size: .82rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat-chip.green  { background: rgba(88,204,2,.2);  border-color: rgba(88,204,2,.4); }
+        .stat-chip.yellow { background: rgba(255,217,0,.2); border-color: rgba(255,217,0,.4); color: #FFD900; }
+        .stat-chip.blue   { background: rgba(28,176,246,.2); border-color: rgba(28,176,246,.4); }
+
+        .global-progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: .78rem;
+            font-weight: 700;
+            opacity: .7;
+            margin-bottom: 6px;
+        }
+
+        .global-bar-bg {
+            background: rgba(255,255,255,.15);
+            border-radius: 50px;
+            height: 14px;
+            overflow: hidden;
+        }
+
+        .global-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--green), #7AE832);
+            border-radius: 50px;
+            transition: width .8s cubic-bezier(.34,1.56,.64,1);
+            min-width: 0%;
+        }
+
+        /* ═══ MAIN ═══ */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px 16px 60px;
+        }
+
+        /* ═══ SUBJECT SECTION ═══ */
+        .subject-section { margin-bottom: 40px; }
+
+        .subject-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 14px 20px;
+            border-radius: var(--radius);
+            color: white;
+        }
+
+        .subject-header.maths {
+            background: linear-gradient(135deg, #1565C0, #1E88E5, #42A5F5);
+            box-shadow: 0 4px 0 #0D47A1;
+        }
+
+        .subject-header.sciences {
+            background: linear-gradient(135deg, #00695C, #00897B, #26A69A);
+            box-shadow: 0 4px 0 #004D40;
+        }
+
+        .subject-icon {
+            width: 44px; height: 44px;
+            background: rgba(255,255,255,.22);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .subject-header h2 { font-size: 1.2rem; font-weight: 900; }
+        .subject-header p  { font-size: .8rem; opacity: .85; font-weight: 600; margin-top: 1px; }
+
+        /* ═══ MODULE GRID ═══ */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 16px;
+        }
+
+        /* ═══ MODULE CARD ═══ */
+        .module-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,.08);
+            border-top: 4px solid var(--mc, #ccc);
+            transition: transform .2s ease, box-shadow .2s ease;
+            position: relative;
+        }
+
+        .module-card:not(.unavailable):hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,.12);
+        }
+
+        .module-card.unavailable { opacity: .72; }
+
+        .module-card-body { padding: 18px 20px; }
+
+        .module-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            gap: 10px;
+        }
+
+        .module-left { display: flex; align-items: center; gap: 12px; }
+
+        .module-icon-wrap {
+            width: 46px; height: 46px;
+            border-radius: 13px;
+            background: var(--mc-bg, #F5F5F5);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+        }
+
+        .module-title    { font-size: 1rem; font-weight: 900; line-height: 1.2; }
+        .module-subtitle { font-size: .75rem; color: var(--text-light); font-weight: 600; margin-top: 2px; }
+
+        .module-pct {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--mc, #ccc);
+            flex-shrink: 0;
+        }
+
+        /* Coming soon badge */
+        .soon-badge {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: #F0F0F0;
+            color: var(--text-light);
+            border-radius: 50px;
+            padding: 3px 10px;
+            font-size: .7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        /* ═══ LEVEL PATH ═══ */
+        .level-path {
+            display: flex;
+            align-items: center;
+            padding: 4px 0 14px;
+        }
+
+        .level-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        .level-circle {
+            width: 46px; height: 46px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900;
+            font-size: .95rem;
+            text-decoration: none;
+            transition: transform .15s ease;
+            position: relative;
+        }
+
+        .level-circle.done {
+            background: var(--mc, #ccc);
+            color: white;
+            box-shadow: 0 3px 0 var(--mc-dark, #aaa);
+        }
+
+        .level-circle.current {
+            background: white;
+            border: 3px solid var(--mc, #ccc);
+            color: var(--mc, #ccc);
+            box-shadow: 0 3px 0 var(--mc-dark, #aaa);
+            cursor: pointer;
+            animation: levelBounce 2.4s cubic-bezier(.36,.07,.19,.97) infinite;
+        }
+
+        .level-circle.current:hover {
+            transform: scale(1.12) translateY(-2px);
+            animation: none;
+        }
+
+        .level-circle.locked {
+            background: #EBEBEB;
+            color: #BBBBBB;
+            cursor: not-allowed;
+            box-shadow: 0 3px 0 #D0D0D0;
+            font-size: .85rem;
+        }
+
+        @keyframes levelBounce {
+            0%, 100% { transform: translateY(0); }
+            10%       { transform: translateY(-6px); }
+            20%       { transform: translateY(0); }
+            30%       { transform: translateY(-3px); }
+            40%       { transform: translateY(0); }
+        }
+
+        .level-label {
+            font-size: .63rem;
+            font-weight: 800;
+            color: var(--text-light);
+            text-align: center;
+            max-width: 52px;
+            line-height: 1.2;
+        }
+
+        .level-label.done    { color: var(--mc, #ccc); }
+        .level-label.current { color: var(--mc, #ccc); font-weight: 900; }
+
+        .level-connector {
+            flex: 1;
+            height: 4px;
+            background: #EBEBEB;
+            border-radius: 2px;
+            margin-bottom: 22px;
+            transition: background .4s;
+        }
+
+        .level-connector.done { background: var(--mc, #ccc); }
+
+        /* ═══ MODULE FOOTER ═══ */
+        .module-footer {
+            border-top: 2px solid var(--border);
+            padding-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .module-progress-bar-bg {
+            flex: 1;
+            background: var(--border);
+            border-radius: 50px;
+            height: 10px;
+            overflow: hidden;
+        }
+
+        .module-progress-fill {
+            height: 100%;
+            background: var(--mc, #ccc);
+            border-radius: 50px;
+            transition: width .6s cubic-bezier(.34,1.56,.64,1);
+        }
+
+        .module-levels-txt {
+            font-size: .8rem;
+            font-weight: 800;
+            color: var(--text-light);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .module-levels-txt.has-progress { color: var(--mc, #ccc); }
+
+        /* ═══ FOOTER ═══ */
+        footer {
+            background: white;
+            border-top: 2px solid var(--border);
+            text-align: center;
+            padding: 20px;
+            font-size: .82rem;
+            color: var(--text-light);
+            font-weight: 700;
+        }
+
+        /* ═══ RESPONSIVE ═══ */
+        @media (max-width: 600px) {
+            .hero-inner       { flex-direction: column; gap: 20px; text-align: center; }
+            .hero-stats       { justify-content: center; }
+            .global-progress-label { text-align: left; }
+            .modules-grid     { grid-template-columns: 1fr; }
+            .header-streak    { display: none; }
+            .level-label      { font-size: .58rem; max-width: 44px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header>
+    <div class="header-inner">
+        <a class="logo" href="index.html">
+            <div class="logo-icon">📚</div>
+            <div class="logo-text">Mon<span>Site</span></div>
+        </a>
+        <div class="header-right">
+            <div class="header-streak" id="streakDisplay">🔥 <span id="streakVal">0</span> niveaux</div>
+            <div class="header-xp">⚡ <span id="headerXP">0</span> XP</div>
+        </div>
+    </div>
+</header>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<div class="hero">
+    <div class="hero-inner">
+        <div class="hero-avatar">🎓</div>
+        <div class="hero-content">
+            <div class="hero-greeting">Prêt à apprendre ?</div>
+            <div class="hero-sub">CE1D · Mathématiques &amp; Sciences</div>
+            <div class="hero-stats">
+                <div class="stat-chip green">🏆 <span id="statCompleted">0</span> niveaux complétés</div>
+                <div class="stat-chip yellow">⚡ <span id="statXP">0</span> XP gagnés</div>
+                <div class="stat-chip blue">📚 <span id="statAvailable">5</span> niveaux disponibles</div>
+            </div>
+            <div class="global-progress-label">
+                <span>Progression globale</span>
+                <span id="globalPct">0%</span>
+            </div>
+            <div class="global-bar-bg">
+                <div class="global-bar-fill" id="globalBar" style="width:0%"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<main>
+
+    <!-- ── MATHÉMATIQUES ── -->
+    <section class="subject-section" id="section-maths">
+        <div class="subject-header maths">
+            <div class="subject-icon">📐</div>
+            <div>
+                <h2>Mathématiques</h2>
+                <p>Calcul · Fractions · Géométrie · Proportionnalité</p>
+            </div>
+        </div>
+        <div class="modules-grid" id="grid-maths"></div>
+    </section>
+
+    <!-- ── SCIENCES ── -->
+    <section class="subject-section" id="section-sciences">
+        <div class="subject-header sciences">
+            <div class="subject-icon">🔬</div>
+            <div>
+                <h2>Sciences</h2>
+                <p>Physique · Chimie</p>
+            </div>
+        </div>
+        <div class="modules-grid" id="grid-sciences"></div>
+    </section>
+
+</main>
+
+<footer>
+    📚 MonSite — CE1D · Belgique &nbsp;·&nbsp; Tous droits réservés
+</footer>
+
+<!-- ═══════════════ JAVASCRIPT ═══════════════ -->
+<script>
+/* ─── Configuration des modules ─── */
+const MODULES = [
+    {
+        id: 'calcul', section: 'maths',
+        title: 'Calcul Algébrique', icon: '🔢',
+        subtitle: 'Priorités · Parenthèses · Expressions',
+        mc: '#58CC02', mcDark: '#46A302', mcBg: '#F0FBE4',
+        files: [
+            'module_calcul_algebrique.html',
+            'calc_niveau2.html',
+            'calc_niveau3.html',
+            'calc_niveau4.html',
+            'calc_niveau5.html'
+        ],
+        labels: ['Base', 'Combiné', 'Pièges', 'Avancé', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'fractions', section: 'maths',
+        title: 'Fractions', icon: '½',
+        subtitle: 'Simplification · Opérations · Comparaison',
+        mc: '#00BFA5', mcDark: '#00796B', mcBg: '#E0F5F1',
+        files: ['maths_fractions_niveau1.html', 'maths_fractions_niveau2.html', 'maths_fractions_niveau3.html', 'maths_fractions_niveau4.html', 'maths_fractions_niveau5.html'],
+        labels: ['Simplif.', 'Opér.', 'Comp.', 'Équ.', 'Défi'],
+        available: true
+    },
+    {
+        id: 'relatifs', section: 'maths',
+        title: 'Nombres Relatifs', icon: '±',
+        subtitle: 'Droite · Opérations · Règles des signes · CE1D',
+        mc: '#1E88E5', mcDark: '#1565C0', mcBg: '#E3F2FD',
+        files: ['maths_relatifs_niveau1.html', 'maths_relatifs_niveau2.html', 'maths_relatifs_niveau3.html', 'maths_relatifs_niveau4.html', 'maths_relatifs_niveau5.html'],
+        labels: ['Intro', 'Opérat.', 'Signes', 'Problèmes', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'puissances', section: 'maths',
+        title: 'Puissances', icon: 'xⁿ',
+        subtitle: 'Définition · Règles · Notation scientifique · CE1D',
+        mc: '#8E24AA', mcDark: '#4A148C', mcBg: '#F3E5F5',
+        files: ['maths_puissances_niveau1.html', 'maths_puissances_niveau2.html', 'maths_puissances_niveau3.html', 'maths_puissances_niveau4.html', 'maths_puissances_niveau5.html'],
+        labels: ['Définition', 'Règles', 'Sci.', 'Expressions', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'geometrie', section: 'maths',
+        title: 'Géométrie', icon: '📐',
+        subtitle: 'Figures · Angles · Périmètres · Aires',
+        mc: '#FF9600', mcDark: '#D07A00', mcBg: '#FFF3E0',
+        files: [null, null, null, null, null],
+        labels: ['Base', 'Angles', 'Périm.', 'Aire', 'Défi'],
+        available: false
+    },
+    {
+        id: 'proportionnalite', section: 'maths',
+        title: 'Proportionnalité', icon: '%',
+        subtitle: 'Tableaux · Pourcentages · Règle de 3',
+        mc: '#A560D4', mcDark: '#7C3DA6', mcBg: '#F5EEFF',
+        files: ['maths_proportionnalite_niveau1.html', null, null, null, null],
+        labels: ['Tableaux', 'Pourc.', 'R.de 3', 'Mixte', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'physique', section: 'sciences',
+        title: 'Physique — Pression', icon: '⚡',
+        subtitle: 'Formule · Calculs · Situations réelles CE1D',
+        mc: '#FF4B4B', mcDark: '#CC0000', mcBg: '#FFEBEB',
+        files: ['physique_pression_niveau1.html', 'physique_pression_niveau2.html', 'physique_pression_niveau3.html', 'physique_pression_niveau4.html', 'physique_pression_niveau5.html'],
+        labels: ['Intro', 'Calculs', 'Situations', 'Avancé', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'chimie', section: 'sciences',
+        title: 'Chimie — Atomes', icon: '⚗️',
+        subtitle: 'Atomes · Molécules · Liaisons',
+        mc: '#00C9A7', mcDark: '#009B80', mcBg: '#E0F7F3',
+        files: [null, null, null, null, null],
+        labels: ['Base', 'Atomes', 'Molé.', 'Liais.', 'Défi'],
+        available: false
+    }
+];
+
+/* ─── Lecture de la progression ─── */
+function getCompleted(moduleId) {
+    const result = [];
+    for (let i = 1; i <= 5; i++) {
+        result.push(localStorage.getItem(`edu_completed_${moduleId}_${i}`) === '1');
+    }
+    return result;
+}
+
+function isUnlocked(moduleConfig, levelIdx, completed) {
+    if (!moduleConfig.available) return false;
+    if (levelIdx === 0) return true;
+    return completed[levelIdx - 1] === true;
+}
+
+/* ─── Rendu d'une carte module ─── */
+function renderCard(mod) {
+    const completed = getCompleted(mod.id);
+    const completedCount = completed.filter(Boolean).length;
+    const pct = Math.round((completedCount / 5) * 100);
+
+    /* Circles */
+    let pathHtml = '<div class="level-path">';
+    for (let i = 0; i < 5; i++) {
+        const unlocked = isUnlocked(mod, i, completed);
+        const isDone    = completed[i];
+        const isCurrent = unlocked && !isDone;
+        const file      = mod.files[i];
+
+        let circleClass, circleContent, circleTag;
+        if (isDone) {
+            circleClass   = 'done';
+            circleContent = '✓';
+            circleTag     = 'div';
+        } else if (isCurrent && file) {
+            circleClass   = 'current';
+            circleContent = i + 1;
+            circleTag     = 'a';
+        } else {
+            circleClass   = 'locked';
+            circleContent = '🔒';
+            circleTag     = 'div';
+        }
+
+        const href    = (circleTag === 'a') ? ` href="${file}"` : '';
+        const title   = (circleTag === 'a') ? ` title="${mod.labels[i]}"` : '';
+        const labelCls = isDone ? 'done' : isCurrent ? 'current' : '';
+
+        pathHtml += `
+            <div class="level-wrap">
+                <${circleTag}${href}${title} class="level-circle ${circleClass}"
+                    style="--mc:${mod.mc};--mc-dark:${mod.mcDark}">
+                    ${circleContent}
+                </${circleTag}>
+                <div class="level-label ${labelCls}">${mod.labels[i]}</div>
+            </div>`;
+
+        if (i < 4) {
+            const connDone = completed[i] && completed[i + 1] !== undefined;
+            pathHtml += `<div class="level-connector ${completed[i] ? 'done' : ''}"
+                style="--mc:${mod.mc}"></div>`;
+        }
+    }
+    pathHtml += '</div>';
+
+    const levelsTxt  = completedCount > 0
+        ? `${completedCount} / 5 niveaux`
+        : mod.available ? '0 / 5 niveaux' : 'Bientôt disponible';
+    const hasProgress = completedCount > 0;
+
+    return `
+    <div class="module-card ${!mod.available ? 'unavailable' : ''}"
+         style="--mc:${mod.mc};--mc-dark:${mod.mcDark};--mc-bg:${mod.mcBg};
+                border-top-color:${mod.mc}">
+        ${!mod.available ? '<div class="soon-badge">Bientôt 🔒</div>' : ''}
+        <div class="module-card-body">
+            <div class="module-top">
+                <div class="module-left">
+                    <div class="module-icon-wrap" style="background:${mod.mcBg}">
+                        ${mod.icon}
+                    </div>
+                    <div>
+                        <div class="module-title">${mod.title}</div>
+                        <div class="module-subtitle">${mod.subtitle}</div>
+                    </div>
+                </div>
+                <div class="module-pct" style="color:${mod.mc}">${pct}%</div>
+            </div>
+            ${pathHtml}
+            <div class="module-footer">
+                <div class="module-progress-bar-bg">
+                    <div class="module-progress-fill"
+                         style="width:${pct}%;background:${mod.mc}"></div>
+                </div>
+                <div class="module-levels-txt ${hasProgress ? 'has-progress' : ''}"
+                     style="${hasProgress ? '--mc:'+mod.mc : ''}">
+                    ${levelsTxt}
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+/* ─── Calcul des stats globales ─── */
+function updateGlobalStats() {
+    let totalCompleted = 0;
+    let totalAvailable = 0;
+
+    MODULES.forEach(mod => {
+        if (mod.available) {
+            const c = getCompleted(mod.id);
+            totalCompleted += c.filter(Boolean).length;
+            totalAvailable += 5;
+        }
+    });
+
+    const pct = totalAvailable > 0
+        ? Math.round((totalCompleted / totalAvailable) * 100) : 0;
+    const xp  = totalCompleted * 100;
+
+    document.getElementById('globalBar').style.width    = pct + '%';
+    document.getElementById('globalPct').textContent    = pct + '%';
+    document.getElementById('statCompleted').textContent = totalCompleted;
+    document.getElementById('statXP').textContent        = xp;
+    document.getElementById('statAvailable').textContent = totalAvailable;
+    document.getElementById('headerXP').textContent      = xp;
+    document.getElementById('streakVal').textContent     = totalCompleted;
+}
+
+/* ─── Rendu de tous les modules ─── */
+function renderAll() {
+    const gridMaths    = document.getElementById('grid-maths');
+    const gridSciences = document.getElementById('grid-sciences');
+
+    MODULES.forEach(mod => {
+        const html = renderCard(mod);
+        if (mod.section === 'maths')    gridMaths.insertAdjacentHTML('beforeend', html);
+        else                             gridSciences.insertAdjacentHTML('beforeend', html);
+    });
+
+    updateGlobalStats();
+}
+
+/* ─── Init ─── */
+renderAll();
+
+/* ─── Rafraîchit si l'élève revient d'un niveau ─── */
+window.addEventListener('focus', () => {
+    document.getElementById('grid-maths').innerHTML    = '';
+    document.getElementById('grid-sciences').innerHTML = '';
+    renderAll();
+});
+</script>
+
+</body>
+</html>

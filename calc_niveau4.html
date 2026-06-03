@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcul Algébrique — Niveau 4</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --red:#FF4B4B; --red-dark:#CC0000;
+            --purple:#A560D4; --purple-dark:#7C3DA6; --purple-light:#CE82FF; --purple-bg:#F5EEFF;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#7C3DA6 0%,#A560D4 60%,#CE82FF 100%); color:white; padding:16px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(124,61,166,.35); }
+        .header-inner { max-width:820px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .header-left  { display:flex; align-items:center; gap:14px; }
+        .level-badge  { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.5); border-radius:12px; padding:6px 14px; font-weight:900; font-size:.9rem; white-space:nowrap; text-align:center; line-height:1.2; }
+        .level-badge span { font-size:1.3rem; display:block; }
+        .header-left h1 { font-size:1.3rem; font-weight:900; }
+        .header-left p  { font-size:.8rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:7px 18px; font-weight:900; font-size:1rem; white-space:nowrap; display:flex; align-items:center; gap:6px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:14px 20px; }
+        .progress-inner { max-width:820px; margin:0 auto; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.8rem; font-weight:700; color:var(--text-light); margin-bottom:7px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:18px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#7C3DA6,#A560D4,#CE82FF); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:6px; top:50%; transform:translateY(-50%); font-size:11px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:820px; margin:0 auto; padding:28px 16px 48px; display:flex; flex-direction:column; gap:28px; }
+
+        .rappel { background:white; border-radius:var(--radius); padding:18px 22px; border-left:5px solid var(--purple); box-shadow:0 2px 10px rgba(0,0,0,.07); display:flex; gap:14px; align-items:flex-start; }
+        .rappel-icon { font-size:1.8rem; flex-shrink:0; }
+        .rappel h2   { font-size:1rem; font-weight:900; color:var(--purple-dark); margin-bottom:6px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:18px 22px 16px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0; }
+        .card-icon.purple { background:var(--purple-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-title { font-size:1.15rem; font-weight:900; }
+        .card-sub   { font-size:.82rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.09); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:1rem; font-weight:700; padding:11px 15px; background:#F8F8F8; border-radius:10px; border-left:4px solid var(--purple); margin-bottom:12px; }
+        .q-num  { display:inline-block; background:var(--purple); color:white; border-radius:5px; padding:1px 8px; font-size:.78rem; font-weight:900; margin-right:8px; }
+        .opts   { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; }
+        .opts.wide { grid-template-columns:1fr; }
+        .opt-btn { padding:13px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.95rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--purple); background:var(--purple-bg); transform:translateY(-2px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:#FFEBEB; border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:9px; padding:9px 13px; border-radius:8px; font-size:.88rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:#FFEBEB; color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:22px 0; }
+
+        .fill-item { background:var(--orange-bg); border:2px solid #FFD08A; border-radius:12px; padding:18px 20px; margin-bottom:18px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--orange); color:white; border-radius:5px; padding:1px 8px; font-size:.78rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.97rem; line-height:2.6; margin-bottom:13px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--orange); background:transparent; font-family:inherit; font-size:.97rem; font-weight:700; color:var(--text); text-align:center; padding:1px 5px; width:90px; outline:none; transition:border-color .2s,background .2s; }
+        .blank:focus   { border-bottom-color:var(--orange-dark); }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:#FFEBEB; border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:9px 20px; border-radius:10px; border:none; background:var(--orange); color:white; font-family:inherit; font-size:.9rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--orange-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 6px 0 var(--orange-dark); }
+        .verify-btn:active:not(:disabled){ transform:translateY(2px);  box-shadow:0 2px 0 var(--orange-dark); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:10px; padding:9px 13px; border-radius:8px; font-size:.88rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:#FFEBEB; color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:16px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top   { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.75rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:5px; }
+        .ex-expr  { font-family:'Courier New',monospace; font-size:1.08rem; font-weight:700; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.92rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:18px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:12px; margin-bottom:11px; font-size:.93rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:27px; height:27px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.75rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:4px; line-height:1.6; }
+        .final-ans { margin-top:13px; padding:12px 16px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1.02rem; color:var(--green-dark); }
+        .final-false { margin-top:13px; padding:12px 16px; background:linear-gradient(135deg,#FFEBEB,#FFD0D0); border-left:4px solid var(--red); border-radius:10px; font-weight:900; font-size:1.02rem; color:var(--red-dark); }
+
+        .completion { display:none; background:linear-gradient(135deg,#7C3DA6,#A560D4,#CE82FF); color:white; border-radius:var(--radius); padding:36px 24px; text-align:center; box-shadow:0 6px 0 #5A2A80; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{opacity:0;transform:scale(.4)} 100%{opacity:1;transform:scale(1)} }
+        .completion .stars { font-size:2.8rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.9rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:1rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:18px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.85rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:12px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .nav-btn.current{ background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+
+        @media(max-width:580px){ .header-inner{flex-direction:column;gap:8px} .opts{grid-template-columns:1fr} .card-body{padding:16px} }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="header-left">
+            <div class="level-badge"><span>4</span>NIV.</div>
+            <div>
+                <h1>📐 Calcul Algébrique</h1>
+                <p>Niveau 4 — Nombres manquants, Vrai/Faux, expressions imbriquées</p>
+            </div>
+        </div>
+        <div class="xp-badge" id="xpBadge">⚡ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels"><span>Progression</span><span id="progTxt">0 / 8 bonnes réponses</span></div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+    </div>
+</div>
+
+<main>
+
+    <div class="rappel">
+        <div class="rappel-icon">🧩</div>
+        <div>
+            <h2>Ce niveau : raisonnement à rebours et pièges algébriques</h2>
+            <p style="font-size:.9rem;color:#555;">Tu vas devoir <strong>trouver un nombre manquant</strong>, dire si une affirmation est <strong>vraie ou fausse</strong> (en justifiant !), et calculer des expressions avec <strong>parenthèses imbriquées</strong>. Chaque erreur se paye ici !</p>
+        </div>
+    </div>
+
+    <!-- QCM -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-icon purple">🎯</div>
+            <div>
+                <div class="card-title">Quiz — Nombres manquants &amp; Vrai/Faux</div>
+                <div class="card-sub">5 questions · Raisonnement à rebours</div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <!-- Q1 -->
+            <div class="qcm-item">
+                <div class="q-text"><span class="q-num">Q1</span>Trouve le nombre manquant □ : &nbsp;<strong>□ × (5 + 3) = 64</strong></div>
+                <div class="opts" id="q1">
+                    <button class="opt-btn" onclick="checkQCM(1,0)">□ = 8</button>
+                    <button class="opt-btn" onclick="checkQCM(1,1)">□ = 6</button>
+                    <button class="opt-btn" onclick="checkQCM(1,2)">□ = 4</button>
+                </div>
+                <div class="q-feedback" id="qf1"></div>
+            </div>
+
+            <hr class="q-divider">
+
+            <!-- Q2 -->
+            <div class="qcm-item">
+                <div class="q-text"><span class="q-num">Q2</span>Trouve le nombre manquant □ : &nbsp;<strong>(□ + 3)² = 49</strong></div>
+                <div class="opts" id="q2">
+                    <button class="opt-btn" onclick="checkQCM(2,0)">□ = 4</button>
+                    <button class="opt-btn" onclick="checkQCM(2,1)">□ = 7</button>
+                    <button class="opt-btn" onclick="checkQCM(2,2)">□ = 46</button>
+                </div>
+                <div class="q-feedback" id="qf2"></div>
+            </div>
+
+            <hr class="q-divider">
+
+            <!-- Q3 -->
+            <div class="qcm-item">
+                <div class="q-text"><span class="q-num">Q3</span>Vrai ou Faux ? &nbsp;<strong>(4 + 5)² = 4² + 5²</strong></div>
+                <div class="opts" id="q3">
+                    <button class="opt-btn" onclick="checkQCM(3,0)">Vrai — c'est toujours vrai pour (a+b)²</button>
+                    <button class="opt-btn" onclick="checkQCM(3,1)">Faux — (4+5)² = 81, mais 4²+5² = 41</button>
+                    <button class="opt-btn" onclick="checkQCM(3,2)">Faux — (4+5)² = 41, mais 4²+5² = 81</button>
+                </div>
+                <div class="q-feedback" id="qf3"></div>
+            </div>
+
+            <hr class="q-divider">
+
+            <!-- Q4 -->
+            <div class="qcm-item">
+                <div class="q-text"><span class="q-num">Q4</span>Ajoute des parenthèses pour obtenir <strong>19</strong> : &nbsp;<code>2 + 3 × 4 − 1 = 19</code></div>
+                <div class="opts wide" id="q4">
+                    <button class="opt-btn" onclick="checkQCM(4,0)">(2 + 3) × 4 − 1</button>
+                    <button class="opt-btn" onclick="checkQCM(4,1)">2 + 3 × (4 − 1)</button>
+                    <button class="opt-btn" onclick="checkQCM(4,2)">2 + (3 × 4) − 1</button>
+                </div>
+                <div class="q-feedback" id="qf4"></div>
+            </div>
+
+            <hr class="q-divider">
+
+            <!-- Q5 -->
+            <div class="qcm-item">
+                <div class="q-text"><span class="q-num">Q5</span>Trouve le nombre manquant □ : &nbsp;<strong>6 × □² − 14 = 40</strong></div>
+                <div class="opts" id="q5">
+                    <button class="opt-btn" onclick="checkQCM(5,0)">□ = 3</button>
+                    <button class="opt-btn" onclick="checkQCM(5,1)">□ = 6</button>
+                    <button class="opt-btn" onclick="checkQCM(5,2)">□ = 9</button>
+                </div>
+                <div class="q-feedback" id="qf5"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TEXTES À TROUS -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-icon orange">✏️</div>
+            <div>
+                <div class="card-title">Textes à trous</div>
+                <div class="card-sub">3 exercices · Raisonnement à rebours et propriétés</div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <div class="fill-item">
+                <div class="fill-num">Trou 1</div>
+                <div class="fill-sentence">
+                    Pour résoudre <strong>□ × (4 + 6) = 70</strong> : on calcule d'abord (4+6) =
+                    <input type="text" class="blank" id="f1a" placeholder="?" style="width:50px">,
+                    puis on cherche □ × <input type="text" class="blank" id="f1b" placeholder="?" style="width:50px"> = 70,
+                    donc □ = <input type="text" class="blank" id="f1c" placeholder="?" style="width:50px">.
+                </div>
+                <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+                <div class="fill-feedback" id="ff1"></div>
+            </div>
+
+            <div class="fill-item">
+                <div class="fill-num">Trou 2</div>
+                <div class="fill-sentence">
+                    <strong>Attention au piège !</strong> (4+5)² =
+                    <input type="text" class="blank" id="f2a" placeholder="?" style="width:55px">
+                    , mais 4² + 5² =
+                    <input type="text" class="blank" id="f2b" placeholder="?" style="width:55px">
+                    . Ces deux expressions donnent des résultats
+                    <input type="text" class="blank" id="f2c" placeholder="?" style="width:110px">.
+                </div>
+                <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+                <div class="fill-feedback" id="ff2"></div>
+            </div>
+
+            <div class="fill-item">
+                <div class="fill-num">Trou 3</div>
+                <div class="fill-sentence">
+                    Dans <strong>((3+2)×4)² ÷ 16</strong> : les parenthèses donnent (3+2)×4 =
+                    <input type="text" class="blank" id="f3a" placeholder="?" style="width:50px">
+                    , la puissance donne 20² =
+                    <input type="text" class="blank" id="f3b" placeholder="?" style="width:55px">
+                    , et la division donne ___÷16 =
+                    <input type="text" class="blank" id="f3c" placeholder="?" style="width:50px">.
+                </div>
+                <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+                <div class="fill-feedback" id="ff3"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- EXERCICES -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-icon green">🔢</div>
+            <div>
+                <div class="card-title">Exercices guidés</div>
+                <div class="card-sub">3 exercices · Nombre manquant · Vrai/Faux · Expression imbriquée</div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <!-- Ex 1 -->
+            <div class="ex-card">
+                <div class="ex-top">
+                    <div class="ex-label">Exercice 1 — Nombre manquant</div>
+                    <div class="ex-expr">Trouve □ : □ × (12 − 7) + 3² = 34</div>
+                </div>
+                <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+                <div class="solution" id="sol1">
+                    <div class="sol-step">
+                        <div class="sol-num">1</div>
+                        <div class="sol-text"><strong>Parenthèses :</strong> (12−7) = <strong>5</strong><br>→ □ × 5 + 3² = 34</div>
+                    </div>
+                    <div class="sol-step">
+                        <div class="sol-num">2</div>
+                        <div class="sol-text"><strong>Puissance :</strong> 3² = <strong>9</strong><br>→ □ × 5 + 9 = 34</div>
+                    </div>
+                    <div class="sol-step">
+                        <div class="sol-num">3</div>
+                        <div class="sol-text"><strong>Raisonnement à rebours :</strong> □ × 5 = 34 − 9 = <strong>25</strong></div>
+                    </div>
+                    <div class="sol-step">
+                        <div class="sol-num">4</div>
+                        <div class="sol-text"><strong>Division :</strong> □ = 25 ÷ 5 = <strong>5</strong></div>
+                    </div>
+                    <div class="final-ans">✅ Réponse : □ = <strong>5</strong> &nbsp;·&nbsp; Vérification : 5 × 5 + 9 = 25 + 9 = 34 ✓</div>
+                </div>
+            </div>
+
+            <!-- Ex 2 -->
+            <div class="ex-card">
+                <div class="ex-top">
+                    <div class="ex-label">Exercice 2 — Vrai ou Faux ?</div>
+                    <div class="ex-expr">(3 + 4)² = 3² + 4²</div>
+                </div>
+                <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+                <div class="solution" id="sol2">
+                    <div class="sol-step">
+                        <div class="sol-num">1</div>
+                        <div class="sol-text"><strong>Calcule le membre gauche :</strong><br>(3+4) = 7, puis 7² = <strong>49</strong></div>
+                    </div>
+                    <div class="sol-step">
+                        <div class="sol-num">2</div>
+                        <div class="sol-text"><strong>Calcule le membre droit :</strong><br>3² = 9, 4² = 16, puis 9 + 16 = <strong>25</strong></div>
+                    </div>
+                    <div class="sol-step">
+                        <div class="sol-num">3</div>
+                        <div class="sol-text"><strong>Comparaison :</strong> 49 ≠ 25 → <strong>FAUX</strong><br>Le carré d'une somme n'est PAS égal à la somme des carrés !</div>
+                    </div>
+                    <div class="final-false">❌ FAUX — (3+4)² = 49, mais 3²+4² = 25. Ce piège est classique en algèbre !</div>
+                </div>
+            </div>
+
+            <!-- Ex 3 -->
+            <div class="ex-card">
+                <div class="ex-top">
+                    <div class="ex-label">Exercice 3 — Expression imbriquée</div>
+                    <div class="ex-expr">Calcule : ((2 + 3) × 2)² ÷ 4</div>
+                </div>
+                <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+                <div class="solution" id="sol3">
+                    <div class="sol-step">
+                        <div class="sol-num">1</div>
+                        <div class="sol-text"><strong>Parenthèses intérieures :</strong> (2+3) = <strong>5</strong><br>→ (5 × 2)² ÷ 4</div>
+                    </div>
+                    <div class="sol-step">
+                        <div class="sol-num">2</div>
+                        <div class="sol-text"><strong>Parenthèses extérieures :</strong> 5 × 2 = <strong>10</strong><br>→ 10² ÷ 4</div>
+                    </div>
+                    <div class="sol-step">
+                        <div class="sol-num">3</div>
+                        <div class="sol-text"><strong>Puissance :</strong> 10² = <strong>100</strong><br>→ 100 ÷ 4</div>
+                    </div>
+                    <div class="sol-step">
+                        <div class="sol-num">4</div>
+                        <div class="sol-text"><strong>Division :</strong> 100 ÷ 4 = <strong>25</strong></div>
+                    </div>
+                    <div class="final-ans">✅ Résultat : ((2+3) × 2)² ÷ 4 = <strong>25</strong></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ CARTE CE1D ══ -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-icon" style="background:#F3E5F5;">📋</div>
+            <div>
+                <div class="card-title">Exercices style CE1D</div>
+                <div class="card-sub">Calculs complexes · Erreur à corriger · Vrai ou Faux</div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <!-- Ex CE1D 1 : Calcul multi-étapes complexe -->
+            <div class="ex-card">
+                <div class="ex-top">
+                    <div class="ex-label">CE1D 2023 Q9 (adapté) — Calcul avec priorités</div>
+                    <div class="ex-stmt">
+                        Calcule en respectant les priorités des opérations. Montre toutes les étapes.
+                        <br><br>
+                        <strong>a)</strong> 5 + 2 × (7 − 4)² − 6 ÷ 2<br><br>
+                        <strong>b)</strong> [(3 + 5)² − 28] × (−2) + 4
+                    </div>
+                </div>
+                <button class="reveal-btn" id="rbce1" onclick="toggleSolC('ce1')">👁 Voir le corrigé <span class="chevron">▼</span></button>
+                <div class="solution" id="solce1">
+                    <div style="font-size:.82rem;font-weight:900;color:#7B1FA2;text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px;">a) 5 + 2 × (7 − 4)² − 6 ÷ 2</div>
+                    <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Parenthèses d'abord : (7 − 4) = <strong>3</strong></div></div>
+                    <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Exposant : 3² = <strong>9</strong></div></div>
+                    <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">× et ÷ de gauche à droite : 2 × 9 = 18 &nbsp;et&nbsp; 6 ÷ 2 = 3</div></div>
+                    <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">+ et − : 5 + 18 − 3 = <strong>20</strong></div></div>
+                    <div style="font-size:.82rem;font-weight:900;color:#7B1FA2;text-transform:uppercase;letter-spacing:.7px;margin:14px 0 8px;">b) [(3 + 5)² − 28] × (−2) + 4</div>
+                    <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Parenthèses intérieures : (3 + 5) = <strong>8</strong></div></div>
+                    <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Exposant : 8² = <strong>64</strong></div></div>
+                    <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Crochets : 64 − 28 = <strong>36</strong></div></div>
+                    <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">× : 36 × (−2) = <strong>−72</strong></div></div>
+                    <div class="sol-step"><div class="sol-num">5</div><div class="sol-text">+ : −72 + 4 = <strong>−68</strong></div></div>
+                    <div class="final-ans">✅ a) 20 &nbsp;·&nbsp; b) −68</div>
+                </div>
+            </div>
+
+            <!-- Ex CE1D 2 : Identifier et corriger une erreur -->
+            <div class="ex-card">
+                <div class="ex-top">
+                    <div class="ex-label">CE1D 2025 Q17 (adapté) — Identifie et corrige l'erreur</div>
+                    <div class="ex-stmt">
+                        Noah calcule <strong>4 × (2 + 3)² ÷ 10 − 6</strong> et écrit :
+                        <br><br>
+                        <span style="display:block;background:#FFF3E0;border-left:3px solid #FF9600;padding:8px 12px;border-radius:6px;margin:6px 0;font-family:monospace;">
+                        ① 4 × (5)² ÷ 10 − 6<br>
+                        ② (4 × 5)² ÷ 10 − 6 = 20² ÷ 10 − 6 = 400 ÷ 10 − 6 = <strong>34</strong>
+                        </span>
+                        <br>
+                        <strong>a)</strong> Identifie précisément l'erreur de Noah.<br>
+                        <strong>b)</strong> Calcule correctement l'expression.
+                    </div>
+                </div>
+                <button class="reveal-btn" id="rbce2" onclick="toggleSolC('ce2')">👁 Voir le corrigé <span class="chevron">▼</span></button>
+                <div class="solution" id="solce2">
+                    <div style="font-size:.82rem;font-weight:900;color:#7B1FA2;text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px;">a) L'erreur de Noah</div>
+                    <div class="sol-step"><div class="sol-num">⚠️</div><div class="sol-text">À l'étape ②, Noah a intégré le 4 <em>à l'intérieur</em> du carré en écrivant (4 × 5)². C'est faux : le ² s'applique <strong>uniquement</strong> à (2 + 3), pas au facteur 4 qui est à l'extérieur.</div></div>
+                    <div style="font-size:.82rem;font-weight:900;color:#7B1FA2;text-transform:uppercase;letter-spacing:.7px;margin:12px 0 8px;">b) Calcul correct</div>
+                    <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Parenthèses : (2 + 3) = 5</div></div>
+                    <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Exposant : 5² = 25</div></div>
+                    <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">× et ÷ de gauche à droite : 4 × 25 = 100 &nbsp;puis&nbsp; 100 ÷ 10 = 10</div></div>
+                    <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">− : 10 − 6 = <strong>4</strong></div></div>
+                    <div class="final-ans">✅ La réponse correcte est <strong>4</strong>, pas 34.</div>
+                </div>
+            </div>
+
+            <!-- Ex CE1D 3 : Vrai ou Faux -->
+            <div class="ex-card">
+                <div class="ex-top">
+                    <div class="ex-label">CE1D 2024 (style) — Vrai ou Faux ?</div>
+                    <div class="ex-stmt">
+                        Indique si chaque égalité est <strong>VRAIE</strong> ou <strong>FAUSSE</strong>.
+                        Si elle est fausse, donne le résultat correct.
+                        <br><br>
+                        <strong>a)</strong> 3 + 4 × 2 − 1 = 13<br><br>
+                        <strong>b)</strong> (6 − 2) × (3 + 1) = 16<br><br>
+                        <strong>c)</strong> 2 × 3² − (4 + 1) = 31
+                    </div>
+                </div>
+                <button class="reveal-btn" id="rbce3" onclick="toggleSolC('ce3')">👁 Voir le corrigé <span class="chevron">▼</span></button>
+                <div class="solution" id="solce3">
+                    <div class="sol-step"><div class="sol-num">a</div><div class="sol-text">3 + 4 × 2 − 1 = 3 + 8 − 1 = <strong>10</strong> → <span style="color:#CC0000;font-weight:900;">FAUX</span> (pas 13 — on ne peut pas additionner avant de multiplier !)</div></div>
+                    <div class="sol-step"><div class="sol-num">b</div><div class="sol-text">(6 − 2) × (3 + 1) = 4 × 4 = <strong>16</strong> → <span style="color:#388E3C;font-weight:900;">VRAI ✓</span></div></div>
+                    <div class="sol-step"><div class="sol-num">c</div><div class="sol-text">2 × 3² − (4 + 1) = 2 × 9 − 5 = 18 − 5 = <strong>13</strong> → <span style="color:#CC0000;font-weight:900;">FAUX</span> (pas 31 — l'exposant ne s'applique pas au 2 devant !)</div></div>
+                    <div class="final-ans">✅ a) FAUX → 10 &nbsp;·&nbsp; b) VRAI &nbsp;·&nbsp; c) FAUX → 13</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- ══ FIN CARTE CE1D ══ -->
+
+    <div class="completion" id="completionBanner">
+        <div class="stars">🌟 🌟 🌟</div>
+        <h2>Niveau 4 terminé !</h2>
+        <p>Impressionnant ! Tu maîtrises les raisonnements avancés. Une dernière épreuve t'attend : le mode défi !<br>Tu as gagné <strong id="finalXP">0</strong> XP !</p>
+    </div>
+
+    <div class="level-nav">
+    <h3>📚 Navigation — Calcul Algébrique</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="module_calcul_algebrique.html" class="nav-btn">Niveau 1 — Introduction</a>
+        <a href="calc_niveau2.html" class="nav-btn">Niveau 2 — Règles combinées</a>
+        <a href="calc_niveau3.html" class="nav-btn">Niveau 3 — Pièges</a>
+        <a href="calc_niveau4.html" class="nav-btn current">▶ Niveau 4 — Complexe</a>
+        <a href="calc_niveau5.html" class="nav-btn">Niveau 5 — Défi</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+    const QCM_CORRECT = {1:0, 2:0, 3:1, 4:0, 5:0};
+    const QCM_OK = {
+        1:"✅ Exact ! (5+3)=8, puis □×8=64 → □=64÷8=8.",
+        2:"✅ Parfait ! √49=7, donc □+3=7 → □=4.",
+        3:"✅ Bravo ! (4+5)²=81 et 4²+5²=16+25=41. Ce ne sont PAS égaux — piège classique !",
+        4:"✅ Juste ! (2+3)×4−1 = 5×4−1 = 20−1 = 19.",
+        5:"✅ Correct ! 6×□²=54 → □²=9 → □=3."
+    };
+    const QCM_ERR = {
+        1:"❌ Non. (5+3)=8 → □×8=64 → □=8. Vérifie : 8×8=64 ✓.",
+        2:"❌ Non. Pour (□+3)²=49 : √49=7, donc □+3=7, donc □=7−3=4.",
+        3:"❌ Vérifie : (4+5)²=9²=81, et 4²+5²=16+25=41. 81≠41 → FAUX.",
+        4:"❌ Vérifie les options : (2+3)×4−1=5×4−1=19 ✓ · 2+3×(4−1)=2+9=11 ✗ · 2+(3×4)−1=13 ✗",
+        5:"❌ Non. 6×□²=54 → □²=9 → □=3. Vérifie : 6×9=54, 54−14=40 ✓."
+    };
+    const FILL_DATA = {
+        1:{
+            fields:['f1a','f1b','f1c'],
+            accepted:[['10'],['10'],['7']],
+            msgOk:"✅ Parfait ! (4+6)=10, puis □×10=70, donc □=7.",
+            msgErr:"❌ Attendus : « 10 », « 10 », « 7 »."
+        },
+        2:{
+            fields:['f2a','f2b','f2c'],
+            accepted:[['81'],['41'],['differents','différents','differentes','différentes','differentes']],
+            msgOk:"✅ Bravo ! (4+5)²=81 ≠ 4²+5²=41. Le carré d'une somme n'est pas la somme des carrés !",
+            msgErr:"❌ Attendus : « 81 », « 41 », « différents »."
+        },
+        3:{
+            fields:['f3a','f3b','f3c'],
+            accepted:[['20'],['400'],['25']],
+            msgOk:"✅ Excellent ! (3+2)×4=20, 20²=400, 400÷16=25.",
+            msgErr:"❌ Attendus : « 20 », « 400 », « 25 »."
+        }
+    };
+
+    let score=0; const TOTAL=8; const qcmDone={}; const fillDone={};
+
+    function norm(s){ return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,''); }
+
+    function updateUI(){
+        const pct=Math.round((score/TOTAL)*100);
+        const bar=document.getElementById('barFill');
+        bar.style.width=pct+'%';
+        if(pct>0) bar.classList.add('has-progress');
+        document.getElementById('progTxt').textContent=score+' / '+TOTAL+' bonnes réponses';
+        const xp=score*15;
+        document.getElementById('xpVal').textContent=xp;
+        const badge=document.getElementById('xpBadge');
+        badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+        if(score>=Math.ceil(TOTAL*0.8)){
+            localStorage.setItem('edu_completed_calcul_4','1');
+            document.getElementById('finalXP').textContent=xp;
+            const b=document.getElementById('completionBanner');
+            b.classList.add('show');
+            setTimeout(()=>b.scrollIntoView({behavior:'smooth',block:'center'}),300);
+        }
+    }
+
+    function checkQCM(qNum,clickedIdx){
+        if(qcmDone[qNum]) return; qcmDone[qNum]=true;
+        const correct=QCM_CORRECT[qNum]; const isOk=(clickedIdx===correct);
+        const btns=document.querySelectorAll('#q'+qNum+' .opt-btn');
+        const fb=document.getElementById('qf'+qNum);
+        btns.forEach(b=>b.disabled=true);
+        btns[clickedIdx].classList.add(isOk?'correct':'wrong');
+        if(!isOk) btns[correct].classList.add('show-correct');
+        fb.textContent=isOk?QCM_OK[qNum]:QCM_ERR[qNum];
+        fb.className='q-feedback '+(isOk?'correct':'wrong');
+        if(isOk){score++;updateUI();}
+    }
+
+    function checkFill(num){
+        if(fillDone[num]) return;
+        const data=FILL_DATA[num]; let allOk=true;
+        data.fields.forEach((id,i)=>{
+            const input=document.getElementById(id);
+            const val=norm(input.value);
+            const matches=data.accepted[i].map(norm);
+            const ok=matches.some(m=>val===m||(m.length>4&&val.startsWith(m)));
+            input.classList.remove('correct','wrong');
+            input.classList.add(ok?'correct':'wrong');
+            if(!ok) allOk=false;
+        });
+        const fb=document.getElementById('ff'+num);
+        const btn=document.getElementById('vbtn'+num);
+        fb.textContent=allOk?data.msgOk:data.msgErr;
+        fb.className='fill-feedback show '+(allOk?'correct':'wrong');
+        if(allOk){btn.disabled=true;fillDone[num]=true;score++;updateUI();}
+    }
+
+    function toggleSol(num){
+        const panel=document.getElementById('sol'+num);
+        const btn=document.getElementById('rb'+num);
+        const open=panel.classList.toggle('open');
+        btn.classList.toggle('open',open);
+        btn.innerHTML=open?'🙈 Masquer le corrigé <span class="chevron">▼</span>':'👁 Voir le corrigé <span class="chevron">▼</span>';
+    }
+
+    function toggleSolC(id){
+        const panel=document.getElementById('sol'+id);
+        const btn=document.getElementById('rb'+id);
+        const open=panel.classList.toggle('open');
+        btn.classList.toggle('open',open);
+        btn.innerHTML=open?'🙈 Masquer le corrigé <span class="chevron">▼</span>':'👁 Voir le corrigé <span class="chevron">▼</span>';
+    }
+
+    document.querySelectorAll('.blank').forEach(input=>{
+        input.addEventListener('keydown',e=>{ if(e.key==='Enter') checkFill(parseInt(input.id.charAt(1))); });
+    });
+</script>
+</body>
+</html>

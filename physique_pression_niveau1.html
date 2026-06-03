@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique — Pression des solides · Niveau 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#E53935; --primary-dark:#B71C1C; --primary-mid:#EF5350; --primary-bg:#FFEBEE;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --purple:#A560D4; --purple-bg:#F5EEFF;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        /* ── HEADER ── */
+        header { background:linear-gradient(135deg,#B71C1C 0%,#E53935 55%,#EF9A9A 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(183,28,28,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        /* ── PROGRESS BAR ── */
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,var(--primary-dark),var(--primary),#EF9A9A); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        /* ── MAIN ── */
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        /* ── CARDS ── */
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.red    { background:var(--primary-bg); }
+        .card-icon.purple { background:var(--purple-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        /* ── LESSON ── */
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .formula-hero {
+            background:linear-gradient(135deg,var(--primary-bg),#FFCDD2);
+            border:2px solid #EF9A9A;
+            border-radius:14px;
+            padding:18px 22px;
+            margin-bottom:20px;
+            display:flex;
+            align-items:center;
+            gap:20px;
+            flex-wrap:wrap;
+        }
+        .formula-big { font-size:2.2rem; font-weight:900; color:var(--primary-dark); font-family:'Courier New',monospace; letter-spacing:-1px; }
+        .formula-details { font-size:.9rem; color:#555; line-height:2; }
+        .formula-details strong { color:var(--primary-dark); }
+
+        .def-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; margin-bottom:22px; }
+        .def-chip {
+            border-radius:12px;
+            padding:12px 16px;
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+        .def-chip.red    { background:var(--primary-bg); border-left:4px solid var(--primary); }
+        .def-chip.blue   { background:var(--blue-bg);    border-left:4px solid var(--blue); }
+        .def-chip.green  { background:var(--green-bg);   border-left:4px solid var(--green); }
+        .def-chip .chip-icon { font-size:1.4rem; }
+        .def-chip h4 { font-size:.88rem; font-weight:900; margin-bottom:2px; }
+        .def-chip p  { font-size:.8rem; color:#555; }
+
+        /* SVG containers */
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* Rule box */
+        .rule-box {
+            background:linear-gradient(135deg,#1A237E,#283593);
+            color:white;
+            border-radius:14px;
+            padding:16px 20px;
+            margin:20px 0;
+        }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        /* Examples */
+        .examples-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-top:20px; }
+        .example-card { border-radius:12px; padding:14px 16px; border:2px solid var(--border); }
+        .example-card h4 { font-size:.88rem; font-weight:900; margin:8px 0 4px; }
+        .example-card p  { font-size:.82rem; color:#555; line-height:1.5; }
+        .example-card .ex-svg { display:flex; justify-content:center; margin-bottom:6px; }
+
+        /* ── QCM ── */
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--primary-bg); color:var(--primary-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        /* ── FILL IN ── */
+        .fill-item { background:var(--orange-bg); border:2px solid #FFD08A; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--orange); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:2.5; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--orange); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:90px; outline:none; transition:border-color .2s,background .2s; }
+        .blank:focus   { border-bottom-color:var(--orange-dark); }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--primary); background:var(--primary-bg); border-radius:5px; color:var(--primary-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--orange); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--orange-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 6px 0 var(--orange-dark); }
+        .verify-btn:active:not(:disabled){ transform:translateY(2px);  box-shadow:0 2px 0 var(--orange-dark); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--primary-bg); color:var(--primary-dark); }
+
+        /* ── CALC EXERCISES ── */
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* ── CALCULATOR ── */
+        .calc-section { display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start; }
+        .calc-tip { flex:1; min-width:220px; background:var(--blue-bg); border:2px solid #90D5F5; border-radius:14px; padding:16px 18px; font-size:.88rem; color:#555; line-height:1.7; }
+        .calc-tip h4 { font-size:.92rem; font-weight:900; color:var(--blue-dark); margin-bottom:8px; }
+        .calc-tip ul  { padding-left:16px; }
+        .calc-tip li  { margin-bottom:4px; }
+
+        .calculator { background:#1E1E2E; border-radius:16px; padding:16px; width:280px; flex-shrink:0; box-shadow:0 6px 20px rgba(0,0,0,.25); }
+        .calc-display-wrap { background:#0D1117; border-radius:10px; padding:10px 14px; margin-bottom:12px; min-height:56px; display:flex; flex-direction:column; align-items:flex-end; justify-content:flex-end; }
+        .calc-expr { font-size:.78rem; color:#666; font-family:'Courier New',monospace; min-height:16px; word-break:break-all; text-align:right; }
+        .calc-display { font-family:'Courier New',monospace; font-size:2rem; font-weight:700; color:#7AE832; word-break:break-all; text-align:right; line-height:1.1; }
+        .calc-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; }
+        .calc-btn { padding:13px 6px; border-radius:9px; border:none; font-family:inherit; font-size:1rem; font-weight:800; cursor:pointer; transition:all .1s ease; text-align:center; }
+        .calc-btn:active { transform:scale(.93); }
+        .calc-btn.num   { background:#2D2D44; color:#EEE; }
+        .calc-btn.num:hover { background:#3A3A58; }
+        .calc-btn.op    { background:var(--primary); color:white; }
+        .calc-btn.op:hover { background:var(--primary-dark); }
+        .calc-btn.eq    { background:var(--green); color:white; }
+        .calc-btn.eq:hover { background:var(--green-dark); }
+        .calc-btn.clr   { background:var(--orange); color:white; font-size:.85rem; }
+        .calc-btn.clr:hover { background:var(--orange-dark); }
+        .calc-btn.del   { background:#444466; color:#CCC; font-size:.85rem; }
+        .calc-btn.del:hover { background:#555577; }
+        .calc-btn.zero  { grid-column:span 2; }
+
+        /* ── COMPLETION ── */
+        .completion { display:none; background:linear-gradient(135deg,#B71C1C,#E53935,#EF9A9A); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #7F0000; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{opacity:0;transform:scale(.4)} 100%{opacity:1;transform:scale(1)} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        /* ── NAV ── */
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+
+        @media(max-width:600px){
+            .header-inner { flex-wrap:wrap; }
+            .header-center { order:-1; flex-basis:100%; }
+            .calc-section { flex-direction:column; }
+            .calculator { width:100%; }
+            .examples-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>⚡ Pression des solides</h1>
+            <p>Physique · Niveau 1 · CE1D</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⚡ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<!-- ═══ PROGRESS ═══ -->
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels"><span>Progression</span><span id="progTxt">0 / 8 bonnes réponses</span></div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+    </div>
+</div>
+
+<main>
+
+<!-- ══════════════════════════════════════
+     1. LEÇON
+══════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon red">📚</div>
+        <div>
+            <div class="card-title">La leçon — Pression des solides</div>
+            <div class="card-sub">Définition · Formule · Règle clé · Exemples</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Quand une force appuie sur une surface, elle crée une <strong>pression</strong>.
+            La pression dépend de deux choses : l'intensité de la force <em>et</em> la taille de la surface sur laquelle elle s'exerce.
+            Plus la surface est petite, plus la pression est grande — c'est le principe du couteau, du clou et des talons aiguilles !
+        </p>
+
+        <!-- FORMULE -->
+        <div class="formula-hero">
+            <div class="formula-big">P = F / S</div>
+            <div class="formula-details">
+                <strong>P</strong> = Pression &nbsp;→ <strong>Pascal (Pa)</strong><br>
+                <strong>F</strong> = Force &nbsp;→ <strong>Newton (N)</strong><br>
+                <strong>S</strong> = Surface &nbsp;→ <strong>mètre carré (m²)</strong><br>
+                <span style="color:var(--primary-dark);font-weight:900;">1 Pa = 1 N/m²</span>
+            </div>
+        </div>
+
+        <!-- CHIPS DÉFINITIONS -->
+        <div class="def-grid">
+            <div class="def-chip red">
+                <div class="chip-icon">⚡</div>
+                <div><h4>Pression P</h4><p>Unité : Pascal (Pa)<br>Mesure l'effet de la force par unité de surface</p></div>
+            </div>
+            <div class="def-chip blue">
+                <div class="chip-icon">↓</div>
+                <div><h4>Force F</h4><p>Unité : Newton (N)<br>Exemple : le poids d'un objet</p></div>
+            </div>
+            <div class="def-chip green">
+                <div class="chip-icon">▭</div>
+                <div><h4>Surface S</h4><p>Unité : m²<br>Zone de contact avec le sol</p></div>
+            </div>
+        </div>
+
+        <!-- SVG 1 : Schéma Force / Surface -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 420 250" xmlns="http://www.w3.org/2000/svg" style="max-width:420px;width:100%">
+                <defs>
+                    <marker id="arrowR" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0,10 3.5,0 7" fill="#E53935"/>
+                    </marker>
+                    <marker id="arrowG" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                        <polygon points="0 0,8 3,0 6" fill="#46A302"/>
+                    </marker>
+                    <pattern id="hatch" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+                        <line x1="0" y1="0" x2="0" y2="8" stroke="#999" stroke-width="1.5"/>
+                    </pattern>
+                </defs>
+
+                <!-- Title -->
+                <text x="210" y="22" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="15" fill="#B71C1C">Schéma — Force sur une surface</text>
+
+                <!-- Force arrow -->
+                <line x1="210" y1="40" x2="210" y2="118" stroke="#E53935" stroke-width="4" marker-end="url(#arrowR)"/>
+                <!-- F label -->
+                <rect x="225" y="62" width="88" height="34" fill="#FFEBEE" rx="8"/>
+                <text x="269" y="76" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="13" fill="#E53935">F = Force</text>
+                <text x="269" y="91" text-anchor="middle" font-family="Nunito,sans-serif" font-size="11" fill="#B71C1C">en Newton (N)</text>
+
+                <!-- Bracket showing width of surface -->
+                <line x1="85" y1="125" x2="335" y2="125" stroke="#E53935" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+                <!-- Surface rectangle -->
+                <rect x="85" y="126" width="250" height="42" fill="#FFCDD2" stroke="#E53935" stroke-width="2.5" rx="5"/>
+                <text x="210" y="150" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="14" fill="#B71C1C">Surface S (m²)</text>
+
+                <!-- Ground -->
+                <rect x="75" y="168" width="270" height="18" fill="url(#hatch)" rx="2"/>
+                <line x1="75" y1="168" x2="345" y2="168" stroke="#888" stroke-width="2"/>
+
+                <!-- S measurement arrow -->
+                <line x1="85" y1="195" x2="335" y2="195" stroke="#1CB0F6" stroke-width="2" marker-end="url(#arrowG)"/>
+                <line x1="85" y1="190" x2="85" y2="200" stroke="#1CB0F6" stroke-width="2"/>
+                <text x="210" y="213" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="700" font-size="11" fill="#0892D0">largeur × longueur = S (m²)</text>
+
+                <!-- Formula box -->
+                <rect x="130" y="223" width="160" height="22" fill="#E53935" rx="8"/>
+                <text x="210" y="238" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="13" fill="white">P = F ÷ S  (en Pascal)</text>
+            </svg>
+        </div>
+
+        <!-- RÈGLE CLÉ -->
+        <div class="rule-box">
+            <h3>📌 Règle clé à retenir</h3>
+            <p>
+                À <strong>force égale</strong>, une <strong>petite surface</strong> produit une <strong>grande pression</strong>, et une <strong>grande surface</strong> produit une <strong>petite pression</strong>.<br>
+                Formule inverse : <strong>F = P × S</strong> et <strong>S = F / P</strong>
+            </p>
+        </div>
+
+        <!-- SVG 2 : Comparaison talon aiguille vs semelle plate -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <defs>
+                    <marker id="arrowCmp" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                        <polygon points="0 0,9 3.5,0 7" fill="#333"/>
+                    </marker>
+                    <pattern id="gndCmp" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+                        <line x1="0" y1="0" x2="0" y2="8" stroke="#AAA" stroke-width="1.5"/>
+                    </pattern>
+                </defs>
+
+                <!-- Fonds des panneaux -->
+                <rect x="8"   y="8" width="262" height="284" fill="#FFF5F5" rx="14"/>
+                <rect x="290" y="8" width="262" height="284" fill="#F0FBF0" rx="14"/>
+
+                <!-- ══ GAUCHE : TALON AIGUILLE (centre x=139) ══ -->
+                <text x="139" y="28" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="13" fill="#B71C1C">Talon aiguille</text>
+
+                <!-- Force vers le BAS -->
+                <line x1="139" y1="36" x2="139" y2="52" stroke="#333" stroke-width="2.5" marker-end="url(#arrowCmp)"/>
+                <text x="150" y="51" font-family="Nunito,sans-serif" font-weight="900" font-size="12" fill="#333">F</text>
+
+                <!-- Jambe -->
+                <rect x="113" y="54" width="52" height="62" fill="#FFAB91" rx="6"/>
+
+                <!-- Corps de la chaussure -->
+                <rect x="105" y="116" width="68" height="22" fill="#8B0000" rx="4"/>
+
+                <!-- Talon aiguille : bloc + tige fine -->
+                <rect x="133" y="138" width="12" height="8"  fill="#700000" rx="2"/>
+                <rect x="136" y="146" width="6"  height="32" fill="#500000" rx="1"/>
+
+                <!-- Sol -->
+                <line x1="25"  y1="178" x2="247" y2="178" stroke="#888" stroke-width="2.5"/>
+                <rect x="25"   y="178" width="222" height="9" fill="url(#gndCmp)"/>
+
+                <!-- Zone de contact : minuscule (6 px) -->
+                <rect x="134" y="175" width="10" height="4" fill="#E53935" rx="1"/>
+
+                <text x="139" y="200" text-anchor="middle" font-family="Nunito,sans-serif" font-size="10.5" font-weight="700" fill="#B71C1C">S ≈ 1 cm² = 0,0001 m²</text>
+                <text x="139" y="216" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="12" fill="#B71C1C">Pression :</text>
+                <rect x="79"  y="220" width="14" height="38" fill="#E53935" rx="3"/>
+                <rect x="97"  y="222" width="14" height="36" fill="#EF5350" rx="3"/>
+                <rect x="115" y="218" width="14" height="40" fill="#C62828" rx="3"/>
+                <rect x="133" y="216" width="14" height="42" fill="#B71C1C" rx="3"/>
+                <rect x="151" y="219" width="14" height="39" fill="#E53935" rx="3"/>
+                <rect x="169" y="221" width="14" height="37" fill="#EF5350" rx="3"/>
+                <rect x="80"  y="264" width="118" height="20" fill="#E53935" rx="8"/>
+                <text x="139" y="278" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="11" fill="white">⬆ TRÈS GRANDE</text>
+
+                <!-- ══ DROITE : SEMELLE PLATE (centre x=421) ══ -->
+                <text x="421" y="28" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="13" fill="#2E7D32">Semelle plate</text>
+
+                <!-- Force vers le BAS -->
+                <line x1="421" y1="36" x2="421" y2="52" stroke="#333" stroke-width="2.5" marker-end="url(#arrowCmp)"/>
+                <text x="432" y="51" font-family="Nunito,sans-serif" font-weight="900" font-size="12" fill="#333">F</text>
+
+                <!-- Jambe -->
+                <rect x="395" y="54" width="52" height="62" fill="#FFAB91" rx="6"/>
+
+                <!-- Corps de la chaussure (très large) -->
+                <rect x="308" y="116" width="226" height="22" fill="#1B5E20" rx="4"/>
+
+                <!-- Semelle plate (large bloc jusqu'au sol) -->
+                <rect x="308" y="138" width="226" height="40" fill="#2E7D32" rx="2"/>
+
+                <!-- Sol -->
+                <line x1="295" y1="178" x2="548" y2="178" stroke="#888" stroke-width="2.5"/>
+                <rect x="295" y="178" width="253" height="9" fill="url(#gndCmp)"/>
+
+                <!-- Zone de contact : très large (226 px) -->
+                <rect x="308" y="175" width="226" height="4" fill="#81C784" rx="1"/>
+
+                <text x="421" y="200" text-anchor="middle" font-family="Nunito,sans-serif" font-size="10.5" font-weight="700" fill="#2E7D32">S ≈ 200 cm² = 0,02 m²</text>
+                <text x="421" y="216" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="12" fill="#2E7D32">Pression :</text>
+                <rect x="352" y="242" width="14" height="17" fill="#A5D6A7" rx="3"/>
+                <rect x="370" y="244" width="14" height="15" fill="#C8E6C9" rx="3"/>
+                <rect x="388" y="241" width="14" height="18" fill="#81C784" rx="3"/>
+                <rect x="406" y="243" width="14" height="16" fill="#A5D6A7" rx="3"/>
+                <rect x="424" y="242" width="14" height="17" fill="#C8E6C9" rx="3"/>
+                <rect x="442" y="244" width="14" height="15" fill="#81C784" rx="3"/>
+                <rect x="371" y="266" width="100" height="20" fill="#2E7D32" rx="8"/>
+                <text x="421" y="280" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="11" fill="white">⬇ PETITE</text>
+
+                <!-- Centre : même force -->
+                <text x="275" y="72" text-anchor="middle" font-family="Nunito,sans-serif" font-size="10" font-weight="900" fill="#555">Même</text>
+                <text x="275" y="86" text-anchor="middle" font-family="Nunito,sans-serif" font-size="10" font-weight="900" fill="#555">force F</text>
+            </svg>
+        </div>
+
+        <!-- EXEMPLES CONCRETS -->
+        <div class="examples-grid">
+
+            <!-- Couteau -->
+            <div class="example-card">
+                <div class="ex-svg">
+                    <svg viewBox="0 0 120 80" width="120" height="80" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Knife blade cross-section -->
+                        <rect x="20" y="10" width="80" height="60" fill="#F5F5F5" rx="6"/>
+                        <!-- Blade (sharp) -->
+                        <polygon points="30,20 90,20 90,40 30,60" fill="#CFD8DC" stroke="#90A4AE" stroke-width="1"/>
+                        <!-- Edge (very thin) -->
+                        <line x1="90" y1="20" x2="90" y2="40" stroke="#546E7A" stroke-width="3"/>
+                        <text x="55" y="72" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" font-weight="700" fill="#555">Tranchant = S petite</text>
+                        <!-- Pressure arrows -->
+                        <line x1="98" y1="25" x2="93" y2="30" stroke="#E53935" stroke-width="1.5" marker-end="url(#arrowR)"/>
+                        <line x1="98" y1="35" x2="93" y2="32" stroke="#E53935" stroke-width="1.5" marker-end="url(#arrowR)"/>
+                    </svg>
+                </div>
+                <h4>🔪 Couteau tranchant</h4>
+                <p>Le fil du couteau a une surface extrêmement petite → pression très grande → coupe facilement.</p>
+            </div>
+
+            <!-- Raquettes à neige -->
+            <div class="example-card">
+                <div class="ex-svg">
+                    <svg viewBox="0 0 120 80" width="120" height="80" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="5" y="5" width="110" height="70" fill="#E3F2FD" rx="6"/>
+                        <!-- Boot footprint (small) -->
+                        <ellipse cx="35" cy="40" rx="12" ry="20" fill="#8D6E63" opacity=".7"/>
+                        <text x="35" y="68" text-anchor="middle" font-size="8" font-family="Nunito,sans-serif" font-weight="700" fill="#5D4037">Botte</text>
+                        <text x="35" y="18" text-anchor="middle" font-size="8" font-family="Nunito,sans-serif" font-weight="700" fill="#E53935">P grande</text>
+                        <!-- Snowshoe (large) -->
+                        <ellipse cx="85" cy="40" rx="25" ry="20" fill="#1565C0" opacity=".5"/>
+                        <!-- Webbing lines -->
+                        <line x1="65" y1="30" x2="105" y2="30" stroke="#1565C0" stroke-width="1" opacity=".6"/>
+                        <line x1="65" y1="40" x2="105" y2="40" stroke="#1565C0" stroke-width="1" opacity=".6"/>
+                        <line x1="65" y1="50" x2="105" y2="50" stroke="#1565C0" stroke-width="1" opacity=".6"/>
+                        <text x="85" y="68" text-anchor="middle" font-size="8" font-family="Nunito,sans-serif" font-weight="700" fill="#1565C0">Raquette</text>
+                        <text x="85" y="18" text-anchor="middle" font-size="8" font-family="Nunito,sans-serif" font-weight="700" fill="#2E7D32">P petite</text>
+                    </svg>
+                </div>
+                <h4>🏔 Raquettes à neige</h4>
+                <p>Grande surface de contact → pression sur la neige beaucoup plus faible → on ne s'enfonce pas.</p>
+            </div>
+
+            <!-- Clou vs pouce -->
+            <div class="example-card">
+                <div class="ex-svg">
+                    <svg viewBox="0 0 140 92" width="140" height="92" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="3" width="134" height="86" fill="#FFF8E1" rx="6"/>
+                        <!-- Séparateur -->
+                        <line x1="70" y1="6" x2="70" y2="86" stroke="#E0E0E0" stroke-width="1" stroke-dasharray="3,3"/>
+                        <!-- Titres -->
+                        <text x="35"  y="14" text-anchor="middle" font-size="8.5" font-family="Nunito,sans-serif" font-weight="900" fill="#E53935">Clou</text>
+                        <text x="105" y="14" text-anchor="middle" font-size="8.5" font-family="Nunito,sans-serif" font-weight="900" fill="#2E7D32">Pouce</text>
+                        <!-- Clou -->
+                        <rect x="29" y="18" width="12" height="32" fill="#9E9E9E" rx="2"/>
+                        <polygon points="29,50 41,50 35,66" fill="#757575"/>
+                        <!-- Pouce -->
+                        <ellipse cx="105" cy="44" rx="24" ry="28" fill="#FFCCBC" stroke="#FF8A65" stroke-width="1.5"/>
+                        <!-- Labels bas -->
+                        <text x="35"  y="75" text-anchor="middle" font-size="8" font-family="Nunito,sans-serif" font-weight="700" fill="#666">S ≈ 0</text>
+                        <text x="35"  y="85" text-anchor="middle" font-size="7.5" font-family="Nunito,sans-serif" font-weight="900" fill="#E53935">P énorme ⬆</text>
+                        <text x="105" y="79" text-anchor="middle" font-size="8" font-family="Nunito,sans-serif" font-weight="700" fill="#666">S grande</text>
+                        <text x="105" y="89" text-anchor="middle" font-size="7.5" font-family="Nunito,sans-serif" font-weight="900" fill="#2E7D32">P faible ⬇</text>
+                    </svg>
+                </div>
+                <h4>📌 Clou vs pouce</h4>
+                <p>La pointe du clou concentre toute la force sur 1 mm² → pression énorme. Le pouce répartit la force → pression faible.</p>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     2. QUIZ QCM
+══════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">🎯</div>
+        <div>
+            <div class="card-title">Quiz — Choix multiple</div>
+            <div class="card-sub">5 questions · Attention aux pièges sur les unités !</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Q1 -->
+        <div class="qcm-item">
+            <div class="q-text"><span class="q-num">Q1</span>Quelle est la <strong>formule</strong> de la pression ?</div>
+            <div class="opts short" id="q1">
+                <button class="opt-btn" onclick="checkQCM(1,0)">P = F × S</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">P = F ÷ S</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">P = S ÷ F</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+
+        <hr class="q-divider">
+
+        <!-- Q2 -->
+        <div class="qcm-item">
+            <div class="q-text"><span class="q-num">Q2</span>Quelle est l'<strong>unité</strong> de la pression ?</div>
+            <div class="opts" id="q2">
+                <button class="opt-btn" onclick="checkQCM(2,0)">Le Pascal (Pa) — équivalent à N/m²</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">Le Newton (N) — unité de force</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">Le Joule (J) — unité d'énergie</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+
+        <hr class="q-divider">
+
+        <!-- Q3 -->
+        <div class="qcm-item">
+            <div class="q-text"><span class="q-num">Q3</span>Une force de <strong>100 N</strong> s'exerce sur une surface de <strong>2 m²</strong>. Quelle est la pression ?</div>
+            <div class="opts short" id="q3">
+                <button class="opt-btn" onclick="checkQCM(3,0)">50 Pa</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">200 Pa</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">0,02 Pa</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+
+        <hr class="q-divider">
+
+        <!-- Q4 -->
+        <div class="qcm-item">
+            <div class="q-text"><span class="q-num">Q4</span>Pourquoi les talons aiguilles s'enfoncent-ils plus dans la neige que les bottes plates, pour la même personne ?</div>
+            <div class="opts" id="q4">
+                <button class="opt-btn" onclick="checkQCM(4,0)">La force exercée est plus grande avec les talons</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">La surface de contact est plus grande avec les talons</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">La surface de contact est plus petite avec les talons → pression plus grande</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+
+        <hr class="q-divider">
+
+        <!-- Q5 -->
+        <div class="qcm-item">
+            <div class="q-text">
+                <span class="q-num">Q5</span>
+                Deux personnes ont le même poids : <strong>700 N</strong>. L'une porte des talons aiguilles
+                (surface totale = <strong>0,0002 m²</strong>), l'autre des semelles plates (surface = <strong>0,03 m²</strong>).
+                Qui exerce la <strong>plus grande pression</strong> sur le sol ?
+            </div>
+            <div class="opts" id="q5">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Elles exercent la même pression — leur poids est identique</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Celle aux talons aiguilles — même force, surface bien plus petite</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Celle aux semelles plates — plus grande surface, plus grande pression</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     3. TEXTES À TROUS
+══════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Formule, unités et règle</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Trou 1 -->
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                La pression P se calcule en divisant la
+                <input type="text" class="blank" id="f1a" placeholder="?" style="width:80px">
+                par la surface S. Son unité est le
+                <input type="text" class="blank" id="f1b" placeholder="?" style="width:90px">
+                , de symbole <strong>Pa</strong>, qui équivaut à <strong>N/m²</strong>.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <!-- Trou 2 -->
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Plus la surface de contact est
+                <input type="text" class="blank" id="f2a" placeholder="?" style="width:80px">
+                , plus la pression est grande, à force égale.
+                Les raquettes à neige ont une grande surface pour
+                <input type="text" class="blank" id="f2b" placeholder="?" style="width:100px">
+                la pression et éviter de s'enfoncer.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <!-- Trou 3 -->
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Un livre de <strong>30 N</strong> repose sur une surface de <strong>0,1 m²</strong>.
+                La pression exercée est P = 30 ÷
+                <input type="text" class="blank" id="f3a" placeholder="?" style="width:55px">
+                =
+                <input type="text" class="blank" id="f3b" placeholder="?" style="width:65px">
+                Pa.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     4. EXERCICES NUMÉRIQUES + CALCULATRICE
+══════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🔢</div>
+        <div>
+            <div class="card-title">Exercices de calcul</div>
+            <div class="card-sub">3 exercices numériques · Corrigé étape par étape · Calculatrice intégrée</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- CALCULATRICE -->
+        <div class="calc-section" style="margin-bottom:24px;">
+            <div class="calc-tip">
+                <h4>🧮 Calculatrice — Comment l'utiliser ?</h4>
+                <ul>
+                    <li>Saisis le <strong>numérateur</strong> (la force F)</li>
+                    <li>Appuie sur <strong>÷</strong></li>
+                    <li>Saisis le <strong>dénominateur</strong> (la surface S)</li>
+                    <li>Appuie sur <strong>=</strong></li>
+                    <li>Pour les décimaux, utilise le point <strong>.</strong></li>
+                </ul>
+                <p style="margin-top:8px;font-size:.8rem;color:#888;">Exemple : 500 ÷ 0.25 = 2000</p>
+            </div>
+            <div class="calculator">
+                <div class="calc-display-wrap">
+                    <div class="calc-expr" id="calcExprDisplay"></div>
+                    <div class="calc-display" id="calcDisplay">0</div>
+                </div>
+                <div class="calc-grid">
+                    <button class="calc-btn clr" onclick="calcClear()">C</button>
+                    <button class="calc-btn del" onclick="calcDel()">⌫</button>
+                    <button class="calc-btn op"  onclick="calcOper('%')">%</button>
+                    <button class="calc-btn op"  onclick="calcOper('÷')">÷</button>
+
+                    <button class="calc-btn num" onclick="calcDigit('7')">7</button>
+                    <button class="calc-btn num" onclick="calcDigit('8')">8</button>
+                    <button class="calc-btn num" onclick="calcDigit('9')">9</button>
+                    <button class="calc-btn op"  onclick="calcOper('×')">×</button>
+
+                    <button class="calc-btn num" onclick="calcDigit('4')">4</button>
+                    <button class="calc-btn num" onclick="calcDigit('5')">5</button>
+                    <button class="calc-btn num" onclick="calcDigit('6')">6</button>
+                    <button class="calc-btn op"  onclick="calcOper('-')">−</button>
+
+                    <button class="calc-btn num" onclick="calcDigit('1')">1</button>
+                    <button class="calc-btn num" onclick="calcDigit('2')">2</button>
+                    <button class="calc-btn num" onclick="calcDigit('3')">3</button>
+                    <button class="calc-btn op"  onclick="calcOper('+')">+</button>
+
+                    <button class="calc-btn num zero" onclick="calcDigit('0')">0</button>
+                    <button class="calc-btn num" onclick="calcDigit('.')">.</button>
+                    <button class="calc-btn eq"  onclick="calcEquals()">=</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exercice 1 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Application directe</div>
+                <div class="ex-stmt">
+                    Une caisse de <strong>500 N</strong> repose sur le sol. Sa surface de contact est de <strong>0,25 m²</strong>.
+                    Calcule la pression exercée sur le sol.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step">
+                    <div class="sol-num">1</div>
+                    <div class="sol-text"><strong>Données :</strong> F = 500 N &nbsp;·&nbsp; S = 0,25 m²</div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">2</div>
+                    <div class="sol-text"><strong>Formule :</strong> P = F ÷ S</div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">3</div>
+                    <div class="sol-text"><strong>Application :</strong> P = 500 ÷ 0,25</div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">4</div>
+                    <div class="sol-text"><strong>Calcul :</strong> P = <strong>2 000 Pa</strong> &nbsp;(car 500 ÷ 0,25 = 500 × 4 = 2 000)</div>
+                </div>
+                <div class="final-ans">✅ P = <strong>2 000 Pa</strong> = 2 kPa</div>
+            </div>
+        </div>
+
+        <!-- Exercice 2 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Calcul de surface</div>
+                <div class="ex-stmt">
+                    Un skieur de fond pèse <strong>800 N</strong>. Il glisse sur un seul ski qui mesure <strong>2 m de long</strong> et <strong>10 cm de large</strong>.
+                    Calcule la pression exercée sous ce ski. (<em>Rappel : 10 cm = 0,10 m</em>)
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step">
+                    <div class="sol-num">1</div>
+                    <div class="sol-text"><strong>Calculer la surface :</strong> S = longueur × largeur = 2 × 0,10 = <strong>0,20 m²</strong></div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">2</div>
+                    <div class="sol-text"><strong>Données :</strong> F = 800 N &nbsp;·&nbsp; S = 0,20 m²</div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">3</div>
+                    <div class="sol-text"><strong>Application :</strong> P = F ÷ S = 800 ÷ 0,20</div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">4</div>
+                    <div class="sol-text"><strong>Calcul :</strong> P = <strong>4 000 Pa</strong> &nbsp;(car 800 ÷ 0,20 = 800 × 5 = 4 000)</div>
+                </div>
+                <div class="final-ans">✅ P = <strong>4 000 Pa</strong> = 4 kPa</div>
+            </div>
+        </div>
+
+        <!-- Exercice 3 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Comparaison : avec et sans raquettes</div>
+                <div class="ex-stmt">
+                    Un randonneur pèse <strong>750 N</strong>. Compare la pression qu'il exerce sur la neige :<br>
+                    <strong>a)</strong> Sans raquettes : surface d'une botte = <strong>150 cm²</strong> = 0,015 m²<br>
+                    <strong>b)</strong> Avec raquettes : surface d'une raquette = <strong>0,25 m²</strong><br>
+                    Dans les deux cas, tout son poids repose sur un seul appui.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step">
+                    <div class="sol-num">a</div>
+                    <div class="sol-text">
+                        <strong>Sans raquettes :</strong><br>
+                        P₁ = 750 ÷ 0,015 = <strong>50 000 Pa</strong> = 50 kPa
+                    </div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">b</div>
+                    <div class="sol-text">
+                        <strong>Avec raquettes :</strong><br>
+                        P₂ = 750 ÷ 0,25 = <strong>3 000 Pa</strong> = 3 kPa
+                    </div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">c</div>
+                    <div class="sol-text">
+                        <strong>Comparaison :</strong> P₁ / P₂ = 50 000 / 3 000 ≈ <strong>17 fois</strong> plus de pression sans raquettes !<br>
+                        C'est pourquoi la raquette empêche de s'enfoncer dans la neige.
+                    </div>
+                </div>
+                <div class="final-ans">✅ Sans raquettes : <strong>50 000 Pa</strong> &nbsp;·&nbsp; Avec raquettes : <strong>3 000 Pa</strong> (÷17 !)</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ COMPLETION ══ -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 1 terminé !</h2>
+    <p>Tu maîtrises maintenant la pression des solides. <br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Prochaine étape : la pression des fluides.</p>
+</div>
+
+
+<!-- ══ NAVIGATION ══ -->
+<div class="level-nav">
+    <h3>📚 Navigation — Pression des solides</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="physique_pression_niveau1.html" class="nav-btn current">▶ Niveau 1 — P = F/S</a>
+        <a href="physique_pression_niveau2.html" class="nav-btn">Niveau 2 — Conversions</a>
+        <a href="physique_pression_niveau3.html" class="nav-btn">Niveau 3 — Pièges</a>
+        <a href="physique_pression_niveau4.html" class="nav-btn">Niveau 4 — Problèmes</a>
+        <a href="physique_pression_niveau5.html" class="nav-btn">Niveau 5 — Défi</a>
+    </div>
+</div>
+
+</main>
+
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════ -->
+<script>
+/* ─── QCM ─── */
+const QCM_CORRECT = {1:1, 2:0, 3:0, 4:2, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! P = F ÷ S. On divise la force par la surface. Ne pas confondre avec F×S !",
+    2:"✅ Parfait ! La pression s'exprime en Pascal (Pa) = N/m². Le Newton est l'unité de la force.",
+    3:"✅ Bravo ! P = 100 ÷ 2 = 50 Pa. Division, pas multiplication !",
+    4:"✅ Juste ! Le talon aiguille a une petite surface → même poids → pression bien plus grande.",
+    5:"✅ Correct ! 700÷0,0002 = 3 500 000 Pa pour les talons vs 700÷0,03 ≈ 23 333 Pa pour les semelles. Énorme différence !"
+};
+
+const QCM_ERR = {
+    1:"❌ Non. P = F ÷ S (division). P = F×S donnerait une unité N·m² qui n'est pas le Pascal.",
+    2:"❌ Attention ! Le Newton est l'unité de la FORCE, pas de la pression. La pression s'exprime en Pascal (Pa) = N/m².",
+    3:"❌ Relis la formule : P = F ÷ S = 100 ÷ 2 = 50 Pa. Ne multiplie pas !",
+    4:"❌ Non ! Le poids est identique pour les deux (même personne). C'est la SURFACE qui change : talons → plus petite → pression plus grande.",
+    5:"❌ Non ! Le poids identique ne suffit pas pour avoir la même pression. La pression dépend aussi de la surface (P=F÷S)."
+};
+
+/* ─── FILL IN ─── */
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[
+            ['force','f'],
+            ['pascal','pa']
+        ],
+        msgOk:"✅ Parfait ! P = force ÷ surface. L'unité est le Pascal (Pa) = N/m².",
+        msgErr:"❌ Attendus : « force » et « Pascal » (ou Pa)."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[
+            ['petite','faible','petite'],
+            ['reduire','diminuer','baisser','abaisser','limiter']
+        ],
+        msgOk:"✅ Bravo ! Petite surface → grande pression. Raquettes : grande surface → réduit la pression.",
+        msgErr:"❌ Attendus : « petite » (ou faible) et « réduire » (ou diminuer)."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[
+            ['0,1','0.1','01'],
+            ['300']
+        ],
+        msgOk:"✅ Exact ! P = 30 ÷ 0,1 = 300 Pa.",
+        msgErr:"❌ Vérifie : P = 30 ÷ 0,1 = 300 Pa."
+    }
+};
+
+/* ─── ÉTAT ─── */
+let score = 0;
+const TOTAL = 8;
+const qcmDone = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase()
+            .normalize('NFD').replace(/[̀-ͯ]/g,'')
+            .replace(/[^a-z0-9]/g,'');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_physique_1', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = (clickedIdx === correct);
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || (m.length > 2 && val.startsWith(m)));
+        input.classList.remove('correct','wrong');
+        input.classList.add(ok ? 'correct' : 'wrong');
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) { btn.disabled = true; fillDone[num] = true; score++; updateUI(); }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+/* ─── CALCULATRICE ─── */
+let calcVal  = '0';
+let calcPrev = null;
+let calcOp   = null;
+let calcFresh = false;
+
+function calcRefresh() {
+    document.getElementById('calcDisplay').textContent = calcVal;
+}
+
+function calcDigit(d) {
+    if (calcFresh) { calcVal = (d === '.') ? '0.' : d; calcFresh = false; }
+    else {
+        if (calcVal === '0' && d !== '.') calcVal = d;
+        else if (!(d === '.' && calcVal.includes('.'))) calcVal += d;
+    }
+    calcRefresh();
+}
+
+function calcOper(op) {
+    if (!calcFresh) {
+        if (calcPrev !== null && calcOp) calcEquals(true);
+        calcPrev = parseFloat(calcVal);
+        calcOp   = op;
+        calcFresh = true;
+    } else {
+        calcOp = op;
+    }
+    document.getElementById('calcExprDisplay').textContent =
+        calcPrev + ' ' + op;
+    calcRefresh();
+}
+
+function calcEquals(chain) {
+    if (calcPrev === null || !calcOp) return;
+    const cur = parseFloat(calcVal);
+    let result;
+    switch(calcOp) {
+        case '+': result = calcPrev + cur; break;
+        case '-': result = calcPrev - cur; break;
+        case '×': result = calcPrev * cur; break;
+        case '÷': result = cur !== 0 ? calcPrev / cur : null; break;
+        case '%': result = (calcPrev * cur) / 100; break;
+    }
+    if (result === null) {
+        calcVal = 'Erreur';
+    } else {
+        result = parseFloat(result.toPrecision(10));
+        calcVal = result.toString();
+    }
+    document.getElementById('calcExprDisplay').textContent = '';
+    calcPrev = null; calcOp = null; calcFresh = true;
+    if (!chain) calcRefresh();
+}
+
+function calcClear() {
+    calcVal = '0'; calcPrev = null; calcOp = null; calcFresh = false;
+    document.getElementById('calcExprDisplay').textContent = '';
+    calcRefresh();
+}
+
+function calcDel() {
+    if (calcFresh || calcVal.length <= 1 || calcVal === 'Erreur') {
+        calcVal = '0'; calcFresh = false;
+    } else {
+        calcVal = calcVal.slice(0, -1);
+    }
+    calcRefresh();
+}
+
+/* ─── Entrée clavier pour les trous ─── */
+document.querySelectorAll('.blank').forEach(input => {
+    input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') checkFill(parseInt(input.id.charAt(1)));
+    });
+});
+</script>
+
+</body>
+</html>

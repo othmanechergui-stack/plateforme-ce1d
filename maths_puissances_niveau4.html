@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Puissances · Niveau 4 — Expressions mélangées</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#8E24AA; --primary-dark:#4A148C; --primary-mid:#AB47BC; --primary-bg:#F3E5F5;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#4A148C 0%,#8E24AA 55%,#CE93D8 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(74,20,140,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#8E24AA; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#4A148C; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#4A148C,#8E24AA,#CE93D8); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.purple { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.red    { background:var(--red-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#4A148C,#6A1B9A); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#CE93D8; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.8; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.8; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .recap-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:10px; margin:16px 0; }
+        .recap-card { background:var(--primary-bg); border:2px solid #CE93D8; border-radius:11px; padding:11px 14px; }
+        .recap-rule { font-size:.82rem; font-weight:900; color:#4A148C; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
+        .recap-formula { font-size:1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .recap-ex { font-size:.82rem; color:#555; margin-top:3px; }
+        .recap-ex strong { color:var(--primary-dark); }
+
+        .examples-row { display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
+        .example-chip { background:var(--primary-bg); border:2px solid #CE93D8; border-radius:10px; padding:8px 16px; font-size:.95rem; font-weight:800; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .example-chip span { color:#888; font-size:.75rem; font-family:inherit; font-weight:700; display:block; text-align:center; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* QCM */
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        /* Fill in */
+        .fill-item { background:var(--primary-bg); border:2px solid #CE93D8; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:70px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* Trouve l'erreur */
+        .error-hunt { background:#FFF8F0; border:2px solid #FF9600; border-radius:14px; padding:20px; }
+        .error-hunt-title { font-size:.78rem; font-weight:900; color:#E65100; text-transform:uppercase; letter-spacing:.8px; margin-bottom:6px; }
+        .error-hunt-stmt  { font-size:.96rem; font-weight:700; margin-bottom:16px; color:#333; }
+        .error-steps { display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
+        .error-step-row { display:flex; align-items:center; gap:12px; }
+        .error-step-label { font-size:.78rem; font-weight:900; color:#888; width:56px; flex-shrink:0; }
+        .error-step-content { font-size:.96rem; font-family:'Courier New',monospace; font-weight:700; color:#333; flex:1; background:white; border:2px solid var(--border); border-radius:10px; padding:10px 14px; }
+        .error-btn { padding:7px 14px; border-radius:10px; border:2px solid var(--orange); background:white; cursor:pointer; font-family:inherit; font-size:.82rem; font-weight:800; color:var(--orange-dark); transition:all .15s; white-space:nowrap; flex-shrink:0; }
+        .error-btn:hover:not(:disabled) { background:var(--orange-bg); }
+        .error-btn:disabled { cursor:not-allowed; opacity:.5; }
+        .error-btn.correct-pick { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .error-btn.wrong-pick   { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .error-feedback { display:none; margin-top:12px; padding:10px 14px; border-radius:10px; font-size:.88rem; font-weight:700; }
+        .error-feedback.show    { display:block; }
+        .error-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .error-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* Guided exercises */
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* Bonus */
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        /* Completion */
+        .completion { display:none; background:linear-gradient(135deg,#4A148C,#8E24AA,#CE93D8); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #2D0062; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        /* Level nav */
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+
+        @media(max-width:600px){
+            .header-inner { flex-wrap:wrap; }
+            .header-center { order:-1; flex-basis:100%; }
+            .opts.short { grid-template-columns:1fr 1fr; }
+            .recap-grid { grid-template-columns:1fr; }
+            .error-step-row { flex-wrap:wrap; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>xⁿ Puissances · Expressions mélangées</h1>
+            <p>Niveau 4 · Toutes les règles combinées · Priorités · Notation scientifique</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 4 — Expert</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- ══ 1. LEÇON ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">📖</div>
+        <div>
+            <div class="card-title">La leçon — Combiner toutes les règles</div>
+            <div class="card-sub">Priorités des opérations · Règles N1+N2+N3 ensemble · Pièges d'expert</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Tu connais maintenant toutes les règles : définition, cas particuliers, produit, quotient,
+            puissance d'une puissance, notation scientifique. Le niveau 4 t'apprend à
+            <strong>combiner tout cela</strong> dans une même expression, en respectant les priorités des opérations —
+            la compétence exactement évaluée au CE1D.
+        </p>
+
+        <!-- Récap compact des règles -->
+        <p style="font-size:.95rem;font-weight:800;color:var(--primary-dark);margin-bottom:12px;">🗂 Récap rapide — Les 6 règles fondamentales</p>
+        <div class="recap-grid">
+            <div class="recap-card">
+                <div class="recap-rule">Définition</div>
+                <div class="recap-formula">aⁿ = a×a×…×a</div>
+                <div class="recap-ex">n facteurs · Ex : <strong>2⁴=16</strong></div>
+            </div>
+            <div class="recap-card">
+                <div class="recap-rule">Cas particuliers</div>
+                <div class="recap-formula">a⁰=1 · a¹=a · a⁻ⁿ=1/aⁿ</div>
+                <div class="recap-ex">Ex : <strong>7⁰=1, 5⁻²=1/25</strong></div>
+            </div>
+            <div class="recap-card">
+                <div class="recap-rule">Produit (règle 1)</div>
+                <div class="recap-formula">aᵐ × aⁿ = aᵐ⁺ⁿ</div>
+                <div class="recap-ex">Même base → <strong>+ exposants</strong></div>
+            </div>
+            <div class="recap-card">
+                <div class="recap-rule">Puissance² (règle 2)</div>
+                <div class="recap-formula">(aᵐ)ⁿ = aᵐˣⁿ</div>
+                <div class="recap-ex">Puissance élevée → <strong>× exposants</strong></div>
+            </div>
+            <div class="recap-card">
+                <div class="recap-rule">Quotient (règle 3)</div>
+                <div class="recap-formula">aᵐ ÷ aⁿ = aᵐ⁻ⁿ</div>
+                <div class="recap-ex">Même base → <strong>− exposants</strong></div>
+            </div>
+            <div class="recap-card">
+                <div class="recap-rule">Produit de facteurs (règle 4)</div>
+                <div class="recap-formula">(a×b)ⁿ = aⁿ×bⁿ</div>
+                <div class="recap-ex">Distribue sur <strong>×</strong> seulement</div>
+            </div>
+        </div>
+
+        <!-- Priorités avec puissances -->
+        <div class="def-box">
+            <h3>📐 Priorités des opérations — La puissance AVANT la multiplication</h3>
+            <p>
+                L'ordre des opérations avec les puissances :<br><br>
+                <strong>1) Parenthèses</strong> → calcule d'abord ce qui est entre ( )<br>
+                <strong>2) Puissances / racines</strong> → calcule les aⁿ<br>
+                <strong>3) × et ÷</strong> → de gauche à droite<br>
+                <strong>4) + et −</strong> → de gauche à droite<br><br>
+                Exemple : <strong>3 + 2² × 4⁰ − (2+1)²</strong><br>
+                → Parenthèses : (2+1)² = 3² = 9<br>
+                → Puissances : 2² = 4, 4⁰ = 1<br>
+                → Multiplication : 4 × 1 = 4<br>
+                → Addition/soustraction : 3 + 4 − 9 = <strong>−2</strong>
+            </p>
+        </div>
+
+        <!-- SVG 1 : Ordre des opérations avec puissances -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 600 165" xmlns="http://www.w3.org/2000/svg" style="max-width:600px;width:100%">
+                <rect x="0" y="0" width="600" height="165" fill="#FAF0FF" rx="10"/>
+                <text x="300" y="20" text-anchor="middle" font-size="13" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Ordre de calcul : 2³ + 3² × 4⁰ − (2²)²</text>
+
+                <!-- Étape 1 : Parenthèses -->
+                <rect x="15" y="30" width="130" height="120" rx="8" fill="#E8F5E9" stroke="#388E3C" stroke-width="2"/>
+                <text x="80" y="50" text-anchor="middle" font-size="11" font-weight="900" fill="#1B5E20" font-family="Nunito,sans-serif">① PARENTHÈSES</text>
+                <text x="80" y="72" text-anchor="middle" font-size="13" font-weight="900" fill="#1B5E20" font-family="Courier New,monospace">(2²)²</text>
+                <text x="80" y="92" text-anchor="middle" font-size="11" fill="#2E7D32" font-weight="700" font-family="Nunito,sans-serif">règle 2 :</text>
+                <text x="80" y="108" text-anchor="middle" font-size="13" font-weight="900" fill="#1B5E20" font-family="Courier New,monospace">= 2⁴ = 16</text>
+                <text x="80" y="138" text-anchor="middle" font-size="10" fill="#388E3C" font-weight="700" font-family="Nunito,sans-serif">En premier !</text>
+
+                <!-- Étape 2 : Puissances -->
+                <rect x="160" y="30" width="130" height="120" rx="8" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+                <text x="225" y="50" text-anchor="middle" font-size="11" font-weight="900" fill="#0D47A1" font-family="Nunito,sans-serif">② PUISSANCES</text>
+                <text x="225" y="72" text-anchor="middle" font-size="13" font-weight="900" fill="#0D47A1" font-family="Courier New,monospace">2³ = 8</text>
+                <text x="225" y="92" text-anchor="middle" font-size="13" font-weight="900" fill="#0D47A1" font-family="Courier New,monospace">3² = 9</text>
+                <text x="225" y="112" text-anchor="middle" font-size="13" font-weight="900" fill="#0D47A1" font-family="Courier New,monospace">4⁰ = 1</text>
+                <text x="225" y="138" text-anchor="middle" font-size="10" fill="#1565C0" font-weight="700" font-family="Nunito,sans-serif">Avant × et ÷</text>
+
+                <!-- Étape 3 : Multiplication -->
+                <rect x="305" y="30" width="130" height="120" rx="8" fill="#FFF3E0" stroke="#E65100" stroke-width="2"/>
+                <text x="370" y="50" text-anchor="middle" font-size="11" font-weight="900" fill="#BF360C" font-family="Nunito,sans-serif">③ × et ÷</text>
+                <text x="370" y="72" text-anchor="middle" font-size="13" font-weight="900" fill="#BF360C" font-family="Courier New,monospace">9 × 1 = 9</text>
+                <text x="370" y="98" text-anchor="middle" font-size="10" fill="#555" font-weight="700" font-family="Nunito,sans-serif">(de gauche à droite)</text>
+                <text x="370" y="138" text-anchor="middle" font-size="10" fill="#E65100" font-weight="700" font-family="Nunito,sans-serif">Avant + et −</text>
+
+                <!-- Étape 4 : Addition -->
+                <rect x="450" y="30" width="140" height="120" rx="8" fill="#FCE4EC" stroke="#C2185B" stroke-width="2"/>
+                <text x="520" y="50" text-anchor="middle" font-size="11" font-weight="900" fill="#880E4F" font-family="Nunito,sans-serif">④ + et −</text>
+                <text x="520" y="72" text-anchor="middle" font-size="12" font-weight="900" fill="#880E4F" font-family="Courier New,monospace">8 + 9 − 16</text>
+                <text x="520" y="95" text-anchor="middle" font-size="12" font-weight="900" fill="#880E4F" font-family="Courier New,monospace">= 17 − 16</text>
+                <text x="520" y="118" text-anchor="middle" font-size="15" font-weight="900" fill="#880E4F" font-family="Courier New,monospace">= 1 ✓</text>
+                <text x="520" y="138" text-anchor="middle" font-size="10" fill="#C2185B" font-weight="700" font-family="Nunito,sans-serif">En dernier</text>
+            </svg>
+        </div>
+
+        <!-- Technique : simplification en chaîne -->
+        <div class="rule-box">
+            <h3>🔗 Technique — Simplification en chaîne : règles 1, 2 et 3 ensemble</h3>
+            <p>
+                Pour simplifier une expression avec plusieurs règles, traite les puissances <strong>de l'intérieur vers l'extérieur</strong>,
+                puis applique les règles dans l'ordre :<br><br>
+                Exemple : <strong>((2²)³ × 2⁴) ÷ 2⁸</strong><br>
+                → Règle 2 : (2²)³ = 2⁶<br>
+                → Règle 1 : 2⁶ × 2⁴ = 2¹⁰<br>
+                → Règle 3 : 2¹⁰ ÷ 2⁸ = <strong>2²  = 4</strong><br><br>
+                Astuce : note l'exposant total en calculant : (2×3) + 4 − 8 = 6 + 4 − 8 = <strong>2</strong>
+            </p>
+        </div>
+
+        <!-- SVG 2 : Simplification en chaîne -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 600 170" xmlns="http://www.w3.org/2000/svg" style="max-width:600px;width:100%">
+                <rect x="0" y="0" width="600" height="170" fill="#FAF0FF" rx="10"/>
+                <text x="300" y="20" text-anchor="middle" font-size="13" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Simplification en chaîne : ((3²)² × 3) ÷ 3⁵</text>
+
+                <!-- Flèche étape 1 -->
+                <rect x="15" y="32" width="140" height="50" rx="8" fill="#F3E5F5" stroke="#AB47BC" stroke-width="2"/>
+                <text x="85" y="52" text-anchor="middle" font-size="11" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Expression de départ</text>
+                <text x="85" y="70" text-anchor="middle" font-size="14" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">((3²)² × 3) ÷ 3⁵</text>
+
+                <polygon points="162,57 178,57 170,67" fill="#8E24AA"/>
+                <text x="170" y="52" text-anchor="middle" font-size="9" fill="#8E24AA" font-weight="900" font-family="Nunito,sans-serif">règle 2</text>
+
+                <rect x="183" y="32" width="120" height="50" rx="8" fill="#E8F5E9" stroke="#388E3C" stroke-width="2"/>
+                <text x="243" y="52" text-anchor="middle" font-size="11" font-weight="900" fill="#1B5E20" font-family="Nunito,sans-serif">(3²)² = 3⁴</text>
+                <text x="243" y="70" text-anchor="middle" font-size="13" font-weight="900" fill="#1B5E20" font-family="Courier New,monospace">(3⁴ × 3) ÷ 3⁵</text>
+
+                <polygon points="309,57 325,57 317,67" fill="#1565C0"/>
+                <text x="317" y="52" text-anchor="middle" font-size="9" fill="#1565C0" font-weight="900" font-family="Nunito,sans-serif">règle 1</text>
+
+                <rect x="330" y="32" width="120" height="50" rx="8" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+                <text x="390" y="52" text-anchor="middle" font-size="11" font-weight="900" fill="#0D47A1" font-family="Nunito,sans-serif">3⁴×3¹ = 3⁵</text>
+                <text x="390" y="70" text-anchor="middle" font-size="13" font-weight="900" fill="#0D47A1" font-family="Courier New,monospace">3⁵ ÷ 3⁵</text>
+
+                <polygon points="456,57 472,57 464,67" fill="#E65100"/>
+                <text x="464" y="52" text-anchor="middle" font-size="9" fill="#E65100" font-weight="900" font-family="Nunito,sans-serif">règle 3</text>
+
+                <rect x="477" y="32" width="110" height="50" rx="8" fill="#4A148C" stroke="#2D0062" stroke-width="2"/>
+                <text x="532" y="52" text-anchor="middle" font-size="11" font-weight="900" fill="#CE93D8" font-family="Nunito,sans-serif">3^(5−5)</text>
+                <text x="532" y="72" text-anchor="middle" font-size="16" font-weight="900" fill="white" font-family="Courier New,monospace">= 3⁰ = 1</text>
+
+                <!-- Bilan -->
+                <text x="300" y="115" text-anchor="middle" font-size="13" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Bilan des exposants : 2×2=4, puis 4+1=5, puis 5−5=0 → 3⁰=1</text>
+                <rect x="80" y="128" width="440" height="30" rx="8" fill="#E8F5E9" stroke="#388E3C" stroke-width="1.5"/>
+                <text x="300" y="147" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Nunito,sans-serif">Astuce CE1D : note juste les exposants → (2×2)+1−5 = 0 → réponse = 3⁰ = 1 ✓</text>
+            </svg>
+        </div>
+
+        <!-- Notation scientifique et puissances -->
+        <div class="def-box">
+            <h3>🔬 Notation scientifique — Élever à une puissance</h3>
+            <p>
+                Pour élever un nombre en notation scientifique à une puissance, applique la règle 4 :<br><br>
+                <strong>(a × 10ⁿ)ᵐ = aᵐ × (10ⁿ)ᵐ = aᵐ × 10ⁿˣᵐ</strong><br><br>
+                Exemple : <strong>(2 × 10³)⁴ = 2⁴ × (10³)⁴ = 16 × 10¹² = 1,6 × 10¹³</strong><br><br>
+                ⚠️ Pense à vérifier que la mantisse reste entre 1 et 10 après le calcul !
+            </p>
+        </div>
+
+        <!-- SVG 3 : Erreurs classiques côte à côte -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 600 175" xmlns="http://www.w3.org/2000/svg" style="max-width:600px;width:100%">
+                <rect x="0" y="0" width="600" height="175" fill="#FFF8F0" rx="10"/>
+                <text x="300" y="20" text-anchor="middle" font-size="13" font-weight="900" fill="#E65100" font-family="Nunito,sans-serif">⚠️ Erreurs classiques niveau 4 — Comparaison</text>
+
+                <!-- Erreur 1 -->
+                <rect x="10" y="30" width="180" height="130" rx="8" fill="#FFCDD2" stroke="#C62828" stroke-width="2"/>
+                <text x="100" y="50" text-anchor="middle" font-size="11" font-weight="900" fill="#B71C1C" font-family="Nunito,sans-serif">❌ Erreur fréquente</text>
+                <text x="100" y="72" text-anchor="middle" font-size="13" font-weight="900" fill="#B71C1C" font-family="Courier New,monospace">(2²)³ = 2²⁺³</text>
+                <text x="100" y="92" text-anchor="middle" font-size="12" font-weight="900" fill="#B71C1C" font-family="Courier New,monospace">= 2⁵ = 32 ✗</text>
+                <text x="100" y="118" text-anchor="middle" font-size="10" fill="#B71C1C" font-weight="700" font-family="Nunito,sans-serif">On a additionné</text>
+                <text x="100" y="132" text-anchor="middle" font-size="10" fill="#B71C1C" font-weight="700" font-family="Nunito,sans-serif">au lieu de multiplier !</text>
+                <text x="100" y="150" text-anchor="middle" font-size="10" fill="#C62828" font-weight="700" font-family="Nunito,sans-serif">(règle 1 ≠ règle 2)</text>
+
+                <!-- Correct 1 -->
+                <rect x="200" y="30" width="180" height="130" rx="8" fill="#C8E6C9" stroke="#388E3C" stroke-width="2"/>
+                <text x="290" y="50" text-anchor="middle" font-size="11" font-weight="900" fill="#1B5E20" font-family="Nunito,sans-serif">✅ Bonne méthode</text>
+                <text x="290" y="72" text-anchor="middle" font-size="13" font-weight="900" fill="#1B5E20" font-family="Courier New,monospace">(2²)³ = 2²ˣ³</text>
+                <text x="290" y="92" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Courier New,monospace">= 2⁶ = 64 ✓</text>
+                <text x="290" y="118" text-anchor="middle" font-size="10" fill="#1B5E20" font-weight="700" font-family="Nunito,sans-serif">Règle 2 : (aᵐ)ⁿ = aᵐˣⁿ</text>
+                <text x="290" y="132" text-anchor="middle" font-size="10" fill="#1B5E20" font-weight="700" font-family="Nunito,sans-serif">On MULTIPLIE les exposants</text>
+
+                <!-- Erreur 2 -->
+                <rect x="395" y="30" width="195" height="130" rx="8" fill="#FFCDD2" stroke="#C62828" stroke-width="2"/>
+                <text x="492" y="50" text-anchor="middle" font-size="11" font-weight="900" fill="#B71C1C" font-family="Nunito,sans-serif">❌ Autre erreur</text>
+                <text x="492" y="70" text-anchor="middle" font-size="12" font-weight="900" fill="#B71C1C" font-family="Courier New,monospace">2³ + 2⁴ = 2³⁺⁴</text>
+                <text x="492" y="90" text-anchor="middle" font-size="12" font-weight="900" fill="#B71C1C" font-family="Courier New,monospace">= 2⁷ = 128 ✗</text>
+                <text x="492" y="108" text-anchor="middle" font-size="11" font-weight="900" fill="#1B5E20" font-family="Courier New,monospace">2³+2⁴=8+16=24 ✓</text>
+                <text x="492" y="130" text-anchor="middle" font-size="10" fill="#B71C1C" font-weight="700" font-family="Nunito,sans-serif">La règle 1 s'applique</text>
+                <text x="492" y="145" text-anchor="middle" font-size="10" fill="#B71C1C" font-weight="700" font-family="Nunito,sans-serif">sur ×, PAS sur + !</text>
+            </svg>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège expert — Exposant négatif + puissance</h3>
+            <p>
+                ❌ <strong>(2⁻³)² = 2⁻³⁺² = 2⁻¹</strong> — FAUX ! On a additionné au lieu de multiplier.<br>
+                ✅ <strong>(2⁻³)² = 2^(−3×2) = 2⁻⁶ = 1/64</strong><br><br>
+                ❌ <strong>2⁻³ × 2⁴ = 2¹²</strong> — FAUX ! On ne multiplie pas les exposants dans le produit.<br>
+                ✅ <strong>2⁻³ × 2⁴ = 2^(−3+4) = 2¹ = 2</strong>
+            </p>
+        </div>
+
+        <div class="examples-row">
+            <div class="example-chip">2⁴×2⁻²÷2⁰ = 2²<span>(4−2−0=2)</span></div>
+            <div class="example-chip">(3²)³÷3⁴ = 3²<span>(6−4=2)</span></div>
+            <div class="example-chip">(2×10²)³ = 8×10⁶<span>règle 4+2</span></div>
+            <div class="example-chip">((2³)²)⁰ = 1<span>tout⁰ = 1 !</span></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 2. QCM ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Expressions combinées · Niveau expert CE1D</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Calcule : <strong>2³ + 3² × 4⁰ − (2²)²</strong> (respecte les priorités !)</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">A) 1</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">B) 17</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">C) −1</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">D) 33</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Simplifie : <strong>(3² × 3³) ÷ 3⁴</strong></div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">A) 3⁴ = 81</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">B) 3¹ = 3</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">C) 3⁵ = 243</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">D) 3⁰ = 1</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Calcule <strong>(2⁴ × 3⁴) ÷ 6²</strong>. Indice : 2⁴ × 3⁴ = (2×3)⁴ …</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">A) 6</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">B) 12</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">C) 36</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">D) 72</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> En notation scientifique : <strong>(1,2 × 10³)²</strong> = ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">A) 1,44 × 10⁶</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">B) 2,4 × 10⁶</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">C) 1,44 × 10⁹</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">D) 1,2 × 10⁶</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Simplifie complètement : <strong>((2²)³ × 2⁰) ÷ (2⁴ × 2²)</strong></div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">A) 2</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">B) 4</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">C) 0</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">D) 1</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 3. TEXTES À TROUS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Simplification en chaîne · Notation scientifique</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1 — Produit et quotient enchaînés</div>
+            <div class="fill-sentence">
+                4³ ÷ 4 × 4² = 4^(3−1+2) = 4<input class="blank" id="f1a" placeholder="?" style="width:50px"> = <input class="blank" id="f1b" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2 — Puissance d'une puissance + quotient</div>
+            <div class="fill-sentence">
+                (5²)³ ÷ 5⁴ = 5^(2×3−4) = 5<input class="blank" id="f2a" placeholder="?" style="width:50px"> = <input class="blank" id="f2b" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3 — Notation scientifique élevée à une puissance</div>
+            <div class="fill-sentence">
+                (2 × 10²)³ = 2³ × (10²)³ = <input class="blank" id="f3a" placeholder="?"> × 10<input class="blank" id="f3b" placeholder="?" style="width:50px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 4. TROUVE L'ERREUR ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon red">🔍</div>
+        <div>
+            <div class="card-title">Trouve l'erreur !</div>
+            <div class="card-sub">Un élève a fait une faute — sauras-tu la repérer ? +1 point bonus</div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="error-hunt">
+            <div class="error-hunt-title">🕵️ Exercice — Chasse à l'erreur</div>
+            <div class="error-hunt-stmt">
+                Un élève calcule <strong>(2³)² + 3² × 2⁰</strong>. Son travail est affiché ci-dessous.
+                <strong>Clique sur l'étape qui contient l'erreur.</strong>
+            </div>
+            <div class="error-steps">
+                <div class="error-step-row">
+                    <div class="error-step-label">Étape 1</div>
+                    <div class="error-step-content">(2³)² = 2^(3×2) = 2⁶ = 64</div>
+                    <button class="error-btn" id="ebtn1" onclick="checkError(1)">C'est ici ✗</button>
+                </div>
+                <div class="error-step-row">
+                    <div class="error-step-label">Étape 2</div>
+                    <div class="error-step-content">3² × 2⁰ = 9 × 2 = 18</div>
+                    <button class="error-btn" id="ebtn2" onclick="checkError(2)">C'est ici ✗</button>
+                </div>
+                <div class="error-step-row">
+                    <div class="error-step-label">Étape 3</div>
+                    <div class="error-step-content">64 + 18 = 82</div>
+                    <button class="error-btn" id="ebtn3" onclick="checkError(3)">C'est ici ✗</button>
+                </div>
+            </div>
+            <div class="error-feedback" id="errorFeedback"></div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ══ 5. EXERCICES GUIDÉS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices de calcul guidés</div>
+            <div class="card-sub">3 exercices avec corrigé · + 1 bonus littéral · Style CE1D</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Ex 1 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Simplification complète</div>
+                <div class="ex-stmt">
+                    Simplifie entièrement, en détaillant chaque étape :<br><br>
+                    <strong>3⁵ × 3⁻² ÷ (3²)⁰</strong>
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Parenthèses d'abord : <strong>(3²)⁰</strong> = tout nombre à la puissance 0 = <strong>1</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Règle 1 (produit) : <strong>3⁵ × 3⁻²</strong> = 3^(5+(−2)) = <strong>3³</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Division par 1 : 3³ ÷ 1 = <strong>3³ = 27</strong></div></div>
+                <div class="final-ans">✅ 3⁵ × 3⁻² ÷ (3²)⁰ = 3³ = <strong>27</strong></div>
+            </div>
+        </div>
+
+        <!-- Ex 2 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Notation scientifique · Style CE1D physique</div>
+                <div class="ex-stmt">
+                    L'énergie libérée par une bombe atomique est environ <strong>(3 × 10⁴)²</strong> kJ.<br>
+                    Calcule ce résultat et exprime-le en notation scientifique correcte.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Règle 4 : <strong>(3 × 10⁴)² = 3² × (10⁴)²</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Calcul de 3² = <strong>9</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Règle 2 : (10⁴)² = 10^(4×2) = <strong>10⁸</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">Résultat : <strong>9 × 10⁸</strong> — vérification : 1 ≤ 9 &lt; 10 → notation correcte ✓</div></div>
+                <div class="final-ans">✅ (3 × 10⁴)² = <strong>9 × 10⁸ kJ</strong></div>
+            </div>
+        </div>
+
+        <!-- Ex 3 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Démonstration · Expression complexe</div>
+                <div class="ex-stmt">
+                    Montre que l'expression suivante est égale à <strong>1</strong>, pour tout a ≠ 0 :<br><br>
+                    <strong>aⁿ × a⁻ⁿ</strong>
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Règle 1 (même base a) : aⁿ × a⁻ⁿ = a^(n + (−n))</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">n + (−n) = n − n = <strong>0</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Cas particulier : a⁰ = <strong>1</strong> pour tout a ≠ 0</div></div>
+                <div class="final-ans">✅ aⁿ × a⁻ⁿ = a⁰ = <strong>1</strong> — Tout nombre multiplié par son inverse de puissance donne 1 !</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Expression littérale · Très CE1D</div>
+                <div class="bonus-stmt">
+                    Simplifie l'expression suivante (n est un entier quelconque) :<br><br>
+                    <code>(2ⁿ × 4) ÷ 2ⁿ⁺¹</code><br><br>
+                    Indice : remarque que 4 = 2² …
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text">On remplace 4 par 2² : <strong>2ⁿ × 2²</strong> ÷ 2^(n+1)</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text">Règle 1 (numérateur) : 2ⁿ × 2² = <strong>2^(n+2)</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text">Règle 3 (quotient) : 2^(n+2) ÷ 2^(n+1) = 2^((n+2)−(n+1))</div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text">(n+2) − (n+1) = n + 2 − n − 1 = <strong>1</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">5</div><div class="sol-text">Donc le résultat est 2¹ = <strong>2</strong>, <em>quelle que soit la valeur de n !</em></div></div>
+                <div class="bonus-ans">
+                    (2ⁿ × 4) ÷ 2^(n+1) = 2^(n+2) ÷ 2^(n+1) = 2¹ = <strong>2</strong><br>
+                    Ce type d'expression littérale est typique des questions difficiles du CE1D.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ COMPLETION ══ -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 4 terminé !</h2>
+    <p>Excellent ! Tu maîtrises les expressions complexes avec puissances.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Plus qu'un niveau avant le défi CE1D !</p>
+</div>
+
+<!-- ══ NAVIGATION ══ -->
+<div class="level-nav">
+    <h3>📚 Navigation — Puissances</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_puissances_niveau1.html" class="nav-btn">Niveau 1 — Définition &amp; calcul</a>
+        <a href="maths_puissances_niveau2.html" class="nav-btn">Niveau 2 — Règles de calcul</a>
+        <a href="maths_puissances_niveau3.html" class="nav-btn">Niveau 3 — Notation scientifique</a>
+        <a href="maths_puissances_niveau4.html" class="nav-btn current">▶ Niveau 4 — Expressions mélangées</a>
+        <a href="maths_puissances_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+/* ── QCM ──
+   Q1 : 2³+3²×4⁰−(2²)² → (2²)²=2⁴=16, 4⁰=1, 2³=8, 3²=9 → 8+9×1−16=8+9−16=1 → A (index 0)
+   Q2 : (3²×3³)÷3⁴ = 3^(2+3−4)=3¹=3 → B (index 1) ; piège A=3⁴ (2+3−4=1 not 4), D=3⁰=1 (wrong)
+   Q3 : (2⁴×3⁴)÷6² = 6⁴÷6²=6²=36 → C (index 2)
+   Q4 : (1,2×10³)² = 1,44×10⁶ → A (index 0) ; piège B=2,4 (doubled), C=10⁹ (3²=9)
+   Q5 : ((2²)³×2⁰)÷(2⁴×2²) = (2⁶×1)÷2⁶ = 2⁰ = 1 → D (index 3) ; piège C=0 (confondre 2⁰ et 0)
+*/
+const QCM_CORRECT = {1:0, 2:1, 3:2, 4:0, 5:3};
+
+const QCM_OK = {
+    1:"✅ (2²)²=2⁴=16, 4⁰=1, 2³=8, 3²=9. Priorités : d'abord les () puis les puissances puis × : 9×1=9. Enfin : 8+9−16 = 1.",
+    2:"✅ Règle 1 : 3²×3³=3⁵. Règle 3 : 3⁵÷3⁴=3^(5−4)=3¹=3. Bilan exposant : 2+3−4=1 → 3¹=3.",
+    3:"✅ Règle 4 à l'envers : 2⁴×3⁴=(2×3)⁴=6⁴. Règle 3 : 6⁴÷6²=6²=36.",
+    4:"✅ Règle 4 : (1,2×10³)²=1,2²×(10³)². 1,2²=1,44 et (10³)²=10⁶. Résultat : 1,44×10⁶.",
+    5:"✅ Règle 2 : (2²)³=2⁶. ×2⁰=×1. Dénominateur : 2⁴×2²=2⁶. Quotient : 2⁶÷2⁶=2⁰=1. Pas 0 !"
+};
+
+const QCM_ERR = {
+    1:"❌ Ordre des priorités : d'abord (2²)²=2⁴=16, puis les puissances (2³=8, 3²=9, 4⁰=1), puis la × (9×1=9), enfin +/− : 8+9−16=1.",
+    2:"❌ Règle 1 puis 3 : 3²×3³=3^(2+3)=3⁵, puis 3⁵÷3⁴=3^(5−4)=3¹=3. Bilan exposant : 2+3−4=1.",
+    3:"❌ Remarque : 2⁴×3⁴=(2×3)⁴=6⁴ (règle 4 inverse). Puis 6⁴÷6²=6^(4−2)=6²=36.",
+    4:"❌ (a×b)ⁿ=aⁿ×bⁿ. Donc (1,2×10³)²=1,2²×(10³)²=1,44×10⁶. 1,2²=1,44 (pas 2,4) et (10³)²=10⁶ (pas 10⁹).",
+    5:"❌ (2²)³=2⁶, ×2⁰=×1. Dénominateur=2⁶. Donc 2⁶÷2⁶=2⁰=1. ⚠️ 2⁰=1, pas 0 !"
+};
+
+/* ── Textes à trous ──
+   Trou1 : 4^(3−1+2) = 4⁴ = 256
+   Trou2 : (5²)³÷5⁴ = 5^(6−4) = 5² = 25
+   Trou3 : (2×10²)³ = 8 × 10⁶
+*/
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['4'],['256']],
+        msgOk:"✅ 4³÷4×4² = 4^(3−1+2) = 4⁴ = 256. Bilan exposant : 3−1+2=4.",
+        msgErr:"❌ Règles 3 et 1 enchaînées : 4³÷4¹×4² = 4^(3−1+2) = 4⁴ = 256."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['2'],['25']],
+        msgOk:"✅ Règle 2 : (5²)³=5⁶. Règle 3 : 5⁶÷5⁴=5². Et 5²=25.",
+        msgErr:"❌ (5²)³=5^(2×3)=5⁶ (règle 2). Puis 5⁶÷5⁴=5^(6−4)=5² (règle 3). Et 5²=25."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['8'],['6']],
+        msgOk:"✅ 2³=8 et (10²)³=10^(2×3)=10⁶. Donc (2×10²)³=8×10⁶.",
+        msgErr:"❌ Règle 4 : (2×10²)³=2³×(10²)³=8×10⁶. Exposant: 2×3=6."
+    }
+};
+
+/* ── Trouve l'erreur ── L'erreur est à l'étape 2 : 2⁰=1, pas 2 */
+let errorDone = false;
+const ERROR_CORRECT = 2;
+
+function checkError(step) {
+    if (errorDone) return;
+    const fb = document.getElementById('errorFeedback');
+    const btn = document.getElementById('ebtn' + step);
+    // Disable all buttons
+    [1,2,3].forEach(i => {
+        document.getElementById('ebtn'+i).disabled = true;
+    });
+    if (step === ERROR_CORRECT) {
+        btn.classList.add('correct-pick');
+        fb.textContent = "✅ Bravo ! L'erreur est à l'étape 2 : l'élève a écrit 2⁰ = 2, mais 2⁰ = 1 (tout nombre à la puissance 0 vaut 1 !). Donc 3²×2⁰ = 9×1 = 9, et le résultat correct est 64+9 = 73.";
+        fb.className = 'error-feedback show correct';
+        errorDone = true;
+        score++;
+        updateUI();
+    } else {
+        btn.classList.add('wrong-pick');
+        document.getElementById('ebtn'+ERROR_CORRECT).classList.add('correct-pick');
+        fb.textContent = "❌ Ce n'est pas là ! L'erreur est à l'étape 2 : l'élève a écrit 2⁰ = 2 au lieu de 2⁰ = 1. Le résultat correct de (2³)²+3²×2⁰ est 64+9×1 = 73.";
+        fb.className = 'error-feedback show wrong';
+    }
+}
+
+let score = 0;
+const TOTAL = 9; // 5 QCM + 3 fill + 1 erreur
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_puissances_4', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m);
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

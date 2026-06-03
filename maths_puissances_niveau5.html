@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Puissances · Niveau 5 — Défi CE1D 🏆</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#8E24AA; --primary-dark:#4A148C; --primary-mid:#AB47BC; --primary-bg:#F3E5F5;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --gold:#FFB300; --gold-dark:#E65100; --gold-bg:#FFF8E1;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#4A148C 0%,#8E24AA 55%,#CE93D8 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(74,20,140,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.gold { background:var(--gold); }
+        .diff-pip.off  { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:var(--gold-dark); }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#4A148C,#8E24AA,#CE93D8); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        /* Timer strip */
+        .timer-wrap { background:linear-gradient(135deg,#E65100,#FF9600); padding:11px 20px; }
+        .timer-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .timer-label { font-size:.82rem; font-weight:900; color:white; opacity:.9; }
+        .timer-display { font-size:1.4rem; font-weight:900; color:white; font-family:'Courier New',monospace; letter-spacing:2px; }
+        .timer-display.urgent { animation:timerPulse .8s ease-in-out infinite; color:#FFD54F; }
+        @keyframes timerPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+        .timer-bar-bg { flex:1; background:rgba(255,255,255,.3); border-radius:50px; height:10px; overflow:hidden; }
+        .timer-bar-fill { height:100%; width:100%; border-radius:50px; background:white; transition:width 1s linear; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.purple { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.gold   { background:var(--gold-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        /* Recap rapide */
+        .recap-strip { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:9px; margin-bottom:18px; }
+        .rs-card { background:var(--primary-bg); border:2px solid #CE93D8; border-radius:10px; padding:10px 13px; }
+        .rs-rule { font-size:.72rem; font-weight:900; color:#4A148C; text-transform:uppercase; letter-spacing:.5px; margin-bottom:3px; }
+        .rs-formula { font-size:.9rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); }
+
+        .challenge-banner { background:linear-gradient(135deg,#E65100,#FF9600); color:white; border-radius:14px; padding:16px 20px; margin-bottom:18px; display:flex; align-items:center; gap:16px; }
+        .challenge-banner .trophy { font-size:2.2rem; }
+        .challenge-banner h3 { font-size:1rem; font-weight:900; margin-bottom:3px; }
+        .challenge-banner p { font-size:.85rem; opacity:.92; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:16px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* QCM */
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        /* Fill in */
+        .fill-item { background:var(--primary-bg); border:2px solid #CE93D8; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:70px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* Guided exercises */
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* Stars completion */
+        .completion { display:none; border-radius:var(--radius); padding:34px 24px; text-align:center; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        .completion.stars3 { background:linear-gradient(135deg,#4A148C,#8E24AA,#CE93D8); color:white; box-shadow:0 6px 0 #2D0062; }
+        .completion.stars2 { background:linear-gradient(135deg,#1565C0,#1976D2,#64B5F6); color:white; box-shadow:0 6px 0 #0D47A1; }
+        .completion.stars1 { background:linear-gradient(135deg,#E65100,#FF9600,#FFCC80); color:white; box-shadow:0 6px 0 #BF360C; }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.8rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.93; }
+
+        /* Level nav */
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+
+        @media(max-width:600px){
+            .header-inner { flex-wrap:wrap; }
+            .header-center { order:-1; flex-basis:100%; }
+            .opts.short { grid-template-columns:1fr 1fr; }
+            .recap-strip { grid-template-columns:1fr 1fr; }
+            .timer-inner { flex-wrap:wrap; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>xⁿ Puissances · Défi CE1D 🏆</h1>
+            <p>Niveau 5 · Toutes règles · Chrono 5 min · Style examen belge</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip gold"></div><div class="diff-pip gold"></div>
+            <div class="diff-pip gold"></div><div class="diff-pip gold"></div>
+            <div class="diff-pip gold"></div>
+            <span class="diff-label">Niveau 5 — Défi 🏆</span>
+        </div>
+    </div>
+</div>
+
+<!-- TIMER STRIP -->
+<div class="timer-wrap">
+    <div class="timer-inner">
+        <span class="timer-label">⏱ Temps restant</span>
+        <div class="timer-bar-bg"><div class="timer-bar-fill" id="timerBarFill"></div></div>
+        <span class="timer-display" id="timerDisplay">5:00</span>
+    </div>
+</div>
+
+<main>
+
+<!-- ══ 1. RAPPEL RAPIDE ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon gold">🏆</div>
+        <div>
+            <div class="card-title">Défi final — Toutes les règles au programme CE1D</div>
+            <div class="card-sub">5 minutes · 8 points · Questions de type examen belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="challenge-banner">
+            <div class="trophy">🏆</div>
+            <div>
+                <h3>Bienvenue dans le Défi CE1D Puissances !</h3>
+                <p>Tu as <strong>5 minutes</strong> pour répondre à 8 questions. Toutes les règles vues aux niveaux 1 à 4 peuvent apparaître.
+                   Obtiens <strong>6/8 ou plus</strong> pour débloquer la médaille or. Bonne chance !</p>
+            </div>
+        </div>
+
+        <p style="font-size:.88rem;font-weight:800;color:var(--primary-dark);margin-bottom:10px;">📋 Aide-mémoire express</p>
+        <div class="recap-strip">
+            <div class="rs-card"><div class="rs-rule">Définition</div><div class="rs-formula">aⁿ = a×a×…×a</div></div>
+            <div class="rs-card"><div class="rs-rule">Cas spéciaux</div><div class="rs-formula">a⁰=1 · a⁻ⁿ=1/aⁿ</div></div>
+            <div class="rs-card"><div class="rs-rule">Produit (R1)</div><div class="rs-formula">aᵐ×aⁿ = aᵐ⁺ⁿ</div></div>
+            <div class="rs-card"><div class="rs-rule">Puissance² (R2)</div><div class="rs-formula">(aᵐ)ⁿ = aᵐˣⁿ</div></div>
+            <div class="rs-card"><div class="rs-rule">Quotient (R3)</div><div class="rs-formula">aᵐ÷aⁿ = aᵐ⁻ⁿ</div></div>
+            <div class="rs-card"><div class="rs-rule">Produit×(R4)</div><div class="rs-formula">(a×b)ⁿ=aⁿ×bⁿ</div></div>
+        </div>
+
+        <!-- SVG récap visuel : les 3 grandes règles sur une ligne -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 600 100" xmlns="http://www.w3.org/2000/svg" style="max-width:600px;width:100%">
+                <rect x="0" y="0" width="600" height="100" fill="#FAF0FF" rx="10"/>
+                <text x="300" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Retiens le trio magique — même base : +, ×, −</text>
+
+                <rect x="15"  y="26" width="178" height="62" rx="8" fill="#E8F5E9" stroke="#388E3C" stroke-width="2"/>
+                <text x="104" y="48" text-anchor="middle" font-size="11" font-weight="900" fill="#1B5E20" font-family="Nunito,sans-serif">× → ADDITIONNE</text>
+                <text x="104" y="66" text-anchor="middle" font-size="13" font-weight="900" fill="#1B5E20" font-family="Courier New,monospace">aᵐ × aⁿ = aᵐ⁺ⁿ</text>
+                <text x="104" y="82" text-anchor="middle" font-size="10" fill="#388E3C" font-weight="700" font-family="Nunito,sans-serif">3²×3³ = 3⁵</text>
+
+                <rect x="211" y="26" width="178" height="62" rx="8" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+                <text x="300" y="48" text-anchor="middle" font-size="11" font-weight="900" fill="#0D47A1" font-family="Nunito,sans-serif">()ⁿ → MULTIPLIE</text>
+                <text x="300" y="66" text-anchor="middle" font-size="13" font-weight="900" fill="#0D47A1" font-family="Courier New,monospace">(aᵐ)ⁿ = aᵐˣⁿ</text>
+                <text x="300" y="82" text-anchor="middle" font-size="10" fill="#1565C0" font-weight="700" font-family="Nunito,sans-serif">(3²)³ = 3⁶</text>
+
+                <rect x="407" y="26" width="178" height="62" rx="8" fill="#FCE4EC" stroke="#C2185B" stroke-width="2"/>
+                <text x="496" y="48" text-anchor="middle" font-size="11" font-weight="900" fill="#880E4F" font-family="Nunito,sans-serif">÷ → SOUSTRAIT</text>
+                <text x="496" y="66" text-anchor="middle" font-size="13" font-weight="900" fill="#880E4F" font-family="Courier New,monospace">aᵐ ÷ aⁿ = aᵐ⁻ⁿ</text>
+                <text x="496" y="82" text-anchor="middle" font-size="10" fill="#C2185B" font-weight="700" font-family="Nunito,sans-serif">3⁶÷3² = 3⁴</text>
+            </svg>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 2. QCM ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple — Défi CE1D</div>
+            <div class="card-sub">5 questions · Contextes réels · Toutes règles · +1 pt chacune</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> 🌍 La masse de la Terre est <strong>6 × 10²⁴ kg</strong>. Un grain de sable pèse <strong>6 × 10⁻⁷ kg</strong>. Combien de grains pour atteindre la masse de la Terre ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">A) 10³¹</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">B) 10¹⁷</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">C) 10³⁶</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">D) 10⁻³¹</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Simplifie : <strong>(2⁻³ × 2⁵) ÷ (2²)⁰</strong></div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">A) 8</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">B) 4</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">C) 1</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">D) 1/4</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> 📦 Un cube a un côté de <strong>3 × 10² cm</strong>. Quel est son volume V = côté³ en notation scientifique correcte ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">A) 2,7 × 10⁷ cm³</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">B) 9 × 10⁶ cm³</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">C) 27 × 10⁶ cm³</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">D) 2,7 × 10⁶ cm³</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Sachant que <strong>8 = 2³</strong>, simplifie : <strong>8² × 2⁴ ÷ 2¹⁰</strong></div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">A) 2</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">B) 8</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">C) 4</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">D) 1</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Pour tout entier n, quelle est la valeur de <strong>4ⁿ⁺¹ ÷ 4ⁿ</strong> ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">A) 1</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">B) 4</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">C) 4ⁿ</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">D) 16</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 3. TEXTES À TROUS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous — Défi</div>
+            <div class="card-sub">3 exercices · Simplifications et base négative · +1 pt chacun</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1 — Puissance d'une puissance + quotient</div>
+            <div class="fill-sentence">
+                (2³)⁴ ÷ 2¹⁰ = 2^(3×4−10) = 2<input class="blank" id="f1a" placeholder="?" style="width:50px"> = <input class="blank" id="f1b" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2 — Division en notation scientifique</div>
+            <div class="fill-sentence">
+                (6 × 10⁷) ÷ (3 × 10⁴) = <input class="blank" id="f2a" placeholder="?"> × 10<input class="blank" id="f2b" placeholder="?" style="width:50px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3 — Base négative + règle du produit</div>
+            <div class="fill-sentence">
+                (−3)⁴ × (−3)² = (−3)<input class="blank" id="f3a" placeholder="?" style="width:50px"> = <input class="blank" id="f3b" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 4. EXERCICES GUIDÉS BONUS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés — Style examen CE1D</div>
+            <div class="card-sub">2 problèmes complets · Corrigés détaillés · Sans points</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Ex 1 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Calcul CE1D classique (type 2023)</div>
+                <div class="ex-stmt">
+                    Calcule et simplifie, en détaillant chaque étape :<br><br>
+                    <strong>((3²)² × 3⁻³) ÷ 3</strong>
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Règle 2 : <strong>(3²)² = 3^(2×2) = 3⁴</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Règle 1 (produit) : <strong>3⁴ × 3⁻³ = 3^(4+(−3)) = 3¹</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Règle 3 (quotient) : <strong>3¹ ÷ 3¹ = 3^(1−1) = 3⁰ = 1</strong></div></div>
+                <div class="final-ans">✅ ((3²)² × 3⁻³) ÷ 3 = 3⁰ = <strong>1</strong></div>
+            </div>
+        </div>
+
+        <!-- Ex 2 -->
+        <div class="ex-card" style="margin-top:15px;">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Physique · Atomes et microscope</div>
+                <div class="ex-stmt">
+                    Un atome d'hydrogène a un diamètre d'environ <strong>1 × 10⁻¹⁰ m</strong>.<br>
+                    Un cheveu humain mesure environ <strong>8 × 10⁻⁵ m</strong> de diamètre.<br>
+                    Combien de fois le cheveu est-il plus large que l'atome ? Exprime en notation scientifique.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">On divise : <strong>(8 × 10⁻⁵) ÷ (1 × 10⁻¹⁰)</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Mantisses : 8 ÷ 1 = <strong>8</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Exposants : −5 − (−10) = −5 + 10 = <strong>+5</strong> → 10⁵</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">Résultat : <strong>8 × 10⁵</strong> — vérification : 1 ≤ 8 &lt; 10 ✓</div></div>
+                <div class="final-ans">✅ Le cheveu est <strong>8 × 10⁵ = 800 000 fois</strong> plus large qu'un atome d'hydrogène !</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ COMPLETION ══ -->
+<div class="completion" id="completionBanner">
+    <div class="stars" id="starsDisplay">🌟</div>
+    <h2 id="completionTitle">Défi terminé !</h2>
+    <p id="completionMsg">Résultat : <strong id="finalScore">0</strong> / 8 — Tu as gagné <strong id="finalXP">0</strong> XP !</p>
+</div>
+
+<!-- ══ NAVIGATION ══ -->
+<div class="level-nav">
+    <h3>📚 Navigation — Puissances</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_puissances_niveau1.html" class="nav-btn">Niveau 1 — Définition &amp; calcul</a>
+        <a href="maths_puissances_niveau2.html" class="nav-btn">Niveau 2 — Règles de calcul</a>
+        <a href="maths_puissances_niveau3.html" class="nav-btn">Niveau 3 — Notation scientifique</a>
+        <a href="maths_puissances_niveau4.html" class="nav-btn">Niveau 4 — Expressions mélangées</a>
+        <a href="maths_puissances_niveau5.html" class="nav-btn current">▶ Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+/* ── TIMER ──
+   5 minutes = 300 secondes. On utilise Date.now() pour la précision.
+*/
+const TIMER_TOTAL = 300;
+let timerLeft = TIMER_TOTAL;
+let timerStopped = false;
+const timerStartTime = Date.now();
+
+function fmtTime(s) {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function tickTimer() {
+    if (timerStopped) return;
+    timerLeft = Math.max(0, TIMER_TOTAL - Math.floor((Date.now() - timerStartTime) / 1000));
+    const disp = document.getElementById('timerDisplay');
+    disp.textContent = fmtTime(timerLeft);
+    if (timerLeft <= 30) disp.classList.add('urgent');
+    const pct = (timerLeft / TIMER_TOTAL) * 100;
+    document.getElementById('timerBarFill').style.width = pct + '%';
+    if (timerLeft === 0) {
+        timerStopped = true;
+        showStars();
+        return;
+    }
+    setTimeout(tickTimer, 1000);
+}
+tickTimer();
+
+/* ── QCM ──
+   Q1 : (6×10²⁴)÷(6×10⁻⁷) = 1×10^(24−(−7))=10³¹ → A (index 0) ; piège B=10¹⁷ (24−7)
+   Q2 : (2⁻³×2⁵)÷(2²)⁰ = 2²÷1=4 → B (index 1) ; piège C=1 (confondre 2⁰ de (2²)⁰ avec 2⁰=1 tout)
+   Q3 : (3×10²)³=3³×10⁶=27×10⁶=2,7×10⁷ → A (index 0) ; piège C=27×10⁶ (mantisse ≥10)
+   Q4 : 8²×2⁴÷2¹⁰=(2³)²×2⁴÷2¹⁰=2⁶×2⁴÷2¹⁰=2^(6+4−10)=2⁰=1 → D (index 3)
+   Q5 : 4ⁿ⁺¹÷4ⁿ=4^((n+1)−n)=4¹=4 → B (index 1) ; piège A=1 (pense tout−tout=0)
+*/
+const QCM_CORRECT = {1:0, 2:1, 3:0, 4:3, 5:1};
+
+const QCM_OK = {
+    1:"✅ (6÷6)×10^(24−(−7)) = 1×10³¹. Attention : soustraire un exposant négatif l'additionne ! 24−(−7)=24+7=31.",
+    2:"✅ (2⁻³×2⁵)=2^(−3+5)=2². (2²)⁰=1 (tout à la puissance 0 = 1). Donc 2²÷1=4.",
+    3:"✅ (3×10²)³=3³×(10²)³=27×10⁶. Mais 27≥10 → on ajuste : 27×10⁶=2,7×10⁷.",
+    4:"✅ 8=2³ donc 8²=(2³)²=2⁶. Puis 2⁶×2⁴÷2¹⁰=2^(6+4−10)=2⁰=1.",
+    5:"✅ Règle 3 : 4ⁿ⁺¹÷4ⁿ=4^((n+1)−n)=4¹=4. Toujours 4, quelle que soit la valeur de n !"
+};
+
+const QCM_ERR = {
+    1:"❌ (6×10²⁴)÷(6×10⁻⁷) : mantisses 6÷6=1, exposants 24−(−7)=24+7=31. Donc 10³¹. Piège : 24−7=17 (oubli du signe !).",
+    2:"❌ Étape 1 : (2⁻³×2⁵)=2^(−3+5)=2². Étape 2 : (2²)⁰=1 (pas 2²). Résultat : 2²÷1=4.",
+    3:"❌ (3×10²)³=3³×(10²)³=27×10⁶. Mais attention : 27≥10 donc ce n'est pas en notation correcte ! On ajuste : 2,7×10⁷.",
+    4:"❌ On remplace 8 par 2³ : (2³)²=2⁶. Puis 2⁶×2⁴÷2¹⁰=2^(6+4−10)=2⁰=1.",
+    5:"❌ Règle 3 : 4^(n+1) ÷ 4ⁿ = 4^((n+1)−n) = 4¹ = 4. Les n s'annulent, il reste l'exposant 1."
+};
+
+/* ── Textes à trous ──
+   Trou1 : (2³)⁴÷2¹⁰ = 2^(12−10)=2² → exposant 2, valeur 4
+   Trou2 : (6×10⁷)÷(3×10⁴) = 2×10³
+   Trou3 : (−3)⁴×(−3)² = (−3)⁶ → exposant 6, valeur 729
+*/
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['2'],['4']],
+        msgOk:"✅ (2³)⁴=2¹², puis 2¹²÷2¹⁰=2^(12−10)=2²=4.",
+        msgErr:"❌ Règle 2 : (2³)⁴=2^(3×4)=2¹². Règle 3 : 2¹²÷2¹⁰=2^(12−10)=2²=4."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['2'],['3']],
+        msgOk:"✅ 6÷3=2, 10^(7−4)=10³. Donc 2×10³.",
+        msgErr:"❌ Mantisses : 6÷3=2. Exposants : 7−4=3. Résultat : 2×10³."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['6'],['729']],
+        msgOk:"✅ Règle 1 (même base −3) : (−3)⁴×(−3)²=(−3)^(4+2)=(−3)⁶. Et (−3)⁶=3⁶=729 (exposant pair → positif).",
+        msgErr:"❌ Règle 1 s'applique même avec une base négative : (−3)⁴×(−3)²=(−3)^(4+2)=(−3)⁶. Exposant 6 pair → positif : 3⁶=729."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+}
+
+function showStars() {
+    timerStopped = true;
+    localStorage.setItem('edu_completed_puissances_5', '1');
+    const xp = score * 20;
+    document.getElementById('finalXP').textContent = xp;
+    document.getElementById('finalScore').textContent = score;
+    const banner = document.getElementById('completionBanner');
+    let starsHtml, title, msg, cls;
+    if (score >= 7) {
+        starsHtml = '🌟 🌟 🌟'; title = 'Score parfait ! 🏆';
+        msg = `Bravo, champion ! Tu maîtrises parfaitement les puissances.<br>Score : <strong>${score}/8</strong> — Tu as gagné <strong>${xp} XP</strong> !`;
+        cls = 'stars3';
+    } else if (score >= 5) {
+        starsHtml = '🌟 🌟'; title = 'Très bien !';
+        msg = `Belle performance ! Revois les questions manquées.<br>Score : <strong>${score}/8</strong> — Tu as gagné <strong>${xp} XP</strong> !`;
+        cls = 'stars2';
+    } else {
+        starsHtml = '🌟'; title = 'Continue tes efforts !';
+        msg = `Bonne tentative ! Relis les niveaux 1 à 4 et réessaie.<br>Score : <strong>${score}/8</strong> — Tu as gagné <strong>${xp} XP</strong> !`;
+        cls = 'stars1';
+    }
+    document.getElementById('starsDisplay').textContent = starsHtml;
+    document.getElementById('completionTitle').textContent = title;
+    document.getElementById('completionMsg').innerHTML = msg;
+    banner.className = 'completion show ' + cls;
+    setTimeout(() => banner.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 20;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) showStars();
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m);
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>
