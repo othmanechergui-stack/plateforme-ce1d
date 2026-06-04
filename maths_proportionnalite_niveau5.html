@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Proportionnalité · Niveau 5 — Défi CE1D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#A560D4; --primary-dark:#7C3DA6; --primary-mid:#B47FDC; --primary-bg:#F5EEFF;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#4A148C 0%,#A560D4 55%,#CE93D8 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(74,20,140,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#A560D4; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#7C3DA6; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#4A148C,#A560D4,#CE93D8); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        /* TIMER */
+        .timer-wrap { background:linear-gradient(135deg,#1A237E,#283593); border-radius:var(--radius); padding:18px 24px; text-align:center; box-shadow:0 4px 16px rgba(26,35,126,.35); }
+        .timer-label { font-size:.78rem; font-weight:900; color:#90CAF9; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+        .timer-display { font-size:3.2rem; font-weight:900; color:white; letter-spacing:4px; font-family:'Courier New',monospace; transition:color .4s; }
+        .timer-display.warn  { color:#FFD54F; }
+        .timer-display.danger { color:#EF9A9A; animation:timerPulse .8s ease-in-out infinite; }
+        @keyframes timerPulse { 0%,100%{opacity:1} 50%{opacity:.6} }
+        .timer-bar-bg { background:rgba(255,255,255,.2); border-radius:50px; height:10px; margin-top:12px; overflow:hidden; }
+        .timer-bar-fill { height:100%; border-radius:50px; background:linear-gradient(90deg,#4CAF50,#8BC34A); transition:width 1s linear, background .4s; }
+        .timer-bar-fill.warn   { background:linear-gradient(90deg,#FF9600,#FFD600); }
+        .timer-bar-fill.danger { background:linear-gradient(90deg,#D32F2F,#E53935); }
+        .timer-stopped { font-size:.85rem; font-weight:900; color:#A5D6A7; margin-top:8px; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.purple { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.red    { background:var(--red-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .opt-btn.timed-out  { background:#F5F5F5; border-color:#CCC; color:#999; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-feedback.timeout { display:block; background:#FFF3E0; color:#E65100; }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        /* Trouve l'erreur */
+        .erreur-box { background:#FFF8E1; border:2px solid #FFD600; border-radius:12px; padding:18px 20px; margin-bottom:18px; }
+        .erreur-title { font-size:.82rem; font-weight:900; color:#E65100; text-transform:uppercase; letter-spacing:.8px; margin-bottom:12px; }
+        .erreur-steps { display:flex; flex-direction:column; gap:8px; }
+        .erreur-step { display:flex; align-items:center; gap:12px; padding:10px 16px; border-radius:10px; border:2px solid #E0E0E0; background:white; cursor:pointer; transition:all .15s; font-size:.92rem; font-weight:700; }
+        .erreur-step:hover:not(.locked) { border-color:#FFD600; background:#FFF8E1; }
+        .erreur-step.locked { cursor:default; }
+        .erreur-step.correct-step { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .erreur-step.wrong-step  { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .step-num { width:28px; height:28px; border-radius:50%; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-size:.8rem; font-weight:900; flex-shrink:0; }
+        .step-num.err { background:var(--red); }
+        .erreur-feedback { display:none; margin-top:12px; padding:10px 14px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .erreur-feedback.show    { display:block; }
+        .erreur-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .erreur-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* Fill in */
+        .fill-item { background:var(--primary-bg); border:2px solid #CE93D8; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* Exercices guidés */
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-num.purple { background:var(--primary); }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .sol-divider { font-size:.78rem; font-weight:900; color:var(--primary-dark); text-transform:uppercase; letter-spacing:.7px; margin:14px 0 8px; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* Completion avec étoiles */
+        .completion { display:none; background:linear-gradient(135deg,#4A148C,#A560D4,#CE93D8); color:white; border-radius:var(--radius); padding:40px 24px; text-align:center; box-shadow:0 6px 0 #38006B; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:3rem; margin-bottom:12px; letter-spacing:8px; }
+        .completion h2 { font-size:2rem; font-weight:900; margin-bottom:8px; }
+        .completion .score-display { font-size:1.1rem; font-weight:900; background:rgba(255,255,255,.2); border-radius:50px; padding:8px 24px; display:inline-block; margin:10px 0; }
+        .completion p  { font-size:.98rem; opacity:.92; margin-top:8px; }
+
+        /* Level nav */
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+
+        @media(max-width:580px){ .header-inner{flex-direction:column;gap:8px} .opts{grid-template-columns:1fr} .card-body{padding:16px} }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🏆 Proportionnalité · Défi CE1D</h1>
+            <p>Niveau 5 · Problèmes multi-étapes · Trouve l'erreur · Style vrais examens</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <span class="diff-label">Niveau 5 — Défi 🏆</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- ══ TIMER ══ -->
+<div class="timer-wrap">
+    <div class="timer-label">⏱ Temps restant — Chronomètre CE1D</div>
+    <div class="timer-display" id="timerDisplay">6:00</div>
+    <div class="timer-bar-bg"><div class="timer-bar-fill" id="timerBar" style="width:100%"></div></div>
+    <div class="timer-stopped" id="timerStopped" style="display:none">✅ Chronomètre arrêté — Tu as terminé !</div>
+</div>
+
+<!-- ══ CONSIGNES ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">🎯</div>
+        <div>
+            <div class="card-title">Consignes du Défi CE1D</div>
+            <div class="card-sub">Lis attentivement avant de commencer</div>
+        </div>
+    </div>
+    <div class="card-body">
+        <p style="font-size:.96rem;line-height:1.9;color:#444;">
+            🕐 Tu disposes de <strong>6 minutes</strong> pour répondre à toutes les questions (~45 secondes par question).<br>
+            📊 <strong>8 points au total</strong> : 5 QCM + 1 "Trouve l'erreur" + 2 textes à trous.<br>
+            🌟 <strong>7–8 pts → 3 étoiles</strong> &nbsp;|&nbsp; <strong>5–6 pts → 2 étoiles</strong> &nbsp;|&nbsp; <strong>≤ 4 pts → 1 étoile</strong><br>
+            💡 Les questions sont de niveau <strong>vrai examen CE1D belge</strong> : multi-étapes, pièges inclus.<br>
+            ⚡ <strong>Le chronomètre démarre maintenant !</strong>
+        </p>
+    </div>
+</div>
+
+
+<!-- ══ QCM ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">❓</div>
+        <div>
+            <div class="card-title">QCM — Problèmes multi-étapes</div>
+            <div class="card-sub">5 questions · Niveau vrai examen CE1D · ~45 s par question</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span>
+                Un appareil est affiché à <strong>250 € HTVA</strong>. Il bénéficie d'une <strong>remise de 12%</strong>,
+                puis la <strong>TVA de 21%</strong> est appliquée sur le prix réduit. Quel est le prix final TVAC ?
+            </div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">266,20 €</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">272,50 €</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">261 €</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">220 €</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span>
+                Sur une carte à l'échelle <strong>1/50 000</strong>, un terrain rectangulaire mesure <strong>2 cm × 1,5 cm</strong>.
+                Quelle est l'aire réelle du terrain en km² ?
+            </div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">0,003 km²</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">0,75 km²</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">15 km²</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">7,5 km²</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span>
+                Dans un atelier, <strong>3 ouvriers</strong> produisent <strong>180 pièces en 4 heures</strong>.
+                En supposant la productivité proportionnelle, combien de pièces <strong>5 ouvriers</strong> produisent-ils en <strong>6 heures</strong> ?
+            </div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">270</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">300</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">450</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">540</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span>
+                Un magasin propose <strong>15% de remise</strong> sur un article, puis <strong>10% supplémentaires</strong>
+                sur le montant déjà réduit. Quelle est la remise totale réelle par rapport au prix initial ?
+            </div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">25% (15+10)</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">23,5%</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">24%</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">26,5%</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span>
+                Un robinet A remplit un réservoir de <strong>600 L en 2 heures</strong>.
+                Un robinet B remplit le même réservoir <strong>en 3 heures</strong>.
+                Si les deux robinets sont ouverts simultanément, en combien de temps le réservoir est-il plein ?
+            </div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">2 h 30 min</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">1 h 12 min</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">1 h 30 min</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">1 h</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ TROUVE L'ERREUR ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon red">🔍</div>
+        <div>
+            <div class="card-title">Trouve l'erreur ! — Bonus +1 point</div>
+            <div class="card-sub">Identifie l'étape incorrecte dans le calcul de Théo</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="erreur-box">
+            <div class="erreur-title">🧮 Calcul de Théo — Prix TVAC après remise</div>
+            <p style="font-size:.9rem;color:#555;margin-bottom:14px;">
+                Théo calcule le prix TVAC d'un article à <strong>300 € HTVA</strong> avec une remise de <strong>20%</strong> et une TVA de <strong>21%</strong>.
+                Une étape est fausse — clique dessus !
+            </p>
+            <div class="erreur-steps">
+                <div class="erreur-step" id="es1" onclick="checkErreur(1)">
+                    <div class="step-num">1</div>
+                    <div>Remise = 300 × 20 ÷ 100 = <strong>60 €</strong></div>
+                </div>
+                <div class="erreur-step" id="es2" onclick="checkErreur(2)">
+                    <div class="step-num">2</div>
+                    <div>Prix après remise = 300 − 60 = <strong>240 € HTVA</strong></div>
+                </div>
+                <div class="erreur-step" id="es3" onclick="checkErreur(3)">
+                    <div class="step-num">3</div>
+                    <div>Prix TVAC = 240 + 21 = <strong>261 €</strong></div>
+                </div>
+                <div class="erreur-step" id="es4" onclick="checkErreur(4)">
+                    <div class="step-num">4</div>
+                    <div>Vérification : 300 × 0,80 × 1,21 = <strong>290,40 €</strong></div>
+                </div>
+            </div>
+            <div class="erreur-feedback" id="errFeedback"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ TEXTES À TROUS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous — Problèmes CE1D</div>
+            <div class="card-sub">2 exercices · Remise + TVA · Règle de trois · Multi-étapes</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1 — Remise + TVA en deux étapes</div>
+            <div class="fill-sentence">
+                Un appareil coûte 500 € HTVA. Remise 10%, puis TVA 21%.
+                Montant remise = 500 × 10/100 = <input class="blank" id="f1a" placeholder="?"> €.
+                Prix HTVA réduit = 500 − 50 = <input class="blank" id="f1b" placeholder="?"> €.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2 — Règle de trois multi-étapes</div>
+            <div class="fill-sentence">
+                Un train parcourt 360 km en 4 heures à vitesse constante.
+                Sa vitesse k = 360 ÷ 4 = <input class="blank" id="f2a" placeholder="?"> km/h.
+                En 6 heures, il parcourt k × 6 = <input class="blank" id="f2b" placeholder="?"> km.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ EXERCICES GUIDÉS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Problèmes CE1D — Corrigés complets</div>
+            <div class="card-sub">3 exercices · Multi-étapes · Niveau vrai examen · Révision finale</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- EX 1 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Facture complète (CE1D)</div>
+                <div class="ex-stmt">
+                    Un plombier facture sa prestation : <strong>3 heures de travail à 45 €/h HTVA</strong>,
+                    plus <strong>120 € de pièces HTVA</strong>, et un <strong>déplacement de 15 € HTVA</strong>.
+                    Une <strong>remise de 10%</strong> est accordée sur la main d'œuvre uniquement.
+                    La <strong>TVA de 21%</strong> est appliquée sur l'ensemble.<br>
+                    Quel est le montant total TVAC à payer ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-divider">Main d'œuvre</div>
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">3 h × 45 € = 135 € HTVA</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Remise 10% : 135 × 0,90 = <strong>121,50 € HTVA</strong></div></div>
+                <div class="sol-divider">Total HTVA</div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Total HTVA = 121,50 + 120 + 15 = <strong>256,50 €</strong></div></div>
+                <div class="sol-divider">TVA et TVAC</div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">TVA = 256,50 × 0,21 = 53,865 ≈ <strong>53,87 €</strong></div></div>
+                <div class="sol-step"><div class="sol-num">5</div><div class="sol-text">Prix TVAC = 256,50 × 1,21 = <strong>310,365 ≈ 310,37 €</strong></div></div>
+                <div class="final-ans">✅ Total à payer : <strong>310,37 € TVAC</strong>.</div>
+            </div>
+        </div>
+
+        <!-- EX 2 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Carte + pourcentage (CE1D)</div>
+                <div class="ex-stmt">
+                    Sur une carte à l'échelle <strong>1/25 000</strong>, une forêt est représentée par
+                    un rectangle de <strong>4 cm × 3 cm</strong>.<br>
+                    <strong>a)</strong> Quelle est la surface réelle de la forêt en km² ?<br>
+                    <strong>b)</strong> Si <strong>40%</strong> de la forêt est protégée, quelle superficie (en km²) peut-on exploiter ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-divider">a) Surface réelle</div>
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">1 cm → 25 000 cm = 250 m = 0,25 km</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Longueur réelle = 4 × 0,25 = 1 km</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Largeur réelle = 3 × 0,25 = 0,75 km</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">Surface réelle = 1 × 0,75 = <strong>0,75 km²</strong></div></div>
+                <div class="sol-divider">b) Surface exploitable (60%)</div>
+                <div class="sol-step"><div class="sol-num">5</div><div class="sol-text">Superficie protégée = 40% → exploitable = 100% − 40% = 60%</div></div>
+                <div class="sol-step"><div class="sol-num purple">✓</div><div class="sol-text">Surface exploitable = 0,75 × 0,60 = <strong>0,45 km²</strong></div></div>
+                <div class="final-ans">✅ Surface totale : <strong>0,75 km²</strong> · Surface exploitable : <strong>0,45 km²</strong>.</div>
+            </div>
+        </div>
+
+        <!-- EX 3 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Problème ouvert CE1D</div>
+                <div class="ex-stmt">
+                    Le prix d'un abonnement de train était <strong>480 € par an</strong> en 2022.
+                    Il a augmenté de <strong>8%</strong> en 2023, puis de <strong>5%</strong> en 2024.<br>
+                    <strong>a)</strong> Quel est le prix en 2024 ?<br>
+                    <strong>b)</strong> Quel est le taux d'augmentation total entre 2022 et 2024 ?<br>
+                    <strong>c)</strong> En 2025, le prix augmente encore. Le prix en 2025 est 600 €.
+                    Quel est le taux d'augmentation entre 2024 et 2025 (arrondi à 0,1%) ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-divider">a) Prix 2024</div>
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">2023 : 480 × 1,08 = 518,40 €</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">2024 : 518,40 × 1,05 = <strong>544,32 €</strong></div></div>
+                <div class="sol-divider">b) Taux global 2022 → 2024</div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Coefficient global = 1,08 × 1,05 = <strong>1,134</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">Taux global = 1,134 − 1 = 0,134 = <strong>+13,4%</strong> (pas 13% = 8+5 !)</div></div>
+                <div class="sol-divider">c) Taux 2024 → 2025</div>
+                <div class="sol-step"><div class="sol-num">5</div><div class="sol-text">Coefficient = 600 ÷ 544,32 ≈ 1,1023…</div></div>
+                <div class="sol-step"><div class="sol-num purple">✓</div><div class="sol-text">Taux ≈ 10,2% d'augmentation entre 2024 et 2025</div></div>
+                <div class="final-ans">✅ 2024 : <strong>544,32 €</strong> · Hausse totale : <strong>+13,4%</strong> · Hausse 2025 : <strong>≈ +10,2%</strong>.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ COMPLETION ══ -->
+<div class="completion" id="completionBanner">
+    <div class="stars" id="starsDisplay">🌟 🌟 🌟</div>
+    <h2 id="completionTitle">Défi CE1D réussi !</h2>
+    <div class="score-display" id="scoreDisplay">Score : 8 / 8</div>
+    <p id="completionMsg">Félicitations ! Tu es prêt(e) pour le CE1D !<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Proportionnalité</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_proportionnalite_niveau1.html" class="nav-btn">▶ Niveau 1 — Tableaux</a>
+        <a href="maths_proportionnalite_niveau2.html" class="nav-btn">▶ Niveau 2 — Pourcentages</a>
+        <a href="maths_proportionnalite_niveau3.html" class="nav-btn">▶ Niveau 3 — Échelles</a>
+        <a href="maths_proportionnalite_niveau4.html" class="nav-btn">▶ Niveau 4 — Remises &amp; TVA</a>
+        <a href="maths_proportionnalite_niveau5.html" class="nav-btn current">▶ Niveau 5 — Défi 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+/* ── Timer ── */
+const TIMER_TOTAL = 360; // 6 minutes
+let timerLeft = TIMER_TOTAL;
+let timerStopped = false;
+const timerStartTime = Date.now();
+
+function fmtTime(s) {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function tickTimer() {
+    if (timerStopped) return;
+    timerLeft = Math.max(0, TIMER_TOTAL - Math.floor((Date.now() - timerStartTime) / 1000));
+    const disp = document.getElementById('timerDisplay');
+    const bar  = document.getElementById('timerBar');
+    const pct  = (timerLeft / TIMER_TOTAL) * 100;
+
+    disp.textContent = fmtTime(timerLeft);
+    bar.style.width  = pct + '%';
+
+    disp.className = 'timer-display';
+    bar.className  = 'timer-bar-fill';
+    if (timerLeft <= 60) {
+        disp.classList.add('danger');
+        bar.classList.add('danger');
+    } else if (timerLeft <= 120) {
+        disp.classList.add('warn');
+        bar.classList.add('warn');
+    }
+
+    if (timerLeft <= 0) {
+        disp.textContent = '0:00';
+        lockAllRemaining();
+        return;
+    }
+    setTimeout(tickTimer, 1000);
+}
+
+function stopTimer() {
+    timerStopped = true;
+    document.getElementById('timerStopped').style.display = 'block';
+}
+
+function lockAllRemaining() {
+    [1,2,3,4,5].forEach(qNum => {
+        if (qcmDone[qNum]) return;
+        qcmDone[qNum] = true;
+        const btns = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+        btns.forEach(b => { b.disabled = true; b.classList.add('timed-out'); });
+        const fb = document.getElementById('qf' + qNum);
+        fb.textContent = '⏰ Temps écoulé pour cette question.';
+        fb.className   = 'q-feedback timeout';
+    });
+}
+
+tickTimer();
+
+/* ── QCM ── */
+const QCM_CORRECT = {1:0, 2:1, 3:2, 4:1, 5:1};
+
+const QCM_OK = {
+    1:"✅ Parfait ! 250 × 0,88 = 220 € HTVA réduit. 220 × 1,21 = 266,20 € TVAC. On peut aussi faire 250 × 0,88 × 1,21 en une seule ligne.",
+    2:"✅ Excellent ! 1 cm → 0,5 km. L = 2×0,5 = 1 km · l = 1,5×0,5 = 0,75 km. Aire = 1 × 0,75 = 0,75 km². (Attention : l'aire est en km², pas en cm² × n !)",
+    3:"✅ Bravo ! Productivité = 180 ÷ (3 × 4) = 15 pièces/ouvrier/heure. 5 ouvriers × 6 h × 15 = 450 pièces. Problème de double proportionnalité !",
+    4:"✅ Exact ! Coefficient global = 0,85 × 0,90 = 0,765 → remise réelle = 1 − 0,765 = 0,235 = 23,5%. (Pas 25% = 15+10, qui serait l'erreur classique !)",
+    5:"✅ Parfait ! Débit A = 300 L/h, débit B = 200 L/h. Débit total = 500 L/h. Temps = 600 ÷ 500 = 1,2 h = 72 min = 1 h 12 min."
+};
+
+const QCM_ERR = {
+    1:"❌ 250 × (1−0,12) = 250 × 0,88 = 220 € HTVA réduit. Puis 220 × 1,21 = 266,20 €. (272,50 = 250×1,09 ; 261 = 240+21 erreur d'addition ; 220 = oubli de la TVA.)",
+    2:"❌ Avec l'échelle 1/50 000 : 1 cm = 50 000 cm = 500 m = 0,5 km. L = 2×0,5 = 1 km, l = 1,5×0,5 = 0,75 km. Aire = 0,75 km². (Il faut appliquer l'échelle à CHAQUE dimension séparément.)",
+    3:"❌ Productivité par ouvrier/heure = 180÷(3×4) = 15 pièces. 5 ouvriers × 6 h × 15 = 450 pièces. (270 = 180×6÷4 oubli des 5 ouvriers ; 300 = 180×5÷3 oubli des heures.)",
+    4:"❌ Remises successives : coefficient = 0,85 × 0,90 = 0,765. Remise réelle = 23,5%. On ne peut PAS additionner 15%+10%=25%, car la 2ème remise s'applique sur un montant déjà réduit.",
+    5:"❌ Débit A = 600÷2 = 300 L/h. Débit B = 600÷3 = 200 L/h. Débit total = 500 L/h. Temps = 600÷500 = 1,2 h = 72 min = 1 h 12 min. (Les débits s'additionnent, pas les temps !)"
+};
+
+/* ── Trouve l'erreur ── */
+const ERREUR_BONNE = 3; // étape 3 est fausse : 240 + 21 au lieu de 240 × 1,21
+
+function checkErreur(step) {
+    if (erreurDone) return;
+    erreurDone = true;
+    const isOk = (step === ERREUR_BONNE);
+    [1,2,3,4].forEach(i => {
+        const el = document.getElementById('es' + i);
+        el.classList.add('locked');
+        el.onclick = null;
+    });
+    const chosen = document.getElementById('es' + step);
+    const fb = document.getElementById('errFeedback');
+    if (isOk) {
+        chosen.classList.add('correct-step');
+        chosen.querySelector('.step-num').classList.add('err');
+        fb.textContent = "✅ Bravo ! L'erreur est à l'étape 3 : Théo a ajouté 21 au lieu de calculer 21% de 240. Il fallait écrire 240 × 1,21 = 290,40 €, pas 240 + 21 = 261 €.";
+        fb.className = 'erreur-feedback show correct';
+        score++;
+        updateUI();
+    } else {
+        chosen.classList.add('wrong-step');
+        document.getElementById('es' + ERREUR_BONNE).classList.add('correct-step');
+        fb.textContent = "❌ Ce n'est pas cette étape. L'erreur est à l'étape 3 : Théo a écrit 240 + 21 = 261 € au lieu de 240 × 1,21 = 290,40 €. La TVA de 21% se multiplie, elle ne s'additionne pas !";
+        fb.className = 'erreur-feedback show wrong';
+    }
+    fb.style.display = 'block';
+}
+
+/* ── Fill in ── */
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['50'],['450']],
+        msgOk:"✅ Remise = 500 × 10/100 = 50 €. Prix HTVA réduit = 500 − 50 = 450 €. (Ensuite : 450 × 1,21 = 544,50 € TVAC.)",
+        msgErr:"❌ Attendus : 50 (car 500 × 10/100 = 50 €) et 450 (car 500 − 50 = 450 €)."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['90'],['540']],
+        msgOk:"✅ k = 360 ÷ 4 = 90 km/h. En 6 heures : 90 × 6 = 540 km. Proportionnalité directe : distance = vitesse × temps.",
+        msgErr:"❌ Attendus : 90 (car 360 ÷ 4 = 90 km/h) et 540 (car 90 × 6 = 540 km)."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+let erreurDone = false;
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+}
+
+function getStars(s) {
+    if (s >= 7) return { stars:'🌟 🌟 🌟', title:'Défi CE1D réussi !', msg:'Félicitations ! Tu maîtrises parfaitement la proportionnalité. Tu es prêt(e) pour le CE1D !' };
+    if (s >= 5) return { stars:'🌟 🌟', title:'Bon travail !', msg:'Tu y es presque ! Relis les pièges des niveaux 2, 3 et 4 pour consolider.' };
+    return { stars:'🌟', title:'Continue à t'entraîner !', msg:'Les bases sont là. Recommence les niveaux précédents pour mieux préparer le CE1D.' };
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 20;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        stopTimer();
+        localStorage.setItem('edu_completed_proportionnalite_5', '1');
+        const info = getStars(score);
+        document.getElementById('starsDisplay').textContent   = info.stars;
+        document.getElementById('completionTitle').textContent = info.title;
+        document.getElementById('completionMsg').innerHTML     = info.msg + '<br>Tu as gagné <strong id="finalXP">' + xp + '</strong> XP !';
+        document.getElementById('scoreDisplay').textContent    = 'Score : ' + score + ' / ' + TOTAL;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m);
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+document.querySelectorAll('.blank').forEach(input => {
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') checkFill(parseInt(input.id.charAt(1))); });
+});
+</script>
+</body>
+</html>

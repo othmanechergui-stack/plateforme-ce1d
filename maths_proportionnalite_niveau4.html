@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Proportionnalité · Niveau 4 — Remises et TVA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#A560D4; --primary-dark:#7C3DA6; --primary-mid:#B47FDC; --primary-bg:#F5EEFF;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#4A148C 0%,#A560D4 55%,#CE93D8 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(74,20,140,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#A560D4; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#7C3DA6; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#4A148C,#A560D4,#CE93D8); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.purple { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#4A148C,#7C3DA6); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#CE93D8; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .method-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0; }
+        @media(max-width:580px) { .method-grid { grid-template-columns:1fr; } }
+        .method-card { border:2.5px solid var(--primary); border-radius:12px; padding:14px 16px; background:var(--primary-bg); }
+        .method-card h4 { font-size:.85rem; font-weight:900; color:var(--primary-dark); margin-bottom:8px; text-transform:uppercase; letter-spacing:.5px; }
+        .method-card p  { font-size:.88rem; line-height:1.7; color:#444; }
+        .method-card code { background:rgba(165,96,212,.15); color:var(--primary-dark); }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .examples-row { display:flex; gap:12px; flex-wrap:wrap; margin:14px 0; }
+        .example-chip { background:var(--primary-bg); border:2px solid #CE93D8; border-radius:10px; padding:8px 16px; font-size:.95rem; font-weight:800; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .example-chip span { color:#888; font-size:.75rem; font-family:inherit; font-weight:700; display:block; text-align:center; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #CE93D8; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-num.purple { background:var(--primary); }
+        .sol-num.red { background:var(--red); }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .sol-divider { font-size:.78rem; font-weight:900; color:var(--primary-dark); text-transform:uppercase; letter-spacing:.7px; margin:14px 0 8px; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .completion { display:none; background:linear-gradient(135deg,#4A148C,#A560D4,#CE93D8); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #38006B; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+
+        @media(max-width:580px){ .header-inner{flex-direction:column;gap:8px} .opts{grid-template-columns:1fr} .card-body{padding:16px} }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🏷️ Proportionnalité · Remises &amp; TVA</h1>
+            <p>Niveau 4 · Remise · Augmentation · HTVA → TVAC · Remises successives</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 4 — Expert</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- ══ 1. LEÇON ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">📖</div>
+        <div>
+            <div class="card-title">La leçon — Remises, augmentations et TVA</div>
+            <div class="card-sub">Remise · Augmentation · Coefficient multiplicateur · HTVA/TVAC · Remises successives · Pièges</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Les remises, augmentations et la TVA sont des applications concrètes des pourcentages
+            que tu rencontres chaque jour : soldes en magasin, hausse de prix, facture d'électricité…
+            Au CE1D belge, ces calculs reviennent souvent dans des situations de la vie réelle.
+            L'astuce : utiliser le <strong>coefficient multiplicateur</strong> pour tout calculer en une seule étape !
+        </p>
+
+        <!-- REMISE -->
+        <div class="def-box">
+            <h3>🏷️ La remise (réduction)</h3>
+            <p>Une <strong>remise de p%</strong> signifie qu'on <strong>retire p%</strong> du prix initial.<br>
+            Prix final = Prix initial × (1 − p/100) = Prix initial × <strong>coefficient multiplicateur</strong><br><br>
+            Exemple : remise de <strong>20%</strong> → coefficient = 1 − 0,20 = <strong>0,80</strong><br>
+            → 150 € × 0,80 = <strong>120 €</strong> (en une seule multiplication !)</p>
+        </div>
+
+        <!-- AUGMENTATION -->
+        <div class="def-box" style="background:linear-gradient(135deg,#1B5E20,#2E7D32)">
+            <h3 style="color:#A5D6A7">📈 L'augmentation</h3>
+            <p>Une <strong>augmentation de p%</strong> signifie qu'on <strong>ajoute p%</strong> au prix initial.<br>
+            Prix final = Prix initial × (1 + p/100) = Prix initial × <strong>coefficient multiplicateur</strong><br><br>
+            Exemple : augmentation de <strong>8%</strong> → coefficient = 1 + 0,08 = <strong>1,08</strong><br>
+            → 200 € × 1,08 = <strong>216 €</strong></p>
+        </div>
+
+        <div class="method-grid">
+            <div class="method-card">
+                <h4>Remise → Coefficient &lt; 1</h4>
+                <p>−5% → <code>× 0,95</code><br>
+                −10% → <code>× 0,90</code><br>
+                −15% → <code>× 0,85</code><br>
+                −25% → <code>× 0,75</code><br>
+                −50% → <code>× 0,50</code></p>
+            </div>
+            <div class="method-card">
+                <h4>Augmentation → Coefficient &gt; 1</h4>
+                <p>+5% → <code>× 1,05</code><br>
+                +10% → <code>× 1,10</code><br>
+                +15% → <code>× 1,15</code><br>
+                +21% → <code>× 1,21</code> (TVA)<br>
+                +50% → <code>× 1,50</code></p>
+            </div>
+        </div>
+
+        <!-- SVG 1 : Ticket de caisse -->
+        <p style="font-size:.95rem;font-weight:900;color:var(--primary-dark);margin:20px 0 6px;">🧾 Ticket de caisse — Remise + TVA</p>
+
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 250" xmlns="http://www.w3.org/2000/svg" style="max-width:520px;width:100%">
+                <rect x="0" y="0" width="560" height="250" fill="#FAF0FF" rx="10"/>
+                <text x="280" y="22" text-anchor="middle" font-size="13" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">Ticket de caisse — Ordinateur 400 € HTVA, remise −20%, TVA 21%</text>
+
+                <!-- Ticket blanc -->
+                <rect x="140" y="32" width="280" height="208" fill="white" rx="6" stroke="#DDD" stroke-width="1.5"/>
+                <!-- Haut dentelé -->
+                <path d="M 140 38 Q 150 32 160 38 Q 170 44 180 38 Q 190 32 200 38 Q 210 44 220 38 Q 230 32 240 38 Q 250 44 260 38 Q 270 32 280 38 Q 290 44 300 38 Q 310 32 320 38 Q 330 44 340 38 Q 350 32 360 38 Q 370 44 380 38 Q 390 32 400 38 Q 410 44 420 38" fill="white" stroke="#DDD" stroke-width="1"/>
+
+                <text x="280" y="60" text-anchor="middle" font-size="12" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">🛒 ÉLECTRO SHOP</text>
+                <line x1="155" y1="67" x2="405" y2="67" stroke="#EEE" stroke-width="1.5"/>
+
+                <!-- Ligne article -->
+                <text x="160" y="85" font-size="11" fill="#555" font-family="Nunito,sans-serif">Ordinateur portable</text>
+                <text x="400" y="85" text-anchor="end" font-size="11" font-weight="700" fill="#3C3C3C" font-family="Courier New,monospace">400,00 €</text>
+
+                <!-- Remise -->
+                <text x="160" y="103" font-size="11" fill="#D32F2F" font-family="Nunito,sans-serif">Remise −20%</text>
+                <text x="400" y="103" text-anchor="end" font-size="11" font-weight="700" fill="#D32F2F" font-family="Courier New,monospace">−80,00 €</text>
+                <text x="165" y="115" font-size="9" fill="#888" font-family="Nunito,sans-serif">(400 × 0,20 = 80)</text>
+
+                <line x1="155" y1="122" x2="405" y2="122" stroke="#EEE" stroke-width="1.5"/>
+
+                <!-- HTVA -->
+                <text x="160" y="137" font-size="11" font-weight="900" fill="#555" font-family="Nunito,sans-serif">Total HTVA</text>
+                <text x="400" y="137" text-anchor="end" font-size="12" font-weight="900" fill="#4A148C" font-family="Courier New,monospace">320,00 €</text>
+                <text x="165" y="149" font-size="9" fill="#888" font-family="Nunito,sans-serif">(400 × 0,80 = 320)</text>
+
+                <!-- TVA -->
+                <text x="160" y="165" font-size="11" fill="#1565C0" font-family="Nunito,sans-serif">TVA 21%</text>
+                <text x="400" y="165" text-anchor="end" font-size="11" font-weight="700" fill="#1565C0" font-family="Courier New,monospace">+67,20 €</text>
+                <text x="165" y="177" font-size="9" fill="#888" font-family="Nunito,sans-serif">(320 × 0,21 = 67,20)</text>
+
+                <line x1="155" y1="183" x2="405" y2="183" stroke="#CCC" stroke-width="2"/>
+
+                <!-- TVAC -->
+                <rect x="148" y="187" width="260" height="26" fill="#F3E5F5" rx="4"/>
+                <text x="160" y="204" font-size="12" font-weight="900" fill="#4A148C" font-family="Nunito,sans-serif">TOTAL TVAC</text>
+                <text x="400" y="204" text-anchor="end" font-size="14" font-weight="900" fill="#7C3DA6" font-family="Courier New,monospace">387,20 €</text>
+
+                <!-- Bas dentelé -->
+                <path d="M 140 232 Q 150 238 160 232 Q 170 226 180 232 Q 190 238 200 232 Q 210 226 220 232 Q 230 238 240 232 Q 250 226 260 232 Q 270 238 280 232 Q 290 226 300 232 Q 310 238 320 232 Q 330 226 340 232 Q 350 238 360 232 Q 370 226 380 232 Q 390 238 400 232 Q 410 226 420 232" fill="white" stroke="#DDD" stroke-width="1"/>
+
+                <!-- Formule rapide -->
+                <rect x="14" y="230" width="120" height="14" fill="transparent"/>
+                <text x="17" y="242" font-size="9" fill="#7C3DA6" font-weight="900" font-family="Nunito,sans-serif">Formule rapide :</text>
+                <text x="17" y="254" font-size="9" fill="#555" font-family="Nunito,sans-serif">400 × 0,80 × 1,21 = 387,20 €</text>
+            </svg>
+        </div>
+
+        <!-- TVA -->
+        <div class="rule-box">
+            <h3>💰 La TVA — Taxe sur la Valeur Ajoutée</h3>
+            <p>En Belgique, la TVA standard est de <strong>21%</strong>.<br>
+            HTVA = prix <strong>H</strong>ors <strong>T</strong>axe sur la <strong>V</strong>aleur <strong>A</strong>joutée (prix sans taxe).<br>
+            TVAC = prix <strong>T</strong>outes <strong>T</strong>axes <strong>C</strong>omprises.<br><br>
+            Prix TVAC = Prix HTVA × <strong>1,21</strong><br>
+            Prix HTVA = Prix TVAC ÷ <strong>1,21</strong></p>
+        </div>
+
+        <!-- SVG 2 : Remises successives -->
+        <p style="font-size:.95rem;font-weight:900;color:var(--primary-dark);margin:20px 0 6px;">⚠️ Remises successives — Le grand piège !</p>
+
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 195" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="195" fill="#FFF8E1" rx="10"/>
+                <text x="280" y="20" text-anchor="middle" font-size="13" font-weight="900" fill="#E65100" font-family="Nunito,sans-serif">⚠️ Remises successives ≠ Remise totale</text>
+
+                <!-- Scénario A : −10% puis −10% -->
+                <rect x="14" y="28" width="250" height="152" fill="white" rx="8" stroke="#FFCC02" stroke-width="2"/>
+                <text x="139" y="47" text-anchor="middle" font-size="11" font-weight="900" fill="#E65100" font-family="Nunito,sans-serif">Scénario A : −10% puis −10%</text>
+
+                <rect x="50" y="55" width="60" height="30" fill="#4A148C" rx="5"/>
+                <text x="80" y="74" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Courier New,monospace">100 €</text>
+
+                <line x1="110" y1="70" x2="138" y2="70" stroke="#D32F2F" stroke-width="2"/>
+                <polygon points="138,70 131,65 131,75" fill="#D32F2F"/>
+                <text x="124" y="63" text-anchor="middle" font-size="9" font-weight="900" fill="#D32F2F" font-family="Nunito,sans-serif">×0,9</text>
+
+                <rect x="142" y="55" width="56" height="30" fill="#C62828" rx="5"/>
+                <text x="170" y="74" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Courier New,monospace">90 €</text>
+
+                <line x1="198" y1="70" x2="226" y2="70" stroke="#D32F2F" stroke-width="2"/>
+                <polygon points="226,70 219,65 219,75" fill="#D32F2F"/>
+                <text x="212" y="63" text-anchor="middle" font-size="9" font-weight="900" fill="#D32F2F" font-family="Nunito,sans-serif">×0,9</text>
+
+                <rect x="228" y="55" width="22" height="30" fill="#B71C1C" rx="4"/>
+                <text x="239" y="74" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Courier New,monospace">81</text>
+
+                <rect x="25" y="100" width="228" height="68" fill="#FFEBEE" rx="6"/>
+                <text x="139" y="116" text-anchor="middle" font-size="10" font-weight="900" fill="#B71C1C" font-family="Nunito,sans-serif">100 × 0,9 × 0,9 = 100 × 0,81 = 81 €</text>
+                <text x="139" y="131" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito,sans-serif">Ce n'est PAS −20% (qui donnerait 80 €) !</text>
+                <text x="139" y="149" text-anchor="middle" font-size="11" font-weight="900" fill="#B71C1C" font-family="Nunito,sans-serif">Remise réelle = 19% (pas 20%) !</text>
+                <text x="139" y="163" text-anchor="middle" font-size="9" fill="#888" font-family="Nunito,sans-serif">1 − 0,9 × 0,9 = 1 − 0,81 = 0,19 = 19%</text>
+
+                <!-- Scénario B : +10% puis −10% -->
+                <rect x="295" y="28" width="250" height="152" fill="white" rx="8" stroke="#66BB6A" stroke-width="2"/>
+                <text x="420" y="47" text-anchor="middle" font-size="11" font-weight="900" fill="#2E7D32" font-family="Nunito,sans-serif">Scénario B : +10% puis −10%</text>
+
+                <rect x="310" y="55" width="60" height="30" fill="#4A148C" rx="5"/>
+                <text x="340" y="74" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Courier New,monospace">100 €</text>
+
+                <line x1="370" y1="70" x2="398" y2="70" stroke="#2E7D32" stroke-width="2"/>
+                <polygon points="398,70 391,65 391,75" fill="#2E7D32"/>
+                <text x="384" y="63" text-anchor="middle" font-size="9" font-weight="900" fill="#2E7D32" font-family="Nunito,sans-serif">×1,1</text>
+
+                <rect x="402" y="55" width="56" height="30" fill="#2E7D32" rx="5"/>
+                <text x="430" y="74" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Courier New,monospace">110 €</text>
+
+                <line x1="458" y1="70" x2="486" y2="70" stroke="#D32F2F" stroke-width="2"/>
+                <polygon points="486,70 479,65 479,75" fill="#D32F2F"/>
+                <text x="472" y="63" text-anchor="middle" font-size="9" font-weight="900" fill="#D32F2F" font-family="Nunito,sans-serif">×0,9</text>
+
+                <rect x="488" y="55" width="30" height="30" fill="#B71C1C" rx="4"/>
+                <text x="503" y="74" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Courier New,monospace">99</text>
+
+                <rect x="306" y="100" width="228" height="68" fill="#FFEBEE" rx="6"/>
+                <text x="420" y="116" text-anchor="middle" font-size="10" font-weight="900" fill="#B71C1C" font-family="Nunito,sans-serif">100 × 1,1 × 0,9 = 100 × 0,99 = 99 €</text>
+                <text x="420" y="131" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito,sans-serif">+10% puis −10% ≠ revenir au départ !</text>
+                <text x="420" y="149" text-anchor="middle" font-size="11" font-weight="900" fill="#B71C1C" font-family="Nunito,sans-serif">On perd 1 € au total (−1%) !</text>
+                <text x="420" y="163" text-anchor="middle" font-size="9" fill="#888" font-family="Nunito,sans-serif">1,1 × 0,9 = 0,99 ≠ 1</text>
+            </svg>
+        </div>
+
+        <!-- PIÈGE -->
+        <div class="trap-box">
+            <h3>⚠️ Le grand piège — Les remises/augmentations successives</h3>
+            <p>Pour <strong>deux variations successives</strong> de coefficients k₁ et k₂ :<br>
+            Coefficient final = k₁ × k₂ (on <strong>multiplie</strong>, on n'additionne pas les pourcentages !)<br><br>
+            <strong>−10% puis −10%</strong> → 0,9 × 0,9 = 0,81 → remise réelle de <strong>19%</strong> (pas 20%)<br>
+            <strong>+10% puis −10%</strong> → 1,1 × 0,9 = 0,99 → on perd <strong>1%</strong> au final (pas 0% !)</p>
+        </div>
+
+        <!-- Exemples rapides -->
+        <p style="font-size:.9rem;font-weight:900;color:var(--primary-dark);margin:16px 0 8px;">📌 Réflexes à avoir</p>
+        <div class="examples-row">
+            <div class="example-chip">−20% sur 150 €<span>150 × 0,80 = 120 €</span></div>
+            <div class="example-chip">+8% sur 200 €<span>200 × 1,08 = 216 €</span></div>
+            <div class="example-chip">HTVA 80 € · TVA 21%<span>80 × 1,21 = 96,80 €</span></div>
+            <div class="example-chip">−10% puis −10%<span>× 0,81 → −19% réel</span></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 2. QCM ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon purple">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Remises · Augmentations · TVA · Pièges successifs · Style CE1D</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Un article coûte 150 €. Il est soldé à −20%. Quel est le prix final ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">120 €</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">130 €</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">30 € (la remise)</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">180 €</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Un salaire de 1 800 € est augmenté de 5%. Quel est le nouveau salaire ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">1 805 €</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">1 890 €</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">1 900 €</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">90 €</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Un appareil coûte 240 € HTVA. Avec une TVA de 21%, quel est le prix TVAC ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">240,21 €</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">261 €</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">290,40 €</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">50,40 € (TVA seule)</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> <strong>Piège !</strong> Un article à 100 € subit deux remises successives de 10% chacune. Quel est le prix final ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">80 € (−20% direct)</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">81 €</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">79 €</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">82 €</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> <strong>Piège !</strong> Un prix augmente de 10% en janvier, puis diminue de 10% en mars. Par rapport au prix initial, on obtient :</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Exactement le même prix → les deux variations s'annulent</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Un prix inférieur de 1% → on perd 1% du prix initial</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Un prix supérieur de 1% → on gagne 1%</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Un prix inférieur de 2%</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 3. TEXTES À TROUS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Remise · HTVA/TVAC · Remises successives</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1 — Coefficient multiplicateur d'une remise</div>
+            <div class="fill-sentence">
+                Un article à 80 € bénéficie d'une remise de 25%.
+                Coefficient = 1 − 25/100 = <input class="blank" id="f1a" placeholder="?"> /100 = 0,75.
+                Prix final = 80 × 0,75 = <input class="blank" id="f1b" placeholder="?"> €.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2 — Calcul HTVA → TVAC</div>
+            <div class="fill-sentence">
+                Un article vaut 200 € HTVA. TVA = 10%.
+                Prix TVAC = 200 × <input class="blank" id="f2a" placeholder="?"> ÷ 100 = <input class="blank" id="f2b" placeholder="?"> €.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3 — Remises successives</div>
+            <div class="fill-sentence">
+                Article à 100 €, deux remises de 10% chacune.
+                Après 1ère remise : 100 × 0,9 = <input class="blank" id="f3a" placeholder="?"> €.
+                Après 2ème remise : 90 × 0,9 = <input class="blank" id="f3b" placeholder="?"> €.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ 4. EXERCICES GUIDÉS ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices — Remises, TVA, variations — Corrigés détaillés</div>
+            <div class="card-sub">3 exercices · Ticket de caisse · Augmentations · Piège classique CE1D</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- EX 1 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Ticket de caisse (CE1D)</div>
+                <div class="ex-stmt">
+                    Dans un magasin, un ordinateur est affiché à <strong>400 € HTVA</strong> avec une <strong>remise de 20%</strong>.<br>
+                    <strong>a)</strong> Quel est le prix après remise (HTVA) ?<br>
+                    <strong>b)</strong> La TVA belge est de 21%. Quel est le prix final TVAC ?<br>
+                    <strong>c)</strong> En une seule opération, calcule directement le prix TVAC depuis le prix initial.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-divider">a) Prix après remise</div>
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Coefficient remise −20% : 1 − 0,20 = <strong>0,80</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Prix HTVA après remise = 400 × 0,80 = <strong>320 €</strong></div></div>
+                <div class="sol-divider">b) Prix TVAC</div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Coefficient TVA +21% : 1 + 0,21 = <strong>1,21</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">Montant TVA = 320 × 0,21 = 67,20 €</div></div>
+                <div class="sol-step"><div class="sol-num">5</div><div class="sol-text">Prix TVAC = 320 + 67,20 = <strong>387,20 €</strong></div></div>
+                <div class="sol-divider">c) En une seule opération</div>
+                <div class="sol-step"><div class="sol-num purple">✓</div><div class="sol-text">400 × 0,80 × 1,21 = 400 × 0,968 = <strong>387,20 €</strong> ✓ (on multiplie les coefficients)</div></div>
+                <div class="final-ans">✅ Prix HTVA après remise : <strong>320 €</strong> · Prix TVAC : <strong>387,20 €</strong>.</div>
+            </div>
+        </div>
+
+        <!-- EX 2 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Augmentations successives (CE1D)</div>
+                <div class="ex-stmt">
+                    Un abonnement coûtait <strong>50 € par mois</strong> en janvier.<br>
+                    Il a augmenté de <strong>10%</strong> en mars, puis de <strong>5%</strong> en septembre.<br>
+                    <strong>a)</strong> Quel est le prix après l'augmentation de mars ?<br>
+                    <strong>b)</strong> Quel est le prix après l'augmentation de septembre ?<br>
+                    <strong>c)</strong> Quel est le taux d'augmentation global sur l'année ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-divider">a) Après +10%</div>
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">50 × 1,10 = <strong>55 €</strong></div></div>
+                <div class="sol-divider">b) Après +5%</div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">55 × 1,05 = <strong>57,75 €</strong></div></div>
+                <div class="sol-divider">c) Taux global</div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Coefficient global = 1,10 × 1,05 = <strong>1,155</strong></div></div>
+                <div class="sol-step"><div class="sol-num purple">✓</div><div class="sol-text">Vérif : 50 × 1,155 = 57,75 € ✓. Taux global = 15,5% (pas 15% = 10+5 !)</div></div>
+                <div class="final-ans">✅ Mars : <strong>55 €</strong> · Septembre : <strong>57,75 €</strong> · Augmentation totale : <strong>+15,5%</strong>.</div>
+            </div>
+        </div>
+
+        <!-- EX 3 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Le piège du +20% / −20% (CE1D)</div>
+                <div class="ex-stmt">
+                    Le prix d'un billet de concert était <strong>200 €</strong>.<br>
+                    En janvier, il <strong>augmente de 20%</strong>. En juillet, il <strong>diminue de 20%</strong>.<br>
+                    <strong>a)</strong> Quel est le prix après l'augmentation de janvier ?<br>
+                    <strong>b)</strong> Quel est le prix après la réduction de juillet ?<br>
+                    <strong>c)</strong> A-t-on retrouvé le prix initial ? Explique.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-divider">a) Après +20%</div>
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">200 × 1,20 = <strong>240 €</strong></div></div>
+                <div class="sol-divider">b) Après −20%</div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">240 × 0,80 = <strong>192 €</strong></div></div>
+                <div class="sol-divider">c) Explication</div>
+                <div class="sol-step"><div class="sol-num red">!</div><div class="sol-text">Non ! 192 € ≠ 200 €. On a <strong>perdu 8 €</strong> (−4% du prix initial).</div></div>
+                <div class="sol-step"><div class="sol-num purple">✓</div><div class="sol-text">Coefficient global = 1,20 × 0,80 = <strong>0,96</strong> → réduction nette de 4%.</div></div>
+                <div class="sol-step"><div class="sol-num purple">✓</div><div class="sol-text">Pourquoi ? La baisse de 20% s'applique sur 240 € (plus grand), donc enlève 48 €, pas 40 €.</div></div>
+                <div class="final-ans">✅ Jan : <strong>240 €</strong> · Juil : <strong>192 €</strong> · Non, on perd 8 € (−4%), car +20% puis −20% ≠ 0% net !</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ══ COMPLETION ══ -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 4 terminé !</h2>
+    <p>Excellent ! Tu maîtrises les remises, augmentations, la TVA et les pièges des variations successives.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Un dernier effort : le Défi CE1D !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Proportionnalité</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_proportionnalite_niveau1.html" class="nav-btn">▶ Niveau 1 — Tableaux</a>
+        <a href="maths_proportionnalite_niveau2.html" class="nav-btn">▶ Niveau 2 — Pourcentages</a>
+        <a href="maths_proportionnalite_niveau3.html" class="nav-btn">▶ Niveau 3 — Échelles</a>
+        <a href="maths_proportionnalite_niveau4.html" class="nav-btn current">▶ Niveau 4 — Remises &amp; TVA</a>
+        <span class="nav-btn locked">🔒 Niveau 5</span>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:1, 3:2, 4:1, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! Remise −20% : coefficient = 0,80. 150 × 0,80 = 120 €. En une étape : prix final = prix × (1 − taux).",
+    2:"✅ Parfait ! Augmentation +5% : coefficient = 1,05. 1 800 × 1,05 = 1 890 €. (1 805 serait 1 800 + 5, une erreur d'addition !)",
+    3:"✅ Bravo ! TVA 21% : coefficient = 1,21. 240 × 1,21 = 290,40 €. La TVA = 240 × 0,21 = 50,40 €, et 240 + 50,40 = 290,40 € ✓",
+    4:"✅ Excellent ! Deux remises de 10% : 100 × 0,9 × 0,9 = 100 × 0,81 = 81 €. Ce n'est PAS 80 € (−20% direct) !",
+    5:"✅ Très bien ! 100 × 1,10 × 0,90 = 100 × 0,99 = 99 €. +10% puis −10% donne −1% net, car la baisse s'applique sur un montant plus élevé."
+};
+
+const QCM_ERR = {
+    1:"❌ Remise −20% : on retire 20% → 150 × 20/100 = 30 € de réduction. Prix final = 150 − 30 = 120 €. (130 = 150−20, erreur d'arithmétique ; 180 = 150+30, c'est une augmentation !)",
+    2:"❌ Augmentation +5% : coefficient = 1 + 0,05 = 1,05. 1 800 × 1,05 = 1 890 €. (1 805 = 1 800+5 est une erreur classique d'addition du taux ; 1 900 = 1 800+100 est 100/1800 ≈ 5,5%.)",
+    3:"❌ TVA 21% : prix TVAC = HTVA × 1,21. 240 × 1,21 = 290,40 €. (240,21 = confusion avec 240+0,21 ; 261 = 240+21 sans diviser par 100.)",
+    4:"❌ Le piège ! −10% puis −10% ≠ −20%. Calcul : 100 × 0,9 × 0,9 = 81 €. La deuxième remise de 10% s'applique sur 90 €, pas sur 100 €.",
+    5:"❌ +10% puis −10% ne s'annulent pas ! 100 × 1,1 × 0,9 = 100 × 0,99 = 99 €. On perd 1% car la baisse de 10% s'applique sur 110 € (enlève 11 €), pas sur 100 € (qui enlèverait 10 €)."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['75'],['60']],
+        msgOk:"✅ 1 − 25/100 = 75/100 = 0,75. Prix final = 80 × 0,75 = 60 €. Le coefficient 0,75 résume la remise en une seule étape !",
+        msgErr:"❌ Attendus : 75 (car 100 − 25 = 75, donc coeff = 0,75) et 60 (car 80 × 0,75 = 60 €)."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['110'],['220']],
+        msgOk:"✅ TVA 10% → coefficient = 1 + 10/100 = 110/100 = 1,10. Prix TVAC = 200 × 110 ÷ 100 = 220 €.",
+        msgErr:"❌ Attendus : 110 (car 100 + 10 = 110, le coefficient ×1,10) et 220 (car 200 × 1,10 = 220 €)."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['90'],['81']],
+        msgOk:"✅ 100 × 0,9 = 90 €. Puis 90 × 0,9 = 81 €. Deux remises de 10% donnent 19% de réduction (pas 20%) !",
+        msgErr:"❌ Attendus : 90 (car 100 × 0,9 = 90) et 81 (car 90 × 0,9 = 81). Ce n'est pas 80 (qui serait −20% d'un coup)."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_proportionnalite_4', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m);
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+document.querySelectorAll('.blank').forEach(input => {
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') checkFill(parseInt(input.id.charAt(1))); });
+});
+</script>
+</body>
+</html>
