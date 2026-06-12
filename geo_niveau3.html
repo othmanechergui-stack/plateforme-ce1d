@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Géométrie · Angles — Niveau 3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#1E88E5; --primary-dark:#1565C0; --primary-mid:#42A5F5; --primary-bg:#E3F2FD;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#0D47A1 0%,#1E88E5 55%,#90CAF9 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(13,71,161,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#1E88E5; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#1565C0; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#0D47A1,#1E88E5,#90CAF9); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.primary { background:var(--primary-bg); }
+        .card-icon.green   { background:var(--green-bg); }
+        .card-icon.orange  { background:var(--orange-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#0D47A1,#1565C0); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:11px; margin:16px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:12px; padding:11px 13px; text-align:center; }
+        .cas-title { font-size:.83rem; font-weight:900; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-val   { font-size:1.15rem; font-weight:900; color:var(--primary-dark); font-family:'Courier New',monospace; margin-bottom:3px; }
+        .cas-desc  { font-size:.76rem; color:#555; line-height:1.4; }
+
+        .examples-row { display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
+        .example-chip { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:10px; padding:8px 16px; font-size:.93rem; font-weight:800; color:var(--primary-dark); }
+        .example-chip span { color:#888; font-size:.75rem; font-weight:700; display:block; text-align:center; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* QCM */
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct      { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong        { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        /* Fill */
+        .fill-item { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:140px; outline:none; }
+        .blank.sm { width:70px; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* Exercises */
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* Bonus */
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        /* Completion */
+        .completion { display:none; background:linear-gradient(135deg,#0D47A1,#1E88E5,#90CAF9); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #0a3580; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        /* Level nav */
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover   { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>📐 Géométrie · Les Angles</h1>
+            <p>Niveau 3 · Types · Mesure · Propriétés dans les figures</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 3 — Avancé</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════════════════
+     1. LEÇON
+════════════════════════════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon primary">📖</div>
+        <div>
+            <div class="card-title">La leçon — Les angles</div>
+            <div class="card-sub">Types · Mesure en degrés · Complémentaires & supplémentaires · Sommes dans les figures</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Un <strong>angle</strong> est formé par deux demi-droites (les <em>côtés</em>) qui partent d'un même point (le <em>sommet</em>).
+            On le mesure en <strong>degrés (°)</strong> à l'aide d'un rapporteur.
+            Les angles sont partout : dans les triangles, les quadrilatères, et entre les droites.
+        </p>
+
+        <!-- Types d'angles -->
+        <div class="def-box">
+            <h3>📌 Les 6 types d'angles à connaître</h3>
+            <p>
+                <strong>Angle nul</strong> : 0° — les deux côtés sont confondus.<br>
+                <strong>Angle aigu</strong> : entre 0° et 90° (exclus).<br>
+                <strong>Angle droit</strong> : exactement <strong>90°</strong> — noté avec un petit carré.<br>
+                <strong>Angle obtus</strong> : entre 90° et 180° (exclus).<br>
+                <strong>Angle plat</strong> : exactement <strong>180°</strong> — les deux côtés forment une droite.<br>
+                <strong>Angle plein</strong> : exactement <strong>360°</strong> — tour complet.
+            </p>
+        </div>
+
+        <!-- Grille visuelle des types -->
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-val">0°</div>
+                <div class="cas-title">Nul</div>
+                <div class="cas-desc">Côtés confondus</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-val">0°–90°</div>
+                <div class="cas-title">Aigu</div>
+                <div class="cas-desc">Plus petit qu'un droit</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-val">90°</div>
+                <div class="cas-title">Droit</div>
+                <div class="cas-desc">Carré dans le coin ∟</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-val">90°–180°</div>
+                <div class="cas-title">Obtus</div>
+                <div class="cas-desc">Plus grand qu'un droit</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-val">180°</div>
+                <div class="cas-title">Plat</div>
+                <div class="cas-desc">Forme une droite</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-val">360°</div>
+                <div class="cas-title">Plein</div>
+                <div class="cas-desc">Tour complet</div>
+            </div>
+        </div>
+
+        <!-- SVG 1 : Types d'angles visuels -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect width="560" height="200" fill="#EEF5FF" rx="10"/>
+                <text x="280" y="20" text-anchor="middle" font-size="13" font-weight="900" fill="#0D47A1" font-family="Nunito">Types d'angles</text>
+
+                <!-- Angle aigu (~40°) -->
+                <line x1="40" y1="150" x2="110" y2="150" stroke="#1E88E5" stroke-width="2.5"/>
+                <line x1="40" y1="150" x2="78"  y2="85"  stroke="#1E88E5" stroke-width="2.5"/>
+                <path d="M 65 150 A 25 25 0 0 0 55 125" stroke="#C62828" stroke-width="1.8" fill="none"/>
+                <text x="75" y="138" font-size="11" font-weight="700" fill="#C62828" font-family="Nunito">40°</text>
+                <circle cx="40" cy="150" r="3" fill="#0D47A1"/>
+                <text x="75" y="175" text-anchor="middle" font-size="11" font-weight="900" fill="#1565C0" font-family="Nunito">Aigu</text>
+
+                <!-- Angle droit (90°) -->
+                <line x1="175" y1="150" x2="255" y2="150" stroke="#1E88E5" stroke-width="2.5"/>
+                <line x1="175" y1="150" x2="175" y2="75"  stroke="#1E88E5" stroke-width="2.5"/>
+                <rect x="175" y="140" width="12" height="12" fill="none" stroke="#C62828" stroke-width="2"/>
+                <circle cx="175" cy="150" r="3" fill="#0D47A1"/>
+                <text x="215" y="130" font-size="11" font-weight="700" fill="#C62828" font-family="Nunito">90°</text>
+                <text x="215" y="175" text-anchor="middle" font-size="11" font-weight="900" fill="#1565C0" font-family="Nunito">Droit ∟</text>
+
+                <!-- Angle obtus (~125°) -->
+                <line x1="300" y1="150" x2="390" y2="150" stroke="#1E88E5" stroke-width="2.5"/>
+                <line x1="300" y1="150" x2="258" y2="92"  stroke="#1E88E5" stroke-width="2.5"/>
+                <path d="M 330 150 A 30 30 0 0 0 305 123" stroke="#C62828" stroke-width="1.8" fill="none"/>
+                <text x="295" y="130" font-size="11" font-weight="700" fill="#C62828" font-family="Nunito">125°</text>
+                <circle cx="300" cy="150" r="3" fill="#0D47A1"/>
+                <text x="325" y="175" text-anchor="middle" font-size="11" font-weight="900" fill="#1565C0" font-family="Nunito">Obtus</text>
+
+                <!-- Angle plat (180°) -->
+                <line x1="415" y1="130" x2="545" y2="130" stroke="#1E88E5" stroke-width="2.5"/>
+                <polygon points="545,130 535,125 535,135" fill="#1E88E5"/>
+                <polygon points="415,130 425,125 425,135" fill="#1E88E5"/>
+                <path d="M 464 130 A 16 16 0 0 0 496 130" stroke="#C62828" stroke-width="1.8" fill="none"/>
+                <text x="480" y="120" font-size="11" font-weight="700" fill="#C62828" font-family="Nunito">180°</text>
+                <circle cx="480" cy="130" r="3" fill="#0D47A1"/>
+                <text x="480" y="175" text-anchor="middle" font-size="11" font-weight="900" fill="#1565C0" font-family="Nunito">Plat</text>
+
+                <text x="280" y="197" text-anchor="middle" font-size="10" fill="#888" font-family="Nunito">Aigu &lt; 90° · Droit = 90° · Obtus entre 90° et 180° · Plat = 180°</text>
+            </svg>
+        </div>
+
+        <!-- Angles complémentaires et supplémentaires -->
+        <div class="rule-box">
+            <h3>➕ Angles complémentaires &amp; supplémentaires</h3>
+            <p>
+                Deux angles sont <strong>complémentaires</strong> si leur somme vaut <strong>90°</strong>.<br>
+                Exemple : 35° et 55° sont complémentaires (35 + 55 = 90).<br><br>
+                Deux angles sont <strong>supplémentaires</strong> si leur somme vaut <strong>180°</strong>.<br>
+                Exemple : 70° et 110° sont supplémentaires (70 + 110 = 180).
+            </p>
+        </div>
+
+        <!-- SVG 2 : Angles dans les figures -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 240" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect width="560" height="240" fill="#EEF5FF" rx="10"/>
+                <text x="280" y="20" text-anchor="middle" font-size="13" font-weight="900" fill="#0D47A1" font-family="Nunito">Somme des angles dans les figures</text>
+
+                <!-- Triangle ABC — somme = 180° -->
+                <polygon points="80,180 200,180 140,65" fill="#BBDEFB" stroke="#1565C0" stroke-width="2"/>
+                <!-- Angles marqués -->
+                <path d="M 100 180 A 22 22 0 0 1 116 167" stroke="#C62828" stroke-width="1.8" fill="none"/>
+                <text x="108" y="168" font-size="10" font-weight="700" fill="#C62828" font-family="Nunito">50°</text>
+                <path d="M 180 180 A 22 22 0 0 0 168 165" stroke="#2E7D32" stroke-width="1.8" fill="none"/>
+                <text x="158" y="168" font-size="10" font-weight="700" fill="#2E7D32" font-family="Nunito">70°</text>
+                <path d="M 133 82 A 15 15 0 0 1 148 82" stroke="#1565C0" stroke-width="1.8" fill="none"/>
+                <text x="132" y="98" font-size="10" font-weight="700" fill="#1565C0" font-family="Nunito">60°</text>
+                <text x="140" y="210" text-anchor="middle" font-size="12" font-weight="900" fill="#0D47A1" font-family="Nunito">Triangle</text>
+                <text x="140" y="228" text-anchor="middle" font-size="11" fill="#333" font-family="Nunito">50° + 70° + 60° = 180°</text>
+
+                <!-- Quadrilatère ABCD — somme = 360° -->
+                <polygon points="280,65 440,65 460,185 260,185" fill="#BBDEFB" stroke="#1565C0" stroke-width="2"/>
+                <path d="M 298 65 A 18 18 0 0 1 296 83" stroke="#C62828" stroke-width="1.8" fill="none"/>
+                <text x="303" y="82" font-size="10" font-weight="700" fill="#C62828" font-family="Nunito">80°</text>
+                <path d="M 424 65 A 18 18 0 0 1 440 80" stroke="#2E7D32" stroke-width="1.8" fill="none"/>
+                <text x="428" y="88" font-size="10" font-weight="700" fill="#2E7D32" font-family="Nunito">105°</text>
+                <path d="M 448 170 A 18 18 0 0 1 430 182" stroke="#1565C0" stroke-width="1.8" fill="none"/>
+                <text x="432" y="177" font-size="10" font-weight="700" fill="#1565C0" font-family="Nunito">95°</text>
+                <path d="M 278 175 A 18 18 0 0 0 267 162" stroke="#F57F17" stroke-width="1.8" fill="none"/>
+                <text x="261" y="172" font-size="10" font-weight="700" fill="#F57F17" font-family="Nunito">80°</text>
+                <text x="370" y="210" text-anchor="middle" font-size="12" font-weight="900" fill="#0D47A1" font-family="Nunito">Quadrilatère</text>
+                <text x="370" y="228" text-anchor="middle" font-size="11" fill="#333" font-family="Nunito">80°+105°+95°+80° = 360°</text>
+            </svg>
+        </div>
+
+        <!-- Sommes dans les figures -->
+        <div class="def-box">
+            <h3>📌 Sommes des angles dans les figures</h3>
+            <p>
+                Dans tout <strong>triangle</strong> : somme des 3 angles = <strong>180°</strong>.<br>
+                Dans tout <strong>quadrilatère</strong> : somme des 4 angles = <strong>360°</strong>.<br>
+                Dans tout <strong>pentagone</strong> : somme = 540°.<br>
+                Formule générale pour un polygone à n côtés : somme = <strong>(n − 2) × 180°</strong>
+            </p>
+        </div>
+
+        <!-- Angles et droites parallèles -->
+        <div class="rule-box">
+            <h3>🔀 Angles formés par deux droites parallèles coupées par une sécante</h3>
+            <p>
+                Quand une sécante coupe deux droites parallèles, elle forme des paires d'angles spéciaux :<br>
+                — <strong>Angles alternes-internes</strong> : de part et d'autre de la sécante, entre les parallèles → <strong>égaux</strong>.<br>
+                — <strong>Angles correspondants</strong> : du même côté de la sécante, l'un interne l'autre externe → <strong>égaux</strong>.<br>
+                — <strong>Angles co-internes</strong> : du même côté de la sécante, tous deux entre les parallèles → <strong>supplémentaires (somme 180°)</strong>.
+            </p>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Pièges classiques au CE1D</h3>
+            <p>
+                <strong>1.</strong> « La somme des angles d'un triangle = 180°, pas 360° ! » → 360° c'est pour les quadrilatères.<br>
+                <strong>2.</strong> Un angle <em>obtus</em> n'est pas forcément grand. 91° est obtus, 179° aussi.<br>
+                <strong>3.</strong> Complémentaires (90°) ≠ Supplémentaires (180°) : relis les définitions si tu confonds.
+            </p>
+        </div>
+
+        <div class="examples-row">
+            <div class="example-chip">Aigu 35°<span>35° + 55° = 90° → complémentaires</span></div>
+            <div class="example-chip">Obtus 120°<span>120° + 60° = 180° → supplémentaires</span></div>
+            <div class="example-chip">Triangle 60°/70°/?<span>180°−60°−70° = 50°</span></div>
+            <div class="example-chip">Quadrilatère<span>4 angles dont somme = 360°</span></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     2. QCM
+════════════════════════════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧠</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · +1 point par bonne réponse</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Q1 : correct = 0 -->
+        <div class="qcm-item">
+            <div class="q-text"><span class="q-num">1</span>Quelle est la somme des angles d'un triangle ?</div>
+            <div class="opts short" id="opts1">
+                <button class="opt-btn" onclick="checkQCM(1,0)">A) 180°</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">B) 360°</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">C) 90°</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">D) 270°</button>
+            </div>
+            <div class="q-feedback" id="fb1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q2 : correct = 2 -->
+        <div class="qcm-item">
+            <div class="q-text"><span class="q-num">2</span>Un angle obtus, c'est un angle qui mesure…</div>
+            <div class="opts" id="opts2">
+                <button class="opt-btn" onclick="checkQCM(2,0)">A) Exactement 90°</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">B) Moins de 90°</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">C) Plus de 90° et moins de 180°</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">D) Exactement 180°</button>
+            </div>
+            <div class="q-feedback" id="fb2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q3 : correct = 2 -->
+        <div class="qcm-item">
+            <div class="q-text"><span class="q-num">3</span>Dans un quadrilatère quelconque, quelle est la somme de tous ses angles ?</div>
+            <div class="opts short" id="opts3">
+                <button class="opt-btn" onclick="checkQCM(3,0)">A) 180°</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">B) 270°</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">C) 360°</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">D) 540°</button>
+            </div>
+            <div class="q-feedback" id="fb3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q4 : correct = 1 -->
+        <div class="qcm-item">
+            <div class="q-text"><span class="q-num">4</span>Deux angles sont complémentaires si leur somme est…</div>
+            <div class="opts short" id="opts4">
+                <button class="opt-btn" onclick="checkQCM(4,0)">A) 180°</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">B) 90°</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">C) 360°</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">D) 45°</button>
+            </div>
+            <div class="q-feedback" id="fb4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q5 : correct = 2 -->
+        <div class="qcm-item">
+            <div class="q-text"><span class="q-num">5</span>Dans un triangle, deux angles mesurent 55° et 75°. Quelle est la mesure du troisième angle ?</div>
+            <div class="opts short" id="opts5">
+                <button class="opt-btn" onclick="checkQCM(5,0)">A) 130°</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">B) 70°</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">C) 50°</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">D) 60°</button>
+            </div>
+            <div class="q-feedback" id="fb5"></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     3. TEXTES À TROUS
+════════════════════════════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon primary">✏️</div>
+        <div>
+            <div class="card-title">Complète les phrases</div>
+            <div class="card-sub">3 trous · Tape le mot ou le nombre manquant</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Trou 1 -->
+        <div class="fill-item" id="fi1">
+            <span class="fill-num">Trou 1</span>
+            <div class="fill-sentence">
+                Deux angles dont la somme vaut 90° sont appelés
+                <input class="blank" id="f1a" placeholder="…">.
+                Deux angles dont la somme vaut 180° sont appelés
+                <input class="blank" id="f1b" placeholder="…">.
+            </div>
+            <button class="verify-btn" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <!-- Trou 2 -->
+        <div class="fill-item" id="fi2">
+            <span class="fill-num">Trou 2</span>
+            <div class="fill-sentence">
+                Dans un triangle, un angle mesure 60° et un autre mesure 80°.
+                Le troisième mesure <input class="blank sm" id="f2a" placeholder="?">°.
+                La somme des trois angles d'un triangle vaut toujours
+                <input class="blank sm" id="f2b" placeholder="?">°.
+            </div>
+            <button class="verify-btn" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <!-- Trou 3 -->
+        <div class="fill-item" id="fi3">
+            <span class="fill-num">Trou 3</span>
+            <div class="fill-sentence">
+                Deux droites parallèles coupées par une sécante forment des angles alternes-internes qui sont
+                <input class="blank" id="f3a" placeholder="…">.
+                Un angle droit mesure <input class="blank sm" id="f3b" placeholder="?">°.
+            </div>
+            <button class="verify-btn" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     4. EXERCICES GUIDÉS
+════════════════════════════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">🔍</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices · Clique sur "Solution" pour voir les étapes</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Ex 1 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Angle manquant dans un triangle</div>
+                <div class="ex-stmt">
+                    Un triangle a deux angles mesurant 48° et 67°.<br>
+                    a) Calcule le troisième angle.<br>
+                    b) Classe ce triangle selon ses angles (aigu, rectangle ou obtusangle).
+                </div>
+            </div>
+            <button class="reveal-btn" id="rbtn1" onclick="toggleSol(1)">Solution <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step">
+                    <div class="sol-num">1</div>
+                    <div class="sol-text"><strong>Somme des angles d'un triangle = 180°</strong><br>Troisième angle = 180° − 48° − 67° = 180° − 115° = <strong>65°</strong></div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">2</div>
+                    <div class="sol-text"><strong>Classification :</strong> les trois angles sont 48°, 67° et 65°. Ils sont tous inférieurs à 90° → triangle <strong>acutangle</strong> (tous les angles sont aigus).</div>
+                </div>
+                <div class="final-ans">✅ Troisième angle = 65° · Triangle acutangle</div>
+            </div>
+        </div>
+
+        <!-- Ex 2 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Complémentaires &amp; supplémentaires</div>
+                <div class="ex-stmt">
+                    a) Un angle mesure 38°. Quel est son angle complémentaire ?<br>
+                    b) Un angle mesure 112°. Quel est son angle supplémentaire ?<br>
+                    c) Deux angles supplémentaires sont dans le rapport 2 : 3. Quelle est la mesure de chacun ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rbtn2" onclick="toggleSol(2)">Solution <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step">
+                    <div class="sol-num">1</div>
+                    <div class="sol-text"><strong>a) Complémentaire de 38° :</strong> 90° − 38° = <strong>52°</strong></div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">2</div>
+                    <div class="sol-text"><strong>b) Supplémentaire de 112° :</strong> 180° − 112° = <strong>68°</strong></div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">3</div>
+                    <div class="sol-text"><strong>c) Rapport 2:3, somme = 180° :</strong> 2 + 3 = 5 parts. 1 part = 180° ÷ 5 = 36°. Angles = 2 × 36° = <strong>72°</strong> et 3 × 36° = <strong>108°</strong>. Vérif : 72 + 108 = 180 ✓</div>
+                </div>
+                <div class="final-ans">✅ a) 52° · b) 68° · c) 72° et 108°</div>
+            </div>
+        </div>
+
+        <!-- Ex 3 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Angle manquant dans un quadrilatère</div>
+                <div class="ex-stmt">
+                    Un quadrilatère a trois angles mesurant 85°, 110° et 92°.<br>
+                    a) Calcule le quatrième angle.<br>
+                    b) Ce quadrilatère peut-il être un rectangle ? Justifie.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rbtn3" onclick="toggleSol(3)">Solution <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step">
+                    <div class="sol-num">1</div>
+                    <div class="sol-text"><strong>Somme des angles d'un quadrilatère = 360°</strong><br>4ème angle = 360° − 85° − 110° − 92° = 360° − 287° = <strong>73°</strong></div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">2</div>
+                    <div class="sol-text"><strong>Rectangle ?</strong> Un rectangle a 4 angles droits (4 × 90° = 360°). Ici les angles sont 85°, 110°, 92° et 73° — aucun n'est exactement 90°. Ce quadrilatère <strong>n'est pas un rectangle</strong>.</div>
+                </div>
+                <div class="final-ans">✅ 4ème angle = 73° · Ce n'est pas un rectangle (aucun angle droit)</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     5. BONUS
+════════════════════════════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon" style="background:#FFFDE7;font-size:1.5rem;">🌟</div>
+        <div>
+            <div class="card-title">Bonus — Angles et droites parallèles</div>
+            <div class="card-sub">Alternes-internes · Correspondants · Optionnel</div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="bonus-card">
+            <div class="bonus-top">
+                <div class="bonus-label">🏅 Défi bonus</div>
+                <div class="bonus-stmt">
+                    Deux droites parallèles (d₁) et (d₂) sont coupées par une sécante.
+                    L'un des angles formés mesure 65°. Détermine les mesures de tous les autres angles en justifiant.
+                </div>
+            </div>
+            <button class="bonus-btn" onclick="toggleBonus()">
+                Voir l'explication <span class="chevron" id="bonusChevron">▼</span>
+            </button>
+            <div class="bonus-solution" id="bonusSol">
+                <div class="bonus-step">
+                    <div class="bonus-num">1</div>
+                    <div class="sol-text">Une sécante qui coupe deux parallèles crée <strong>8 angles</strong> au total (4 à chaque intersection), mais il n'y a en réalité que <strong>2 mesures distinctes</strong> : α et (180°−α).</div>
+                </div>
+                <div class="bonus-step">
+                    <div class="bonus-num">2</div>
+                    <div class="sol-text"><strong>Angle donné = 65°.</strong> Son angle <em>opposé par le sommet</em> (même intersection, de l'autre côté) = <strong>65°</strong> aussi.</div>
+                </div>
+                <div class="bonus-step">
+                    <div class="bonus-num">3</div>
+                    <div class="sol-text"><strong>Angles alternes-internes</strong> (entre les deux parallèles, de part et d'autre de la sécante) = <strong>65°</strong> (égaux car droites parallèles).</div>
+                </div>
+                <div class="bonus-step">
+                    <div class="bonus-num">4</div>
+                    <div class="sol-text"><strong>Angles supplémentaires</strong> (côté à côté sur une droite) = 180° − 65° = <strong>115°</strong>. Tous les autres angles de 115° se déduisent de la même façon.</div>
+                </div>
+                <div class="bonus-ans">
+                    🏆 Résultat : 4 angles de 65° et 4 angles de 115°<br>
+                    65° + 115° = 180° (angles supplémentaires sur une droite) ✓<br>
+                    <em>Avec deux droites parallèles, il suffit de connaître un seul angle pour trouver tous les autres !</em>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     6. FÉLICITATIONS
+════════════════════════════════════════════════════════════ -->
+<div class="completion" id="completion">
+    <div class="stars">🎉⭐🎉</div>
+    <h2>Niveau 3 complété !</h2>
+    <p>Tu maîtrises les angles et leurs propriétés. Cap sur les transformations au niveau 4 !</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     7. NAVIGATION
+════════════════════════════════════════════════════════════ -->
+<div class="level-nav">
+    <h3>📐 Navigation — Géométrie</h3>
+    <div class="nav-levels">
+        <a href="geo_niveau1.html" class="nav-btn">▶ Niveau 1 — Vocabulaire</a>
+        <a href="geo_niveau2.html" class="nav-btn">▶ Niveau 2 — Périmètres &amp; Aires</a>
+        <a href="geo_niveau3.html" class="nav-btn current">▶ Niveau 3 — Angles</a>
+        <a href="geo_niveau4.html" class="nav-btn">▶ Niveau 4 — Transformations</a>
+        <a href="geo_niveau5.html" class="nav-btn">▶ Niveau 5 — Défi 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+// ── CONFIG ─────────────────────────────────────────────────
+const TOTAL       = 8;
+const STORAGE_KEY = 'edu_completed_geo_3';
+const QCM_CORRECT = {1:0, 2:2, 3:2, 4:1, 5:2};
+
+const FILL_DATA = {
+    1: {
+        fields:  ['f1a','f1b'],
+        answers: ['complementaires','supplementaires'],
+        altAnswers: {
+            f1a: ['complementaires','complémentaires'],
+            f1b: ['supplementaires','supplémentaires']
+        },
+        points: 1
+    },
+    2: {
+        fields:  ['f2a','f2b'],
+        answers: ['40','180'],
+        points:  1
+    },
+    3: {
+        fields:  ['f3a','f3b'],
+        answers: ['egaux','90'],
+        altAnswers: { f3a: ['egaux','égaux'] },
+        points:  1
+    }
+};
+
+// ── STATE ──────────────────────────────────────────────────
+let score = 0;
+let xp    = 0;
+const answered = {};
+const filled   = {};
+
+// ── UTILS ──────────────────────────────────────────────────
+function norm(s) {
+    return s.trim().toLowerCase()
+        .normalize('NFD').replace(/[̀-ͯ]/g,'')
+        .replace(/[^a-z0-9]/g,'');
+}
+
+function updateBar() {
+    const pct = Math.min(100, Math.round(score / TOTAL * 100));
+    const bar = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    bar.classList.toggle('has-progress', score > 0);
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+}
+
+function addScore(n) {
+    score += n;
+    xp = score * 15;
+    const badge = document.getElementById('xpBadge');
+    document.getElementById('xpVal').textContent = xp;
+    badge.classList.remove('pop');
+    void badge.offsetWidth;
+    badge.classList.add('pop');
+    updateBar();
+    if (score >= Math.ceil(TOTAL * 0.8)) showCompletion();
+}
+
+function showCompletion() {
+    const el = document.getElementById('completion');
+    if (el.classList.contains('show')) return;
+    el.classList.add('show');
+    localStorage.setItem(STORAGE_KEY, '1');
+    el.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+// ── QCM ────────────────────────────────────────────────────
+function checkQCM(qNum, chosen) {
+    if (answered[qNum]) return;
+    answered[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const btns    = document.querySelectorAll('#opts' + qNum + ' .opt-btn');
+    btns.forEach(b => b.disabled = true);
+    const fb = document.getElementById('fb' + qNum);
+    if (chosen === correct) {
+        btns[chosen].classList.add('correct');
+        fb.className   = 'q-feedback correct';
+        fb.textContent = '✅ Bonne réponse !';
+        addScore(1);
+    } else {
+        btns[chosen].classList.add('wrong');
+        btns[correct].classList.add('show-correct');
+        fb.className   = 'q-feedback wrong';
+        fb.textContent = '❌ Pas tout à fait. La bonne réponse est indiquée en vert.';
+    }
+}
+
+// ── FILL ───────────────────────────────────────────────────
+function checkFill(num) {
+    if (filled[num]) return;
+    const data = FILL_DATA[num];
+    let allCorrect = true;
+    data.fields.forEach((fid, i) => {
+        const inp     = document.getElementById(fid);
+        const expected = data.answers[i];
+        const alts    = (data.altAnswers && data.altAnswers[fid]) ? data.altAnswers[fid] : [expected];
+        const userVal = norm(inp.value);
+        const isOk    = alts.map(norm).includes(userVal) || norm(expected) === userVal;
+        inp.classList.toggle('correct', isOk);
+        inp.classList.toggle('wrong', !isOk);
+        inp.disabled  = true;
+        if (!isOk) allCorrect = false;
+    });
+    const fb = document.getElementById('ff' + num);
+    fb.classList.add('show');
+    if (allCorrect) {
+        fb.className   = 'fill-feedback show correct';
+        fb.textContent = '✅ Parfait !';
+        if (!filled[num + '_scored']) {
+            filled[num + '_scored'] = true;
+            addScore(data.points);
+        }
+    } else {
+        fb.className   = 'fill-feedback show wrong';
+        const hints = data.fields.map((fid, i) => {
+            const alts = (data.altAnswers && data.altAnswers[fid]) ? data.altAnswers[fid] : [data.answers[i]];
+            return alts[0];
+        });
+        fb.textContent = '❌ Pas tout à fait. Réponses attendues : ' + hints.join(' · ');
+    }
+    filled[num] = true;
+    document.querySelector('#fi' + num + ' .verify-btn').disabled = true;
+}
+
+// ── EXERCISES ──────────────────────────────────────────────
+function toggleSol(n) {
+    const sol  = document.getElementById('sol' + n);
+    const btn  = document.getElementById('rbtn' + n);
+    const open = sol.classList.toggle('open');
+    btn.classList.toggle('open', open);
+}
+
+// ── BONUS ──────────────────────────────────────────────────
+function toggleBonus() {
+    const sol  = document.getElementById('bonusSol');
+    const chev = document.getElementById('bonusChevron');
+    const open = sol.classList.toggle('open');
+    chev.style.transform = open ? 'rotate(180deg)' : '';
+}
+
+// ── INIT ───────────────────────────────────────────────────
+updateBar();
+</script>
+
+</body>
+</html>
