@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Géométrie · Transformations — Niveau 4</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#1E88E5; --primary-dark:#1565C0; --primary-mid:#42A5F5; --primary-bg:#E3F2FD;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#0D47A1 0%,#1E88E5 55%,#90CAF9 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(13,71,161,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#1E88E5; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#1565C0; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#0D47A1,#1E88E5,#90CAF9); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.primary { background:var(--primary-bg); }
+        .card-icon.green   { background:var(--green-bg); }
+        .card-icon.orange  { background:var(--orange-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#0D47A1,#1565C0); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .transf-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .transf-card { border:2px solid #90CAF9; border-radius:12px; padding:15px 17px; }
+        .transf-icon { font-size:1.6rem; margin-bottom:6px; }
+        .transf-name { font-size:.95rem; font-weight:900; color:var(--primary-dark); margin-bottom:5px; }
+        .transf-desc { font-size:.82rem; color:#555; line-height:1.5; }
+        .transf-prop { font-size:.8rem; font-weight:700; color:#2E7D32; margin-top:6px; }
+
+        .examples-row { display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
+        .example-chip { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:10px; padding:8px 16px; font-size:.93rem; font-weight:800; color:var(--primary-dark); }
+        .example-chip span { color:#888; font-size:.75rem; font-weight:700; display:block; text-align:center; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* QCM */
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct      { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong        { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        /* Fill */
+        .fill-item { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:140px; outline:none; }
+        .blank.sm { width:70px; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* Exercises */
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* Bonus */
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        /* Completion */
+        .completion { display:none; background:linear-gradient(135deg,#0D47A1,#1E88E5,#90CAF9); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #0a3580; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        /* Level nav */
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover   { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>📐 Géométrie · Transformations</h1>
+            <p>Niveau 4 · Translation · Symétrie axiale · Rotation · Symétrie centrale</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 4 — Expert</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════════════════
+     1. LEÇON
+════════════════════════════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon primary">📖</div>
+        <div>
+            <div class="card-title">La leçon — Transformations géométriques</div>
+            <div class="card-sub">Translation · Symétrie axiale · Rotation · Symétrie centrale</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Une <strong>transformation géométrique</strong> fait correspondre à chaque point du plan un autre point (son <em>image</em>).
+            Les quatre transformations du programme CE1D sont des <strong>isométries</strong> : elles conservent les distances et donc la forme et la taille des figures.
+        </p>
+
+        <!-- Vue d'ensemble -->
+        <div class="transf-grid">
+            <div class="transf-card">
+                <div class="transf-icon">➡️</div>
+                <div class="transf-name">Translation</div>
+                <div class="transf-desc">Glissement dans une direction donnée. Définie par un <strong>vecteur</strong> (direction + sens + longueur).</div>
+                <div class="transf-prop">✓ Conserve orientation</div>
+            </div>
+            <div class="transf-card">
+                <div class="transf-icon">🪞</div>
+                <div class="transf-name">Symétrie axiale</div>
+                <div class="transf-desc">Réflexion par rapport à un <strong>axe (d)</strong>. L'axe est la médiatrice de [PP'].</div>
+                <div class="transf-prop">✗ Renverse l'orientation</div>
+            </div>
+            <div class="transf-card">
+                <div class="transf-icon">🔄</div>
+                <div class="transf-name">Rotation</div>
+                <div class="transf-desc">Pivot autour d'un <strong>centre O</strong> d'un angle donné (en °) dans un sens.</div>
+                <div class="transf-prop">✓ Conserve orientation</div>
+            </div>
+            <div class="transf-card">
+                <div class="transf-icon">↩️</div>
+                <div class="transf-name">Symétrie centrale</div>
+                <div class="transf-desc">Réflexion par rapport à un <strong>point O</strong>. O est le milieu de [PP']. = Rotation 180°.</div>
+                <div class="transf-prop">✓ Conserve orientation</div>
+            </div>
+        </div>
+
+        <!-- Translation -->
+        <div class="def-box">
+            <h3>➡️ La translation</h3>
+            <p>
+                Une translation déplace chaque point du même <strong>vecteur</strong> <code>v⃗</code> : même direction, même sens, même longueur.<br>
+                La figure image est <strong>identique</strong> à la figure originale (même forme, même taille, même orientation).<br>
+                Pour construire l'image d'un point A : <strong>A' = A + v⃗</strong> (on ajoute le vecteur à chaque sommet).
+            </p>
+        </div>
+
+        <!-- SVG 1 : Translation et symétrie axiale -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 240" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect width="560" height="240" fill="#EEF5FF" rx="10"/>
+                <text x="280" y="20" text-anchor="middle" font-size="13" font-weight="900" fill="#0D47A1" font-family="Nunito">Translation et Symétrie axiale</text>
+
+                <!-- Grille gauche -->
+                <g stroke="#D0E8FF" stroke-width="0.8">
+                    <line x1="20"  y1="40"  x2="20"  y2="220"/>
+                    <line x1="50"  y1="40"  x2="50"  y2="220"/>
+                    <line x1="80"  y1="40"  x2="80"  y2="220"/>
+                    <line x1="110" y1="40"  x2="110" y2="220"/>
+                    <line x1="140" y1="40"  x2="140" y2="220"/>
+                    <line x1="170" y1="40"  x2="170" y2="220"/>
+                    <line x1="200" y1="40"  x2="200" y2="220"/>
+                    <line x1="230" y1="40"  x2="230" y2="220"/>
+                    <line x1="20"  y1="60"  x2="235" y2="60"/>
+                    <line x1="20"  y1="90"  x2="235" y2="90"/>
+                    <line x1="20"  y1="120" x2="235" y2="120"/>
+                    <line x1="20"  y1="150" x2="235" y2="150"/>
+                    <line x1="20"  y1="180" x2="235" y2="180"/>
+                    <line x1="20"  y1="210" x2="235" y2="210"/>
+                </g>
+
+                <!-- Triangle original (bleu) -->
+                <polygon points="50,180 80,100 110,180" fill="#BBDEFB" stroke="#1565C0" stroke-width="2"/>
+                <text x="50"  y="196" font-size="10" font-weight="700" fill="#1565C0" font-family="Nunito">A</text>
+                <text x="76"  y="96"  font-size="10" font-weight="700" fill="#1565C0" font-family="Nunito">B</text>
+                <text x="110" y="196" font-size="10" font-weight="700" fill="#1565C0" font-family="Nunito">C</text>
+
+                <!-- Vecteur de translation : +90px horizontal, -30px vertical -->
+                <defs>
+                    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                        <polygon points="0 0, 8 3, 0 6" fill="#C62828"/>
+                    </marker>
+                </defs>
+                <line x1="80" y1="60" x2="170" y2="32" stroke="#C62828" stroke-width="2" marker-end="url(#arr)"/>
+                <text x="110" y="44" font-size="11" font-weight="900" fill="#C62828" font-family="Nunito">v⃗</text>
+
+                <!-- Triangle image (rouge clair) — décalé de (+90, -30) -->
+                <polygon points="140,150 170,70 200,150" fill="none" stroke="#C62828" stroke-width="2" stroke-dasharray="5,3"/>
+                <text x="133" y="166" font-size="10" font-weight="700" fill="#C62828" font-family="Nunito">A'</text>
+                <text x="166" y="66"  font-size="10" font-weight="700" fill="#C62828" font-family="Nunito">B'</text>
+                <text x="200" y="166" font-size="10" font-weight="700" fill="#C62828" font-family="Nunito">C'</text>
+
+                <text x="128" y="230" text-anchor="middle" font-size="11" font-weight="900" fill="#1565C0" font-family="Nunito">Translation par v⃗</text>
+
+                <!-- ── Symétrie axiale ── -->
+                <!-- Axe vertical -->
+                <line x1="350" y1="35" x2="350" y2="225" stroke="#2E7D32" stroke-width="2.5" stroke-dasharray="8,4"/>
+                <text x="354" y="48" font-size="11" font-weight="700" fill="#2E7D32" font-family="Nunito">(d)</text>
+
+                <!-- Triangle gauche (original, bleu) -->
+                <polygon points="290,180 310,95 340,165" fill="#BBDEFB" stroke="#1565C0" stroke-width="2"/>
+                <text x="282" y="194" font-size="10" font-weight="700" fill="#1565C0" font-family="Nunito">A</text>
+                <text x="306" y="90"  font-size="10" font-weight="700" fill="#1565C0" font-family="Nunito">B</text>
+                <text x="337" y="178" font-size="10" font-weight="700" fill="#1565C0" font-family="Nunito">C</text>
+
+                <!-- Triangle image (symétrique par rapport à x=350) -->
+                <!-- A(290,180)→A'(410,180) ; B(310,95)→B'(390,95) ; C(340,165)→C'(360,165) -->
+                <polygon points="410,180 390,95 360,165" fill="none" stroke="#C62828" stroke-width="2" stroke-dasharray="5,3"/>
+                <text x="412" y="194" font-size="10" font-weight="700" fill="#C62828" font-family="Nunito">A'</text>
+                <text x="390" y="90"  font-size="10" font-weight="700" fill="#C62828" font-family="Nunito">B'</text>
+                <text x="355" y="178" font-size="10" font-weight="700" fill="#C62828" font-family="Nunito">C'</text>
+
+                <!-- Tirets médiatrice AA' -->
+                <line x1="290" y1="180" x2="410" y2="180" stroke="#F57F17" stroke-width="1" stroke-dasharray="3,3"/>
+                <circle cx="350" cy="180" r="3" fill="#F57F17"/>
+
+                <text x="410" y="230" text-anchor="middle" font-size="11" font-weight="900" fill="#1565C0" font-family="Nunito">Symétrie axiale par (d)</text>
+            </svg>
+        </div>
+
+        <!-- Symétrie axiale -->
+        <div class="def-box">
+            <h3>🪞 La symétrie axiale</h3>
+            <p>
+                La symétrie axiale (ou réflexion) est définie par un <strong>axe (d)</strong>.<br>
+                L'image P' d'un point P est telle que <strong>(d) est la médiatrice de [PP']</strong> : (d) est perpendiculaire à PP' en son milieu.<br>
+                Elle conserve distances et angles, mais <strong>renverse l'orientation</strong> (une figure et son image en miroir ne sont pas superposables par glissement).
+            </p>
+        </div>
+
+        <!-- Rotation et symétrie centrale -->
+        <div class="def-box">
+            <h3>🔄 La rotation</h3>
+            <p>
+                Une rotation est définie par un <strong>centre O</strong>, un <strong>angle α</strong> et un <strong>sens</strong> (horaire ou antihoraire).<br>
+                Chaque point tourne autour de O du même angle : <strong>OA = OA'</strong> et l'angle AÔA' = α.<br>
+                Elle conserve distances, angles et <strong>orientation</strong>.
+            </p>
+        </div>
+
+        <!-- SVG 2 : Rotation et symétrie centrale -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect width="560" height="230" fill="#EEF5FF" rx="10"/>
+                <text x="280" y="20" text-anchor="middle" font-size="13" font-weight="900" fill="#0D47A1" font-family="Nunito">Rotation et Symétrie centrale</text>
+
+                <!-- ── Rotation 90° antihoraire autour de O(140,130) ── -->
+                <!-- Triangle original A(140,75) B(195,130) C(140,130) -->
+                <polygon points="140,75 195,130 140,130" fill="#BBDEFB" stroke="#1565C0" stroke-width="2"/>
+                <text x="134" y="72" font-size="10" font-weight="700" fill="#1565C0" font-family="Nunito">A</text>
+                <text x="197" y="138" font-size="10" font-weight="700" fill="#1565C0" font-family="Nunito">B</text>
+                <text x="126" y="144" font-size="10" font-weight="700" fill="#1565C0" font-family="Nunito">C=O</text>
+
+                <!-- Centre O -->
+                <circle cx="140" cy="130" r="5" fill="#0D47A1"/>
+                <text x="147" y="147" font-size="10" font-weight="700" fill="#0D47A1" font-family="Nunito">O</text>
+
+                <!-- Image après rotation 90° antihoraire : A(140,75)→A'(85,130), B(195,130)→B'(140,185) -->
+                <polygon points="85,130 140,185 140,130" fill="none" stroke="#C62828" stroke-width="2" stroke-dasharray="5,3"/>
+                <text x="66"  y="130" font-size="10" font-weight="700" fill="#C62828" font-family="Nunito">A'</text>
+                <text x="140" y="200" font-size="10" font-weight="700" fill="#C62828" font-family="Nunito">B'</text>
+
+                <!-- Arc de rotation -->
+                <path d="M 140 85 A 45 45 0 0 0 95 130" stroke="#F57F17" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+                <text x="98" y="98" font-size="11" font-weight="900" fill="#F57F17" font-family="Nunito">90°</text>
+
+                <text x="140" y="218" text-anchor="middle" font-size="11" font-weight="900" fill="#1565C0" font-family="Nunito">Rotation 90° antihoraire</text>
+
+                <!-- ── Symétrie centrale par rapport à O(420,130) ── -->
+                <!-- Triangle A(380,80) B(455,80) C(420,130) → image A'(460,180) B'(385,180) C'(420,130) -->
+                <polygon points="380,80 455,80 420,130" fill="#BBDEFB" stroke="#1565C0" stroke-width="2"/>
+                <text x="366" y="78" font-size="10" font-weight="700" fill="#1565C0" font-family="Nunito">A</text>
+                <text x="457" y="78" font-size="10" font-weight="700" fill="#1565C0" font-family="Nunito">B</text>
+
+                <!-- Centre O -->
+                <circle cx="420" cy="130" r="5" fill="#0D47A1"/>
+                <text x="426" y="128" font-size="10" font-weight="700" fill="#0D47A1" font-family="Nunito">O</text>
+
+                <!-- Image symétrique : A'(460,180) B'(385,180) C'(420,130) -->
+                <polygon points="460,180 385,180 420,130" fill="none" stroke="#C62828" stroke-width="2" stroke-dasharray="5,3"/>
+                <text x="462" y="192" font-size="10" font-weight="700" fill="#C62828" font-family="Nunito">A'</text>
+                <text x="372" y="192" font-size="10" font-weight="700" fill="#C62828" font-family="Nunito">B'</text>
+
+                <!-- Segments AA' et BB' passant par O -->
+                <line x1="380" y1="80" x2="460" y2="180" stroke="#F57F17" stroke-width="1.2" stroke-dasharray="3,3"/>
+                <line x1="455" y1="80" x2="385" y2="180" stroke="#F57F17" stroke-width="1.2" stroke-dasharray="3,3"/>
+
+                <text x="420" y="218" text-anchor="middle" font-size="11" font-weight="900" fill="#1565C0" font-family="Nunito">Symétrie centrale par O</text>
+            </svg>
+        </div>
+
+        <!-- Symétrie centrale -->
+        <div class="rule-box">
+            <h3>↩️ La symétrie centrale</h3>
+            <p>
+                Définie par un <strong>centre O</strong>. L'image P' de P est telle que <strong>O est le milieu de [PP']</strong>.<br>
+                C'est une <strong>rotation de 180°</strong> autour de O.<br>
+                Elle conserve distances, angles et orientation.<br>
+                Pour construire P' : on prolonge OP d'une longueur égale à OP de l'autre côté de O.
+            </p>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Pièges à éviter</h3>
+            <p>
+                <strong>1.</strong> La <em>symétrie axiale</em> utilise un <strong>axe (droite)</strong> ; la <em>symétrie centrale</em> utilise un <strong>centre (point)</strong>. Ne les confonds pas !<br>
+                <strong>2.</strong> La symétrie axiale <strong>inverse l'orientation</strong> (comme un miroir). Les trois autres transformations la conservent.<br>
+                <strong>3.</strong> Une rotation de 360° redonne la figure originale — ce n'est pas une transformation intéressante.
+            </p>
+        </div>
+
+        <div class="examples-row">
+            <div class="example-chip">Translation<span>Glissement · vecteur v⃗ · orientation ✓</span></div>
+            <div class="example-chip">Symétrie axiale<span>Miroir · axe (d) · orientation ✗</span></div>
+            <div class="example-chip">Rotation<span>Pivot · centre O · angle α · sens</span></div>
+            <div class="example-chip">Sym. centrale<span>= Rotation 180° · centre O · orientation ✓</span></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     2. QCM
+════════════════════════════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧠</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · +1 point par bonne réponse</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Q1 : correct = 2 -->
+        <div class="qcm-item">
+            <div class="q-text"><span class="q-num">1</span>Lors d'une translation, qu'arrive-t-il à la figure ?</div>
+            <div class="opts" id="opts1">
+                <button class="opt-btn" onclick="checkQCM(1,0)">A) Elle change de taille</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">B) Elle se retourne par rapport à un axe</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">C) Elle se déplace sans changer de forme, de taille ni d'orientation</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">D) Elle tourne autour d'un point central</button>
+            </div>
+            <div class="q-feedback" id="fb1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q2 : correct = 1 -->
+        <div class="qcm-item">
+            <div class="q-text"><span class="q-num">2</span>Quelle transformation inverse l'orientation d'une figure (comme un miroir) ?</div>
+            <div class="opts" id="opts2">
+                <button class="opt-btn" onclick="checkQCM(2,0)">A) La translation</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">B) La symétrie axiale</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">C) La rotation</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">D) La symétrie centrale</button>
+            </div>
+            <div class="q-feedback" id="fb2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q3 : correct = 2 -->
+        <div class="qcm-item">
+            <div class="q-text"><span class="q-num">3</span>Une symétrie centrale par rapport à un point O est équivalente à…</div>
+            <div class="opts" id="opts3">
+                <button class="opt-btn" onclick="checkQCM(3,0)">A) Une translation</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">B) Une symétrie axiale par rapport à (d) passant par O</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">C) Une rotation de 180° autour de O</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">D) Une rotation de 90° autour de O</button>
+            </div>
+            <div class="q-feedback" id="fb3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q4 : correct = 3 -->
+        <div class="qcm-item">
+            <div class="q-text"><span class="q-num">4</span>Quelle transformation est définie par un vecteur (direction + sens + longueur) ?</div>
+            <div class="opts short" id="opts4">
+                <button class="opt-btn" onclick="checkQCM(4,0)">A) La rotation</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">B) La symétrie axiale</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">C) La symétrie centrale</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">D) La translation</button>
+            </div>
+            <div class="q-feedback" id="fb4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <!-- Q5 : correct = 0 -->
+        <div class="qcm-item">
+            <div class="q-text"><span class="q-num">5</span>Dans une symétrie axiale par rapport à l'axe (d), que représente (d) par rapport au segment [PP'] ?</div>
+            <div class="opts" id="opts5">
+                <button class="opt-btn" onclick="checkQCM(5,0)">A) La médiatrice de [PP'] (perpendiculaire à PP' en son milieu)</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">B) Une droite parallèle à PP'</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">C) La bissectrice de l'angle en P</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">D) Une droite quelconque qui passe par P</button>
+            </div>
+            <div class="q-feedback" id="fb5"></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     3. TEXTES À TROUS
+════════════════════════════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon primary">✏️</div>
+        <div>
+            <div class="card-title">Complète les phrases</div>
+            <div class="card-sub">3 trous · Tape le mot manquant</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Trou 1 -->
+        <div class="fill-item" id="fi1">
+            <span class="fill-num">Trou 1</span>
+            <div class="fill-sentence">
+                Une transformation qui déplace chaque point d'un même vecteur s'appelle une
+                <input class="blank" id="f1a" placeholder="…">.
+                La figure et son image sont <input class="blank" id="f1b" placeholder="…"> (même forme, même taille).
+            </div>
+            <button class="verify-btn" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <!-- Trou 2 -->
+        <div class="fill-item" id="fi2">
+            <span class="fill-num">Trou 2</span>
+            <div class="fill-sentence">
+                Dans une symétrie <input class="blank" id="f2a" placeholder="…">, le centre O est le milieu de chaque segment [PP'].
+                Cela revient à effectuer une rotation de <input class="blank sm" id="f2b" placeholder="?">°.
+            </div>
+            <button class="verify-btn" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <!-- Trou 3 -->
+        <div class="fill-item" id="fi3">
+            <span class="fill-num">Trou 3</span>
+            <div class="fill-sentence">
+                Une rotation est définie par trois éléments : un <input class="blank" id="f3a" placeholder="…"> (le centre),
+                un <input class="blank" id="f3b" placeholder="…"> (en degrés) et un sens de rotation.
+            </div>
+            <button class="verify-btn" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     4. EXERCICES GUIDÉS
+════════════════════════════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">🔍</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices · Clique sur "Solution" pour voir les étapes</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <!-- Ex 1 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Translation</div>
+                <div class="ex-stmt">
+                    Dans un repère, le triangle ABC a pour sommets A(1, 2), B(4, 2) et C(1, 5).
+                    On applique la translation de vecteur v⃗(3, −2).<br>
+                    Donne les coordonnées des sommets A', B', C' de l'image.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rbtn1" onclick="toggleSol(1)">Solution <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step">
+                    <div class="sol-num">1</div>
+                    <div class="sol-text"><strong>Règle :</strong> pour toute translation de vecteur v⃗(a, b), l'image de P(x, y) est P'(x + a, y + b).</div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">2</div>
+                    <div class="sol-text"><strong>A(1, 2) :</strong> A' = (1+3, 2−2) = <strong>(4, 0)</strong></div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">3</div>
+                    <div class="sol-text"><strong>B(4, 2) :</strong> B' = (4+3, 2−2) = <strong>(7, 0)</strong></div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">4</div>
+                    <div class="sol-text"><strong>C(1, 5) :</strong> C' = (1+3, 5−2) = <strong>(4, 3)</strong></div>
+                </div>
+                <div class="final-ans">✅ A'(4, 0) · B'(7, 0) · C'(4, 3)</div>
+            </div>
+        </div>
+
+        <!-- Ex 2 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Symétrie centrale</div>
+                <div class="ex-stmt">
+                    Le point O(3, 4) est le centre d'une symétrie centrale.<br>
+                    a) Donne l'image du point A(1, 6) par cette symétrie.<br>
+                    b) Donne l'image du point B(5, 2) par cette symétrie.<br>
+                    c) Vérifie que O est bien le milieu de [AA'] et de [BB'].
+                </div>
+            </div>
+            <button class="reveal-btn" id="rbtn2" onclick="toggleSol(2)">Solution <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step">
+                    <div class="sol-num">1</div>
+                    <div class="sol-text"><strong>Règle :</strong> si O est le centre, alors P'(2·xO − xP, 2·yO − yP).</div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">2</div>
+                    <div class="sol-text"><strong>a) A(1, 6) :</strong> A' = (2×3−1, 2×4−6) = (6−1, 8−6) = <strong>(5, 2)</strong></div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">3</div>
+                    <div class="sol-text"><strong>b) B(5, 2) :</strong> B' = (2×3−5, 2×4−2) = (6−5, 8−2) = <strong>(1, 6)</strong></div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">4</div>
+                    <div class="sol-text"><strong>c) Vérif AA' :</strong> milieu = ((1+5)/2, (6+2)/2) = (3, 4) = O ✓ · <strong>BB' :</strong> milieu = ((5+1)/2, (2+6)/2) = (3, 4) = O ✓<br>Remarque : A' = B et B' = A — ils sont symétriques l'un de l'autre !</div>
+                </div>
+                <div class="final-ans">✅ A'(5, 2) · B'(1, 6) · O est bien le milieu dans les deux cas</div>
+            </div>
+        </div>
+
+        <!-- Ex 3 -->
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Identifier la transformation</div>
+                <div class="ex-stmt">
+                    Pour chaque cas, identifie la transformation et justifie :<br>
+                    a) Figure F et image F' : même forme, même orientation, pas de rotation → ?<br>
+                    b) Figure F et image F' : orientation inversée (image en miroir), définie par une droite → ?<br>
+                    c) Figure F et image F' : même orientation, chaque point a pivoté de 90° autour d'un point O → ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rbtn3" onclick="toggleSol(3)">Solution <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step">
+                    <div class="sol-num">1</div>
+                    <div class="sol-text"><strong>a) → Translation.</strong> Même orientation, glissement pur, pas de rotation → c'est une translation. On peut trouver le vecteur en comparant un point et son image.</div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">2</div>
+                    <div class="sol-text"><strong>b) → Symétrie axiale.</strong> L'orientation est inversée (seule la symétrie axiale fait ça parmi les 4 isométries). L'axe est la médiatrice de [PP'] pour tout point P.</div>
+                </div>
+                <div class="sol-step">
+                    <div class="sol-num">3</div>
+                    <div class="sol-text"><strong>c) → Rotation.</strong> Pivot de 90° autour de O, orientation conservée → rotation de 90° de centre O.</div>
+                </div>
+                <div class="final-ans">✅ a) Translation · b) Symétrie axiale · c) Rotation</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     5. BONUS
+════════════════════════════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon" style="background:#FFFDE7;font-size:1.5rem;">🌟</div>
+        <div>
+            <div class="card-title">Bonus — Composition de deux symétries axiales</div>
+            <div class="card-sub">Pour aller plus loin · Optionnel</div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="bonus-card">
+            <div class="bonus-top">
+                <div class="bonus-label">🏅 Défi bonus</div>
+                <div class="bonus-stmt">
+                    Que se passe-t-il quand on enchaîne deux symétries axiales ?<br>
+                    Cas 1 : les deux axes sont <strong>parallèles</strong>.<br>
+                    Cas 2 : les deux axes se <strong>croisent</strong> en un point O.
+                </div>
+            </div>
+            <button class="bonus-btn" onclick="toggleBonus()">
+                Voir l'explication <span class="chevron" id="bonusChevron">▼</span>
+            </button>
+            <div class="bonus-solution" id="bonusSol">
+                <div class="bonus-step">
+                    <div class="bonus-num">1</div>
+                    <div class="sol-text"><strong>Deux axes parallèles (d₁ // d₂) :</strong> la composition donne une <strong>translation</strong>. Le vecteur de translation est perpendiculaire aux axes et sa longueur est le double de la distance entre les axes.</div>
+                </div>
+                <div class="bonus-step">
+                    <div class="bonus-num">2</div>
+                    <div class="sol-text"><strong>Deux axes sécants (d₁ ∩ d₂ = {O}) :</strong> la composition donne une <strong>rotation</strong> de centre O. L'angle de rotation est le double de l'angle entre les deux axes.</div>
+                </div>
+                <div class="bonus-step">
+                    <div class="bonus-num">3</div>
+                    <div class="sol-text"><strong>Exemple :</strong> deux axes perpendiculaires (angle 90°) qui se croisent en O → rotation de 2×90° = <strong>180°</strong> = symétrie centrale de centre O.</div>
+                </div>
+                <div class="bonus-ans">
+                    🏆 Composition de 2 symétries axiales :<br>
+                    Axes parallèles → Translation<br>
+                    Axes sécants en O → Rotation de centre O, angle = 2× (angle entre les axes)<br>
+                    <em>Toute isométrie s'obtient par composition de symétries axiales !</em>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     6. FÉLICITATIONS
+════════════════════════════════════════════════════════════ -->
+<div class="completion" id="completion">
+    <div class="stars">🎉⭐🎉</div>
+    <h2>Niveau 4 complété !</h2>
+    <p>Tu maîtrises les quatre transformations géométriques. Place au Défi CE1D au niveau 5 !</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     7. NAVIGATION
+════════════════════════════════════════════════════════════ -->
+<div class="level-nav">
+    <h3>📐 Navigation — Géométrie</h3>
+    <div class="nav-levels">
+        <a href="geo_niveau1.html" class="nav-btn">▶ Niveau 1 — Vocabulaire</a>
+        <a href="geo_niveau2.html" class="nav-btn">▶ Niveau 2 — Périmètres &amp; Aires</a>
+        <a href="geo_niveau3.html" class="nav-btn">▶ Niveau 3 — Angles</a>
+        <a href="geo_niveau4.html" class="nav-btn current">▶ Niveau 4 — Transformations</a>
+        <a href="geo_niveau5.html" class="nav-btn">▶ Niveau 5 — Défi 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+// ── CONFIG ─────────────────────────────────────────────────
+const TOTAL       = 8;
+const STORAGE_KEY = 'edu_completed_geo_4';
+const QCM_CORRECT = {1:2, 2:1, 3:2, 4:3, 5:0};
+
+const FILL_DATA = {
+    1: {
+        fields:  ['f1a','f1b'],
+        answers: ['translation','congruentes'],
+        altAnswers: { f1b: ['congruentes','congruente','identiques','identique','isometriques','isométriques'] },
+        points: 1
+    },
+    2: {
+        fields:  ['f2a','f2b'],
+        answers: ['centrale','180'],
+        points:  1
+    },
+    3: {
+        fields:  ['f3a','f3b'],
+        answers: ['point','angle'],
+        altAnswers: { f3a: ['point','centre'] },
+        points:  1
+    }
+};
+
+// ── STATE ──────────────────────────────────────────────────
+let score = 0;
+let xp    = 0;
+const answered = {};
+const filled   = {};
+
+// ── UTILS ──────────────────────────────────────────────────
+function norm(s) {
+    return s.trim().toLowerCase()
+        .normalize('NFD').replace(/[̀-ͯ]/g,'')
+        .replace(/[^a-z0-9]/g,'');
+}
+
+function updateBar() {
+    const pct = Math.min(100, Math.round(score / TOTAL * 100));
+    const bar = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    bar.classList.toggle('has-progress', score > 0);
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+}
+
+function addScore(n) {
+    score += n;
+    xp = score * 15;
+    const badge = document.getElementById('xpBadge');
+    document.getElementById('xpVal').textContent = xp;
+    badge.classList.remove('pop');
+    void badge.offsetWidth;
+    badge.classList.add('pop');
+    updateBar();
+    if (score >= Math.ceil(TOTAL * 0.8)) showCompletion();
+}
+
+function showCompletion() {
+    const el = document.getElementById('completion');
+    if (el.classList.contains('show')) return;
+    el.classList.add('show');
+    localStorage.setItem(STORAGE_KEY, '1');
+    el.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+// ── QCM ────────────────────────────────────────────────────
+function checkQCM(qNum, chosen) {
+    if (answered[qNum]) return;
+    answered[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const btns    = document.querySelectorAll('#opts' + qNum + ' .opt-btn');
+    btns.forEach(b => b.disabled = true);
+    const fb = document.getElementById('fb' + qNum);
+    if (chosen === correct) {
+        btns[chosen].classList.add('correct');
+        fb.className   = 'q-feedback correct';
+        fb.textContent = '✅ Bonne réponse !';
+        addScore(1);
+    } else {
+        btns[chosen].classList.add('wrong');
+        btns[correct].classList.add('show-correct');
+        fb.className   = 'q-feedback wrong';
+        fb.textContent = '❌ Pas tout à fait. La bonne réponse est indiquée en vert.';
+    }
+}
+
+// ── FILL ───────────────────────────────────────────────────
+function checkFill(num) {
+    if (filled[num]) return;
+    const data = FILL_DATA[num];
+    let allCorrect = true;
+    data.fields.forEach((fid, i) => {
+        const inp      = document.getElementById(fid);
+        const expected = data.answers[i];
+        const alts     = (data.altAnswers && data.altAnswers[fid]) ? data.altAnswers[fid] : [expected];
+        const userVal  = norm(inp.value);
+        const isOk     = alts.map(norm).includes(userVal) || norm(expected) === userVal;
+        inp.classList.toggle('correct', isOk);
+        inp.classList.toggle('wrong', !isOk);
+        inp.disabled   = true;
+        if (!isOk) allCorrect = false;
+    });
+    const fb = document.getElementById('ff' + num);
+    fb.classList.add('show');
+    if (allCorrect) {
+        fb.className   = 'fill-feedback show correct';
+        fb.textContent = '✅ Parfait !';
+        if (!filled[num + '_scored']) {
+            filled[num + '_scored'] = true;
+            addScore(data.points);
+        }
+    } else {
+        fb.className   = 'fill-feedback show wrong';
+        const hints = data.fields.map((fid, i) => {
+            const alts = (data.altAnswers && data.altAnswers[fid]) ? data.altAnswers[fid] : [data.answers[i]];
+            return alts[0];
+        });
+        fb.textContent = '❌ Pas tout à fait. Réponses attendues : ' + hints.join(' · ');
+    }
+    filled[num] = true;
+    document.querySelector('#fi' + num + ' .verify-btn').disabled = true;
+}
+
+// ── EXERCISES ──────────────────────────────────────────────
+function toggleSol(n) {
+    const sol  = document.getElementById('sol' + n);
+    const btn  = document.getElementById('rbtn' + n);
+    const open = sol.classList.toggle('open');
+    btn.classList.toggle('open', open);
+}
+
+// ── BONUS ──────────────────────────────────────────────────
+function toggleBonus() {
+    const sol  = document.getElementById('bonusSol');
+    const chev = document.getElementById('bonusChevron');
+    const open = sol.classList.toggle('open');
+    chev.style.transform = open ? 'rotate(180deg)' : '';
+}
+
+// ── INIT ───────────────────────────────────────────────────
+updateBar();
+</script>
+
+</body>
+</html>
