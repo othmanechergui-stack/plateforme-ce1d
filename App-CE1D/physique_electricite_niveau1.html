@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique — Électricité · Niveau 1 — Introduction au courant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#F9A825; --primary-dark:#E65100; --primary-mid:#FBC02D; --primary-bg:#FFF8E1;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#E65100 0%,#F9A825 55%,#FFE082 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(230,81,0,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#F9A825; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#E65100; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#E65100,#F9A825,#FFE082); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.amber  { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        /* Definition box */
+        .def-box { background:linear-gradient(135deg,#E65100,#F57F17); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#FFE082; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFF59D; }
+
+        /* Rule box */
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        /* Trap box */
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        /* Cas particuliers */
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #FFCC80; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.8rem; }
+        .cas-eq   { font-size:1.1rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        /* Examples row */
+        .examples-row { display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
+        .example-chip { background:var(--primary-bg); border:2px solid #FFCC80; border-radius:10px; padding:8px 16px; font-size:.95rem; font-weight:800; color:var(--primary-dark); }
+        .example-chip span { color:#888; font-size:.75rem; font-weight:700; display:block; text-align:center; }
+
+        /* SVG wrap */
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* QCM */
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        /* Fill in */
+        .fill-item { background:var(--primary-bg); border:2px solid #FFCC80; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:90px; outline:none; }
+        .blank.sm { width:60px; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        /* Exercices */
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        /* Bonus */
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        /* Completion */
+        .completion { display:none; background:linear-gradient(135deg,#E65100,#F9A825,#FFE082); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #BF360C; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        /* Level nav */
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+
+        @media(max-width:580px){ .header-inner{flex-direction:column;gap:8px} .opts{grid-template-columns:1fr} .card-body{padding:16px} }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>⚡ Électricité · Introduction</h1>
+            <p>Niveau 1 · Le courant électrique et les circuits de base</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 1 — Base</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon amber">📖</div>
+        <div>
+            <div class="card-title">La leçon — Le courant électrique</div>
+            <div class="card-sub">Définition · Conducteurs/isolants · Circuit · Sens du courant</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            L'électricité qui allume une lampe ou fait tourner un moteur, c'est en réalité un <strong>déplacement de minuscules particules</strong>
+            à l'intérieur d'un fil. On appelle ce déplacement le <strong>courant électrique</strong>.
+        </p>
+
+        <!-- Définition -->
+        <div class="def-box">
+            <h3>📌 Définition — Le courant électrique</h3>
+            <p>Le <strong>courant électrique</strong> est un <strong>déplacement ordonné d'électrons</strong> à l'intérieur d'un conducteur
+            (en général un fil métallique).<br>
+            Les électrons sont des particules chargées négativement, présentes dans tous les atomes.
+            Dans certains matériaux, ils peuvent se déplacer librement d'atome en atome : c'est ce mouvement qui constitue le courant.</p>
+        </div>
+
+        <!-- SVG 1 : circuit fermé avec sens du courant -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 260" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="260" fill="#FFFDF5" rx="10"/>
+                <text x="280" y="24" text-anchor="middle" font-size="13" font-weight="900" fill="#E65100" font-family="Nunito, sans-serif">Circuit électrique simple — fermé (la lampe brille)</text>
+
+                <!-- Fils du circuit (rectangle) -->
+                <rect x="80" y="60" width="400" height="140" fill="none" stroke="#5D4037" stroke-width="4" rx="6"/>
+
+                <!-- Pile (générateur) à gauche -->
+                <rect x="60" y="105" width="40" height="50" fill="white" stroke="#5D4037" stroke-width="3"/>
+                <line x1="68" y1="115" x2="68" y2="145" stroke="#333" stroke-width="5"/>
+                <line x1="92" y1="118" x2="92" y2="142" stroke="#333" stroke-width="3"/>
+                <text x="80" y="178" text-anchor="middle" font-size="11" font-weight="900" fill="#5D4037" font-family="Nunito, sans-serif">Pile</text>
+                <text x="68" y="100" text-anchor="middle" font-size="13" font-weight="900" fill="#D32F2F">+</text>
+                <text x="92" y="100" text-anchor="middle" font-size="13" font-weight="900" fill="#1565C0">−</text>
+
+                <!-- Lampe en haut -->
+                <circle cx="280" cy="60" r="22" fill="#FFF9C4" stroke="#F9A825" stroke-width="3"/>
+                <line x1="265" y1="45" x2="295" y2="75" stroke="#F57F17" stroke-width="2"/>
+                <line x1="295" y1="45" x2="265" y2="75" stroke="#F57F17" stroke-width="2"/>
+                <text x="280" y="34" text-anchor="middle" font-size="11" font-weight="900" fill="#5D4037" font-family="Nunito, sans-serif">Lampe (récepteur)</text>
+
+                <!-- Interrupteur à droite -->
+                <circle cx="465" cy="130" r="4" fill="#333"/>
+                <circle cx="465" cy="170" r="4" fill="#333"/>
+                <line x1="465" y1="130" x2="465" y2="170" stroke="#333" stroke-width="3"/>
+                <text x="500" y="154" text-anchor="middle" font-size="11" font-weight="900" fill="#5D4037" font-family="Nunito, sans-serif">Interrupteur</text>
+                <text x="500" y="168" text-anchor="middle" font-size="9.5" fill="#555" font-family="Nunito, sans-serif">(fermé)</text>
+
+                <!-- Flèches sens conventionnel (rouge, depuis +) -->
+                <text x="280" y="218" text-anchor="middle" font-size="11" font-weight="900" fill="#D32F2F" font-family="Nunito, sans-serif">→ Sens conventionnel du courant : du + vers le − (à l'extérieur de la pile) →</text>
+                <path d="M 175 60 L 195 60" stroke="#D32F2F" stroke-width="3" marker-end="url(#arrR)"/>
+                <path d="M 380 60 L 400 60" stroke="#D32F2F" stroke-width="3" marker-end="url(#arrR)"/>
+                <path d="M 465 105 L 465 90" stroke="#D32F2F" stroke-width="3" marker-end="url(#arrR)"/>
+
+                <!-- Flèches sens réel électrons (bleu, depuis -) -->
+                <text x="280" y="236" text-anchor="middle" font-size="11" font-weight="900" fill="#1565C0" font-family="Nunito, sans-serif">⟵ Sens réel des électrons : du − vers le + (à l'extérieur de la pile) ⟵</text>
+                <path d="M 400 200 L 380 200" stroke="#1565C0" stroke-width="3" marker-end="url(#arrB)"/>
+                <path d="M 195 200 L 175 200" stroke="#1565C0" stroke-width="3" marker-end="url(#arrB)"/>
+
+                <defs>
+                    <marker id="arrR" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#D32F2F"/></marker>
+                    <marker id="arrB" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#1565C0"/></marker>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Conducteurs vs isolants -->
+        <div class="rule-box">
+            <h3>🔑 Conducteurs et isolants</h3>
+            <p>Un <strong>conducteur</strong> est un matériau qui laisse circuler les électrons facilement (le courant passe).<br>
+            Un <strong>isolant</strong> empêche le passage des électrons (le courant ne passe pas).<br>
+            C'est pour cela que les fils électriques sont en métal (conducteur) et recouverts de plastique (isolant) pour protéger les utilisateurs.</p>
+        </div>
+
+        <!-- SVG 2 : tableau conducteurs vs isolants -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="210" fill="#FFFDF5" rx="10"/>
+                <text x="280" y="22" text-anchor="middle" font-size="13" font-weight="900" fill="#E65100" font-family="Nunito, sans-serif">Conducteurs vs isolants</text>
+
+                <!-- Colonne conducteurs -->
+                <rect x="20" y="36" width="255" height="160" fill="#FFF3E0" stroke="#F9A825" stroke-width="2" rx="10"/>
+                <text x="147" y="58" text-anchor="middle" font-size="13" font-weight="900" fill="#E65100" font-family="Nunito, sans-serif">⚡ CONDUCTEURS</text>
+                <text x="147" y="74" text-anchor="middle" font-size="10" fill="#666" font-family="Nunito, sans-serif">le courant passe</text>
+
+                <circle cx="55" cy="100" r="14" fill="#D7825A" stroke="#A0522D" stroke-width="2"/>
+                <text x="80" y="104" font-size="11" font-weight="700" fill="#5D4037" font-family="Nunito, sans-serif">Cuivre (fils électriques)</text>
+
+                <circle cx="55" cy="132" r="14" fill="#B0BEC5" stroke="#78909C" stroke-width="2"/>
+                <text x="80" y="136" font-size="11" font-weight="700" fill="#5D4037" font-family="Nunito, sans-serif">Aluminium</text>
+
+                <circle cx="55" cy="164" r="14" fill="#9E9E9E" stroke="#616161" stroke-width="2"/>
+                <text x="80" y="168" font-size="11" font-weight="700" fill="#5D4037" font-family="Nunito, sans-serif">Fer / acier</text>
+
+                <text x="147" y="186" text-anchor="middle" font-size="9.5" font-weight="700" fill="#888" font-family="Nunito, sans-serif">Tous les métaux conduisent !</text>
+
+                <!-- Colonne isolants -->
+                <rect x="285" y="36" width="255" height="160" fill="#ECEFF1" stroke="#90A4AE" stroke-width="2" rx="10"/>
+                <text x="412" y="58" text-anchor="middle" font-size="13" font-weight="900" fill="#37474F" font-family="Nunito, sans-serif">🚫 ISOLANTS</text>
+                <text x="412" y="74" text-anchor="middle" font-size="10" fill="#666" font-family="Nunito, sans-serif">le courant ne passe pas</text>
+
+                <rect x="305" y="90" width="28" height="20" fill="#FFCC80" stroke="#E65100" stroke-width="2" rx="4"/>
+                <text x="345" y="104" font-size="11" font-weight="700" fill="#5D4037" font-family="Nunito, sans-serif">Plastique</text>
+
+                <rect x="305" y="122" width="28" height="20" fill="#A1887F" stroke="#5D4037" stroke-width="2" rx="2"/>
+                <text x="345" y="136" font-size="11" font-weight="700" fill="#5D4037" font-family="Nunito, sans-serif">Bois</text>
+
+                <rect x="305" y="154" width="28" height="20" fill="#B3E5FC" stroke="#0288D1" stroke-width="2" rx="2" opacity="0.7"/>
+                <text x="345" y="168" font-size="11" font-weight="700" fill="#5D4037" font-family="Nunito, sans-serif">Verre / caoutchouc</text>
+
+                <text x="412" y="186" text-anchor="middle" font-size="9.5" font-weight="700" fill="#888" font-family="Nunito, sans-serif">Utilisés pour isoler/protéger</text>
+            </svg>
+        </div>
+
+        <!-- Circuit -->
+        <div class="def-box" style="background:linear-gradient(135deg,#1B5E20,#388E3C)">
+            <h3 style="color:#A5D6A7;">🔌 Le circuit électrique de base</h3>
+            <p>Un circuit électrique simple comprend toujours :<br>
+            • un <strong>générateur</strong> (pile, batterie) qui fournit l'énergie ;<br>
+            • des <strong>fils conducteurs</strong> qui relient les éléments ;<br>
+            • un <strong>récepteur</strong> (lampe, moteur) qui utilise l'énergie ;<br>
+            • souvent un <strong>interrupteur</strong> pour ouvrir ou fermer le circuit.</p>
+        </div>
+
+        <!-- SVG 3 : circuit ouvert vs fermé -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="230" fill="#FFFDF5" rx="10"/>
+
+                <!-- Circuit fermé -->
+                <text x="140" y="20" text-anchor="middle" font-size="12" font-weight="900" fill="#2E7D32" font-family="Nunito, sans-serif">✅ Circuit FERMÉ</text>
+                <rect x="40" y="40" width="200" height="120" fill="none" stroke="#5D4037" stroke-width="3.5" rx="6"/>
+                <rect x="25" y="80" width="30" height="40" fill="white" stroke="#5D4037" stroke-width="2.5"/>
+                <circle cx="140" cy="40" r="16" fill="#FFF59D" stroke="#F9A825" stroke-width="3"/>
+                <line x1="129" y1="29" x2="151" y2="51" stroke="#F57F17" stroke-width="1.8"/>
+                <line x1="151" y1="29" x2="129" y2="51" stroke="#F57F17" stroke-width="1.8"/>
+                <circle cx="240" cy="100" r="3.5" fill="#333"/>
+                <circle cx="240" cy="135" r="3.5" fill="#333"/>
+                <line x1="240" y1="100" x2="240" y2="135" stroke="#2E7D32" stroke-width="3.5"/>
+                <text x="140" y="182" text-anchor="middle" font-size="10.5" font-weight="700" fill="#2E7D32" font-family="Nunito, sans-serif">Interrupteur fermé → boucle continue</text>
+                <text x="140" y="198" text-anchor="middle" font-size="10.5" font-weight="900" fill="#2E7D32" font-family="Nunito, sans-serif">→ Les électrons circulent → la lampe BRILLE 💡</text>
+
+                <!-- Séparateur -->
+                <line x1="280" y1="20" x2="280" y2="210" stroke="#E0E0E0" stroke-width="2" stroke-dasharray="4,4"/>
+
+                <!-- Circuit ouvert -->
+                <text x="420" y="20" text-anchor="middle" font-size="12" font-weight="900" fill="#B71C1C" font-family="Nunito, sans-serif">❌ Circuit OUVERT</text>
+                <rect x="320" y="40" width="200" height="120" fill="none" stroke="#5D4037" stroke-width="3.5" rx="6"/>
+                <rect x="305" y="80" width="30" height="40" fill="white" stroke="#5D4037" stroke-width="2.5"/>
+                <circle cx="420" cy="40" r="16" fill="#F5F5F5" stroke="#BDBDBD" stroke-width="3"/>
+                <circle cx="520" cy="100" r="3.5" fill="#333"/>
+                <circle cx="520" cy="135" r="3.5" fill="#333"/>
+                <line x1="520" y1="100" x2="535" y2="112" stroke="#B71C1C" stroke-width="3.5"/>
+                <text x="420" y="182" text-anchor="middle" font-size="10.5" font-weight="700" fill="#B71C1C" font-family="Nunito, sans-serif">Interrupteur ouvert → boucle coupée</text>
+                <text x="420" y="198" text-anchor="middle" font-size="10.5" font-weight="900" fill="#B71C1C" font-family="Nunito, sans-serif">→ Les électrons ne circulent pas → lampe ÉTEINTE</text>
+            </svg>
+        </div>
+
+        <!-- Conditions -->
+        <p style="font-size:.95rem;font-weight:800;color:var(--primary-dark);margin-bottom:12px;">⚠️ Conditions pour qu'un circuit fonctionne</p>
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">🔁</div>
+                <div class="cas-eq">Circuit fermé</div>
+                <div class="cas-desc">Le chemin doit former une <strong>boucle continue</strong>, sans coupure</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🔋</div>
+                <div class="cas-eq">Source d'énergie</div>
+                <div class="cas-desc">Un générateur (pile, batterie) doit fournir l'énergie nécessaire</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">💡</div>
+                <div class="cas-eq">Récepteur</div>
+                <div class="cas-desc">Un élément (lampe, moteur) doit utiliser cette énergie</div>
+            </div>
+        </div>
+
+        <!-- Piège -->
+        <div class="trap-box">
+            <h3>⚠️ Piège fréquent — Sens du courant</h3>
+            <p>Le <strong>sens conventionnel</strong> du courant (utilisé dans les schémas, du <strong>+</strong> vers le <strong>−</strong> à l'extérieur du générateur)
+            est <strong>l'inverse</strong> du sens réel de déplacement des électrons (du <strong>−</strong> vers le <strong>+</strong>).<br>
+            Cette convention a été fixée avant la découverte de l'électron — on ne l'a jamais changée depuis !</p>
+        </div>
+
+        <!-- SVG 4 : symboles électriques -->
+        <p style="font-size:.95rem;font-weight:800;color:var(--primary-dark);margin-bottom:10px;margin-top:8px;">📌 Symboles électriques normalisés</p>
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 130" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="130" fill="#FFFDF5" rx="10"/>
+
+                <!-- Pile -->
+                <line x1="40" y1="35" x2="40" y2="65" stroke="#333" stroke-width="5"/>
+                <line x1="60" y1="40" x2="60" y2="60" stroke="#333" stroke-width="2.5"/>
+                <line x1="20" y1="50" x2="40" y2="50" stroke="#333" stroke-width="2"/>
+                <line x1="60" y1="50" x2="80" y2="50" stroke="#333" stroke-width="2"/>
+                <text x="50" y="90" text-anchor="middle" font-size="11" font-weight="900" fill="#5D4037" font-family="Nunito, sans-serif">Pile</text>
+
+                <!-- Lampe -->
+                <circle cx="170" cy="50" r="18" fill="#FFF9C4" stroke="#F9A825" stroke-width="2.5"/>
+                <line x1="157" y1="37" x2="183" y2="63" stroke="#F57F17" stroke-width="1.8"/>
+                <line x1="183" y1="37" x2="157" y2="63" stroke="#F57F17" stroke-width="1.8"/>
+                <line x1="135" y1="50" x2="152" y2="50" stroke="#333" stroke-width="2"/>
+                <line x1="188" y1="50" x2="205" y2="50" stroke="#333" stroke-width="2"/>
+                <text x="170" y="90" text-anchor="middle" font-size="11" font-weight="900" fill="#5D4037" font-family="Nunito, sans-serif">Lampe</text>
+
+                <!-- Interrupteur -->
+                <circle cx="280" cy="60" r="3" fill="#333"/>
+                <circle cx="320" cy="60" r="3" fill="#333"/>
+                <line x1="280" y1="60" x2="313" y2="42" stroke="#333" stroke-width="2.5"/>
+                <line x1="255" y1="60" x2="280" y2="60" stroke="#333" stroke-width="2"/>
+                <line x1="320" y1="60" x2="345" y2="60" stroke="#333" stroke-width="2"/>
+                <text x="300" y="90" text-anchor="middle" font-size="11" font-weight="900" fill="#5D4037" font-family="Nunito, sans-serif">Interrupteur</text>
+
+                <!-- Fil conducteur -->
+                <line x1="395" y1="50" x2="465" y2="50" stroke="#333" stroke-width="2.5"/>
+                <circle cx="395" cy="50" r="2.5" fill="#333"/>
+                <circle cx="465" cy="50" r="2.5" fill="#333"/>
+                <text x="430" y="90" text-anchor="middle" font-size="11" font-weight="900" fill="#5D4037" font-family="Nunito, sans-serif">Fil conducteur</text>
+
+                <!-- Résistance -->
+                <path d="M 480 50 L 488 50 L 492 38 L 500 62 L 508 38 L 516 62 L 520 50 L 528 50" fill="none" stroke="#333" stroke-width="2"/>
+                <text x="503" y="90" text-anchor="middle" font-size="11" font-weight="900" fill="#5D4037" font-family="Nunito, sans-serif">Résistance</text>
+            </svg>
+        </div>
+
+        <!-- Exemples rapides -->
+        <p style="font-size:.9rem;font-weight:800;color:var(--primary-dark);margin-bottom:10px;margin-top:8px;">📌 À retenir</p>
+        <div class="examples-row">
+            <div class="example-chip">Métal → conducteur<span>cuivre, fer, alu</span></div>
+            <div class="example-chip">Plastique → isolant<span>protège les fils</span></div>
+            <div class="example-chip">Sens conv. : + → −<span>dans les schémas</span></div>
+            <div class="example-chip">Sens réel e⁻ : − → +<span>vrai déplacement</span></div>
+            <div class="example-chip">Circuit fermé = boucle<span>sans coupure</span></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon amber">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Pièges sur le sens du courant et les isolants</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Le courant électrique correspond à un déplacement de :</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">Électrons</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">Protons</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">Molécules d'eau</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">Atomes entiers</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> L'eau pure (distillée, sans sel ni minéraux) est-elle conductrice ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">Non — l'eau pure est un très mauvais conducteur</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">Oui — toute eau conduit très bien</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">Oui, comme le cuivre</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">Seulement si elle est chaude</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Dans quel sens se déplacent réellement les électrons dans un fil, à l'extérieur du générateur ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">Du − vers le +</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">Du + vers le −</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">Ils ne bougent pas</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">Dans les deux sens à la fois</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Lequel de ces matériaux est un <strong>isolant</strong> ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">Caoutchouc</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">Cuivre</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">Aluminium</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">Fer</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Pour que la lampe d'un circuit s'allume, il faut que le circuit soit :</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Fermé (boucle continue)</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Ouvert</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Coupé en deux endroits</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Sans générateur</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Vocabulaire et conditions de fonctionnement</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1 — Le courant électrique</div>
+            <div class="fill-sentence">
+                Le courant électrique est un déplacement d'<input class="blank" id="f1a" placeholder="?"> à l'intérieur d'un
+                <input class="blank" id="f1b" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2 — Conducteurs et isolants</div>
+            <div class="fill-sentence">
+                Les métaux comme le cuivre sont de bons <input class="blank" id="f2a" placeholder="?">.
+                Le plastique, le bois et le verre sont des <input class="blank" id="f2b" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3 — Conditions d'un circuit</div>
+            <div class="fill-sentence">
+                Pour que la lampe s'allume, le circuit doit être <input class="blank" id="f3a" placeholder="?"> (boucle continue),
+                il faut une source d'énergie appelée <input class="blank" id="f3b" placeholder="?">,
+                et un élément qui consomme cette énergie appelé <input class="blank" id="f3c" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Identification de circuits</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Circuit ouvert ou fermé ?</div>
+                <div class="ex-stmt">
+                    Un circuit comprend une pile, une lampe et un interrupteur. L'interrupteur est en position <strong>levée</strong> (les deux contacts ne se touchent pas).
+                    La lampe est-elle allumée ? Justifie.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Un interrupteur levé signifie que les deux contacts métalliques sont <strong>séparés</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">La boucle du circuit est donc <strong>coupée</strong> : le circuit est <strong>ouvert</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Les électrons ne peuvent plus circuler dans tout le circuit.</div></div>
+                <div class="final-ans">✅ La lampe est <strong>éteinte</strong>, car le circuit est ouvert : aucun courant ne circule.</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Identifier les composants</div>
+                <div class="ex-stmt">
+                    Un schéma montre : une pile reliée par des fils à une lampe, avec un interrupteur fermé entre les deux.
+                    Identifie le rôle de chaque élément (générateur, récepteur, conducteur, commande).
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">La <strong>pile</strong> est le <strong>générateur</strong> : elle fournit l'énergie électrique.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Les <strong>fils</strong> sont les <strong>conducteurs</strong> : ils transportent le courant.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">La <strong>lampe</strong> est le <strong>récepteur</strong> : elle utilise l'énergie pour produire de la lumière.</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">L'<strong>interrupteur</strong> est l'élément de <strong>commande</strong> : il ouvre ou ferme le circuit.</div></div>
+                <div class="final-ans">✅ Pile = générateur · Fils = conducteurs · Lampe = récepteur · Interrupteur = commande.</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Pourquoi la lampe ne s'allume pas ?</div>
+                <div class="ex-stmt">
+                    Léa construit un circuit avec une pile, une lampe et des fils. La lampe ne s'allume pas.
+                    Elle vérifie : la pile est neuve, les fils sont en cuivre, mais un des fils est entouré de plastique sur toute sa longueur
+                    et ce plastique touche directement les deux bornes de la lampe (le fil de cuivre, lui, ne touche rien). Explique le problème.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Le plastique est un <strong>isolant</strong> : il ne permet pas le passage du courant.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Si c'est la gaine plastique (et non le cuivre) qui touche les bornes de la lampe, le contact électrique n'est <strong>pas établi</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Il faut que le <strong>fil de cuivre</strong> (le conducteur) touche directement les bornes métalliques de la lampe.</div></div>
+                <div class="final-ans">✅ Le circuit ne fonctionne pas car l'isolant (plastique) empêche le contact électrique — il faut dénuder le fil pour que le cuivre touche la lampe.</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Vrai ou faux CE1D</div>
+                <div class="bonus-stmt">
+                    Pour chacune de ces affirmations, dis si elle est vraie ou fausse :<br>
+                    1. Le sens conventionnel du courant va du − vers le + à l'extérieur du générateur.<br>
+                    2. Tous les métaux sont des conducteurs.<br>
+                    3. Un circuit ouvert laisse passer le courant.<br>
+                    4. Les électrons se déplacent réellement du − vers le + à l'extérieur du générateur.
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>FAUX</strong> — Le sens conventionnel va du <strong>+ vers le −</strong> à l'extérieur du générateur (pas l'inverse).</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>VRAI</strong> — Tous les métaux laissent circuler les électrons : ce sont tous de bons conducteurs.</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>FAUX</strong> — Un circuit <strong>ouvert</strong> est coupé : le courant ne peut pas circuler. Il faut un circuit fermé.</div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text"><strong>VRAI</strong> — Les électrons (charge négative) se déplacent réellement du <strong>− vers le +</strong>, à l'inverse du sens conventionnel.</div></div>
+                <div class="bonus-ans">
+                    Réponses : 1. Faux · 2. Vrai · 3. Faux · 4. Vrai<br>
+                    Retiens bien la différence entre sens conventionnel (+ → −) et sens réel des électrons (− → +) !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 1 terminé !</h2>
+    <p>Bravo ! Tu connais maintenant les bases du courant électrique et des circuits.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue vers le niveau 2 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Électricité</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="physique_electricite_niveau1.html" class="nav-btn current">▶ Niveau 1 — Introduction & courant</a>
+        <a href="physique_electricite_niveau2.html" class="nav-btn">Niveau 2</a>
+        <a href="physique_electricite_niveau3.html" class="nav-btn">Niveau 3</a>
+        <a href="physique_electricite_niveau4.html" class="nav-btn">Niveau 4</a>
+        <a href="physique_electricite_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! Le courant électrique est un déplacement d'électrons (particules chargées négativement) à l'intérieur d'un conducteur.",
+    2:"✅ Bravo ! L'eau pure (sans sel ni minéraux) ne contient presque pas de charges libres : elle est un très mauvais conducteur. C'est l'eau avec des minéraux/sel qui conduit (eau de mer, eau du robinet).",
+    3:"✅ Parfait ! Les électrons, chargés négativement, se déplacent réellement du − vers le + à l'extérieur du générateur — l'inverse du sens conventionnel.",
+    4:"✅ Exact ! Le caoutchouc est un isolant : c'est pourquoi on l'utilise pour les gants et les semelles de protection électrique.",
+    5:"✅ Oui ! Il faut un circuit fermé (boucle continue, sans coupure) pour que le courant circule et que la lampe s'allume."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Ce sont les électrons qui se déplacent, pas les protons (qui restent dans le noyau) ni des molécules ou atomes entiers.",
+    2:"❌ Non, c'est un piège classique ! L'eau pure (distillée) ne contient presque pas d'ions libres : elle conduit très mal. C'est l'eau avec du sel ou des minéraux dissous qui devient conductrice.",
+    3:"❌ Non. C'est le sens conventionnel qui va du + vers le −. Les électrons, eux, se déplacent réellement du − vers le + (sens inverse).",
+    4:"❌ Non. Cuivre, aluminium et fer sont tous des métaux, donc des conducteurs. Seul le caoutchouc est un isolant.",
+    5:"❌ Non. Un circuit ouvert (coupé) empêche le courant de circuler — la lampe reste éteinte. Il faut un circuit fermé."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['electrons','electron'],['conducteur','conducteurs']],
+        msgOk:"✅ Le courant électrique est un déplacement d'électrons à l'intérieur d'un conducteur.",
+        msgErr:"❌ Attendus : « électrons » et « conducteur »."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['conducteurs','conducteur'],['isolants','isolant']],
+        msgOk:"✅ Le cuivre est un bon conducteur. Plastique, bois et verre sont des isolants.",
+        msgErr:"❌ Attendus : « conducteurs » et « isolants »."
+    },
+    3:{
+        fields:['f3a','f3b','f3c'],
+        accepted:[['ferme','fermee'],['generateur'],['recepteur']],
+        msgOk:"✅ Circuit fermé + générateur (source d'énergie) + récepteur (qui consomme l'énergie) = conditions pour que ça fonctionne.",
+        msgErr:"❌ Attendus : « fermé », « générateur » et « récepteur »."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_electricite_1', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m);
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>
