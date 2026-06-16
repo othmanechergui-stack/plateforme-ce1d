@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique — Électricité · Niveau 3 — Circuits série et dérivés</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#F9A825; --primary-dark:#E65100; --primary-mid:#FBC02D; --primary-bg:#FFF8E1;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#E65100 0%,#F9A825 55%,#FFE082 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(230,81,0,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#F9A825; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#E65100; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#E65100,#F9A825,#FFE082); transition:width .5s cubic-bezier(.34,1.56,.64,1); }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.amber { background:var(--primary-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:18px; }
+
+        .def-box { background:linear-gradient(135deg,#E65100,#F57F17); color:white; border-radius:14px; padding:16px 20px; margin:16px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#FFE082; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFF59D; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:16px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #FFCC80; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.8rem; }
+        .cas-eq   { font-size:1.1rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* Quiz - une question à la fois */
+        .quiz-counter { font-size:.8rem; font-weight:800; color:var(--text-light); margin-bottom:12px; }
+        .q-text { font-size:1.05rem; font-weight:800; padding:14px 16px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:14px; }
+        .opts { display:grid; grid-template-columns:1fr; gap:10px; }
+        .opt-btn { padding:13px 16px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.95rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct      { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong        { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:14px; padding:12px 14px; border-radius:10px; font-size:.9rem; font-weight:700; }
+        .q-feedback.show    { display:block; }
+        .q-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+        .next-btn { margin-top:16px; padding:12px 24px; border-radius:12px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.95rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; display:none; }
+        .next-btn.show { display:inline-block; }
+        .next-btn:hover { transform:translateY(-2px); }
+
+        .result-panel { display:none; text-align:center; padding:10px 0; }
+        .result-panel.show { display:block; }
+        .result-score { font-size:1.4rem; font-weight:900; color:var(--primary-dark); margin-bottom:10px; }
+        .restart-btn { padding:12px 24px; border-radius:12px; border:none; background:var(--red); color:white; font-family:inherit; font-size:.95rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--red-dark); }
+
+        .completion { display:none; background:linear-gradient(135deg,#E65100,#F9A825,#FFE082); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #BF360C; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .fail-panel { display:none; background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:var(--radius); padding:30px 24px; text-align:center; box-shadow:0 6px 0 #7F0000; }
+        .fail-panel.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        .fail-panel h2 { font-size:1.6rem; font-weight:900; margin-bottom:8px; }
+        .fail-panel p  { font-size:.96rem; opacity:.93; margin-bottom:16px; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); text-align:center; }
+        .nav-btn { display:inline-block; padding:12px 24px; border-radius:50px; text-decoration:none; font-size:.92rem; font-weight:800; background:var(--primary); color:white; border:none; box-shadow:0 4px 0 var(--primary-dark); transition:all .15s; }
+        .nav-btn:hover { transform:translateY(-2px); }
+
+        @media(max-width:580px){ .header-inner{flex-direction:column;gap:8px} .card-body{padding:16px} }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>⚡ Électricité · Circuits série et dérivés</h1>
+            <p>Niveau 3 · Montage série vs montage en dérivation (parallèle)</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">Question 1 / 10</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 3 — Avancé</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon amber">📖</div>
+        <div>
+            <div class="card-title">La leçon — Circuits série et circuits dérivés</div>
+            <div class="card-sub">Deux façons de monter un circuit, et leurs conséquences</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Il existe deux grandes façons de relier plusieurs récepteurs (lampes, appareils…) dans un circuit :
+            <strong>en série</strong> ou <strong>en dérivation</strong> (aussi appelée « en parallèle »). Le comportement du circuit change complètement selon le montage choisi.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Le circuit série</h3>
+            <p>Dans un circuit <strong>série</strong>, les composants sont placés <strong>les uns après les autres</strong>, sur un <strong>seul chemin</strong> pour le courant.<br>
+            Conséquence importante : si <strong>un seul</strong> composant est défectueux ou si on ouvre le circuit à un seul endroit, <strong>tout s'arrête</strong> —
+            le courant ne peut plus circuler nulle part.<br>
+            Exemple classique : une vieille guirlande de Noël où toutes les ampoules s'éteignent dès qu'une seule grille.</p>
+        </div>
+
+        <!-- SVG circuit série -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 150" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="150" fill="#FFFDF5" rx="10"/>
+                <text x="280" y="20" text-anchor="middle" font-size="12" font-weight="900" fill="#E65100" font-family="Nunito, sans-serif">Circuit SÉRIE — un seul chemin pour le courant</text>
+
+                <rect x="60" y="45" width="440" height="70" fill="none" stroke="#5D4037" stroke-width="3.5" rx="6"/>
+                <rect x="45" y="65" width="30" height="32" fill="white" stroke="#5D4037" stroke-width="2.5"/>
+                <text x="60" y="135" text-anchor="middle" font-size="10" fill="#5D4037" font-family="Nunito, sans-serif">Pile</text>
+
+                <circle cx="220" cy="45" r="16" fill="#FFF9C4" stroke="#F9A825" stroke-width="2.5"/>
+                <line x1="209" y1="34" x2="231" y2="56" stroke="#F57F17" stroke-width="1.6"/>
+                <line x1="231" y1="34" x2="209" y2="56" stroke="#F57F17" stroke-width="1.6"/>
+                <text x="220" y="135" text-anchor="middle" font-size="10" fill="#5D4037" font-family="Nunito, sans-serif">Lampe 1</text>
+
+                <circle cx="350" cy="45" r="16" fill="#FFF9C4" stroke="#F9A825" stroke-width="2.5"/>
+                <line x1="339" y1="34" x2="361" y2="56" stroke="#F57F17" stroke-width="1.6"/>
+                <line x1="361" y1="34" x2="339" y2="56" stroke="#F57F17" stroke-width="1.6"/>
+                <text x="350" y="135" text-anchor="middle" font-size="10" fill="#5D4037" font-family="Nunito, sans-serif">Lampe 2</text>
+
+                <text x="280" y="105" text-anchor="middle" font-size="10.5" font-weight="900" fill="#5D4037" font-family="Nunito, sans-serif">→ même courant I partout →</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔑 Le circuit en dérivation (parallèle)</h3>
+            <p>Dans un circuit <strong>en dérivation</strong>, le courant se divise en <strong>plusieurs chemins</strong> (branches) qui fonctionnent indépendamment.<br>
+            Conséquence importante : si <strong>une</strong> branche est coupée (ampoule grillée), <strong>les autres branches continuent</strong> de fonctionner normalement.<br>
+            C'est ce montage qui est utilisé dans les <strong>installations domestiques</strong> : chaque appareil (frigo, lampe, four…) fonctionne indépendamment des autres.</p>
+        </div>
+
+        <!-- SVG circuit dérivation -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 180" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="180" fill="#FFFDF5" rx="10"/>
+                <text x="280" y="20" text-anchor="middle" font-size="12" font-weight="900" fill="#1A237E" font-family="Nunito, sans-serif">Circuit en DÉRIVATION — plusieurs chemins (branches)</text>
+
+                <rect x="40" y="80" width="25" height="30" fill="white" stroke="#5D4037" stroke-width="2.5"/>
+                <line x1="65" y1="95" x2="120" y2="95" stroke="#5D4037" stroke-width="3"/>
+                <line x1="120" y1="40" x2="120" y2="150" stroke="#5D4037" stroke-width="3"/>
+
+                <line x1="120" y1="55" x2="220" y2="55" stroke="#5D4037" stroke-width="3"/>
+                <circle cx="250" cy="55" r="15" fill="#FFF9C4" stroke="#F9A825" stroke-width="2.5"/>
+                <line x1="239" y1="44" x2="261" y2="66" stroke="#F57F17" stroke-width="1.6"/>
+                <line x1="261" y1="44" x2="239" y2="66" stroke="#F57F17" stroke-width="1.6"/>
+                <line x1="280" y1="55" x2="440" y2="55" stroke="#5D4037" stroke-width="3"/>
+                <text x="250" y="30" text-anchor="middle" font-size="9.5" fill="#5D4037" font-family="Nunito, sans-serif">Branche A</text>
+
+                <line x1="120" y1="135" x2="220" y2="135" stroke="#5D4037" stroke-width="3"/>
+                <circle cx="250" cy="135" r="15" fill="#FFF9C4" stroke="#F9A825" stroke-width="2.5"/>
+                <line x1="239" y1="124" x2="261" y2="146" stroke="#F57F17" stroke-width="1.6"/>
+                <line x1="261" y1="124" x2="239" y2="146" stroke="#F57F17" stroke-width="1.6"/>
+                <line x1="280" y1="135" x2="440" y2="135" stroke="#5D4037" stroke-width="3"/>
+                <text x="250" y="160" text-anchor="middle" font-size="9.5" fill="#5D4037" font-family="Nunito, sans-serif">Branche B</text>
+
+                <line x1="440" y1="40" x2="440" y2="150" stroke="#5D4037" stroke-width="3"/>
+                <text x="490" y="98" text-anchor="middle" font-size="9.5" font-weight="900" fill="#1A237E" font-family="Nunito, sans-serif">Même U aux 2 branches</text>
+            </svg>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">🔗</div>
+                <div class="cas-eq">Série</div>
+                <div class="cas-desc">I identique partout · U se répartit entre les composants</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🔀</div>
+                <div class="cas-eq">Dérivation</div>
+                <div class="cas-desc">U identique sur chaque branche · I total se divise entre les branches</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🏠</div>
+                <div class="cas-eq">Maison = dérivation</div>
+                <div class="cas-desc">Chaque appareil fonctionne indépendamment des autres</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège fréquent — Ne pas confondre I et U</h3>
+            <p>En <strong>série</strong> : c'est l'<strong>intensité</strong> qui reste la même partout (et la tension qui se répartit).<br>
+            En <strong>dérivation</strong> : c'est la <strong>tension</strong> qui reste la même sur chaque branche (et l'intensité totale qui se divise : I_total = I₁ + I₂ + …).<br>
+            Beaucoup d'élèves inversent ces deux règles — relis-les bien !</p>
+        </div>
+
+    </div>
+</div>
+
+<!-- QUIZ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon amber">❓</div>
+        <div>
+            <div class="card-title">Quiz — Circuits série et dérivés</div>
+            <div class="card-sub">10 questions · Une à la fois · Réussite à partir de 80%</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div id="quizArea">
+            <div class="quiz-counter" id="quizCounter">Question 1 / 10</div>
+            <div class="q-text" id="qText"></div>
+            <div class="opts" id="qOpts"></div>
+            <div class="q-feedback" id="qFeedback"></div>
+            <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Suivant →</button>
+        </div>
+
+        <div class="result-panel" id="resultPanel">
+            <div class="result-score" id="resultScore"></div>
+        </div>
+
+    </div>
+</div>
+
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 3 terminé !</h2>
+    <p>Bravo ! Tu sais maintenant distinguer un circuit série d'un circuit en dérivation.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP !</p>
+</div>
+
+<div class="fail-panel" id="failPanel">
+    <h2>Pas encore validé 😕</h2>
+    <p>Il faut au moins 80% de bonnes réponses pour valider ce niveau. Relis la leçon et retente ta chance !</p>
+    <button class="restart-btn" onclick="location.reload()">🔄 Recommencer</button>
+</div>
+
+<div class="level-nav" id="levelNav" style="display:none;">
+    <a href="physique_electricite_niveau4.html" class="nav-btn" id="nextLevelBtn">▶ Niveau 4</a>
+</div>
+
+</main>
+
+<script>
+const QUESTIONS = [
+    {
+        text: "Dans un circuit série, comment sont placés les composants ?",
+        opts: ["Les uns après les autres, sur un seul chemin", "Chacun sur sa propre branche indépendante", "Toujours directement sur le générateur", "Cela dépend de la couleur des fils"],
+        correct: 0,
+        ok: "✅ Exact ! En série, les composants se suivent sur un seul et même chemin pour le courant.",
+        err: "❌ Non. En série, les composants sont placés les uns après les autres, sur un seul chemin (pas de branches séparées)."
+    },
+    {
+        text: "Dans un circuit série, si une des lampes grille (se coupe), que se passe-t-il pour les autres lampes ?",
+        opts: ["Elles continuent de briller normalement", "Elles s'éteignent aussi, car le circuit est coupé", "Elles brillent plus fort", "Rien, cela ne change rien"],
+        correct: 1,
+        ok: "✅ Bravo ! En série, il n'y a qu'un seul chemin : si ce chemin est coupé à un endroit, plus rien ne fonctionne.",
+        err: "❌ Non. En série, toutes les lampes s'éteignent car il n'y a qu'un seul chemin pour le courant, et il est coupé."
+    },
+    {
+        text: "Dans un circuit en dérivation (parallèle), si une lampe grille sur une branche, les autres lampes :",
+        opts: ["S'éteignent toutes aussi", "Continuent de fonctionner normalement", "Deviennent plus faibles", "Explosent"],
+        correct: 1,
+        ok: "✅ Parfait ! En dérivation, chaque branche est indépendante : une branche coupée n'affecte pas les autres.",
+        err: "❌ Non. En dérivation, les branches sont indépendantes : si l'une est coupée, les autres continuent de fonctionner."
+    },
+    {
+        text: "Dans un circuit série, l'intensité du courant :",
+        opts: ["Est la même en tout point du circuit", "Se divise entre les composants", "Est nulle au milieu du circuit", "Double à chaque composant"],
+        correct: 0,
+        ok: "✅ Exact ! En série, il n'y a qu'un seul chemin, donc l'intensité est identique partout dans le circuit.",
+        err: "❌ Non. En série, l'intensité est LA MÊME partout (un seul chemin pour le courant)."
+    },
+    {
+        text: "Dans un circuit en dérivation avec plusieurs branches, l'intensité totale délivrée par le générateur :",
+        opts: ["Est la même dans chaque branche", "Se divise entre les différentes branches (I total = I1 + I2 + …)", "Est toujours nulle", "Ne dépend pas des branches"],
+        correct: 1,
+        ok: "✅ Bravo ! En dérivation, le courant total se répartit entre les branches : I_total = I1 + I2 + …",
+        err: "❌ Non. En dérivation, l'intensité totale SE DIVISE entre les branches : I_total = I1 + I2 + … (ce n'est pas la même dans chaque branche, sauf cas particulier)."
+    },
+    {
+        text: "Dans un circuit série avec deux lampes, la tension totale du générateur :",
+        opts: ["Est entièrement appliquée sur chaque lampe", "Se répartit entre les deux lampes (U total = U1 + U2)", "Ne dépend pas des lampes", "Est toujours nulle"],
+        correct: 1,
+        ok: "✅ Exact ! En série, la tension du générateur se répartit (se partage) entre les différents composants.",
+        err: "❌ Non. En série, c'est la TENSION qui se répartit entre les composants : U_total = U1 + U2 + …"
+    },
+    {
+        text: "Dans un circuit en dérivation, la tension aux bornes de chaque branche :",
+        opts: ["Se divise entre les branches", "Est la même pour toutes les branches (égale à celle du générateur)", "Est toujours nulle", "Double à chaque branche"],
+        correct: 1,
+        ok: "✅ Parfait ! En dérivation, c'est la tension qui reste identique sur chaque branche.",
+        err: "❌ Non. En dérivation, la TENSION reste la même sur chaque branche (égale à celle du générateur)."
+    },
+    {
+        text: "Les installations électriques domestiques (prises, appareils) sont généralement montées :",
+        opts: ["En série, pour économiser les fils", "En dérivation, pour que chaque appareil fonctionne indépendamment", "Cela n'a pas d'importance", "Jamais reliées entre elles"],
+        correct: 1,
+        ok: "✅ Bravo ! Les maisons utilisent un montage en dérivation : éteindre une lampe n'éteint pas le frigo !",
+        err: "❌ Non. Les installations domestiques sont montées EN DÉRIVATION, pour que chaque appareil fonctionne indépendamment des autres."
+    },
+    {
+        text: "Une vieille guirlande de Noël où toutes les ampoules s'éteignent dès qu'une seule grille est montée :",
+        opts: ["En série", "En dérivation", "Ni l'un ni l'autre", "Avec un seul fil sans circuit"],
+        correct: 0,
+        ok: "✅ Exact ! C'est la signature d'un montage en série : un seul chemin, donc une seule coupure suffit à tout arrêter.",
+        err: "❌ Non. Ce comportement (tout s'éteint si une ampoule grille) est typique d'un montage EN SÉRIE."
+    },
+    {
+        text: "Un circuit en dérivation a deux branches parcourues par 0,5 A et 0,3 A. Quelle est l'intensité totale délivrée par le générateur ?",
+        opts: ["0,2 A", "0,15 A", "0,8 A", "1,5 A"],
+        correct: 2,
+        ok: "✅ Parfait ! I_total = I1 + I2 = 0,5 + 0,3 = 0,8 A.",
+        err: "❌ Non. En dérivation, I_total = I1 + I2 = 0,5 + 0,3 = 0,8 A."
+    }
+];
+
+const TOTAL = QUESTIONS.length;
+let current = 0;
+let score = 0;
+let answered = false;
+
+function renderQuestion() {
+    const q = QUESTIONS[current];
+    document.getElementById('quizCounter').textContent = 'Question ' + (current + 1) + ' / ' + TOTAL;
+    document.getElementById('progTxt').textContent = 'Question ' + (current + 1) + ' / ' + TOTAL;
+    document.getElementById('barFill').style.width = Math.round((current / TOTAL) * 100) + '%';
+    document.getElementById('qText').textContent = q.text;
+
+    const optsWrap = document.getElementById('qOpts');
+    optsWrap.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn';
+        btn.type = 'button';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => selectAnswer(idx));
+        optsWrap.appendChild(btn);
+    });
+
+    const fb = document.getElementById('qFeedback');
+    fb.className = 'q-feedback';
+    fb.textContent = '';
+    document.getElementById('nextBtn').classList.remove('show');
+    answered = false;
+}
+
+function selectAnswer(idx) {
+    if (answered) return;
+    answered = true;
+    const q = QUESTIONS[current];
+    const isOk = idx === q.correct;
+    const btns = document.querySelectorAll('#qOpts .opt-btn');
+    btns.forEach(b => b.disabled = true);
+    btns[idx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[q.correct].classList.add('show-correct');
+
+    const fb = document.getElementById('qFeedback');
+    fb.textContent = isOk ? q.ok : q.err;
+    fb.className = 'q-feedback show ' + (isOk ? 'correct' : 'wrong');
+
+    if (isOk) {
+        score++;
+        const xp = score * 12;
+        document.getElementById('xpVal').textContent = xp;
+        const badge = document.getElementById('xpBadge');
+        badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    }
+
+    const nextBtn = document.getElementById('nextBtn');
+    nextBtn.textContent = (current === TOTAL - 1) ? 'Voir mon résultat →' : 'Suivant →';
+    nextBtn.classList.add('show');
+}
+
+function nextQuestion() {
+    current++;
+    if (current >= TOTAL) {
+        showResult();
+    } else {
+        renderQuestion();
+    }
+}
+
+function showResult() {
+    document.getElementById('barFill').style.width = '100%';
+    document.getElementById('quizArea').style.display = 'none';
+    const panel = document.getElementById('resultPanel');
+    panel.classList.add('show');
+    document.getElementById('resultScore').textContent = 'Score : ' + score + ' / ' + TOTAL;
+
+    const xp = score * 12;
+    document.getElementById('xpVal').textContent = xp;
+
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_electricite_3', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        document.getElementById('levelNav').style.display = 'block';
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    } else {
+        const f = document.getElementById('failPanel');
+        f.classList.add('show');
+        setTimeout(() => f.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

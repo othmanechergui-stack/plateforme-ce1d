@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique — Électricité · Niveau 4 — Loi d'Ohm et résistance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#F9A825; --primary-dark:#E65100; --primary-mid:#FBC02D; --primary-bg:#FFF8E1;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#E65100 0%,#F9A825 55%,#FFE082 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(230,81,0,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#F9A825; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#E65100; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#E65100,#F9A825,#FFE082); transition:width .5s cubic-bezier(.34,1.56,.64,1); }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.amber { background:var(--primary-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:18px; }
+
+        .formula-hero { background:linear-gradient(135deg,var(--primary-bg),#FFE0B2); border:2px solid #FFCC80; border-radius:14px; padding:18px 22px; margin-bottom:20px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+        .formula-big { font-size:1.6rem; font-weight:900; color:var(--primary-dark); font-family:'Courier New',monospace; }
+        .formula-details { font-size:.9rem; color:#555; line-height:2; }
+        .formula-details strong { color:var(--primary-dark); }
+
+        .def-box { background:linear-gradient(135deg,#E65100,#F57F17); color:white; border-radius:14px; padding:16px 20px; margin:16px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#FFE082; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFF59D; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:16px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #FFCC80; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.5rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .cas-eq   { font-size:1.1rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        /* Quiz */
+        .quiz-counter { font-size:.8rem; font-weight:800; color:var(--text-light); margin-bottom:12px; }
+        .q-text { font-size:1.05rem; font-weight:800; padding:14px 16px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:14px; }
+        .opts { display:grid; grid-template-columns:1fr; gap:10px; }
+        .opt-btn { padding:13px 16px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.95rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct      { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong        { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:14px; padding:12px 14px; border-radius:10px; font-size:.9rem; font-weight:700; }
+        .q-feedback.show    { display:block; }
+        .q-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+        .next-btn { margin-top:16px; padding:12px 24px; border-radius:12px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.95rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; display:none; }
+        .next-btn.show { display:inline-block; }
+        .next-btn:hover { transform:translateY(-2px); }
+
+        .result-panel { display:none; text-align:center; padding:10px 0; }
+        .result-panel.show { display:block; }
+        .result-score { font-size:1.4rem; font-weight:900; color:var(--primary-dark); margin-bottom:10px; }
+        .restart-btn { padding:12px 24px; border-radius:12px; border:none; background:var(--red); color:white; font-family:inherit; font-size:.95rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--red-dark); }
+
+        .completion { display:none; background:linear-gradient(135deg,#E65100,#F9A825,#FFE082); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #BF360C; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .fail-panel { display:none; background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:var(--radius); padding:30px 24px; text-align:center; box-shadow:0 6px 0 #7F0000; }
+        .fail-panel.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        .fail-panel h2 { font-size:1.6rem; font-weight:900; margin-bottom:8px; }
+        .fail-panel p  { font-size:.96rem; opacity:.93; margin-bottom:16px; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); text-align:center; }
+        .nav-btn { display:inline-block; padding:12px 24px; border-radius:50px; text-decoration:none; font-size:.92rem; font-weight:800; background:var(--primary); color:white; border:none; box-shadow:0 4px 0 var(--primary-dark); transition:all .15s; }
+        .nav-btn:hover { transform:translateY(-2px); }
+
+        @media(max-width:580px){ .header-inner{flex-direction:column;gap:8px} .card-body{padding:16px} }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>⚡ Électricité · Loi d'Ohm et résistance</h1>
+            <p>Niveau 4 · U = R × I</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">Question 1 / 10</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 4 — Expert</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon amber">📖</div>
+        <div>
+            <div class="card-title">La leçon — La loi d'Ohm</div>
+            <div class="card-sub">Résistance électrique et relation entre U, R et I</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Chaque composant d'un circuit s'oppose plus ou moins au passage du courant : c'est sa <strong>résistance électrique</strong>.
+            La <strong>loi d'Ohm</strong> relie cette résistance à la tension et à l'intensité.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 La résistance électrique (R)</h3>
+            <p>La <strong>résistance</strong> mesure la capacité d'un composant à s'opposer au passage du courant.
+            Elle se note <strong>R</strong> et s'exprime en <strong>ohms (Ω)</strong>.<br>
+            Plus un fil est <strong>long et fin</strong>, plus sa résistance est <strong>grande</strong>.
+            Plus il est <strong>court et épais</strong>, plus sa résistance est <strong>petite</strong>.</p>
+        </div>
+
+        <!-- Formule -->
+        <div class="formula-hero">
+            <div class="formula-big">U = R × I</div>
+            <div class="formula-details">
+                <strong>U</strong> = tension (volts, V)<br>
+                <strong>R</strong> = résistance (ohms, Ω)<br>
+                <strong>I</strong> = intensité (ampères, A)
+            </div>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔑 Isoler une grandeur</h3>
+            <p>À partir de <strong>U = R × I</strong>, on peut retrouver chaque grandeur si on connaît les deux autres :<br>
+            • Pour trouver R : <strong>R = U ÷ I</strong><br>
+            • Pour trouver I : <strong>I = U ÷ R</strong><br>
+            • Pour trouver U : <strong>U = R × I</strong></p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">U=12V, R=6Ω</div>
+                <div class="cas-eq">I = 2 A</div>
+                <div class="cas-desc">I = U ÷ R = 12 ÷ 6</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">R=10Ω, I=0,5A</div>
+                <div class="cas-eq">U = 5 V</div>
+                <div class="cas-desc">U = R × I = 10 × 0,5</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">U=9V, I=3A</div>
+                <div class="cas-eq">R = 3 Ω</div>
+                <div class="cas-desc">R = U ÷ I = 9 ÷ 3</div>
+            </div>
+        </div>
+
+        <div class="def-box" style="background:linear-gradient(135deg,#1B5E20,#388E3C)">
+            <h3 style="color:#A5D6A7;">🔥 L'effet Joule</h3>
+            <p>Quand le courant traverse une résistance, une partie de l'énergie électrique se transforme en <strong>chaleur</strong> :
+            c'est l'<strong>effet Joule</strong>. C'est ce phénomène qui chauffe les résistances des grille-pain, fers à repasser ou radiateurs électriques.</p>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège fréquent — Proportionnalité inverse</h3>
+            <p>À tension constante, si on <strong>double la résistance</strong>, l'intensité n'est <strong>pas doublée</strong> : elle est <strong>divisée par 2</strong> !<br>
+            En effet, I = U ÷ R : si R augmente, I diminue (et inversement). Beaucoup d'élèves pensent à tort que R et I varient dans le même sens.</p>
+        </div>
+
+    </div>
+</div>
+
+<!-- QUIZ -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon amber">❓</div>
+        <div>
+            <div class="card-title">Quiz — Loi d'Ohm et résistance</div>
+            <div class="card-sub">10 questions · Une à la fois · Réussite à partir de 80%</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div id="quizArea">
+            <div class="quiz-counter" id="quizCounter">Question 1 / 10</div>
+            <div class="q-text" id="qText"></div>
+            <div class="opts" id="qOpts"></div>
+            <div class="q-feedback" id="qFeedback"></div>
+            <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Suivant →</button>
+        </div>
+
+        <div class="result-panel" id="resultPanel">
+            <div class="result-score" id="resultScore"></div>
+        </div>
+
+    </div>
+</div>
+
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 4 terminé !</h2>
+    <p>Bravo ! Tu maîtrises la loi d'Ohm et la résistance électrique.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP !</p>
+</div>
+
+<div class="fail-panel" id="failPanel">
+    <h2>Pas encore validé 😕</h2>
+    <p>Il faut au moins 80% de bonnes réponses pour valider ce niveau. Relis la leçon et retente ta chance !</p>
+    <button class="restart-btn" onclick="location.reload()">🔄 Recommencer</button>
+</div>
+
+<div class="level-nav" id="levelNav" style="display:none;">
+    <a href="physique_electricite_niveau5.html" class="nav-btn" id="nextLevelBtn">▶ Niveau 5 — Défi CE1D 🏆</a>
+</div>
+
+</main>
+
+<script>
+const QUESTIONS = [
+    {
+        text: "La loi d'Ohm relie la tension U, la résistance R et l'intensité I selon la formule :",
+        opts: ["U = R × I", "U = R + I", "U = R ÷ I", "U = I − R"],
+        correct: 0,
+        ok: "✅ Exact ! La loi d'Ohm s'écrit U = R × I.",
+        err: "❌ Non. La bonne formule est U = R × I."
+    },
+    {
+        text: "Quelle est l'unité de la résistance électrique ?",
+        opts: ["Le volt (V)", "L'ampère (A)", "L'ohm (Ω)", "Le watt (W)"],
+        correct: 2,
+        ok: "✅ Bravo ! La résistance se mesure en ohms (Ω).",
+        err: "❌ Non. La résistance se mesure en ohms (Ω), pas en volts ni en ampères."
+    },
+    {
+        text: "Une résistance est soumise à une tension U = 12 V et traversée par un courant I = 2 A. Quelle est sa résistance R ?",
+        opts: ["R = 24 Ω", "R = 6 Ω", "R = 10 Ω", "R = 14 Ω"],
+        correct: 1,
+        ok: "✅ Parfait ! R = U ÷ I = 12 ÷ 2 = 6 Ω.",
+        err: "❌ Non. R = U ÷ I = 12 ÷ 2 = 6 Ω."
+    },
+    {
+        text: "Une résistance R = 10 Ω est traversée par un courant I = 0,5 A. Quelle est la tension U à ses bornes ?",
+        opts: ["U = 20 V", "U = 5 V", "U = 0,05 V", "U = 10,5 V"],
+        correct: 1,
+        ok: "✅ Exact ! U = R × I = 10 × 0,5 = 5 V.",
+        err: "❌ Non. U = R × I = 10 × 0,5 = 5 V."
+    },
+    {
+        text: "Une résistance R = 3 Ω est soumise à une tension U = 9 V. Quelle est l'intensité I qui la traverse ?",
+        opts: ["I = 27 A", "I = 3 A", "I = 6 A", "I = 0,3 A"],
+        correct: 1,
+        ok: "✅ Bravo ! I = U ÷ R = 9 ÷ 3 = 3 A.",
+        err: "❌ Non. I = U ÷ R = 9 ÷ 3 = 3 A."
+    },
+    {
+        text: "À tension constante, plus la résistance d'un circuit est grande, plus l'intensité est :",
+        opts: ["Plus grande", "Plus petite", "Toujours nulle", "Indépendante de la résistance"],
+        correct: 1,
+        ok: "✅ Exact ! I = U ÷ R : si R augmente (à U constant), I diminue.",
+        err: "❌ Non. Si R augmente à tension constante, I DIMINUE (I = U ÷ R)."
+    },
+    {
+        text: "Un fil très long et très fin a généralement une résistance :",
+        opts: ["Plus petite qu'un fil court et épais", "Plus grande qu'un fil court et épais", "Toujours nulle", "Identique à n'importe quel fil"],
+        correct: 1,
+        ok: "✅ Parfait ! Un fil long et fin résiste davantage au passage du courant qu'un fil court et épais.",
+        err: "❌ Non. Un fil long et fin a une résistance PLUS GRANDE qu'un fil court et épais."
+    },
+    {
+        text: "Le phénomène qui transforme l'énergie électrique en chaleur dans une résistance s'appelle :",
+        opts: ["L'effet Doppler", "L'effet Joule", "L'effet de serre", "L'effet photoélectrique"],
+        correct: 1,
+        ok: "✅ Bravo ! C'est l'effet Joule, utilisé par exemple dans les grille-pain ou les radiateurs électriques.",
+        err: "❌ Non. C'est l'effet JOULE qui transforme l'énergie électrique en chaleur dans une résistance."
+    },
+    {
+        text: "Si on double la résistance d'un circuit en gardant la même tension, l'intensité est :",
+        opts: ["Multipliée par 2", "Divisée par 2", "Inchangée", "Multipliée par 4"],
+        correct: 1,
+        ok: "✅ Exact ! I = U ÷ R : doubler R divise I par 2 (à tension constante).",
+        err: "❌ Non, piège classique ! Doubler la résistance DIVISE l'intensité par 2 (I = U ÷ R), elle ne la multiplie pas."
+    },
+    {
+        text: "Une résistance R = 100 Ω est traversée par un courant I = 0,2 A. Quelle tension trouve-t-on à ses bornes ?",
+        opts: ["U = 500 V", "U = 20 V", "U = 0,002 V", "U = 102 V"],
+        correct: 1,
+        ok: "✅ Bravo ! U = R × I = 100 × 0,2 = 20 V.",
+        err: "❌ Non. U = R × I = 100 × 0,2 = 20 V."
+    }
+];
+
+const TOTAL = QUESTIONS.length;
+let current = 0;
+let score = 0;
+let answered = false;
+
+function renderQuestion() {
+    const q = QUESTIONS[current];
+    document.getElementById('quizCounter').textContent = 'Question ' + (current + 1) + ' / ' + TOTAL;
+    document.getElementById('progTxt').textContent = 'Question ' + (current + 1) + ' / ' + TOTAL;
+    document.getElementById('barFill').style.width = Math.round((current / TOTAL) * 100) + '%';
+    document.getElementById('qText').textContent = q.text;
+
+    const optsWrap = document.getElementById('qOpts');
+    optsWrap.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn';
+        btn.type = 'button';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => selectAnswer(idx));
+        optsWrap.appendChild(btn);
+    });
+
+    const fb = document.getElementById('qFeedback');
+    fb.className = 'q-feedback';
+    fb.textContent = '';
+    document.getElementById('nextBtn').classList.remove('show');
+    answered = false;
+}
+
+function selectAnswer(idx) {
+    if (answered) return;
+    answered = true;
+    const q = QUESTIONS[current];
+    const isOk = idx === q.correct;
+    const btns = document.querySelectorAll('#qOpts .opt-btn');
+    btns.forEach(b => b.disabled = true);
+    btns[idx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[q.correct].classList.add('show-correct');
+
+    const fb = document.getElementById('qFeedback');
+    fb.textContent = isOk ? q.ok : q.err;
+    fb.className = 'q-feedback show ' + (isOk ? 'correct' : 'wrong');
+
+    if (isOk) {
+        score++;
+        const xp = score * 12;
+        document.getElementById('xpVal').textContent = xp;
+        const badge = document.getElementById('xpBadge');
+        badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    }
+
+    const nextBtn = document.getElementById('nextBtn');
+    nextBtn.textContent = (current === TOTAL - 1) ? 'Voir mon résultat →' : 'Suivant →';
+    nextBtn.classList.add('show');
+}
+
+function nextQuestion() {
+    current++;
+    if (current >= TOTAL) {
+        showResult();
+    } else {
+        renderQuestion();
+    }
+}
+
+function showResult() {
+    document.getElementById('barFill').style.width = '100%';
+    document.getElementById('quizArea').style.display = 'none';
+    const panel = document.getElementById('resultPanel');
+    panel.classList.add('show');
+    document.getElementById('resultScore').textContent = 'Score : ' + score + ' / ' + TOTAL;
+
+    const xp = score * 12;
+    document.getElementById('xpVal').textContent = xp;
+
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_electricite_4', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        document.getElementById('levelNav').style.display = 'block';
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    } else {
+        const f = document.getElementById('failPanel');
+        f.classList.add('show');
+        setTimeout(() => f.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

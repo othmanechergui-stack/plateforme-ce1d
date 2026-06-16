@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique — Électricité · Niveau 5 — Défi CE1D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#F9A825; --primary-dark:#E65100; --primary-mid:#FBC02D; --primary-bg:#FFF8E1;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#E65100 0%,#F9A825 55%,#FFE082 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(230,81,0,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#F9A825; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#E65100; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#E65100,#F9A825,#FFE082); transition:width .7s cubic-bezier(.34,1.56,.64,1); }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        /* Intro card */
+        .intro-card { background:linear-gradient(135deg,#E65100,#F9A825); color:white; border-radius:var(--radius); padding:28px 28px 24px; text-align:center; box-shadow:0 4px 20px rgba(230,81,0,.3); }
+        .intro-card h2 { font-size:1.5rem; font-weight:900; margin-bottom:8px; }
+        .intro-card p  { font-size:.95rem; opacity:.92; line-height:1.8; margin-bottom:18px; }
+        .rules-row { display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-bottom:22px; }
+        .rule-chip { background:rgba(255,255,255,.18); border:1.5px solid rgba(255,255,255,.35); border-radius:50px; padding:6px 16px; font-size:.88rem; font-weight:800; }
+        .start-btn { background:white; color:#E65100; border:none; border-radius:50px; padding:14px 36px; font-family:inherit; font-size:1.05rem; font-weight:900; cursor:pointer; box-shadow:0 5px 0 rgba(0,0,0,.2); transition:all .12s; }
+        .start-btn:hover { transform:translateY(-2px); box-shadow:0 7px 0 rgba(0,0,0,.2); }
+
+        /* Challenge arena */
+        .arena { display:none; }
+        .arena.active { display:block; }
+
+        .arena-top { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); margin-bottom:20px; }
+        .arena-header { display:flex; align-items:center; justify-content:space-between; padding:16px 22px; background:linear-gradient(135deg,#E65100,#F9A825); color:white; }
+        .q-counter { font-size:1rem; font-weight:900; }
+        .q-counter span { font-size:1.4rem; }
+        .timer-ring { position:relative; width:64px; height:64px; }
+        .timer-ring svg { transform:rotate(-90deg); }
+        .timer-ring circle.bg   { fill:none; stroke:rgba(255,255,255,.25); stroke-width:5; }
+        .timer-ring circle.prog { fill:none; stroke:white; stroke-width:5; stroke-dasharray:163; stroke-dashoffset:0; transition:stroke-dashoffset .9s linear, stroke .3s; stroke-linecap:round; }
+        .timer-ring circle.prog.urgent { stroke:#FFD54F; }
+        .timer-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:1.2rem; font-weight:900; color:white; }
+
+        .q-body { padding:24px 24px 20px; }
+        .q-type-badge { display:inline-block; font-size:.7rem; font-weight:900; text-transform:uppercase; letter-spacing:.8px; border-radius:6px; padding:2px 10px; margin-bottom:12px; }
+        .q-type-badge.standard  { background:#E3F2FD; color:#1565C0; }
+        .q-type-badge.error     { background:#FFF3E0; color:#E65100; }
+        .q-type-badge.conversion{ background:#F3E5F5; color:#6A1B9A; }
+        .q-question { font-size:1.05rem; font-weight:700; line-height:1.7; margin-bottom:18px; }
+        .q-question code { background:rgba(0,0,0,.07); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.95rem; font-weight:700; }
+
+        .error-calc { background:#FFF8E1; border:2px solid #FFD08A; border-radius:12px; padding:14px 18px; margin-bottom:16px; font-family:'Courier New',monospace; font-size:.92rem; line-height:2; }
+
+        .opts-grid { display:grid; grid-template-columns:1fr; gap:10px; }
+        .opts-grid.two-col { grid-template-columns:1fr 1fr; }
+        .opt { padding:13px 16px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s; text-align:left; }
+        .opt:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt:disabled { cursor:not-allowed; }
+        .opt.correct      { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt.wrong        { background:#FFEBEE; border-color:var(--primary); color:var(--primary-dark); }
+        .opt.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+
+        .q-explain { display:none; margin-top:14px; padding:12px 16px; border-radius:10px; font-size:.9rem; font-weight:700; line-height:1.6; }
+        .q-explain.correct { display:block; background:var(--green-bg); color:var(--green-dark); border-left:4px solid var(--green); }
+        .q-explain.wrong   { display:block; background:var(--primary-bg); color:var(--primary-dark); border-left:4px solid var(--primary); }
+
+        .next-btn { display:none; width:100%; padding:13px; margin-top:16px; border-radius:12px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:1rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s; }
+        .next-btn:hover { transform:translateY(-2px); }
+        .next-btn.show { display:block; }
+
+        /* Results */
+        .results { display:none; }
+        .results.show { display:block; }
+        .result-hero { background:linear-gradient(135deg,#E65100,#F9A825); color:white; border-radius:var(--radius); padding:32px 24px; text-align:center; margin-bottom:20px; box-shadow:0 4px 20px rgba(230,81,0,.3); }
+        .result-stars { font-size:2.4rem; margin-bottom:8px; letter-spacing:4px; }
+        .result-hero h2 { font-size:1.6rem; font-weight:900; margin-bottom:8px; }
+        .result-hero .score-big { font-size:3.5rem; font-weight:900; line-height:1; }
+        .result-hero .score-sub { font-size:1rem; opacity:.85; margin-top:6px; }
+        .result-hero .xp-won { margin-top:14px; background:rgba(255,255,255,.2); border-radius:50px; display:inline-block; padding:6px 22px; font-size:1rem; font-weight:900; }
+
+        .recap-card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); margin-bottom:20px; }
+        .recap-header { padding:16px 22px; border-bottom:2px solid var(--border); font-size:1rem; font-weight:900; }
+        .recap-list { list-style:none; padding:0; }
+        .recap-item { display:flex; align-items:flex-start; gap:12px; padding:14px 22px; border-bottom:1px solid var(--border); font-size:.9rem; }
+        .recap-item:last-child { border-bottom:none; }
+        .recap-icon { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.85rem; flex-shrink:0; margin-top:1px; }
+        .recap-icon.ok  { background:var(--green-bg); }
+        .recap-icon.bad { background:var(--primary-bg); }
+        .recap-text { flex:1; }
+        .recap-text strong { display:block; font-size:.88rem; font-weight:900; margin-bottom:3px; }
+        .recap-text em { font-style:normal; font-size:.84rem; color:#666; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.95rem; font-weight:900; margin-bottom:14px; color:var(--text-light); text-transform:uppercase; letter-spacing:.5px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+
+        @media(max-width:580px){ .header-inner{flex-direction:column;gap:8px} }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>⚡ Mode Défi — Électricité</h1>
+            <p>Niveau 5 · Timer 45 secondes · 10 questions</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 10 répondues</span>
+            <span id="progPct">0 %</span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <span class="diff-label">Niveau Défi</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- INTRO -->
+<div class="intro-card" id="introCard">
+    <h2>⚡ Mode Défi</h2>
+    <p>Teste toutes tes connaissances sur l'électricité : courant, conducteurs, grandeurs, circuits et loi d'Ohm.<br>
+       Chaque question a <strong>45 secondes</strong> — réfléchis vite mais avec méthode !</p>
+    <div class="rules-row">
+        <div class="rule-chip">⏱ 45 s / question</div>
+        <div class="rule-chip">10 questions</div>
+        <div class="rule-chip">🔍 Trouve l'erreur</div>
+        <div class="rule-chip">🧮 Calculs U, R, I</div>
+    </div>
+    <button class="start-btn" onclick="startChallenge()">▶ Commencer le défi</button>
+</div>
+
+<!-- ARENA -->
+<div class="arena" id="arenaSection">
+    <div class="arena-top" id="arenaCard">
+        <div class="arena-header">
+            <div class="q-counter">Question <span id="qNumDisplay">1</span> / 10</div>
+            <div class="timer-ring">
+                <svg width="64" height="64" viewBox="0 0 64 64">
+                    <circle class="bg"   cx="32" cy="32" r="26"/>
+                    <circle class="prog" cx="32" cy="32" r="26" id="timerCircle"/>
+                </svg>
+                <div class="timer-text" id="timerText">45</div>
+            </div>
+        </div>
+        <div class="q-body" id="qBody"></div>
+    </div>
+</div>
+
+<!-- RESULTS -->
+<div class="results" id="resultsSection">
+    <div class="result-hero" id="resultHero">
+        <div class="result-stars" id="resultStars"></div>
+        <h2 id="resultTitle"></h2>
+        <div class="score-big" id="resultScore"></div>
+        <div class="score-sub">bonnes réponses sur 10</div>
+        <div class="xp-won" id="resultXP"></div>
+    </div>
+
+    <div class="recap-card" id="recapCard">
+        <div class="recap-header">📋 Récapitulatif détaillé</div>
+        <ul class="recap-list" id="recapList"></ul>
+    </div>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Électricité</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="physique_electricite_niveau1.html" class="nav-btn">Niveau 1 — Courant</a>
+        <a href="physique_electricite_niveau2.html" class="nav-btn">Niveau 2 — Grandeurs</a>
+        <a href="physique_electricite_niveau3.html" class="nav-btn">Niveau 3 — Circuits</a>
+        <a href="physique_electricite_niveau4.html" class="nav-btn">Niveau 4 — Loi d'Ohm</a>
+        <a href="physique_electricite_niveau5.html" class="nav-btn current">▶ Niveau 5 — Défi</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QUESTIONS = [
+    {
+        id: 1,
+        typeBadge: 'standard',
+        typeName: 'Circuit ouvert/fermé',
+        text: 'Un circuit comprend une pile, un interrupteur <strong>ouvert</strong> et une lampe. La lampe est-elle allumée ?',
+        opts: [
+            'Oui, toujours, peu importe l\'interrupteur',
+            'Non, car le circuit est ouvert : le courant ne circule pas',
+            'Oui, car la pile est neuve',
+            'Cela dépend de la couleur des fils'
+        ],
+        twoCol: false,
+        correct: 1,
+        ok:  '✅ Exact ! Un interrupteur ouvert coupe la boucle du circuit : aucun courant ne peut circuler, la lampe reste éteinte.',
+        err: '❌ Non. Un circuit OUVERT (interrupteur ouvert) coupe la boucle : le courant ne circule pas, la lampe est éteinte.'
+    },
+    {
+        id: 2,
+        typeBadge: 'error',
+        typeName: 'Trouve l\'erreur',
+        text: 'Un élève veut mesurer l\'intensité dans un circuit. Voici son raisonnement — <strong>trouve l\'erreur</strong> :',
+        errorCalc: `Ligne A : Je branche l'ampèremètre EN DÉRIVATION aux bornes de la lampe.<br>
+Ligne B : Je lis l'intensité affichée sur l'écran.`,
+        opts: [
+            'Ligne A — l\'ampèremètre doit être branché en série, pas en dérivation',
+            'Ligne B — il ne faut jamais lire l\'affichage d\'un appareil',
+            'Aucune erreur, tout est correct',
+            'Les deux lignes sont fausses'
+        ],
+        twoCol: false,
+        correct: 0,
+        ok:  '✅ Oui ! L\'ampèremètre doit toujours être branché EN SÉRIE (intercalé dans le circuit), jamais en dérivation — sous peine de court-circuit.',
+        err: '❌ L\'erreur est à la Ligne A : l\'ampèremètre doit être branché EN SÉRIE, pas en dérivation (risque de court-circuit).'
+    },
+    {
+        id: 3,
+        typeBadge: 'conversion',
+        typeName: 'Calcul — Loi d\'Ohm',
+        text: 'Une résistance de <strong>20 Ω</strong> est soumise à une tension de <strong>10 V</strong>. Quelle est l\'intensité qui la traverse ?',
+        opts: [
+            'I = U ÷ R = 10 ÷ 20 = 0,5 A',
+            'I = U × R = 10 × 20 = 200 A',
+            'I = R ÷ U = 20 ÷ 10 = 2 A',
+            'I = U + R = 30 A'
+        ],
+        twoCol: false,
+        correct: 0,
+        ok:  '✅ Parfait ! I = U ÷ R = 10 ÷ 20 = 0,5 A.',
+        err: '❌ La bonne formule est I = U ÷ R = 10 ÷ 20 = 0,5 A.'
+    },
+    {
+        id: 4,
+        typeBadge: 'standard',
+        typeName: 'Conducteurs/isolants',
+        text: 'Lequel de ces objets est un <strong>isolant</strong> utilisé pour se protéger des chocs électriques ?',
+        opts: [
+            'Des gants en caoutchouc',
+            'Un fil de cuivre nu',
+            'Une plaque d\'aluminium',
+            'Une clé en fer'
+        ],
+        twoCol: true,
+        correct: 0,
+        ok:  '✅ Exact ! Le caoutchouc est un isolant : c\'est pourquoi on l\'utilise pour les gants et tapis de protection électrique.',
+        err: '❌ Non. Cuivre, aluminium et fer sont des métaux, donc des conducteurs. Seul le caoutchouc est un isolant.'
+    },
+    {
+        id: 5,
+        typeBadge: 'error',
+        typeName: 'Trouve l\'erreur',
+        text: 'On cherche la tension U sachant R = 15 Ω et I = 3 A. Un élève calcule :',
+        errorCalc: `Ligne A : U = R ÷ I = 15 ÷ 3 = 5<br>
+Ligne B : Donc U = 5 V`,
+        opts: [
+            'Ligne A — la formule est fausse, il fallait U = R × I = 45 V',
+            'Ligne B — l\'unité volt est fausse',
+            'Aucune erreur, U = 5 V est correct',
+            'Les deux lignes sont vraies mais incomplètes'
+        ],
+        twoCol: false,
+        correct: 0,
+        ok:  '✅ Oui ! La loi d\'Ohm donne U = R × I, pas R ÷ I. La bonne réponse : U = 15 × 3 = 45 V.',
+        err: '❌ L\'erreur est à la Ligne A : il fallait utiliser U = R × I = 15 × 3 = 45 V (pas une division).'
+    },
+    {
+        id: 6,
+        typeBadge: 'standard',
+        typeName: 'Circuits série/dérivation',
+        text: 'Dans une guirlande de Noël ancienne montée <strong>en série</strong>, une ampoule grille. Que se passe-t-il ?',
+        opts: [
+            'Toutes les autres ampoules s\'éteignent aussi',
+            'Seule cette ampoule reste éteinte, les autres continuent de briller',
+            'Rien ne change',
+            'Le courant augmente dans les autres ampoules'
+        ],
+        twoCol: false,
+        correct: 0,
+        ok:  '✅ Exact ! En série, il n\'y a qu\'un seul chemin : une coupure arrête tout le circuit.',
+        err: '❌ Non. En série, il n\'y a qu\'un seul chemin pour le courant : toutes les ampoules s\'éteignent si l\'une d\'elles grille.'
+    },
+    {
+        id: 7,
+        typeBadge: 'conversion',
+        typeName: 'Calcul — résistance',
+        text: 'Un appareil est traversé par un courant de <strong>0,4 A</strong> sous une tension de <strong>8 V</strong>. Calcule sa résistance.',
+        opts: [
+            'R = U ÷ I = 8 ÷ 0,4 = 20 Ω',
+            'R = U × I = 8 × 0,4 = 3,2 Ω',
+            'R = I ÷ U = 0,4 ÷ 8 = 0,05 Ω',
+            'R = U − I = 7,6 Ω'
+        ],
+        twoCol: false,
+        correct: 0,
+        ok:  '✅ Bravo ! R = U ÷ I = 8 ÷ 0,4 = 20 Ω.',
+        err: '❌ La bonne formule est R = U ÷ I = 8 ÷ 0,4 = 20 Ω.'
+    },
+    {
+        id: 8,
+        typeBadge: 'standard',
+        typeName: 'Sens du courant',
+        text: 'Dans un circuit, le <strong>sens conventionnel</strong> du courant va :',
+        opts: [
+            'Du + vers le − à l\'extérieur du générateur',
+            'Du − vers le + à l\'extérieur du générateur',
+            'Toujours dans le même sens que les électrons',
+            'Cela dépend uniquement de la couleur des fils'
+        ],
+        twoCol: false,
+        correct: 0,
+        ok:  '✅ Exact ! Le sens conventionnel va du + vers le − à l\'extérieur du générateur — c\'est l\'inverse du sens réel des électrons.',
+        err: '❌ Non. Le sens CONVENTIONNEL va du + vers le − à l\'extérieur du générateur (le sens réel des électrons est l\'inverse).'
+    },
+    {
+        id: 9,
+        typeBadge: 'error',
+        typeName: 'Trouve l\'erreur',
+        text: 'Léa veut mesurer la tension aux bornes d\'une lampe. Voici ce qu\'elle fait — <strong>identifie le problème</strong> :',
+        errorCalc: `Étape 1 : Je prends un voltmètre.<br>
+Étape 2 : Je le branche EN SÉRIE dans le circuit, à la place de la lampe.`,
+        opts: [
+            'Aucun problème, le voltmètre fonctionne aussi bien en série',
+            'Le voltmètre doit être branché EN DÉRIVATION aux bornes de la lampe, pas en série',
+            'Il fallait utiliser un ampèremètre à la place',
+            'Le courant va automatiquement doubler'
+        ],
+        twoCol: false,
+        correct: 1,
+        ok:  '✅ Exact ! Le voltmètre se branche toujours EN DÉRIVATION (en parallèle), directement aux bornes du composant à mesurer — jamais en série.',
+        err: '❌ Le problème est à l\'Étape 2 : le voltmètre doit être branché EN DÉRIVATION aux bornes de la lampe, pas en série dans le circuit.'
+    },
+    {
+        id: 10,
+        typeBadge: 'standard',
+        typeName: 'Synthèse — Loi d\'Ohm',
+        text: 'Une résistance reçoit une tension <strong>U = 24 V</strong> et un courant <strong>I = 2 A</strong>. Si on <strong>double la résistance</strong> en gardant la même tension, que devient l\'intensité ?',
+        opts: [
+            'Elle double aussi (I = 4 A)',
+            'Elle est divisée par 2 (I = 1 A)',
+            'Elle reste la même (I = 2 A)',
+            'Elle devient nulle'
+        ],
+        twoCol: false,
+        correct: 1,
+        ok:  '✅ Parfait ! Comme I = U ÷ R, doubler R (à U constant) divise l\'intensité par 2 : I devient 1 A.',
+        err: '❌ Non, piège classique ! I = U ÷ R : doubler la résistance DIVISE l\'intensité par 2 (et non l\'inverse).'
+    }
+];
+
+let currentQ    = 0;
+let score       = 0;
+let answered    = 0;
+let timerInterval = null;
+let timeLeft    = 45;
+const CIRCUMFERENCE = 2 * Math.PI * 26;
+
+const results = [];
+
+function updateProgressBar() {
+    const pct = Math.round((answered / 10) * 100);
+    document.getElementById('barFill').style.width = pct + '%';
+    document.getElementById('progTxt').textContent = answered + ' / 10 répondues';
+    document.getElementById('progPct').textContent = pct + ' %';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+}
+
+function startTimer() {
+    timeLeft = 45;
+    updateTimerDisplay(45);
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay(timeLeft);
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            timeExpired();
+        }
+    }, 1000);
+}
+
+function stopTimer() {
+    clearInterval(timerInterval);
+}
+
+function updateTimerDisplay(t) {
+    document.getElementById('timerText').textContent = t;
+    const circle = document.getElementById('timerCircle');
+    const offset = CIRCUMFERENCE * (1 - t / 45);
+    circle.style.strokeDashoffset = offset;
+    if (t <= 10) {
+        circle.classList.add('urgent');
+    } else {
+        circle.classList.remove('urgent');
+    }
+}
+
+function timeExpired() {
+    const q = QUESTIONS[currentQ];
+    results.push({ qIdx: currentQ, ok: false, timeout: true });
+    answered++;
+    updateProgressBar();
+    revealAnswer(null, q.correct, false, '⏱ Temps écoulé ! ' + q.err.replace('❌ ',''));
+}
+
+function renderQuestion(idx) {
+    const q = QUESTIONS[idx];
+    document.getElementById('qNumDisplay').textContent = idx + 1;
+
+    let html = '';
+    html += `<div class="q-type-badge ${q.typeBadge}">${q.typeName}</div>`;
+    html += `<div class="q-question">${q.text}</div>`;
+    if (q.errorCalc) {
+        html += `<div class="error-calc">${q.errorCalc}</div>`;
+    }
+    const colClass = q.twoCol ? 'opts-grid two-col' : 'opts-grid';
+    html += `<div class="${colClass}" id="optsGrid">`;
+    q.opts.forEach((opt, i) => {
+        html += `<button class="opt" id="opt${i}" type="button" onclick="pickAnswer(${i})">${opt}</button>`;
+    });
+    html += `</div>`;
+    html += `<div class="q-explain" id="qExplain"></div>`;
+    const isLast = (idx === QUESTIONS.length - 1);
+    html += `<button class="next-btn" id="nextBtn" type="button" onclick="${isLast ? 'showResults()' : 'nextQuestion()'}">${isLast ? '🏁 Voir les résultats' : 'Question suivante →'}</button>`;
+
+    document.getElementById('qBody').innerHTML = html;
+    startTimer();
+}
+
+function pickAnswer(chosen) {
+    stopTimer();
+    const q = QUESTIONS[currentQ];
+    const isOk = (chosen === q.correct);
+    if (isOk) score++;
+    results.push({ qIdx: currentQ, ok: isOk, chosen: chosen, timeout: false });
+    answered++;
+    updateProgressBar();
+    revealAnswer(chosen, q.correct, isOk, isOk ? q.ok : q.err);
+}
+
+function revealAnswer(chosen, correct, isOk, msg) {
+    const btns = document.querySelectorAll('#optsGrid .opt');
+    btns.forEach(b => b.disabled = true);
+    if (chosen !== null && chosen !== undefined) {
+        btns[chosen].classList.add(isOk ? 'correct' : 'wrong');
+    }
+    if (!isOk) {
+        btns[correct].classList.add('show-correct');
+    }
+    const ex = document.getElementById('qExplain');
+    ex.textContent = msg;
+    ex.className = 'q-explain ' + (isOk ? 'correct' : 'wrong');
+    document.getElementById('nextBtn').classList.add('show');
+}
+
+function startChallenge() {
+    document.getElementById('introCard').style.display = 'none';
+    document.getElementById('arenaSection').classList.add('active');
+    currentQ = 0;
+    renderQuestion(0);
+}
+
+function nextQuestion() {
+    currentQ++;
+    renderQuestion(currentQ);
+}
+
+function showResults() {
+    stopTimer();
+    document.getElementById('arenaSection').style.display = 'none';
+    const res = document.getElementById('resultsSection');
+    res.classList.add('show');
+
+    let stars = '';
+    let title = '';
+    if      (score === 10) { stars = '🌟🌟🌟'; title = 'Score parfait ! Exceptionnel !'; }
+    else if (score >= 8)   { stars = '⭐⭐⭐'; title = 'Excellent travail !'; }
+    else if (score >= 5)   { stars = '⭐⭐'; title = 'Bien joué, continue !'; }
+    else if (score >= 3)   { stars = '⭐'; title = 'À retravailler !'; }
+    else                   { stars = '💪'; title = 'Courage, relis les leçons !'; }
+
+    document.getElementById('resultStars').textContent = stars;
+    document.getElementById('resultTitle').textContent = title;
+    document.getElementById('resultScore').textContent = score;
+    document.getElementById('resultXP').textContent = '⭐ + ' + (score * 15) + ' XP';
+
+    const list = document.getElementById('recapList');
+    list.innerHTML = '';
+    results.forEach((r, i) => {
+        const q = QUESTIONS[r.qIdx];
+        const li = document.createElement('li');
+        li.className = 'recap-item';
+        const iconClass = r.ok ? 'ok' : 'bad';
+        const iconText  = r.ok ? '✅' : '❌';
+        const detail = r.timeout
+            ? '<em>Temps écoulé. ' + q.err.replace('❌ ','') + '</em>'
+            : (r.ok
+                ? '<em>' + q.ok.replace('✅ ','') + '</em>'
+                : '<em>' + q.err.replace('❌ ','') + '</em>');
+        li.innerHTML = `
+            <div class="recap-icon ${iconClass}">${iconText}</div>
+            <div class="recap-text">
+                <strong>Q${i+1} — ${q.typeName}</strong>
+                ${detail}
+            </div>`;
+        list.appendChild(li);
+    });
+
+    if (score >= Math.ceil(10 * 0.8)) {
+        localStorage.setItem('edu_completed_electricite_5', '1');
+    }
+
+    document.getElementById('barFill').style.width = '100%';
+    document.getElementById('progTxt').textContent = '10 / 10 répondues';
+    document.getElementById('progPct').textContent = '100 %';
+    document.getElementById('xpVal').textContent = score * 15;
+
+    setTimeout(() => res.scrollIntoView({ behavior:'smooth', block:'start' }), 300);
+}
+</script>
+</body>
+</html>
