@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Statistiques · Niveau 3 — Graphiques</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#00BFA5; --primary-dark:#00796B; --primary-mid:#26C6B3; --primary-bg:#E0F5F1;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#004D40 0%,#00BFA5 55%,#80CBC4 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(0,77,64,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#00BFA5; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#00796B; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#004D40,#00BFA5,#80CBC4); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#004D40,#00796B); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#80CBC4; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-icon { font-size:1.8rem; margin-bottom:4px; }
+        .cas-titre { font-size:.92rem; font-weight:900; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .data-table { width:100%; border-collapse:collapse; border-radius:10px; overflow:hidden; margin:14px 0; font-size:.92rem; }
+        .data-table th { background:var(--primary); color:white; padding:9px 14px; font-weight:900; text-align:center; }
+        .data-table td { padding:8px 14px; text-align:center; border-bottom:1px solid var(--border); }
+        .data-table tr:nth-child(even) td { background:var(--primary-bg); }
+        .data-table tr:last-child td { border-bottom:none; }
+        .data-table td.total-row { font-weight:900; background:#E0F5F1; color:var(--primary-dark); }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#004D40,#00BFA5,#80CBC4); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #003330; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>📈 Statistiques · Graphiques</h1>
+            <p>Niveau 3 · Lire, construire et interpréter tous les types de graphiques</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 3 — Avancé</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Les graphiques statistiques</div>
+            <div class="card-sub">Barres · Camembert · Courbes · Angles · Pièges d'échelle</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Un graphique transforme un tableau de données en image pour <strong>mieux visualiser</strong> les informations.
+            Il en existe plusieurs types, et choisir le <strong>bon graphique</strong> selon la situation est une compétence clé au CE1D.
+            Il faut aussi savoir <strong>lire et interpréter</strong> un graphique sans se laisser piéger par une échelle trompeuse.
+        </p>
+
+        <!-- Les 3 types principaux -->
+        <div class="def-box">
+            <h3>📌 Les 3 types de graphiques à connaître</h3>
+            <p>
+                <strong>Diagramme en barres (ou bâtons)</strong> : pour comparer des catégories entre elles (ex : ventes par mois).<br>
+                <strong>Diagramme circulaire (camembert)</strong> : pour montrer la répartition en % d'un tout (ex : sports pratiqués).<br>
+                <strong>Graphique en courbes</strong> : pour montrer l'évolution d'une valeur dans le temps (ex : températures).
+            </p>
+        </div>
+
+        <!-- Résumé visuel des 3 types -->
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-icon">📊</div>
+                <div class="cas-titre">Barres</div>
+                <div class="cas-desc">Comparer des <strong>catégories</strong> différentes. Hauteur = valeur. Axe Y = échelle.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-icon">🥧</div>
+                <div class="cas-titre">Camembert</div>
+                <div class="cas-desc">Montrer la <strong>répartition en %</strong>. Chaque secteur = une fréquence. Total = 360°.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-icon">📈</div>
+                <div class="cas-titre">Courbes</div>
+                <div class="cas-desc">Montrer une <strong>évolution dans le temps</strong>. Points reliés = tendance.</div>
+            </div>
+        </div>
+
+        <!-- DIAGRAMME EN BARRES -->
+        <div class="rule-box">
+            <h3>📊 Lire un diagramme en barres — Règles importantes</h3>
+            <p>
+                1. Repérer le <strong>titre</strong> : il indique ce que représente le graphique.<br>
+                2. Lire l'<strong>axe des ordonnées (Y)</strong> : c'est l'échelle de mesure. Vérifier si l'axe commence à 0 !<br>
+                3. Lire l'<strong>axe des abscisses (X)</strong> : c'est la liste des catégories.<br>
+                4. La <strong>hauteur de la barre</strong> donne la valeur en lisant l'axe Y.<br>
+                <strong>Attention :</strong> si l'axe Y ne commence pas à 0, les barres semblent plus différentes qu'elles ne le sont vraiment !
+            </p>
+        </div>
+
+        <!-- SVG 1 : piège échelle tronquée -->
+        <p style="font-size:.95rem;font-weight:800;color:var(--primary-dark);margin:4px 0 4px;">⚠️ Piège classique — L'axe tronqué :</p>
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="230" fill="#F5FFFD" rx="10"/>
+
+                <!-- Titre -->
+                <text x="140" y="18" text-anchor="middle" font-size="11" font-weight="900" fill="#B71C1C" font-family="Nunito, sans-serif">❌ Axe Y commence à 80</text>
+                <text x="420" y="18" text-anchor="middle" font-size="11" font-weight="900" fill="#00796B" font-family="Nunito, sans-serif">✅ Axe Y commence à 0</text>
+
+                <!-- GRAPHIQUE TROMPEUR (gauche) -->
+                <line x1="40" y1="30" x2="40" y2="190" stroke="#B71C1C" stroke-width="2"/>
+                <line x1="40" y1="190" x2="260" y2="190" stroke="#333" stroke-width="2"/>
+                <!-- Graduations Y tronqué : 80 à 100, espace = (190-30)/2 = 80px -->
+                <text x="34" y="193" text-anchor="end" font-size="9" fill="#B71C1C" font-family="Nunito, sans-serif">80</text>
+                <text x="34" y="113" text-anchor="end" font-size="9" fill="#B71C1C" font-family="Nunito, sans-serif">90</text>
+                <text x="34" y="33" text-anchor="end" font-size="9" fill="#B71C1C" font-family="Nunito, sans-serif">100</text>
+                <line x1="37" y1="110" x2="40" y2="110" stroke="#B71C1C" stroke-width="1.5"/>
+                <!-- Barres : A=82 → y=190-(82-80)/20*160=190-16=174; B=98 → y=190-(18/20)*160=190-144=46 -->
+                <!-- Ça donne une impression ENORME d'écart -->
+                <rect x="55" y="174" width="50" height="16" fill="#EF5350" rx="3"/>
+                <text x="80" y="169" text-anchor="middle" font-size="10" font-weight="900" fill="#B71C1C" font-family="Nunito, sans-serif">82</text>
+                <text x="80" y="207" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">A</text>
+                <rect x="130" y="94" width="50" height="96" fill="#EF9A9A" rx="3"/>
+                <text x="155" y="89" text-anchor="middle" font-size="10" font-weight="900" fill="#B71C1C" font-family="Nunito, sans-serif">88</text>
+                <text x="155" y="207" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">B</text>
+                <rect x="205" y="46" width="50" height="144" fill="#E53935" rx="3"/>
+                <text x="230" y="41" text-anchor="middle" font-size="10" font-weight="900" fill="#B71C1C" font-family="Nunito, sans-serif">98</text>
+                <text x="230" y="207" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">C</text>
+                <!-- Brisure axe -->
+                <text x="40" y="215" text-anchor="middle" font-size="9" font-weight="900" fill="#B71C1C" font-family="Nunito, sans-serif">⚡ L'axe est coupé → impression exagérée</text>
+
+                <!-- GRAPHIQUE CORRECT (droite) -->
+                <line x1="300" y1="30" x2="300" y2="190" stroke="#00796B" stroke-width="2"/>
+                <line x1="300" y1="190" x2="540" y2="190" stroke="#333" stroke-width="2"/>
+                <!-- Graduations Y correct : 0 à 100, espace = (190-30)/5 = 32px par 20 unités -->
+                <text x="294" y="193" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">0</text>
+                <text x="294" y="161" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">20</text>
+                <text x="294" y="129" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">40</text>
+                <text x="294" y="97" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">60</text>
+                <text x="294" y="65" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">80</text>
+                <text x="294" y="33" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">100</text>
+                <!-- Barres correctes : A=82 → h=82/100*160=131.2 → top=190-131=59; B=88→top=190-141=49; C=98→top=190-157=33 -->
+                <rect x="315" y="59" width="50" height="131" fill="#00BFA5" rx="3"/>
+                <text x="340" y="54" text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">82</text>
+                <text x="340" y="207" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">A</text>
+                <rect x="390" y="49" width="50" height="141" fill="#26C6B3" rx="3"/>
+                <text x="415" y="44" text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">88</text>
+                <text x="415" y="207" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">B</text>
+                <rect x="465" y="33" width="50" height="157" fill="#004D40" rx="3"/>
+                <text x="490" y="28" text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">98</text>
+                <text x="490" y="207" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">C</text>
+                <text x="420" y="215" text-anchor="middle" font-size="9" font-weight="900" fill="#00796B" font-family="Nunito, sans-serif">✅ Axe commence à 0 → proportions réelles</text>
+            </svg>
+        </div>
+
+        <!-- CAMEMBERT -->
+        <div class="rule-box">
+            <h3>🥧 Le diagramme circulaire — Calculer les angles</h3>
+            <p>
+                Un disque entier = <strong>360°</strong>. Chaque secteur représente une fréquence.<br>
+                <strong>Angle du secteur = Fréquence (%) × 3,6</strong><br>
+                (car 100 % = 360° → 1 % = 3,6°)<br>
+                Exemple : 25 % → 25 × 3,6 = <strong>90°</strong> &nbsp;|&nbsp; 50 % → 50 × 3,6 = <strong>180°</strong><br>
+                La somme de tous les angles doit toujours donner <strong>360°</strong>.
+            </p>
+        </div>
+
+        <!-- SVG 2 : camembert avec angles annotés -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="230" fill="#F5FFFD" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Camembert — Transports scolaires de 200 élèves</text>
+
+                <!-- Camembert centré à (155, 120) rayon 85 -->
+                <!-- Bus 40% = 144° : de -90° à 54° | cos(-90°)=0,sin(-90°)=-1 → (155,35) ; cos(54°)=0.588,sin(54°)=0.809 → (155+50,120+69)=(205,189) -->
+                <path d="M155,120 L155,35 A85,85 0 0,1 205,189 Z" fill="#00BFA5"/>
+                <!-- Vélo 25% = 90° : de 54° à 144° | cos(144°)=-0.809,sin(144°)=0.588 → (155-69,120+50)=(86,170) -->
+                <path d="M155,120 L205,189 A85,85 0 0,1 86,170 Z" fill="#26C6B3"/>
+                <!-- Voiture 20% = 72° : de 144° à 216° | cos(216°)=-0.809,sin(216°)=-0.588 → (155-69,120-50)=(86,70) -->
+                <path d="M155,120 L86,170 A85,85 0 0,1 86,70 Z" fill="#F9A825"/>
+                <!-- À pied 15% = 54° : de 216° à 270° → retour à -90° = (155,35) -->
+                <path d="M155,120 L86,70 A85,85 0 0,1 155,35 Z" fill="#EF5350"/>
+
+                <!-- Labels fréquences dans les parts -->
+                <text x="188" y="112" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">40%</text>
+                <text x="155" y="188" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">25%</text>
+                <text x="108" y="115" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">20%</text>
+                <text x="120" y="68"  text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">15%</text>
+
+                <!-- Légende + angles -->
+                <rect x="265" y="42" width="12" height="12" fill="#00BFA5" rx="2"/>
+                <text x="283" y="53" font-size="11" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Bus — 40% →</text>
+                <text x="365" y="53" font-size="11" font-weight="900" fill="#00796B" font-family="Courier New, monospace">40×3,6 = 144°</text>
+
+                <rect x="265" y="68" width="12" height="12" fill="#26C6B3" rx="2"/>
+                <text x="283" y="79" font-size="11" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Vélo — 25% →</text>
+                <text x="365" y="79" font-size="11" font-weight="900" fill="#00796B" font-family="Courier New, monospace">25×3,6 =  90°</text>
+
+                <rect x="265" y="94" width="12" height="12" fill="#F9A825" rx="2"/>
+                <text x="283" y="105" font-size="11" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Voiture — 20% →</text>
+                <text x="365" y="105" font-size="11" font-weight="900" fill="#00796B" font-family="Courier New, monospace">20×3,6 =  72°</text>
+
+                <rect x="265" y="120" width="12" height="12" fill="#EF5350" rx="2"/>
+                <text x="283" y="131" font-size="11" font-weight="700" fill="#333" font-family="Nunito, sans-serif">À pied — 15% →</text>
+                <text x="365" y="131" font-size="11" font-weight="900" fill="#00796B" font-family="Courier New, monospace">15×3,6 =  54°</text>
+
+                <line x1="265" y1="145" x2="530" y2="145" stroke="#80CBC4" stroke-width="1.5"/>
+                <text x="283" y="161" font-size="11" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Total : 100%</text>
+                <text x="365" y="161" font-size="11" font-weight="900" fill="#004D40" font-family="Courier New, monospace">→ 144+90+72+54 = 360°</text>
+
+                <!-- Formule clé -->
+                <rect x="265" y="172" width="270" height="38" rx="8" fill="#004D40"/>
+                <text x="400" y="190" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">Angle = Fréquence (%) × 3,6</text>
+                <text x="400" y="204" text-anchor="middle" font-size="10" fill="#80CBC4" font-family="Nunito, sans-serif">car 100% = 360° → 1% = 3,6°</text>
+
+                <text x="155" y="220" text-anchor="middle" font-size="10" fill="#888" font-family="Nunito, sans-serif">200 élèves · Bus = 80 élèves · Vélo = 50 élèves · Voiture = 40 · Pied = 30</text>
+            </svg>
+        </div>
+
+        <!-- COURBES -->
+        <div class="rule-box">
+            <h3>📈 Le graphique en courbes — Lire une évolution</h3>
+            <p>
+                1. Repérer le <strong>titre</strong> et les <strong>unités</strong> des deux axes.<br>
+                2. Pour lire une valeur : partir du point sur l'axe X, monter verticalement jusqu'à la courbe, puis lire l'axe Y.<br>
+                3. Une <strong>courbe qui monte</strong> = augmentation. Qui descend = diminution. Plateau = stable.<br>
+                4. On peut <strong>interpoler</strong> (estimer une valeur entre deux points) mais pas extrapoler trop loin.
+            </p>
+        </div>
+
+        <!-- SVG 3 : courbe avec lecture annotée -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="220" fill="#F5FFFD" rx="10"/>
+                <text x="280" y="16" text-anchor="middle" font-size="12" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Ventes de glaces (en dizaines) par mois — Lecture annotée</text>
+
+                <!-- Axes -->
+                <line x1="55" y1="25" x2="55" y2="175" stroke="#333" stroke-width="2"/>
+                <line x1="55" y1="175" x2="535" y2="175" stroke="#333" stroke-width="2"/>
+
+                <!-- Graduations Y : 0 à 50, chaque 10 = (175-25)/5 = 30px -->
+                <text x="48" y="178" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">0</text>
+                <text x="48" y="148" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">10</text>
+                <line x1="52" y1="145" x2="55" y2="145" stroke="#555" stroke-width="1.5"/>
+                <line x1="55" y1="145" x2="535" y2="145" stroke="#E0E0E0" stroke-width="1" stroke-dasharray="4,3"/>
+                <text x="48" y="118" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">20</text>
+                <line x1="52" y1="115" x2="55" y2="115" stroke="#555" stroke-width="1.5"/>
+                <line x1="55" y1="115" x2="535" y2="115" stroke="#E0E0E0" stroke-width="1" stroke-dasharray="4,3"/>
+                <text x="48" y="88" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">30</text>
+                <line x1="52" y1="85" x2="55" y2="85" stroke="#555" stroke-width="1.5"/>
+                <line x1="55" y1="85" x2="535" y2="85" stroke="#E0E0E0" stroke-width="1" stroke-dasharray="4,3"/>
+                <text x="48" y="58" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">40</text>
+                <line x1="52" y1="55" x2="55" y2="55" stroke="#555" stroke-width="1.5"/>
+                <line x1="55" y1="55" x2="535" y2="55" stroke="#E0E0E0" stroke-width="1" stroke-dasharray="4,3"/>
+                <text x="48" y="28" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">50</text>
+                <line x1="52" y1="25" x2="55" y2="25" stroke="#555" stroke-width="1.5"/>
+
+                <!-- Mois X : Jan à Juin, espacement = (535-55)/5 = 96px -->
+                <text x="55"  y="190" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">Jan</text>
+                <text x="151" y="190" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">Fév</text>
+                <text x="247" y="190" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">Mar</text>
+                <text x="343" y="190" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">Avr</text>
+                <text x="439" y="190" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">Mai</text>
+                <text x="535" y="190" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">Jun</text>
+
+                <!-- Valeurs : Jan=5(y=175-15=160), Fév=8(y=175-24=151), Mar=15(y=175-45=130), Avr=30(y=175-90=85), Mai=42(y=175-126=49), Jun=48(y=175-144=31) -->
+                <polyline points="55,160 151,151 247,130 343,85 439,49 535,31"
+                    fill="none" stroke="#00BFA5" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+
+                <!-- Points -->
+                <circle cx="55"  cy="160" r="5" fill="#004D40" stroke="white" stroke-width="2"/>
+                <circle cx="151" cy="151" r="5" fill="#004D40" stroke="white" stroke-width="2"/>
+                <circle cx="247" cy="130" r="5" fill="#004D40" stroke="white" stroke-width="2"/>
+                <circle cx="343" cy="85"  r="5" fill="#004D40" stroke="white" stroke-width="2"/>
+                <circle cx="439" cy="49"  r="6" fill="#F9A825" stroke="#E65100" stroke-width="2"/>
+                <circle cx="535" cy="31"  r="5" fill="#004D40" stroke="white" stroke-width="2"/>
+
+                <!-- Valeurs au-dessus -->
+                <text x="55"  y="153" text-anchor="middle" font-size="9" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">5</text>
+                <text x="151" y="144" text-anchor="middle" font-size="9" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">8</text>
+                <text x="247" y="123" text-anchor="middle" font-size="9" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">15</text>
+                <text x="343" y="78"  text-anchor="middle" font-size="9" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">30</text>
+                <text x="439" y="42"  text-anchor="middle" font-size="9" font-weight="900" fill="#E65100" font-family="Nunito, sans-serif">42</text>
+                <text x="535" y="24"  text-anchor="middle" font-size="9" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">48</text>
+
+                <!-- Annotation lecture Avr=30 -->
+                <line x1="343" y1="85" x2="343" y2="175" stroke="#E53935" stroke-width="1.5" stroke-dasharray="4,3"/>
+                <line x1="55"  y1="85" x2="343" y2="85"  stroke="#E53935" stroke-width="1.5" stroke-dasharray="4,3"/>
+                <text x="200" y="80" text-anchor="middle" font-size="9" font-weight="900" fill="#E53935" font-family="Nunito, sans-serif">← Lire la valeur ici : 30</text>
+
+                <!-- Flèche tendance -->
+                <text x="350" y="120" font-size="9" font-weight="900" fill="#00796B" font-family="Nunito, sans-serif">Hausse continue →</text>
+                <text x="280" y="205" text-anchor="middle" font-size="9" fill="#888" font-family="Nunito, sans-serif">La courbe monte → les ventes augmentent chaque mois jusqu'en juin</text>
+            </svg>
+        </div>
+
+        <!-- Piège lecture courbe -->
+        <div class="trap-box">
+            <h3>⚠️ Pièges fréquents sur les graphiques</h3>
+            <p>
+                <strong>Axe Y tronqué :</strong> si l'axe Y ne commence pas à 0, les différences semblent beaucoup plus grandes qu'elles ne le sont.<br>
+                <strong>Confondre hauteur et valeur :</strong> toujours lire la valeur sur l'axe Y, pas estimer visuellement la hauteur de la barre.<br>
+                <strong>Mauvais type de graphique :</strong> un camembert ne sert pas à montrer une évolution dans le temps — utiliser une courbe.<br>
+                <strong>Angle ≠ pourcentage :</strong> un secteur de 90° représente 25 % (pas 90 %).
+            </p>
+        </div>
+
+        <!-- Tableau récapitulatif quand utiliser quoi -->
+        <p style="font-size:.93rem;font-weight:700;color:#444;margin-bottom:8px;">📋 Quel graphique choisir ?</p>
+        <table class="data-table">
+            <tr><th>Situation</th><th>Type de graphique</th><th>Pourquoi ?</th></tr>
+            <tr><td>Comparer des ventes par pays</td><td>📊 Barres</td><td>Catégories séparées</td></tr>
+            <tr><td>Répartition des élèves par sport</td><td>🥧 Camembert</td><td>Proportions d'un tout</td></tr>
+            <tr><td>Évolution de la température</td><td>📈 Courbes</td><td>Continuité dans le temps</td></tr>
+            <tr><td>Comparer des notes de classe</td><td>📊 Barres</td><td>Comparaison de valeurs distinctes</td></tr>
+            <tr><td>Parts d'un budget familial</td><td>🥧 Camembert</td><td>Fractions d'un total (100 %)</td></tr>
+        </table>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Lecture, angles, pièges d'échelle</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Dans un diagramme circulaire, la catégorie "Football" représente 30 % des élèves. Quel est l'angle de son secteur ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">30° — c'est le pourcentage</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">108°</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">90° — c'est le quart du cercle</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">120°</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Un graphique en courbes montre les ventes de parapluies par mois. En juillet, la courbe est au plus bas. Que peut-on en conclure ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">Les ventes de parapluies sont les plus élevées en juillet</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">Les ventes de parapluies sont les plus faibles en juillet</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">Les ventes sont stables en juillet</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">Impossible à conclure sans le tableau</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Dans un diagramme en barres, l'axe Y commence à 50 (au lieu de 0). La barre A mesure 2 cm et la barre B mesure 4 cm. Peut-on dire que B est deux fois plus grand que A ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">Oui — la barre B est deux fois plus haute</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">Non — l'axe tronqué fausse la comparaison visuelle</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">Oui, si les deux barres ont la même largeur</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">Cela dépend des unités utilisées</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> On veut représenter l'évolution du prix de l'essence chaque semaine pendant 3 mois. Quel type de graphique est le plus adapté ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">Diagramme circulaire (camembert)</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">Graphique en courbes</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">Diagramme en barres groupées</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">Tableau à double entrée</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Dans un camembert, un secteur a un angle de 72°. Quelle fréquence (en %) représente-t-il ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">72 % — c'est l'angle</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">36 % — on divise par 2</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">20 %</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">25 % — c'est le quart</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Formules et vocabulaire des graphiques</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Dans un diagramme circulaire, le disque entier représente
+                <input class="blank" id="f1a" placeholder="?" style="width:50px"> %.
+                Pour calculer l'angle d'un secteur, on multiplie la fréquence par
+                <input class="blank" id="f1b" placeholder="?" style="width:40px">.
+                Un secteur de 50 % a donc un angle de <input class="blank" id="f1c" placeholder="?" style="width:50px">°.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Pour représenter l'<strong>évolution</strong> d'une grandeur dans le temps, on utilise un graphique en
+                <input class="blank" id="f2a" placeholder="?" style="width:80px">.
+                Pour comparer des <strong>catégories</strong> entre elles, on utilise un diagramme en
+                <input class="blank" id="f2b" placeholder="?" style="width:70px">.
+                Pour montrer la <strong>répartition</strong> en pourcentages d'un tout, on utilise un
+                <input class="blank" id="f2c" placeholder="?" style="width:110px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Dans un diagramme en barres, si l'axe Y ne commence pas à
+                <input class="blank" id="f3a" placeholder="?" style="width:40px">,
+                les différences entre les barres semblent plus
+                <input class="blank" id="f3b" placeholder="?" style="width:90px"> qu'elles ne le sont réellement.
+                C'est ce qu'on appelle un axe <input class="blank" id="f3c" placeholder="?" style="width:90px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Calculer les angles d'un camembert (CE1D style)</div>
+                <div class="ex-stmt">
+                    Une enquête auprès de 50 élèves donne les langues parlées à la maison :
+                    <table class="data-table" style="margin-top:10px;">
+                        <tr><th>Langue</th><th>Effectif</th><th>Fréquence (%)</th><th>Angle (°)</th></tr>
+                        <tr><td>Français</td><td>25</td><td>?</td><td>?</td></tr>
+                        <tr><td>Arabe</td><td>10</td><td>?</td><td>?</td></tr>
+                        <tr><td>Anglais</td><td>8</td><td>?</td><td>?</td></tr>
+                        <tr><td>Autre</td><td>7</td><td>?</td><td>?</td></tr>
+                        <tr><td class="total-row">Total</td><td class="total-row">50</td><td class="total-row">100 %</td><td class="total-row">360°</td></tr>
+                    </table>
+                    Complète le tableau et vérifie que la somme des angles vaut 360°.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Fréquences :</strong> (effectif ÷ 50) × 100<br>• Français : (25÷50)×100 = <strong>50 %</strong><br>• Arabe : (10÷50)×100 = <strong>20 %</strong><br>• Anglais : (8÷50)×100 = <strong>16 %</strong><br>• Autre : (7÷50)×100 = <strong>14 %</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Angles :</strong> fréquence × 3,6<br>• Français : 50 × 3,6 = <strong>180°</strong><br>• Arabe : 20 × 3,6 = <strong>72°</strong><br>• Anglais : 16 × 3,6 = <strong>57,6°</strong><br>• Autre : 14 × 3,6 = <strong>50,4°</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Vérification :</strong> 180 + 72 + 57,6 + 50,4 = <strong>360°</strong> ✓</div></div>
+                <div class="final-ans">✅ Angles : 180° · 72° · 57,6° · 50,4° — Somme = <strong>360°</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Lire et critiquer un graphique (CE1D style)</div>
+                <div class="ex-stmt">
+                    Un magazine affirme : "Les ventes ont <em>explosé</em> !" en montrant un graphique où les barres de l'an 1 à l'an 2 semblent tripler de hauteur. Mais l'axe Y va de 980 à 1 020.
+                    <br>a) Les vraies valeurs sont : An 1 = 990, An 2 = 1 010. Calcule l'augmentation réelle en %.<br>
+                    b) Pourquoi le graphique donne-t-il une fausse impression ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Augmentation réelle :</strong> (1 010 − 990) ÷ 990 × 100 = 20 ÷ 990 × 100 ≈ <strong>2,02 %</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Axe tronqué :</strong> L'axe commence à 980 au lieu de 0. La hauteur visible de la barre An 1 est 990−980 = 10 unités, et pour An 2 = 1 010−980 = 30 unités. Visuellement, An 2 semble <strong>3 fois plus grand</strong> alors que l'augmentation réelle n'est que de 2 % !</div></div>
+                <div class="sol-step"><div class="sol-num" style="background:#E53935">!</div><div class="sol-text" style="color:#B71C1C;font-weight:700;">Un axe tronqué exagère visuellement les différences. Toujours vérifier si l'axe Y commence à 0 avant d'interpréter un graphique.</div></div>
+                <div class="final-ans">✅ Augmentation réelle ≈ <strong>2 %</strong> — Le graphique est trompeur car son axe Y commence à 980, pas à 0.</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Lire un graphique en courbes (CE1D style)</div>
+                <div class="ex-stmt">
+                    Un graphique en courbes montre le nombre de visiteurs d'un parc chaque mois.
+                    Les valeurs lues sont : Jan=200, Fév=220, Mar=350, Avr=480, Mai=520, Jun=600.<br>
+                    a) Quel mois a eu le plus de visiteurs ? &nbsp; b) Entre quels mois la hausse a-t-elle été la plus forte ?
+                    &nbsp; c) Calcule la moyenne mensuelle sur les 6 mois.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Mois avec le plus de visiteurs :</strong> La valeur maximale est 600 → <strong>Juin</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Hausse la plus forte :</strong> Calculer les écarts entre mois consécutifs :<br>• Jan→Fév : 220−200 = 20<br>• Fév→Mar : 350−220 = <strong>130</strong> ← le plus grand écart<br>• Mar→Avr : 480−350 = 130 aussi<br>• Avr→Mai : 520−480 = 40<br>• Mai→Jun : 600−520 = 80<br>→ Hausse la plus forte entre <strong>Fév et Mar</strong> (ou Mar et Avr, égalité).</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Moyenne :</strong> (200+220+350+480+520+600) ÷ 6 = 2 370 ÷ 6 = <strong>395 visiteurs/mois</strong>.</div></div>
+                <div class="final-ans">✅ a) Juin &nbsp;|&nbsp; b) Fév→Mar (et Mar→Avr) &nbsp;|&nbsp; c) Moyenne = <strong>395 visiteurs/mois</strong></div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Reconstituer un tableau à partir d'un camembert</div>
+                <div class="bonus-stmt">
+                    Un camembert représente la répartition de 120 élèves selon leur sport préféré.
+                    Les angles des secteurs sont : Football = 150°, Natation = 90°, Tennis = 60°, Autre = 60°.<br>
+                    Retrouve l'effectif de chaque sport. (Indice : fréquence = angle ÷ 3,6)
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text">Vérification des angles : 150 + 90 + 60 + 60 = 360° ✓</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Fréquences :</strong> angle ÷ 3,6<br>• Football : 150 ÷ 3,6 = <strong>41,7 %</strong> (≈ 41,7%)<br>• Natation : 90 ÷ 3,6 = <strong>25 %</strong><br>• Tennis : 60 ÷ 3,6 = <strong>16,7 %</strong><br>• Autre : 60 ÷ 3,6 = <strong>16,7 %</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>Effectifs :</strong> fréquence × 120 ÷ 100<br>• Football : 150/360 × 120 = <strong>50 élèves</strong><br>• Natation : 90/360 × 120 = <strong>30 élèves</strong><br>• Tennis : 60/360 × 120 = <strong>20 élèves</strong><br>• Autre : 60/360 × 120 = <strong>20 élèves</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text">Vérification : 50 + 30 + 20 + 20 = <strong>120 ✓</strong></div></div>
+                <div class="bonus-ans">
+                    Football = <strong>50</strong> · Natation = <strong>30</strong> · Tennis = <strong>20</strong> · Autre = <strong>20</strong><br>
+                    Astuce CE1D : Effectif = (Angle ÷ 360) × Effectif total — plus direct que passer par la fréquence.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 3 terminé !</h2>
+    <p>Excellent ! Tu maîtrises maintenant la lecture et la construction de tous les graphiques.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue vers le niveau 4 — Fréquences !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Statistiques</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_statistiques_niveau1.html" class="nav-btn">Niveau 1 — Moyenne &amp; Étendue</a>
+        <a href="maths_statistiques_niveau2.html" class="nav-btn">Niveau 2 — Tableaux</a>
+        <a href="maths_statistiques_niveau3.html" class="nav-btn current">▶ Niveau 3 — Graphiques</a>
+        <a href="maths_statistiques_niveau4.html" class="nav-btn">Niveau 4 — Fréquences</a>
+        <a href="maths_statistiques_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:1, 3:1, 4:1, 5:2};
+
+const QCM_OK = {
+    1:"✅ Exact ! Angle = 30 × 3,6 = 108°. (30° serait la valeur du pourcentage, pas l'angle ; 90° c'est 25 % du disque.)",
+    2:"✅ Bravo ! Le point le plus bas sur la courbe correspond à la valeur la plus faible → ventes minimales en juillet.",
+    3:"✅ Oui ! L'axe tronqué fausse la perception visuelle. Il faut lire les valeurs réelles sur l'axe Y, pas comparer les hauteurs de barres.",
+    4:"✅ Parfait ! Le graphique en courbes est idéal pour montrer une évolution continue dans le temps (semaine après semaine).",
+    5:"✅ Exact ! Fréquence = Angle ÷ 3,6 = 72 ÷ 3,6 = 20 %. (72° ≠ 72 %, et 90° = 25 % — pas 72°.)"
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Angle = Fréquence × 3,6 = 30 × 3,6 = 108°. Ne pas confondre le pourcentage (30 %) avec l'angle (108°). 90° correspond à 25 % du cercle.",
+    2:"❌ Non. Le point le plus bas sur une courbe correspond à la valeur la plus FAIBLE, donc aux ventes les plus faibles. En juillet, il fait chaud et sec → peu de ventes de parapluies.",
+    3:"❌ Non. Quand l'axe Y est tronqué (ne commence pas à 0), les hauteurs de barres ne sont plus proportionnelles aux valeurs réelles. Il faut toujours lire les valeurs sur l'axe, pas comparer les hauteurs.",
+    4:"❌ Non. Pour montrer une évolution semaine après semaine (dans le temps), le graphique en courbes est le plus adapté. Le camembert montre des proportions, pas une évolution.",
+    5:"❌ Non. Fréquence = Angle ÷ 3,6 = 72 ÷ 3,6 = 20 %. L'angle et le pourcentage sont deux choses différentes : 72° représente 20 % du disque, pas 72 %."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b','f1c'],
+        accepted:[['100'],['3,6','3.6'],['180']],
+        msgOk:"✅ 100 % = 360°. Angle = fréquence × 3,6. 50 % × 3,6 = 180°.",
+        msgErr:"❌ Attendus : 100 %, multiplier par 3,6, résultat = 180° (50×3,6=180)."
+    },
+    2:{
+        fields:['f2a','f2b','f2c'],
+        accepted:[['courbes','courbe'],['barres','bâtons','batons'],['camembert','diagramme circulaire','circulaire']],
+        msgOk:"✅ Courbes pour l'évolution dans le temps, barres pour comparer des catégories, camembert pour les proportions.",
+        msgErr:"❌ Attendus : graphique en 'courbes', diagramme en 'barres', 'camembert' (diagramme circulaire)."
+    },
+    3:{
+        fields:['f3a','f3b','f3c'],
+        accepted:[['0'],['grandes','importante','importantes','exagerees','exagérées'],['tronque','tronqué','coupe','coupé']],
+        msgOk:"✅ Si l'axe Y ne commence pas à 0, les différences semblent plus grandes qu'elles ne le sont → axe tronqué.",
+        msgErr:"❌ Attendus : si l'axe ne commence pas à '0', les différences semblent plus 'grandes' → axe 'tronqué'."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9,\.]/g,'');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_statistiques_3', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m);
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>
