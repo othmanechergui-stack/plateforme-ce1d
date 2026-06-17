@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Statistiques · Niveau 1 — Moyenne & Étendue</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#00BFA5; --primary-dark:#00796B; --primary-mid:#26C6B3; --primary-bg:#E0F5F1;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#004D40 0%,#00BFA5 55%,#80CBC4 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(0,77,64,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#00BFA5; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#00796B; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#004D40,#00BFA5,#80CBC4); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .formula-hero { background:linear-gradient(135deg,var(--primary-bg),#B2DFDB); border:2px solid #80CBC4; border-radius:14px; padding:18px 22px; margin-bottom:20px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+        .formula-big { font-size:1.6rem; font-weight:900; color:var(--primary-dark); font-family:'Courier New',monospace; }
+        .formula-details { font-size:.9rem; color:#555; line-height:2; }
+        .formula-details strong { color:var(--primary-dark); }
+
+        .def-box { background:linear-gradient(135deg,#004D40,#00796B); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#80CBC4; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.6rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .cas-eq   { font-size:1rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .examples-row { display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
+        .example-chip { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:10px; padding:8px 16px; font-size:.95rem; font-weight:800; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .example-chip span { color:#888; font-size:.75rem; font-family:inherit; font-weight:700; display:block; text-align:center; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#004D40,#00BFA5,#80CBC4); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #003330; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.locked { cursor:default; opacity:.55; }
+
+        /* Tableau de données */
+        .data-table { width:100%; border-collapse:collapse; border-radius:10px; overflow:hidden; margin:16px 0; font-size:.92rem; }
+        .data-table th { background:var(--primary); color:white; padding:9px 14px; font-weight:900; text-align:center; }
+        .data-table td { padding:8px 14px; text-align:center; border-bottom:1px solid var(--border); }
+        .data-table tr:nth-child(even) td { background:var(--primary-bg); }
+        .data-table tr:last-child td { border-bottom:none; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>📊 Statistiques · Moyenne &amp; Étendue</h1>
+            <p>Niveau 1 · Analyser et interpréter des données</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 1 — Base</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Statistiques : analyser des données</div>
+            <div class="card-sub">Vocabulaire · Moyenne · Étendue · Médiane · Graphiques</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Les statistiques permettent de <strong>résumer et analyser</strong> un grand nombre d'informations.
+            Par exemple : les notes d'une classe, les températures de la semaine ou les sports pratiqués par des élèves.
+            On utilise des <strong>indicateurs</strong> (moyenne, étendue, médiane) et des <strong>graphiques</strong> pour mieux comprendre les données.
+        </p>
+
+        <!-- Vocabulaire -->
+        <div class="def-box">
+            <h3>📌 Vocabulaire de base</h3>
+            <p>
+                <strong>Population</strong> : l'ensemble de tous les individus étudiés (ex : tous les élèves de l'école).<br>
+                <strong>Échantillon</strong> : une partie de la population choisie pour l'étude (ex : une classe).<br>
+                <strong>Donnée</strong> : une valeur mesurée ou observée (ex : la note d'un élève).<br>
+                <strong>Effectif</strong> : le nombre de fois qu'une valeur apparaît dans les données.<br>
+                <strong>Fréquence</strong> : la proportion (en %) d'une valeur par rapport au total.
+            </p>
+        </div>
+
+        <!-- Tableau exemple -->
+        <p style="font-size:.93rem;font-weight:700;color:#444;margin-bottom:8px;">Exemple — Notes de 10 élèves en mathématiques :</p>
+        <table class="data-table">
+            <tr><th>Note</th><th>12</th><th>14</th><th>16</th><th>10</th><th>18</th><th>14</th><th>8</th><th>16</th><th>14</th><th>12</th></tr>
+            <tr><td style="font-weight:900;background:var(--primary-bg);">Élève</td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td>I</td><td>J</td></tr>
+        </table>
+
+        <!-- Formule MOYENNE -->
+        <div class="rule-box">
+            <h3>🔑 La Moyenne — Comment la calculer ?</h3>
+            <p>La <strong>moyenne</strong> est la valeur "équilibrée" qui représente l'ensemble des données.<br>
+            <strong>Formule : Moyenne = somme de toutes les valeurs ÷ nombre de valeurs</strong><br>
+            Exemple avec les 10 notes : (12+14+16+10+18+14+8+16+14+12) ÷ 10 = 134 ÷ 10 = <strong>13,4</strong></p>
+        </div>
+
+        <!-- SVG 4 : Schéma calcul de la moyenne -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="200" fill="#F5FFFD" rx="10"/>
+                <text x="280" y="22" text-anchor="middle" font-size="13" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Comment calculer la moyenne ? — Étape par étape</text>
+
+                <!-- Étape 1 -->
+                <rect x="10" y="34" width="160" height="58" rx="10" fill="#E0F5F1" stroke="#00BFA5" stroke-width="2"/>
+                <text x="90" y="56" text-anchor="middle" font-size="11" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">ÉTAPE 1</text>
+                <text x="90" y="73" text-anchor="middle" font-size="10" fill="#333" font-family="Nunito, sans-serif">Additionner toutes</text>
+                <text x="90" y="87" text-anchor="middle" font-size="10" fill="#333" font-family="Nunito, sans-serif">les valeurs</text>
+
+                <!-- Flèche 1 -->
+                <line x1="170" y1="63" x2="200" y2="63" stroke="#00BFA5" stroke-width="2.5" marker-end="url(#arr)"/>
+                <defs>
+                    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                        <path d="M0,0 L0,6 L8,3 z" fill="#00BFA5"/>
+                    </marker>
+                </defs>
+
+                <!-- Étape 2 -->
+                <rect x="200" y="34" width="160" height="58" rx="10" fill="#E0F5F1" stroke="#00BFA5" stroke-width="2"/>
+                <text x="280" y="56" text-anchor="middle" font-size="11" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">ÉTAPE 2</text>
+                <text x="280" y="73" text-anchor="middle" font-size="10" fill="#333" font-family="Nunito, sans-serif">Diviser par le nombre</text>
+                <text x="280" y="87" text-anchor="middle" font-size="10" fill="#333" font-family="Nunito, sans-serif">de valeurs</text>
+
+                <!-- Flèche 2 -->
+                <line x1="360" y1="63" x2="390" y2="63" stroke="#00BFA5" stroke-width="2.5" marker-end="url(#arr)"/>
+
+                <!-- Étape 3 = résultat -->
+                <rect x="390" y="34" width="160" height="58" rx="10" fill="#00BFA5" stroke="#00796B" stroke-width="2"/>
+                <text x="470" y="56" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">RÉSULTAT</text>
+                <text x="470" y="73" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="Courier New, monospace">= MOYENNE</text>
+
+                <!-- Exemple numérique -->
+                <rect x="10" y="108" width="540" height="42" rx="8" fill="white" stroke="#80CBC4" stroke-width="1.5"/>
+                <text x="30" y="126" font-size="11" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Exemple :</text>
+                <text x="100" y="126" font-size="11" fill="#333" font-family="Nunito, sans-serif">(12+14+16+10+18+14+8+16+14+12)</text>
+                <text x="350" y="126" font-size="12" font-weight="900" fill="#004D40" font-family="Courier New, monospace">= 134</text>
+                <text x="30" y="142" font-size="11" font-weight="700" fill="#333" font-family="Nunito, sans-serif">134 ÷ 10</text>
+                <text x="105" y="142" font-size="12" font-weight="900" fill="#00796B" font-family="Courier New, monospace">= 13,4</text>
+                <text x="170" y="142" font-size="11" fill="#555" font-family="Nunito, sans-serif">← voilà la moyenne !</text>
+
+                <!-- Formule résumée -->
+                <rect x="10" y="160" width="540" height="34" rx="8" fill="#004D40"/>
+                <text x="280" y="182" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Nunito, sans-serif">Moyenne = Somme des valeurs ÷ Nombre de valeurs</text>
+            </svg>
+        </div>
+
+        <!-- Étendue -->
+        <div class="rule-box">
+            <h3>📏 L'Étendue — L'écart entre le plus grand et le plus petit</h3>
+            <p>L'<strong>étendue</strong> mesure la dispersion (l'écart) des données.<br>
+            <strong>Formule : Étendue = valeur maximale − valeur minimale</strong><br>
+            Exemple : max = 18, min = 8 → Étendue = 18 − 8 = <strong>10</strong><br>
+            Une étendue grande = données très dispersées. Petite = données regroupées.</p>
+        </div>
+
+        <!-- Médiane -->
+        <div class="def-box" style="background:linear-gradient(135deg,#1B5E20,#388E3C)">
+            <h3 style="color:#A5D6A7;">📍 La Médiane — La valeur du milieu</h3>
+            <p>La <strong>médiane</strong> est la valeur qui se trouve <strong>au centre</strong> des données triées.<br>
+            1. Trier les données dans l'ordre croissant.<br>
+            2. Si nombre impair de valeurs : prendre la valeur du milieu.<br>
+            3. Si nombre pair de valeurs : faire la moyenne des 2 valeurs centrales.<br>
+            Exemple (10 notes triées) : 8, 10, 12, 12, <strong>14, 14</strong>, 14, 16, 16, 18 → Médiane = (14+14)÷2 = <strong>14</strong></p>
+        </div>
+
+        <!-- Piège moyenne ≠ médiane -->
+        <div class="trap-box">
+            <h3>⚠️ Piège fréquent — Moyenne ≠ Médiane</h3>
+            <p>La <strong>moyenne</strong> est influencée par les valeurs extrêmes (très grandes ou très petites).<br>
+            La <strong>médiane</strong>, elle, n'est pas affectée par les valeurs extrêmes.<br>
+            Exemple : salaires [1000, 1200, 1100, 1050, 9500] → Moyenne = 2770 €, Médiane = 1100 €.<br>
+            <strong>La médiane représente mieux la "situation typique" ici !</strong></p>
+        </div>
+
+        <!-- SVG 1 : Diagramme en barres -->
+        <p style="font-size:.95rem;font-weight:800;color:var(--primary-dark);margin:16px 0 4px;">📊 Diagramme en barres — Notes de la classe</p>
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 240" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="240" fill="#F5FFFD" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Notes des 10 élèves en mathématiques</text>
+
+                <!-- Axes -->
+                <line x1="60" y1="30" x2="60" y2="195" stroke="#333" stroke-width="2"/>
+                <line x1="60" y1="195" x2="540" y2="195" stroke="#333" stroke-width="2"/>
+
+                <!-- Graduations Y -->
+                <text x="52" y="198" text-anchor="end" font-size="10" fill="#555" font-family="Nunito, sans-serif">0</text>
+                <line x1="57" y1="195" x2="60" y2="195" stroke="#555" stroke-width="1.5"/>
+                <text x="52" y="158" text-anchor="end" font-size="10" fill="#555" font-family="Nunito, sans-serif">5</text>
+                <line x1="57" y1="155" x2="60" y2="155" stroke="#555" stroke-width="1.5"/>
+                <line x1="60" y1="155" x2="540" y2="155" stroke="#E0E0E0" stroke-width="1" stroke-dasharray="4,4"/>
+                <text x="52" y="118" text-anchor="end" font-size="10" fill="#555" font-family="Nunito, sans-serif">10</text>
+                <line x1="57" y1="115" x2="60" y2="115" stroke="#555" stroke-width="1.5"/>
+                <line x1="60" y1="115" x2="540" y2="115" stroke="#E0E0E0" stroke-width="1" stroke-dasharray="4,4"/>
+                <text x="52" y="78" text-anchor="end" font-size="10" fill="#555" font-family="Nunito, sans-serif">15</text>
+                <line x1="57" y1="75" x2="60" y2="75" stroke="#555" stroke-width="1.5"/>
+                <line x1="60" y1="75" x2="540" y2="75" stroke="#E0E0E0" stroke-width="1" stroke-dasharray="4,4"/>
+                <text x="52" y="38" text-anchor="end" font-size="10" fill="#555" font-family="Nunito, sans-serif">20</text>
+                <line x1="57" y1="35" x2="60" y2="35" stroke="#555" stroke-width="1.5"/>
+                <line x1="60" y1="35" x2="540" y2="35" stroke="#E0E0E0" stroke-width="1" stroke-dasharray="4,4"/>
+
+                <!-- Barres : chaque unité = (195-35)/20 = 8px. Note×8 = hauteur depuis bas -->
+                <!-- A=12 → h=96px, top=195-96=99 -->
+                <rect x="70"  y="99"  width="36" height="96" fill="#00BFA5" rx="3"/>
+                <text x="88"  y="95"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">12</text>
+                <text x="88"  y="210" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">A</text>
+
+                <!-- B=14 → h=112 top=83 -->
+                <rect x="116" y="83"  width="36" height="112" fill="#26C6B3" rx="3"/>
+                <text x="134" y="79"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">14</text>
+                <text x="134" y="210" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">B</text>
+
+                <!-- C=16 → h=128 top=67 -->
+                <rect x="162" y="67"  width="36" height="128" fill="#00BFA5" rx="3"/>
+                <text x="180" y="63"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">16</text>
+                <text x="180" y="210" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">C</text>
+
+                <!-- D=10 → h=80 top=115 -->
+                <rect x="208" y="115" width="36" height="80" fill="#80CBC4" rx="3"/>
+                <text x="226" y="111" text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">10</text>
+                <text x="226" y="210" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">D</text>
+
+                <!-- E=18 → h=144 top=51 -->
+                <rect x="254" y="51"  width="36" height="144" fill="#F9A825" rx="3"/>
+                <text x="272" y="47"  text-anchor="middle" font-size="10" font-weight="900" fill="#E65100" font-family="Nunito, sans-serif">18</text>
+                <text x="272" y="210" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">E</text>
+
+                <!-- F=14 → h=112 top=83 -->
+                <rect x="300" y="83"  width="36" height="112" fill="#26C6B3" rx="3"/>
+                <text x="318" y="79"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">14</text>
+                <text x="318" y="210" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">F</text>
+
+                <!-- G=8 → h=64 top=131 -->
+                <rect x="346" y="131" width="36" height="64" fill="#EF5350" rx="3"/>
+                <text x="364" y="127" text-anchor="middle" font-size="10" font-weight="900" fill="#B71C1C" font-family="Nunito, sans-serif">8</text>
+                <text x="364" y="210" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">G</text>
+
+                <!-- H=16 → h=128 top=67 -->
+                <rect x="392" y="67"  width="36" height="128" fill="#00BFA5" rx="3"/>
+                <text x="410" y="63"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">16</text>
+                <text x="410" y="210" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">H</text>
+
+                <!-- I=14 → h=112 top=83 -->
+                <rect x="438" y="83"  width="36" height="112" fill="#26C6B3" rx="3"/>
+                <text x="456" y="79"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">14</text>
+                <text x="456" y="210" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">I</text>
+
+                <!-- J=12 → h=96 top=99 -->
+                <rect x="484" y="99"  width="36" height="96" fill="#00BFA5" rx="3"/>
+                <text x="502" y="95"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">12</text>
+                <text x="502" y="210" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">J</text>
+
+                <!-- Ligne moyenne -->
+                <line x1="60" y1="99.8" x2="540" y2="99.8" stroke="#E53935" stroke-width="2" stroke-dasharray="6,4"/>
+                <text x="545" y="97" font-size="10" font-weight="900" fill="#E53935" font-family="Nunito, sans-serif">moy.</text>
+                <text x="545" y="109" font-size="10" font-weight="900" fill="#E53935" font-family="Nunito, sans-serif">13,4</text>
+
+                <!-- Légende -->
+                <text x="280" y="228" text-anchor="middle" font-size="10" fill="#888" font-family="Nunito, sans-serif">— — La ligne rouge indique la moyenne (13,4)</text>
+            </svg>
+        </div>
+
+        <!-- SVG 2 : Camembert -->
+        <p style="font-size:.95rem;font-weight:800;color:var(--primary-dark);margin:16px 0 4px;">🥧 Diagramme circulaire (camembert) — Sports pratiqués</p>
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="230" fill="#F5FFFD" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Sports pratiqués par 100 élèves de l'école</text>
+
+                <!-- Camembert centré à (185, 120) rayon 90 -->
+                <!-- Football 40% = 144° : de -90° à 54° -->
+                <path d="M185,120 L185,30 A90,90 0 0,1 257.9,167.4 Z" fill="#00BFA5"/>
+                <!-- Basket 25% = 90° : de 54° à 144° -->
+                <path d="M185,120 L257.9,167.4 A90,90 0 0,1 112.1,167.4 Z" fill="#26C6B3"/>
+                <!-- Tennis 20% = 72° : de 144° à 216° -->
+                <path d="M185,120 L112.1,167.4 A90,90 0 0,1 112.1,72.6 Z" fill="#F9A825"/>
+                <!-- Natation 15% = 54° : de 216° à 270° = -90° -->
+                <path d="M185,120 L112.1,72.6 A90,90 0 0,1 185,30 Z" fill="#EF5350"/>
+
+                <!-- Labels dans les parts -->
+                <text x="218" y="108" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">40%</text>
+                <text x="185" y="178" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">25%</text>
+                <text x="143" y="108" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">20%</text>
+                <text x="145" y="70" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">15%</text>
+
+                <!-- Légende à droite -->
+                <rect x="305" y="60" width="14" height="14" fill="#00BFA5" rx="3"/>
+                <text x="325" y="72" font-size="12" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Football — 40 élèves</text>
+
+                <rect x="305" y="85" width="14" height="14" fill="#26C6B3" rx="3"/>
+                <text x="325" y="97" font-size="12" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Basketball — 25 élèves</text>
+
+                <rect x="305" y="110" width="14" height="14" fill="#F9A825" rx="3"/>
+                <text x="325" y="122" font-size="12" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Tennis — 20 élèves</text>
+
+                <rect x="305" y="135" width="14" height="14" fill="#EF5350" rx="3"/>
+                <text x="325" y="147" font-size="12" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Natation — 15 élèves</text>
+
+                <rect x="305" y="160" width="222" height="28" rx="6" fill="#E0F5F1" stroke="#80CBC4" stroke-width="1.5"/>
+                <text x="416" y="178" text-anchor="middle" font-size="11" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Total : 100 élèves = 100%</text>
+
+                <text x="280" y="218" text-anchor="middle" font-size="10" fill="#888" font-family="Nunito, sans-serif">Chaque secteur représente la fréquence (%) de chaque sport</text>
+            </svg>
+        </div>
+
+        <!-- SVG 3 : Courbes températures -->
+        <p style="font-size:.95rem;font-weight:800;color:var(--primary-dark);margin:16px 0 4px;">📈 Graphique en courbes — Températures de la semaine</p>
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="230" fill="#F5FFFD" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Températures maximales (°C) — Semaine du 14 au 20 juin</text>
+
+                <!-- Axes -->
+                <line x1="60" y1="28" x2="60" y2="185" stroke="#333" stroke-width="2"/>
+                <line x1="60" y1="185" x2="540" y2="185" stroke="#333" stroke-width="2"/>
+
+                <!-- Graduations Y : 10°C à 30°C, chaque 5° = (185-28)/4 = 39.25px -->
+                <text x="52" y="188" text-anchor="end" font-size="10" fill="#555" font-family="Nunito, sans-serif">10</text>
+                <line x1="57" y1="185" x2="60" y2="185" stroke="#555" stroke-width="1.5"/>
+                <text x="52" y="149" text-anchor="end" font-size="10" fill="#555" font-family="Nunito, sans-serif">15</text>
+                <line x1="57" y1="146" x2="60" y2="146" stroke="#555" stroke-width="1.5"/>
+                <line x1="60" y1="146" x2="540" y2="146" stroke="#E0E0E0" stroke-width="1" stroke-dasharray="4,3"/>
+                <text x="52" y="110" text-anchor="end" font-size="10" fill="#555" font-family="Nunito, sans-serif">20</text>
+                <line x1="57" y1="107" x2="60" y2="107" stroke="#555" stroke-width="1.5"/>
+                <line x1="60" y1="107" x2="540" y2="107" stroke="#E0E0E0" stroke-width="1" stroke-dasharray="4,3"/>
+                <text x="52" y="71" text-anchor="end" font-size="10" fill="#555" font-family="Nunito, sans-serif">25</text>
+                <line x1="57" y1="68" x2="60" y2="68" stroke="#555" stroke-width="1.5"/>
+                <line x1="60" y1="68" x2="540" y2="68" stroke="#E0E0E0" stroke-width="1" stroke-dasharray="4,3"/>
+                <text x="52" y="32" text-anchor="end" font-size="10" fill="#555" font-family="Nunito, sans-serif">30</text>
+                <line x1="57" y1="29" x2="60" y2="29" stroke="#555" stroke-width="1.5"/>
+                <line x1="60" y1="29" x2="540" y2="29" stroke="#E0E0E0" stroke-width="1" stroke-dasharray="4,3"/>
+
+                <!-- Unité Y : 1°C = 39.25/5 = 7.85px. Temp t → y = 185 - (t-10)*7.85 -->
+                <!-- Lun=18 → y=185-62.8=122.2. Mar=22 → y=185-94.2=90.8. Mer=25 → y=185-117.75=67.25
+                     Jeu=27 → y=185-133.45=51.55. Ven=24 → y=185-109.9=75.1. Sam=20 → y=185-78.5=106.5
+                     Dim=16 → y=185-47.1=137.9 -->
+
+                <!-- Jours X : 7 jours, espace = (540-60)/6 = 80px chacun -->
+                <!-- x: Lun=60+0=60, Mar=140, Mer=220, Jeu=300, Ven=380, Sam=460, Dim=540 -->
+                <text x="60"  y="200" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">Lun</text>
+                <text x="140" y="200" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">Mar</text>
+                <text x="220" y="200" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">Mer</text>
+                <text x="300" y="200" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">Jeu</text>
+                <text x="380" y="200" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">Ven</text>
+                <text x="460" y="200" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">Sam</text>
+                <text x="540" y="200" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">Dim</text>
+
+                <!-- Courbe -->
+                <polyline points="60,122 140,91 220,67 300,52 380,75 460,107 540,138"
+                    fill="none" stroke="#00BFA5" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+
+                <!-- Points -->
+                <circle cx="60"  cy="122" r="5" fill="#004D40" stroke="white" stroke-width="2"/>
+                <circle cx="140" cy="91"  r="5" fill="#004D40" stroke="white" stroke-width="2"/>
+                <circle cx="220" cy="67"  r="5" fill="#004D40" stroke="white" stroke-width="2"/>
+                <circle cx="300" cy="52"  r="6" fill="#F9A825" stroke="#E65100" stroke-width="2"/>
+                <circle cx="380" cy="75"  r="5" fill="#004D40" stroke="white" stroke-width="2"/>
+                <circle cx="460" cy="107" r="5" fill="#004D40" stroke="white" stroke-width="2"/>
+                <circle cx="540" cy="138" r="5" fill="#004D40" stroke="white" stroke-width="2"/>
+
+                <!-- Valeurs au-dessus des points -->
+                <text x="60"  y="115" text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">18°</text>
+                <text x="140" y="84"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">22°</text>
+                <text x="220" y="60"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">25°</text>
+                <text x="300" y="44"  text-anchor="middle" font-size="10" font-weight="900" fill="#E65100" font-family="Nunito, sans-serif">27°</text>
+                <text x="380" y="68"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">24°</text>
+                <text x="460" y="100" text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">20°</text>
+                <text x="540" y="131" text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">16°</text>
+
+                <text x="280" y="218" text-anchor="middle" font-size="10" fill="#888" font-family="Nunito, sans-serif">⭐ Le maximum (27°, jeudi) est indiqué en orange</text>
+            </svg>
+        </div>
+
+        <!-- Exemples à retenir -->
+        <p style="font-size:.9rem;font-weight:800;color:var(--primary-dark);margin-bottom:10px;margin-top:8px;">📌 Résumé des indicateurs</p>
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac" style="font-size:1.1rem;">Somme ÷ n</div>
+                <div class="cas-eq">= Moyenne</div>
+                <div class="cas-desc">Valeur "équilibrée" représentative de toutes les données</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac" style="font-size:1.1rem;">Max − Min</div>
+                <div class="cas-eq">= Étendue</div>
+                <div class="cas-desc">Mesure la dispersion (écart entre valeurs extrêmes)</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac" style="font-size:1.1rem;">Valeur du</div>
+                <div class="cas-eq">= Médiane</div>
+                <div class="cas-desc">Milieu des données triées — résiste aux valeurs extrêmes</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Pièges sur les définitions et la lecture de graphiques</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Les notes de 5 élèves sont : 8, 12, 14, 10, 16. Quelle est la <strong>moyenne</strong> de ces notes ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">12</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">13</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">14 — c'est la médiane</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">10</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Les températures d'une semaine sont : 15, 18, 22, 27, 24, 20, 16 °C. Quelle est l'<strong>étendue</strong> ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">10 — max−min avec erreur</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">12</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">27 — c'est le maximum</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">20,3</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Les données triées sont : 5, 8, <strong>10</strong>, 12, 15. Quel est l'indicateur qui vaut <strong>10</strong> ici ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">La moyenne</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">L'étendue</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">La médiane</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">L'effectif</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Dans un diagramme en barres sur les sports, la barre "Football" atteint la graduation 40 sur l'axe "Nombre d'élèves". Combien d'élèves pratiquent le football ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">4 élèves — on lit l'indice</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">400 élèves</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">40 élèves</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">Impossible à savoir</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Les salaires mensuels de 5 employés sont : 1 200, 1 100, 1 050, 1 300, 9 500 €. Quel indicateur représente le mieux le salaire <strong>typique</strong> de ces employés ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">La moyenne — elle vaut 2 830 €</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">La médiane — elle vaut 1 200 €</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">L'étendue — elle vaut 8 450 €</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">L'effectif — il vaut 5</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Formules et définitions à compléter</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Pour calculer la <strong>moyenne</strong> des notes 10, 14, 16, on fait la <strong>somme</strong> :
+                10 + 14 + 16 = <input class="blank" id="f1a" placeholder="?" style="width:55px">.
+                On divise par <input class="blank" id="f1b" placeholder="?" style="width:40px"> (le nombre de valeurs).
+                La moyenne est donc <input class="blank" id="f1c" placeholder="?" style="width:45px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Pour calculer l'<strong>étendue</strong> des données : 5, 12, 8, 20, 3.
+                La valeur <strong>maximale</strong> est <input class="blank" id="f2a" placeholder="?" style="width:40px">
+                et la valeur <strong>minimale</strong> est <input class="blank" id="f2b" placeholder="?" style="width:40px">.
+                L'étendue est donc <input class="blank" id="f2c" placeholder="?" style="width:40px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Pour trouver la <strong>médiane</strong> de : 3, 7, 9, 11, 15.
+                On trie d'abord en ordre <input class="blank" id="f3a" placeholder="?" style="width:100px">.
+                Il y a <input class="blank" id="f3b" placeholder="?" style="width:40px"> valeurs (nombre impair),
+                donc la médiane est la valeur du milieu : <input class="blank" id="f3c" placeholder="?" style="width:40px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices de calcul guidé</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Inspirés du CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Moyenne et étendue (CE1D style)</div>
+                <div class="ex-stmt">
+                    Voici les points obtenus par 6 élèves lors d'un contrôle : <strong>12, 15, 8, 18, 14, 11</strong>.<br>
+                    a) Calcule la moyenne. &nbsp; b) Calcule l'étendue. &nbsp; c) Que signifie l'étendue ici ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Moyenne :</strong> Additionner toutes les valeurs : 12 + 15 + 8 + 18 + 14 + 11 = <strong>78</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Diviser par le nombre de valeurs : 78 ÷ 6 = <strong>13</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>b) Étendue :</strong> Valeur max = 18, valeur min = 8 → Étendue = 18 − 8 = <strong>10</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>c) Interprétation :</strong> L'étendue de 10 points signifie qu'il y a un écart de 10 points entre l'élève qui a obtenu le moins et celui qui a obtenu le plus. Les résultats sont assez dispersés.</div></div>
+                <div class="final-ans">✅ Moyenne = <strong>13</strong> · Étendue = <strong>10</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Médiane (nombre pair de valeurs)</div>
+                <div class="ex-stmt">
+                    Les âges de 8 enfants dans une famille sont : <strong>3, 7, 12, 5, 9, 14, 6, 10</strong>.<br>
+                    Trouve la médiane de ces âges. Montre toutes les étapes.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Trier dans l'ordre croissant :</strong> 3, 5, 6, 7, 9, 10, 12, 14</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Il y a <strong>8 valeurs</strong> (nombre pair). Les deux valeurs centrales sont aux positions 4 et 5 : <strong>7</strong> et <strong>9</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Médiane = (7 + 9) ÷ 2 = 16 ÷ 2 = <strong>8</strong></div></div>
+                <div class="sol-step"><div class="sol-num" style="background:#1CB0F6">💡</div><div class="sol-text" style="color:#0892D0;font-weight:700;">Attention : quand le nombre de valeurs est PAIR, la médiane est la moyenne des 2 valeurs du milieu — pas une valeur de la liste !</div></div>
+                <div class="final-ans">✅ Médiane = <strong>8 ans</strong> (la moitié des enfants a moins de 8 ans, l'autre moitié a plus de 8 ans)</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Lecture de graphique (type CE1D)</div>
+                <div class="ex-stmt">
+                    Dans un diagramme en barres, les ventes de glaces par jour sont :<br>
+                    Lundi : 30 · Mardi : 45 · Mercredi : 60 · Jeudi : 25 · Vendredi : 40<br>
+                    a) Quel jour y a-t-il eu le plus de ventes ? &nbsp; b) Calcule la vente moyenne par jour. &nbsp; c) Calcule l'étendue.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Jour avec le plus de ventes :</strong> La barre la plus haute correspond à <strong>Mercredi</strong> avec 60 glaces.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Moyenne :</strong> 30 + 45 + 60 + 25 + 40 = <strong>200</strong> glaces au total. Moyenne = 200 ÷ 5 = <strong>40 glaces/jour</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Étendue :</strong> max = 60 (mercredi), min = 25 (jeudi). Étendue = 60 − 25 = <strong>35 glaces</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num" style="background:#E53935">!</div><div class="sol-text" style="color:#B71C1C;font-weight:700;">Piège : si l'axe commence à 20 (et non à 0), une barre qui semble "deux fois plus haute" ne représente pas forcément deux fois plus de valeurs. Toujours vérifier l'échelle de l'axe !</div></div>
+                <div class="final-ans">✅ a) Mercredi &nbsp;|&nbsp; b) Moyenne = <strong>40 glaces/jour</strong> &nbsp;|&nbsp; c) Étendue = <strong>35 glaces</strong></div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Retrouver une valeur manquante</div>
+                <div class="bonus-stmt">
+                    La moyenne de 5 notes est <strong>14</strong>. Quatre notes sont connues : <strong>12, 16, 10, 18</strong>.<br>
+                    Quelle est la 5ᵉ note ? (Indice : utilise la définition de la moyenne à l'envers !)
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text">Si la moyenne de 5 notes est 14, alors la <strong>somme totale</strong> = Moyenne × Nombre de valeurs = 14 × 5 = <strong>70</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text">La somme des 4 notes connues = 12 + 16 + 10 + 18 = <strong>56</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text">La 5ᵉ note = somme totale − somme des 4 connues = 70 − 56 = <strong>14</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text">Vérification : (12 + 16 + 10 + 18 + 14) ÷ 5 = 70 ÷ 5 = 14 ✓</div></div>
+                <div class="bonus-ans">
+                    La 5ᵉ note est <strong>14</strong>.<br>
+                    Astuce CE1D : Somme totale = Moyenne × n → Note manquante = Somme totale − Somme des notes connues.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 1 terminé !</h2>
+    <p>Bravo ! Tu maîtrises maintenant la moyenne, l'étendue et la médiane.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue vers le niveau 2 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Statistiques</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_statistiques_niveau1.html" class="nav-btn current">▶ Niveau 1 — Moyenne &amp; Étendue</a>
+        <a href="maths_statistiques_niveau2.html" class="nav-btn">Niveau 2 — Tableaux</a>
+        <a href="maths_statistiques_niveau3.html" class="nav-btn">Niveau 3 — Graphiques</a>
+        <a href="maths_statistiques_niveau4.html" class="nav-btn">Niveau 4 — Fréquences</a>
+        <a href="maths_statistiques_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:1, 3:2, 4:2, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! Somme = 8+12+14+10+16 = 60. Moyenne = 60 ÷ 5 = 12.",
+    2:"✅ Bravo ! Étendue = max − min = 27 − 15 = 12 °C.",
+    3:"✅ Parfait ! La médiane est la valeur du milieu quand les données sont triées. Ici, avec 5 valeurs, c'est la 3ᵉ : 10.",
+    4:"✅ Exact ! La barre atteint 40 sur l'axe → 40 élèves pratiquent le football. On lit directement la graduation.",
+    5:"✅ Oui ! La médiane (1 200 €) est bien plus représentative ici. La moyenne (2 830 €) est tirée vers le haut par le salaire exceptionnel de 9 500 €."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Somme = 8+12+14+10+16 = 60. Moyenne = 60 ÷ 5 = 12. (14 est la médiane — ce n'est pas la même chose !)",
+    2:"❌ Non. Étendue = valeur MAX − valeur MIN = 27 − 15 = 12. (27 tout seul est le maximum, pas l'étendue.)",
+    3:"❌ Non. La valeur du milieu d'une série triée s'appelle la MÉDIANE. La moyenne de ces 5 valeurs serait (5+8+10+12+15)÷5 = 10 aussi ici, mais c'est une coïncidence — ce sont deux indicateurs différents !",
+    4:"❌ Non. Si la barre atteint la graduation 40, cela signifie directement 40 élèves. Il faut lire la valeur sur l'axe des ordonnées (Y), pas l'interpréter autrement.",
+    5:"❌ Non. La moyenne (2 830 €) est faussée par le salaire très élevé de 9 500 €. La médiane (1 200 €) résiste aux valeurs extrêmes et représente mieux la situation typique."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b','f1c'],
+        accepted:[['40'],['3'],['13,3','13','13.3']],
+        msgOk:"✅ 10+14+16 = 40. On divise par 3 (il y a 3 valeurs). Moyenne = 40÷3 ≈ 13,3.",
+        msgErr:"❌ Attendus : somme = 40, on divise par 3, moyenne ≈ 13,3. (10+14+16=40 ; 40÷3≈13,3)"
+    },
+    2:{
+        fields:['f2a','f2b','f2c'],
+        accepted:[['20'],['3'],['17']],
+        msgOk:"✅ Valeur maximale = 20, valeur minimale = 3. Étendue = 20 − 3 = 17.",
+        msgErr:"❌ Attendus : max = 20, min = 3, étendue = 17. (20 − 3 = 17)"
+    },
+    3:{
+        fields:['f3a','f3b','f3c'],
+        accepted:[['croissant'],['5'],['9']],
+        msgOk:"✅ On trie en ordre croissant : 3, 7, 9, 11, 15. Il y a 5 valeurs (nombre impair). La valeur du milieu (3ᵉ position) est 9 → médiane = 9.",
+        msgErr:"❌ Attendus : ordre croissant, 5 valeurs, médiane = 9. (3, 7, [9], 11, 15 → la valeur centrale est 9)"
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9,\.]/g,'');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_statistiques_1', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m);
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>
