@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Statistiques · Niveau 5 — Défi CE1D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#00BFA5; --primary-dark:#00796B; --primary-mid:#26C6B3; --primary-bg:#E0F5F1;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#004D40 0%,#00BFA5 55%,#80CBC4 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(0,77,64,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#00BFA5; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#00796B; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#004D40,#00BFA5,#80CBC4); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#004D40,#00796B); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#80CBC4; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .data-table { width:100%; border-collapse:collapse; border-radius:10px; overflow:hidden; margin:14px 0; font-size:.91rem; }
+        .data-table th { background:var(--primary); color:white; padding:9px 12px; font-weight:900; text-align:center; }
+        .data-table th.fc-col { background:#00796B; }
+        .data-table td { padding:8px 12px; text-align:center; border-bottom:1px solid var(--border); }
+        .data-table tr:nth-child(even) td { background:var(--primary-bg); }
+        .data-table tr:last-child td { border-bottom:none; }
+        .data-table td.total-row { font-weight:900; background:#E0F5F1; color:var(--primary-dark); }
+        .data-table td.fc-cell { font-weight:900; color:#00796B; background:#E8F5E9; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#004D40,#00BFA5,#80CBC4); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #003330; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+
+        .recap-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin:20px 0; }
+        .recap-card { border-radius:14px; padding:16px 18px; }
+        .recap-card.n1 { background:linear-gradient(135deg,#E0F5F1,#B2DFDB); border:2px solid #80CBC4; }
+        .recap-card.n2 { background:linear-gradient(135deg,#E3F2FD,#BBDEFB); border:2px solid #90CAF9; }
+        .recap-card.n3 { background:linear-gradient(135deg,#FFF3E0,#FFE0B2); border:2px solid #FFCC80; }
+        .recap-card.n4 { background:linear-gradient(135deg,#F3E5F5,#E1BEE7); border:2px solid #CE93D8; }
+        .recap-level { font-size:.72rem; font-weight:900; text-transform:uppercase; letter-spacing:.8px; margin-bottom:6px; }
+        .n1 .recap-level { color:#00796B; }
+        .n2 .recap-level { color:#1565C0; }
+        .n3 .recap-level { color:#E65100; }
+        .n4 .recap-level { color:#6A1B9A; }
+        .recap-title { font-size:.98rem; font-weight:900; margin-bottom:8px; }
+        .recap-formulas { font-size:.85rem; line-height:1.8; }
+        .recap-formulas code { background:rgba(0,0,0,.1); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🏆 Statistiques · Défi CE1D</h1>
+            <p>Niveau 5 · Défi complet · Tous les concepts · Style examen belge</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <span class="diff-label">Niveau 5 — Défi CE1D 🏆</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. FICHE DE RÉVISION -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📋</div>
+        <div>
+            <div class="card-title">Fiche de révision — Tous les chapitres</div>
+            <div class="card-sub">Récapitulatif N1 à N4 · Formules clés · Pièges à éviter</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Bienvenue dans le <strong>Défi CE1D</strong> ! Ce niveau reprend tous les concepts vus aux niveaux 1 à 4
+            et te prépare aux exercices du vrai examen de certification. Commence par revoir la fiche de révision,
+            puis affronte les questions.
+        </p>
+
+        <div class="recap-grid">
+            <div class="recap-card n1">
+                <div class="recap-level">Niveau 1</div>
+                <div class="recap-title">Indicateurs statistiques</div>
+                <div class="recap-formulas">
+                    <code>Moyenne = Σ valeurs ÷ n</code><br>
+                    <code>Étendue = max − min</code><br>
+                    <code>Médiane</code> : trier, prendre la valeur centrale (ou moyenne des 2 centrales si n pair)
+                </div>
+            </div>
+            <div class="recap-card n2">
+                <div class="recap-level">Niveau 2</div>
+                <div class="recap-title">Tableaux de distribution</div>
+                <div class="recap-formulas">
+                    <code>Fréquence = (eff ÷ total) × 100</code><br>
+                    <code>Moy. pond. = Σ(val × eff) ÷ N</code><br>
+                    Somme des fréquences = 100 %
+                </div>
+            </div>
+            <div class="recap-card n3">
+                <div class="recap-level">Niveau 3</div>
+                <div class="recap-title">Graphiques</div>
+                <div class="recap-formulas">
+                    <code>Angle = fréquence (%) × 3,6</code><br>
+                    Barres → comparaison<br>
+                    Camembert → proportions<br>
+                    Courbes → évolution dans le temps
+                </div>
+            </div>
+            <div class="recap-card n4">
+                <div class="recap-level">Niveau 4</div>
+                <div class="recap-title">Fréquences cumulées</div>
+                <div class="recap-formulas">
+                    <code>FCC(X) = Σ f(val ≤ X)</code><br>
+                    Dernière FCC = 100 %<br>
+                    <code>Centre = (a + b) ÷ 2</code><br>
+                    FCC = 50 % → médiane
+                </div>
+            </div>
+        </div>
+
+        <!-- SVG 1 : tableau récap formules -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="200" fill="#F5FFFD" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Récapitulatif des formules — Statistiques CE1D</text>
+
+                <!-- Colonne 1 : Indicateurs -->
+                <rect x="14" y="26" width="125" height="163" rx="8" fill="#E0F5F1" stroke="#80CBC4" stroke-width="1.5"/>
+                <rect x="14" y="26" width="125" height="26" rx="8" fill="#00BFA5"/>
+                <text x="76" y="43" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">Indicateurs</text>
+                <text x="76" y="62"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Courier New, monospace">x̄ = Σxᵢ ÷ n</text>
+                <text x="76" y="82"  text-anchor="middle" font-size="9"  fill="#555" font-family="Nunito, sans-serif">Moyenne</text>
+                <text x="76" y="103" text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Courier New, monospace">E = max − min</text>
+                <text x="76" y="118" text-anchor="middle" font-size="9"  fill="#555" font-family="Nunito, sans-serif">Étendue</text>
+                <text x="76" y="140" text-anchor="middle" font-size="9"  fill="#004D40" font-family="Nunito, sans-serif" font-weight="700">Médiane : trier</text>
+                <text x="76" y="155" text-anchor="middle" font-size="9"  fill="#004D40" font-family="Nunito, sans-serif" font-weight="700">puis valeur centrale</text>
+                <text x="76" y="175" text-anchor="middle" font-size="9"  fill="#555" font-family="Nunito, sans-serif">(ou moy. des 2 centrales)</text>
+
+                <!-- Colonne 2 : Fréquences -->
+                <rect x="150" y="26" width="125" height="163" rx="8" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1.5"/>
+                <rect x="150" y="26" width="125" height="26" rx="8" fill="#1565C0"/>
+                <text x="212" y="43" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">Fréquences</text>
+                <text x="212" y="64"  text-anchor="middle" font-size="9" font-weight="900" fill="#1565C0" font-family="Courier New, monospace">f = (n ÷ N) × 100</text>
+                <text x="212" y="79"  text-anchor="middle" font-size="9"  fill="#555" font-family="Nunito, sans-serif">Fréquence en %</text>
+                <text x="212" y="100" text-anchor="middle" font-size="9" font-weight="900" fill="#1565C0" font-family="Courier New, monospace">moy = Σ(val × n) ÷ N</text>
+                <text x="212" y="115" text-anchor="middle" font-size="9"  fill="#555" font-family="Nunito, sans-serif">Moyenne pondérée</text>
+                <text x="212" y="137" text-anchor="middle" font-size="9" font-weight="900" fill="#1565C0" font-family="Nunito, sans-serif">Σ fréquences = 100 %</text>
+
+                <!-- Colonne 3 : Graphiques -->
+                <rect x="286" y="26" width="125" height="163" rx="8" fill="#FFF3E0" stroke="#FFCC80" stroke-width="1.5"/>
+                <rect x="286" y="26" width="125" height="26" rx="8" fill="#E65100"/>
+                <text x="348" y="43" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">Graphiques</text>
+                <text x="348" y="64"  text-anchor="middle" font-size="9" font-weight="900" fill="#E65100" font-family="Courier New, monospace">angle = f% × 3,6</text>
+                <text x="348" y="79"  text-anchor="middle" font-size="9"  fill="#555" font-family="Nunito, sans-serif">Angle du camembert</text>
+                <text x="348" y="100" text-anchor="middle" font-size="9"  fill="#E65100" font-family="Nunito, sans-serif" font-weight="700">Barres → comparaison</text>
+                <text x="348" y="116" text-anchor="middle" font-size="9"  fill="#E65100" font-family="Nunito, sans-serif" font-weight="700">Camembert → proportions</text>
+                <text x="348" y="132" text-anchor="middle" font-size="9"  fill="#E65100" font-family="Nunito, sans-serif" font-weight="700">Courbes → évolution</text>
+                <text x="348" y="148" text-anchor="middle" font-size="9"  fill="#555" font-family="Nunito, sans-serif">Axe Y commence à 0 !</text>
+
+                <!-- Colonne 4 : FCC -->
+                <rect x="422" y="26" width="124" height="163" rx="8" fill="#F3E5F5" stroke="#CE93D8" stroke-width="1.5"/>
+                <rect x="422" y="26" width="124" height="26" rx="8" fill="#6A1B9A"/>
+                <text x="484" y="43" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">FCC</text>
+                <text x="484" y="64"  text-anchor="middle" font-size="9" font-weight="900" fill="#6A1B9A" font-family="Courier New, monospace">FCC(X) = Σf(val ≤ X)</text>
+                <text x="484" y="79"  text-anchor="middle" font-size="9"  fill="#555" font-family="Nunito, sans-serif">Somme croissante</text>
+                <text x="484" y="100" text-anchor="middle" font-size="9" font-weight="900" fill="#6A1B9A" font-family="Nunito, sans-serif">Toujours croissante</text>
+                <text x="484" y="116" text-anchor="middle" font-size="9" font-weight="900" fill="#6A1B9A" font-family="Nunito, sans-serif">Dernière FCC = 100 %</text>
+                <text x="484" y="137" text-anchor="middle" font-size="9" font-weight="900" fill="#6A1B9A" font-family="Courier New, monospace">FCC = 50 % → médiane</text>
+                <text x="484" y="153" text-anchor="middle" font-size="9" font-weight="900" fill="#6A1B9A" font-family="Courier New, monospace">centre = (a+b)÷2</text>
+            </svg>
+        </div>
+
+        <!-- Pièges CE1D -->
+        <div class="trap-box">
+            <h3>⚠️ Les 5 pièges classiques du CE1D en statistiques</h3>
+            <p>
+                <strong>1. Médiane ≠ Moyenne :</strong> une valeur extrême (très grande ou très petite) fausse la moyenne mais pas la médiane.<br>
+                <strong>2. Médiane avec n pair :</strong> il faut faire la moyenne des 2 valeurs centrales, pas choisir l'une d'elles.<br>
+                <strong>3. Angle camembert :</strong> multiplier par 3,6 (car 100 % = 360°), pas par 3 ou par 100.<br>
+                <strong>4. Axe tronqué :</strong> un graphique dont l'axe Y ne commence pas à 0 exagère visuellement les différences.<br>
+                <strong>5. FCC ≠ fréquence simple :</strong> "FCC(14) = 68 %" signifie 68 % des élèves ont <em>14 ou moins</em>, pas exactement 14.
+            </p>
+        </div>
+
+        <!-- SVG 2 : camembert sports coloré -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="230" fill="#F5FFFD" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Exemple de camembert — Sports préférés de 120 élèves</text>
+
+                <!-- Camembert : cx=155, cy=120, r=90 -->
+                <!-- Football 35% → 126° : 0° à 126° -->
+                <path d="M 155 120 L 245 120 A 90 90 0 0 1 183 200 Z" fill="#00BFA5" stroke="white" stroke-width="2"/>
+                <!-- Basket 25% → 90° : 126° à 216° -->
+                <path d="M 155 120 L 183 200 A 90 90 0 0 1 65 120 Z" fill="#1CB0F6" stroke="white" stroke-width="2"/>
+                <!-- Tennis 15% → 54° : 216° à 270° -->
+                <path d="M 155 120 L 65 120 A 90 90 0 0 1 155 30 Z" fill="#FF9600" stroke="white" stroke-width="2"/>
+                <!-- Natation 20% → 72° : 270° à 342° -->
+                <path d="M 155 120 L 155 30 A 90 90 0 0 1 240.6 94.5 Z" fill="#58CC02" stroke="white" stroke-width="2"/>
+                <!-- Autres 5% → 18° : 342° à 360° -->
+                <path d="M 155 120 L 240.6 94.5 A 90 90 0 0 1 245 120 Z" fill="#E53935" stroke="white" stroke-width="2"/>
+
+                <!-- Annotations -->
+                <text x="195" y="150" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">Football</text>
+                <text x="195" y="163" text-anchor="middle" font-size="9" font-weight="900" fill="white" font-family="Nunito, sans-serif">35% · 126°</text>
+
+                <text x="100" y="165" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">Basket</text>
+                <text x="100" y="178" text-anchor="middle" font-size="9" font-weight="900" fill="white" font-family="Nunito, sans-serif">25% · 90°</text>
+
+                <text x="107" y="85" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">Tennis</text>
+                <text x="107" y="98" text-anchor="middle" font-size="9" font-weight="900" fill="white" font-family="Nunito, sans-serif">15% · 54°</text>
+
+                <text x="195" y="72" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">Natation</text>
+                <text x="195" y="85" text-anchor="middle" font-size="9" font-weight="900" fill="white" font-family="Nunito, sans-serif">20% · 72°</text>
+
+                <text x="230" y="112" text-anchor="middle" font-size="9" font-weight="900" fill="#333" font-family="Nunito, sans-serif">Autres 5%</text>
+
+                <!-- Légende -->
+                <rect x="310" y="50"  width="14" height="14" rx="3" fill="#00BFA5"/>
+                <text x="330" y="62"  font-size="11" fill="#333" font-family="Nunito, sans-serif" font-weight="700">Football : 42 élèves → 35 % → 126°</text>
+                <rect x="310" y="74"  width="14" height="14" rx="3" fill="#1CB0F6"/>
+                <text x="330" y="86"  font-size="11" fill="#333" font-family="Nunito, sans-serif" font-weight="700">Basket : 30 élèves → 25 % → 90°</text>
+                <rect x="310" y="98"  width="14" height="14" rx="3" fill="#FF9600"/>
+                <text x="330" y="110" font-size="11" fill="#333" font-family="Nunito, sans-serif" font-weight="700">Tennis : 18 élèves → 15 % → 54°</text>
+                <rect x="310" y="122" width="14" height="14" rx="3" fill="#58CC02"/>
+                <text x="330" y="134" font-size="11" fill="#333" font-family="Nunito, sans-serif" font-weight="700">Natation : 24 élèves → 20 % → 72°</text>
+                <rect x="310" y="146" width="14" height="14" rx="3" fill="#E53935"/>
+                <text x="330" y="158" font-size="11" fill="#333" font-family="Nunito, sans-serif" font-weight="700">Autres : 6 élèves → 5 % → 18°</text>
+
+                <text x="420" y="185" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">Total = 120 élèves · Somme angles = 360°</text>
+                <text x="420" y="200" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">Formule : angle = fréquence % × 3,6</text>
+
+                <text x="155" y="220" text-anchor="middle" font-size="9" fill="#888" font-family="Nunito, sans-serif">Exemple : Basket → 25 × 3,6 = 90°</text>
+            </svg>
+        </div>
+
+        <!-- SVG 3 : histogramme temps de réaction -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="220" fill="#F5FFFD" rx="10"/>
+                <text x="280" y="16" text-anchor="middle" font-size="12" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Histogramme — Temps de réaction (ms) de 30 sujets + FCC</text>
+
+                <!-- Axes -->
+                <line x1="60" y1="20" x2="60" y2="175" stroke="#333" stroke-width="2"/>
+                <line x1="60" y1="175" x2="530" y2="175" stroke="#333" stroke-width="2"/>
+
+                <!-- Y : effectif 0 à 12 -->
+                <text x="53" y="178" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">0</text>
+                <text x="53" y="140" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">4</text>
+                <line x1="57" y1="137" x2="60" y2="137" stroke="#555" stroke-width="1.5"/>
+                <line x1="60" y1="137" x2="530" y2="137" stroke="#E0E0E0" stroke-width="1" stroke-dasharray="3,3"/>
+                <text x="53" y="101" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">8</text>
+                <line x1="57" y1="99"  x2="60" y2="99"  stroke="#555" stroke-width="1.5"/>
+                <line x1="60" y1="99"  x2="530" y2="99"  stroke="#E0E0E0" stroke-width="1" stroke-dasharray="3,3"/>
+                <text x="53" y="61"  text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">12</text>
+                <line x1="57" y1="58"  x2="60" y2="58"  stroke="#555" stroke-width="1.5"/>
+                <line x1="60" y1="58"  x2="530" y2="58"  stroke="#E0E0E0" stroke-width="1" stroke-dasharray="3,3"/>
+
+                <!-- 5 classes, largeur = (530-60)/5 = 94px -->
+                <!-- effectifs : 3,7,12,6,2 ; h = eff/12*(175-20) = eff*12.9 -->
+                <!-- [200;250[ eff=3 h=38.8 top=175-39=136 -->
+                <rect x="60"  y="136" width="94" height="39"  fill="#80CBC4" stroke="white" stroke-width="1.5"/>
+                <text x="107" y="130" text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">3</text>
+                <text x="107" y="190" text-anchor="middle" font-size="8" fill="#555" font-family="Nunito, sans-serif">[200;250[</text>
+
+                <!-- [250;300[ eff=7 h=90.7 top=175-91=84 -->
+                <rect x="154" y="84"  width="94" height="91"  fill="#26C6B3" stroke="white" stroke-width="1.5"/>
+                <text x="201" y="78"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">7</text>
+                <text x="201" y="190" text-anchor="middle" font-size="8" fill="#555" font-family="Nunito, sans-serif">[250;300[</text>
+
+                <!-- [300;350[ eff=12 h=155.4 top=175-155=20 -->
+                <rect x="248" y="20"  width="94" height="155" fill="#00BFA5" stroke="white" stroke-width="1.5"/>
+                <text x="295" y="14"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">12</text>
+                <text x="295" y="190" text-anchor="middle" font-size="8" fill="#555" font-family="Nunito, sans-serif">[300;350[</text>
+
+                <!-- [350;400[ eff=6 h=77.6 top=175-78=97 -->
+                <rect x="342" y="97"  width="94" height="78"  fill="#26C6B3" stroke="white" stroke-width="1.5"/>
+                <text x="389" y="91"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">6</text>
+                <text x="389" y="190" text-anchor="middle" font-size="8" fill="#555" font-family="Nunito, sans-serif">[350;400[</text>
+
+                <!-- [400;450[ eff=2 h=25.8 top=175-26=149 -->
+                <rect x="436" y="149" width="94" height="26"  fill="#80CBC4" stroke="white" stroke-width="1.5"/>
+                <text x="483" y="143" text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">2</text>
+                <text x="483" y="190" text-anchor="middle" font-size="8" fill="#555" font-family="Nunito, sans-serif">[400;450[</text>
+
+                <!-- FCC en annotation -->
+                <text x="107" y="124" text-anchor="middle" font-size="8" fill="#6A1B9A" font-weight="900" font-family="Nunito, sans-serif">FCC: 10%</text>
+                <text x="201" y="72"  text-anchor="middle" font-size="8" fill="#6A1B9A" font-weight="900" font-family="Nunito, sans-serif">FCC: 33%</text>
+                <text x="295" y="208" text-anchor="middle" font-size="8" fill="#6A1B9A" font-weight="900" font-family="Nunito, sans-serif">FCC: 73% ← médiane ici</text>
+                <text x="389" y="205" text-anchor="middle" font-size="8" fill="#6A1B9A" font-weight="900" font-family="Nunito, sans-serif">FCC: 93%</text>
+                <text x="483" y="137" text-anchor="middle" font-size="8" fill="#6A1B9A" font-weight="900" font-family="Nunito, sans-serif">FCC: 100%</text>
+            </svg>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple — Défi CE1D</div>
+            <div class="card-sub">5 questions · Tous niveaux mélangés · Style examen</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Les notes d'un élève, triées dans l'ordre croissant, sont : 3, 7, 8, 8, 11, 14. Quelle est la médiane ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">8 — moyenne des 3ᵉ et 4ᵉ valeurs</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">8,5 — (8+9)÷2</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">7,5 — (7+8)÷2</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">8,5 — c'est la moyenne des 6 notes</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Dans un camembert, une catégorie représente 40 % des données. Quel angle lui correspond ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">40°</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">144°</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">100°</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">400°</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> La FCC de la note 14 est 68 % dans une classe de 25 élèves. Combien d'élèves ont obtenu <strong>plus de 14</strong> ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">17 — car 68 % de 25 = 17</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">8 — car (100 − 68) % de 25 = 8</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">68 — c'est la FCC elle-même</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">14 — c'est la note lue</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Un élève a eu 10 en maths (coeff. 2), 14 en français (coeff. 3) et 12 en sciences (coeff. 1). Quelle est sa moyenne pondérée ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">12 — (10 + 14 + 12) ÷ 3</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">12,3 — Σ(note × coeff) ÷ Σcoeff</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">11,7</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">13</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Dans un histogramme (données groupées par classes), les barres sont…</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Séparées par un espace, comme dans un diagramme en barres classique</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Toujours de la même hauteur</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Adjacentes (collées), car les classes se suivent sans interruption</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Disposées par ordre de hauteur décroissante</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous — Récapitulatif</div>
+            <div class="card-sub">3 exercices · Un piège par trou · Tous les niveaux</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                La <input class="blank" id="f1a" placeholder="?" style="width:90px"> se calcule en faisant la somme de toutes les valeurs divisée par le nombre de valeurs.
+                L'<input class="blank" id="f1b" placeholder="?" style="width:90px"> est la différence entre la valeur maximale et la valeur
+                <input class="blank" id="f1c" placeholder="?" style="width:110px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                L'angle d'une part dans un camembert s'obtient en multipliant la fréquence (en %) par
+                <input class="blank" id="f2a" placeholder="?" style="width:50px">.
+                Pour représenter l'<em>évolution</em> d'une température au fil des mois, on choisit un graphique en
+                <input class="blank" id="f2b" placeholder="?" style="width:90px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Une colonne de FCC est toujours
+                <input class="blank" id="f3a" placeholder="?" style="width:110px"> : chaque valeur est supérieure ou égale à la précédente.
+                La dernière FCC est toujours <input class="blank" id="f3b" placeholder="?" style="width:50px"> %.
+                Sur l'ogive, la valeur pour laquelle FCC = 50 % est la <input class="blank" id="f3c" placeholder="?" style="width:100px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés — Style CE1D</div>
+            <div class="card-sub">3 exercices complets · Corrigés détaillés · + 1 bonus</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Analyse complète d'un jeu de données (CE1D style)</div>
+                <div class="ex-stmt">
+                    Les résultats d'un test de maths (sur 20) pour 24 élèves sont :<br>
+                    <strong>8, 9, 9, 10, 10, 10, 11, 11, 12, 12, 12, 12, 13, 13, 13, 14, 14, 15, 15, 16, 16, 17, 18, 19</strong><br><br>
+                    a) Calcule la <strong>moyenne</strong>.<br>
+                    b) Détermine l'<strong>étendue</strong>.<br>
+                    c) Trouve la <strong>médiane</strong>.<br>
+                    d) Complète ce tableau de fréquences pour les notes 10, 11 et 12 :
+                    <table class="data-table" style="margin-top:10px;">
+                        <tr><th>Note</th><th>Effectif</th><th>Fréquence (%)</th></tr>
+                        <tr><td>10</td><td>3</td><td>?</td></tr>
+                        <tr><td>11</td><td>2</td><td>?</td></tr>
+                        <tr><td>12</td><td>4</td><td>?</td></tr>
+                    </table>
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Moyenne :</strong><br>
+                    Somme = 8 + (9×2) + (10×3) + (11×2) + (12×4) + (13×3) + (14×2) + (15×2) + (16×2) + 17 + 18 + 19<br>
+                    = 8 + 18 + 30 + 22 + 48 + 39 + 28 + 30 + 32 + 17 + 18 + 19 = <strong>309</strong><br>
+                    Moyenne = 309 ÷ 24 ≈ <strong>12,9</strong>
+                </div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Étendue :</strong> max − min = 19 − 8 = <strong>11</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Médiane (24 valeurs — pair) :</strong><br>
+                    On cherche la moyenne des 12ᵉ et 13ᵉ valeurs.<br>
+                    En comptant la liste ordonnée : la 12ᵉ valeur est <strong>12</strong> et la 13ᵉ est <strong>13</strong>.<br>
+                    Médiane = (12 + 13) ÷ 2 = <strong>12,5</strong>
+                </div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>d) Fréquences (total = 24) :</strong><br>
+                    • Note 10 : (3 ÷ 24) × 100 = <strong>12,5 %</strong><br>
+                    • Note 11 : (2 ÷ 24) × 100 ≈ <strong>8,3 %</strong><br>
+                    • Note 12 : (4 ÷ 24) × 100 ≈ <strong>16,7 %</strong>
+                </div></div>
+                <div class="final-ans">✅ Moyenne ≈ <strong>12,9</strong> · Étendue = <strong>11</strong> · Médiane = <strong>12,5</strong> · Fréquences : 12,5% — 8,3% — 16,7%</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Camembert : calcul d'angles et lecture (CE1D style)</div>
+                <div class="ex-stmt">
+                    Un sondage sur le sport préféré de 120 élèves donne :
+                    <table class="data-table" style="margin-top:10px;">
+                        <tr><th>Sport</th><th>Effectif</th><th>Fréquence (%)</th><th>Angle (°)</th></tr>
+                        <tr><td>Football</td><td>42</td><td>?</td><td>?</td></tr>
+                        <tr><td>Basket</td><td>30</td><td>?</td><td>?</td></tr>
+                        <tr><td>Tennis</td><td>18</td><td>?</td><td>?</td></tr>
+                        <tr><td>Natation</td><td>24</td><td>?</td><td>?</td></tr>
+                        <tr><td>Autres</td><td>6</td><td>?</td><td>?</td></tr>
+                    </table>
+                    a) Calcule toutes les fréquences et tous les angles.<br>
+                    b) Quel sport correspond exactement à un angle de <strong>90°</strong> dans le camembert ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Fréquences (÷ 120 × 100) :</strong><br>
+                    Football : 42÷120×100 = <strong>35 %</strong> · Basket : 30÷120×100 = <strong>25 %</strong> · Tennis : 18÷120×100 = <strong>15 %</strong><br>
+                    Natation : 24÷120×100 = <strong>20 %</strong> · Autres : 6÷120×100 = <strong>5 %</strong> · Vérif : 35+25+15+20+5 = 100 % ✓
+                </div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Angles (fréquence × 3,6) :</strong><br>
+                    Football : 35 × 3,6 = <strong>126°</strong> · Basket : 25 × 3,6 = <strong>90°</strong> · Tennis : 15 × 3,6 = <strong>54°</strong><br>
+                    Natation : 20 × 3,6 = <strong>72°</strong> · Autres : 5 × 3,6 = <strong>18°</strong> · Vérif : 126+90+54+72+18 = 360° ✓
+                </div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>b) Angle = 90° :</strong> 90 ÷ 3,6 = 25 % → c'est le <strong>Basket</strong> (30 élèves sur 120 = 25 %).</div></div>
+                <div class="final-ans">✅ Football 126° · Basket 90° · Tennis 54° · Natation 72° · Autres 18° · Angle 90° → <strong>Basket</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Données groupées, FCC et médiane (CE1D style)</div>
+                <div class="ex-stmt">
+                    Les temps de réaction (en millisecondes) de 30 sujets lors d'un test sont regroupés en classes :
+                    <table class="data-table" style="margin-top:10px;">
+                        <tr><th>Classe (ms)</th><th>Effectif</th><th>Fréquence (%)</th><th class="fc-col">FCC (%)</th></tr>
+                        <tr><td>[200 ; 250[</td><td>3</td><td>?</td><td class="fc-cell">?</td></tr>
+                        <tr><td>[250 ; 300[</td><td>7</td><td>?</td><td class="fc-cell">?</td></tr>
+                        <tr><td>[300 ; 350[</td><td>12</td><td>?</td><td class="fc-cell">?</td></tr>
+                        <tr><td>[350 ; 400[</td><td>6</td><td>?</td><td class="fc-cell">?</td></tr>
+                        <tr><td>[400 ; 450[</td><td>2</td><td>?</td><td class="fc-cell">?</td></tr>
+                        <tr><td class="total-row">Total</td><td class="total-row">30</td><td class="total-row">100 %</td><td class="fc-cell">—</td></tr>
+                    </table>
+                    a) Complète les colonnes Fréquence et FCC.<br>
+                    b) Dans quelle classe se trouve la médiane ?<br>
+                    c) Calcule la <strong>moyenne approchée</strong> à l'aide des centres de classes.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Fréquences (÷ 30 × 100) :</strong><br>
+                    [200;250[ : 10 % · [250;300[ : 23,3 % · [300;350[ : 40 % · [350;400[ : 20 % · [400;450[ : 6,7 %
+                </div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>FCC :</strong><br>
+                    [200;250[ : 10 % · [250;300[ : 10+23,3 = <strong>33,3 %</strong> · [300;350[ : 33,3+40 = <strong>73,3 %</strong><br>
+                    [350;400[ : 73,3+20 = <strong>93,3 %</strong> · [400;450[ : 93,3+6,7 = <strong>100 %</strong> ✓
+                </div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>b) Médiane (FCC = 50 %) :</strong><br>
+                    Après [250;300[ : FCC = 33,3 % → pas encore 50 %<br>
+                    Après [300;350[ : FCC = 73,3 % → on a dépassé 50 %<br>
+                    La médiane est dans la classe <strong>[300 ; 350[</strong>.
+                </div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>c) Moyenne approchée (centres de classes) :</strong><br>
+                    Centres : 225 · 275 · 325 · 375 · 425<br>
+                    Σ(centre × eff) = 225×3 + 275×7 + 325×12 + 375×6 + 425×2<br>
+                    = 675 + 1 925 + 3 900 + 2 250 + 850 = <strong>9 600</strong><br>
+                    Moyenne ≈ 9 600 ÷ 30 = <strong>320 ms</strong>
+                </div></div>
+                <div class="final-ans">✅ FCC : 10%, 33,3%, 73,3%, 93,3%, 100% · Médiane dans <strong>[300;350[</strong> · Moyenne ≈ <strong>320 ms</strong></div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Retrouver une note manquante (piège classique CE1D)</div>
+                <div class="bonus-stmt">
+                    Un élève passe 6 évaluations de même coefficient. Ses 5 premières notes sont :
+                    <strong>10, 11, 13, 14, 12</strong>.<br>
+                    Pour que sa moyenne soit exactement <strong>12 sur 20</strong>, quelle note minimale doit-il obtenir à la 6ᵉ évaluation ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Somme totale nécessaire :</strong><br>Si la moyenne doit être 12, et qu'il y a 6 notes : somme = 12 × 6 = <strong>72</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Somme des 5 premières notes :</strong><br>10 + 11 + 13 + 14 + 12 = <strong>60</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>Note manquante :</strong><br>72 − 60 = <strong>12</strong><br>Il doit obtenir au moins <strong>12</strong> à la 6ᵉ évaluation.</div></div>
+                <div class="bonus-step"><div class="bonus-num" style="background:#1CB0F6">💡</div><div class="sol-text" style="color:#0892D0;font-weight:700;">Méthode générale : note manquante = (moyenne visée × nombre de notes) − somme des notes connues.<br>C'est une question très fréquente au CE1D !</div></div>
+                <div class="bonus-ans">
+                    Note manquante = 72 − 60 = <strong>12</strong><br>
+                    Il faut obtenir exactement 12 pour avoir une moyenne de 12.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🏆 🌟 🏆</div>
+    <h2>Défi CE1D réussi !</h2>
+    <p>Félicitations ! Tu as terminé tout le module Statistiques.<br>
+       Tu maîtrises la moyenne, la médiane, les tableaux, les graphiques et les fréquences cumulées.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP — tu es prêt(e) pour l'examen !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Statistiques</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_statistiques_niveau1.html" class="nav-btn">Niveau 1 — Moyenne &amp; Étendue</a>
+        <a href="maths_statistiques_niveau2.html" class="nav-btn">Niveau 2 — Tableaux</a>
+        <a href="maths_statistiques_niveau3.html" class="nav-btn">Niveau 3 — Graphiques</a>
+        <a href="maths_statistiques_niveau4.html" class="nav-btn">Niveau 4 — Fréquences</a>
+        <a href="maths_statistiques_niveau5.html" class="nav-btn current">▶ Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:1, 3:1, 4:1, 5:2};
+
+const QCM_OK = {
+    1:"✅ Exact ! 6 valeurs → médiane = moyenne des 3ᵉ et 4ᵉ valeurs = (8 + 8) ÷ 2 = 8. Les deux valeurs centrales sont toutes les deux 8 !",
+    2:"✅ Parfait ! Angle = fréquence × 3,6 = 40 × 3,6 = 144°. (Rappel : 100 % correspond à 360°, donc 1 % = 3,6°.)",
+    3:"✅ Bravo ! FCC(14) = 68 % → 68 % des élèves ont ≤ 14. Ceux qui ont > 14 = (100 − 68) % = 32 % de 25 = 0,32 × 25 = 8 élèves.",
+    4:"✅ Correct ! Moy. pond. = (10×2 + 14×3 + 12×1) ÷ (2+3+1) = (20 + 42 + 12) ÷ 6 = 74 ÷ 6 ≈ 12,3.",
+    5:"✅ Exact ! Dans un histogramme, les classes se suivent sans interruption → les barres sont adjacentes (collées). Ce n'est pas un diagramme en barres classique."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. 6 valeurs → les deux valeurs centrales sont la 3ᵉ (= 8) et la 4ᵉ (= 8). Médiane = (8 + 8) ÷ 2 = 8. Pas besoin de calculer la moyenne de toutes les notes.",
+    2:"❌ Non. La formule est : angle = fréquence (%) × 3,6. Donc 40 × 3,6 = 144°. (100 % = 360°, donc 1 % = 3,6°. Ne pas confondre avec 40° qui n'utilise pas la conversion.)",
+    3:"❌ Non. FCC(14) = 68 % signifie que 68 % des élèves ont OBTENU 14 OU MOINS. Pour ceux qui ont PLUS de 14 : (100 − 68) % = 32 %, et 0,32 × 25 = 8 élèves.",
+    4:"❌ Non. La moyenne pondérée tient compte des coefficients : (10×2 + 14×3 + 12×1) ÷ (2+3+1) = 74 ÷ 6 ≈ 12,3. Ne pas simplement faire (10+14+12)÷3 = 12 qui ignore les coefficients.",
+    5:"❌ Non. Dans un histogramme, les barres sont ADJACENTES (collées), car les données sont continues (classes d'intervalles sans espace). Ce n'est pas comme un diagramme en barres classique qui compare des catégories distinctes."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b','f1c'],
+        accepted:[['moyenne'],['etendue','étendue'],['minimale','minimale','minimum','min']],
+        msgOk:"✅ La moyenne = somme ÷ n. L'étendue = max − min (valeur minimale).",
+        msgErr:"❌ Attendus : 'moyenne', 'étendue' (ou étendue), 'minimale' (ou minimum / min)."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['3,6','3.6'],['courbes','courbe']],
+        msgOk:"✅ Angle = fréquence % × 3,6. Pour une évolution dans le temps → graphique en courbes.",
+        msgErr:"❌ Attendus : multiplier par '3,6', et graphique en 'courbes'."
+    },
+    3:{
+        fields:['f3a','f3b','f3c'],
+        accepted:[['croissante'],['100'],['mediane','médiane']],
+        msgOk:"✅ La FCC est toujours croissante, la dernière est 100 %, et FCC = 50 % donne la médiane.",
+        msgErr:"❌ Attendus : 'croissante', '100' %, 'médiane'."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_statistiques_5', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>
