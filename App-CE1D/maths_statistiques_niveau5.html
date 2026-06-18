@@ -391,59 +391,65 @@
 
         <!-- SVG 3 : histogramme temps de réaction -->
         <div class="svg-wrap">
-            <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
-                <rect x="0" y="0" width="560" height="220" fill="#F5FFFD" rx="10"/>
-                <text x="280" y="16" text-anchor="middle" font-size="12" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Histogramme — Temps de réaction (ms) de 30 sujets + FCC</text>
+            <svg viewBox="0 0 560 255" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="255" fill="#F5FFFD" rx="10"/>
+                <text x="280" y="16" text-anchor="middle" font-size="12" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Histogramme — Temps de réaction (ms) de 30 sujets</text>
 
-                <!-- Axes -->
-                <line x1="60" y1="20" x2="60" y2="175" stroke="#333" stroke-width="2"/>
-                <line x1="60" y1="175" x2="530" y2="175" stroke="#333" stroke-width="2"/>
+                <!-- Axes — zone graphique y=52 à y=185 -->
+                <line x1="60" y1="52" x2="60" y2="185" stroke="#333" stroke-width="2"/>
+                <line x1="60" y1="185" x2="530" y2="185" stroke="#333" stroke-width="2"/>
 
-                <!-- Y : effectif 0 à 12 -->
-                <text x="53" y="178" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">0</text>
-                <text x="53" y="140" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">4</text>
-                <line x1="57" y1="137" x2="60" y2="137" stroke="#555" stroke-width="1.5"/>
-                <line x1="60" y1="137" x2="530" y2="137" stroke="#E0E0E0" stroke-width="1" stroke-dasharray="3,3"/>
+                <!-- Y : effectif 0 à 12 ; scale = (185-52)/12 = 11.08px/unité -->
+                <!-- 0 → y=185 ; 4 → y=141 ; 8 → y=97 ; 12 → y=52 -->
+                <text x="53" y="189" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">0</text>
+                <text x="53" y="145" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">4</text>
+                <line x1="57" y1="141" x2="60" y2="141" stroke="#555" stroke-width="1.5"/>
+                <line x1="60" y1="141" x2="530" y2="141" stroke="#E0E0E0" stroke-width="1" stroke-dasharray="3,3"/>
                 <text x="53" y="101" text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">8</text>
-                <line x1="57" y1="99"  x2="60" y2="99"  stroke="#555" stroke-width="1.5"/>
-                <line x1="60" y1="99"  x2="530" y2="99"  stroke="#E0E0E0" stroke-width="1" stroke-dasharray="3,3"/>
-                <text x="53" y="61"  text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">12</text>
-                <line x1="57" y1="58"  x2="60" y2="58"  stroke="#555" stroke-width="1.5"/>
-                <line x1="60" y1="58"  x2="530" y2="58"  stroke="#E0E0E0" stroke-width="1" stroke-dasharray="3,3"/>
+                <line x1="57" y1="97"  x2="60" y2="97"  stroke="#555" stroke-width="1.5"/>
+                <line x1="60" y1="97"  x2="530" y2="97"  stroke="#E0E0E0" stroke-width="1" stroke-dasharray="3,3"/>
+                <text x="53" y="56"  text-anchor="end" font-size="9" fill="#555" font-family="Nunito, sans-serif">12</text>
+                <line x1="57" y1="52"  x2="60" y2="52"  stroke="#555" stroke-width="1.5"/>
+                <line x1="60" y1="52"  x2="530" y2="52"  stroke="#E0E0E0" stroke-width="1" stroke-dasharray="3,3"/>
 
-                <!-- 5 classes, largeur = (530-60)/5 = 94px -->
-                <!-- effectifs : 3,7,12,6,2 ; h = eff/12*(175-20) = eff*12.9 -->
-                <!-- [200;250[ eff=3 h=38.8 top=175-39=136 -->
-                <rect x="60"  y="136" width="94" height="39"  fill="#80CBC4" stroke="white" stroke-width="1.5"/>
-                <text x="107" y="130" text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">3</text>
-                <text x="107" y="190" text-anchor="middle" font-size="8" fill="#555" font-family="Nunito, sans-serif">[200;250[</text>
+                <!-- 5 classes, largeur=94px ; h = eff*11.08 ; top = 185-h -->
+                <!-- [200;250[ eff=3 h=33 top=152 -->
+                <rect x="60"  y="152" width="94" height="33" fill="#80CBC4" stroke="white" stroke-width="1.5"/>
+                <text x="107" y="147" text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">3</text>
+                <text x="107" y="200" text-anchor="middle" font-size="8" fill="#555" font-family="Nunito, sans-serif">[200;250[</text>
 
-                <!-- [250;300[ eff=7 h=90.7 top=175-91=84 -->
-                <rect x="154" y="84"  width="94" height="91"  fill="#26C6B3" stroke="white" stroke-width="1.5"/>
-                <text x="201" y="78"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">7</text>
-                <text x="201" y="190" text-anchor="middle" font-size="8" fill="#555" font-family="Nunito, sans-serif">[250;300[</text>
+                <!-- [250;300[ eff=7 h=78 top=107 -->
+                <rect x="154" y="107" width="94" height="78" fill="#26C6B3" stroke="white" stroke-width="1.5"/>
+                <text x="201" y="102" text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">7</text>
+                <text x="201" y="200" text-anchor="middle" font-size="8" fill="#555" font-family="Nunito, sans-serif">[250;300[</text>
 
-                <!-- [300;350[ eff=12 h=155.4 top=175-155=20 -->
-                <rect x="248" y="20"  width="94" height="155" fill="#00BFA5" stroke="white" stroke-width="1.5"/>
-                <text x="295" y="14"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">12</text>
-                <text x="295" y="190" text-anchor="middle" font-size="8" fill="#555" font-family="Nunito, sans-serif">[300;350[</text>
+                <!-- [300;350[ eff=12 h=133 top=52 -->
+                <rect x="248" y="52"  width="94" height="133" fill="#00BFA5" stroke="white" stroke-width="1.5"/>
+                <text x="295" y="46"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">12</text>
+                <text x="295" y="200" text-anchor="middle" font-size="8" fill="#555" font-family="Nunito, sans-serif">[300;350[</text>
 
-                <!-- [350;400[ eff=6 h=77.6 top=175-78=97 -->
-                <rect x="342" y="97"  width="94" height="78"  fill="#26C6B3" stroke="white" stroke-width="1.5"/>
-                <text x="389" y="91"  text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">6</text>
-                <text x="389" y="190" text-anchor="middle" font-size="8" fill="#555" font-family="Nunito, sans-serif">[350;400[</text>
+                <!-- [350;400[ eff=6 h=66 top=119 -->
+                <rect x="342" y="119" width="94" height="66" fill="#26C6B3" stroke="white" stroke-width="1.5"/>
+                <text x="389" y="114" text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">6</text>
+                <text x="389" y="200" text-anchor="middle" font-size="8" fill="#555" font-family="Nunito, sans-serif">[350;400[</text>
 
-                <!-- [400;450[ eff=2 h=25.8 top=175-26=149 -->
-                <rect x="436" y="149" width="94" height="26"  fill="#80CBC4" stroke="white" stroke-width="1.5"/>
-                <text x="483" y="143" text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">2</text>
-                <text x="483" y="190" text-anchor="middle" font-size="8" fill="#555" font-family="Nunito, sans-serif">[400;450[</text>
+                <!-- [400;450[ eff=2 h=22 top=163 -->
+                <rect x="436" y="163" width="94" height="22" fill="#80CBC4" stroke="white" stroke-width="1.5"/>
+                <text x="483" y="158" text-anchor="middle" font-size="10" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">2</text>
+                <text x="483" y="200" text-anchor="middle" font-size="8" fill="#555" font-family="Nunito, sans-serif">[400;450[</text>
 
-                <!-- FCC en annotation -->
-                <text x="107" y="124" text-anchor="middle" font-size="8" fill="#6A1B9A" font-weight="900" font-family="Nunito, sans-serif">FCC: 10%</text>
-                <text x="201" y="72"  text-anchor="middle" font-size="8" fill="#6A1B9A" font-weight="900" font-family="Nunito, sans-serif">FCC: 33%</text>
-                <text x="295" y="208" text-anchor="middle" font-size="8" fill="#6A1B9A" font-weight="900" font-family="Nunito, sans-serif">FCC: 73% ← médiane ici</text>
-                <text x="389" y="205" text-anchor="middle" font-size="8" fill="#6A1B9A" font-weight="900" font-family="Nunito, sans-serif">FCC: 93%</text>
-                <text x="483" y="137" text-anchor="middle" font-size="8" fill="#6A1B9A" font-weight="900" font-family="Nunito, sans-serif">FCC: 100%</text>
+                <!-- Rangée FCC — fond violet clair -->
+                <rect x="60" y="208" width="470" height="22" rx="4" fill="#EDE7F6"/>
+                <text x="66" y="222" font-size="9" font-weight="900" fill="#6A1B9A" font-family="Nunito, sans-serif">FCC ▶</text>
+                <text x="107" y="222" text-anchor="middle" font-size="10" font-weight="900" fill="#6A1B9A" font-family="Nunito, sans-serif">10 %</text>
+                <text x="201" y="222" text-anchor="middle" font-size="10" font-weight="900" fill="#6A1B9A" font-family="Nunito, sans-serif">33 %</text>
+                <!-- FCC 73% mis en valeur (médiane dans cette classe) -->
+                <rect x="262" y="210" width="66" height="18" rx="4" fill="#6A1B9A"/>
+                <text x="295" y="222" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">73 % ★</text>
+                <text x="389" y="222" text-anchor="middle" font-size="10" font-weight="900" fill="#6A1B9A" font-family="Nunito, sans-serif">93 %</text>
+                <text x="483" y="222" text-anchor="middle" font-size="10" font-weight="900" fill="#6A1B9A" font-family="Nunito, sans-serif">100 %</text>
+
+                <text x="280" y="244" text-anchor="middle" font-size="9" fill="#6A1B9A" font-weight="700" font-family="Nunito, sans-serif">★ FCC 73 % — la médiane se trouve dans la classe [300 ; 350[</text>
             </svg>
         </div>
 
