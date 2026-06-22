@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Vitesse &amp; Débit · Niveau 1 — La vitesse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#3949AB; --primary-dark:#1A237E; --primary-mid:#5C6BC0; --primary-bg:#E8EAF6;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#0D1B6E 0%,#3949AB 55%,#9FA8DA 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(13,27,110,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#3949AB; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#1A237E; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#0D1B6E,#3949AB,#9FA8DA); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#0D1B6E,#1A237E); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#9FA8DA; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #9FA8DA; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .data-table { width:100%; border-collapse:collapse; border-radius:10px; overflow:hidden; margin:14px 0; font-size:.91rem; }
+        .data-table th { background:var(--primary); color:white; padding:9px 12px; font-weight:900; text-align:center; }
+        .data-table th.fc-col { background:#1A237E; }
+        .data-table td { padding:8px 12px; text-align:center; border-bottom:1px solid var(--border); }
+        .data-table tr:nth-child(even) td { background:var(--primary-bg); }
+        .data-table tr:last-child td { border-bottom:none; }
+        .data-table td.total-row { font-weight:900; background:#E8EAF6; color:var(--primary-dark); }
+        .data-table td.fc-cell { font-weight:900; color:#1A237E; background:#E8EAF6; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #9FA8DA; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#0D1B6E,#3949AB,#9FA8DA); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #0D1B6E; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🚗 Vitesse &amp; Débit · La vitesse</h1>
+            <p>Niveau 1 · Formule v = d/t · Triangle vitesse-distance-temps · Vitesse moyenne</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip off"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 1 — Débutant</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — La vitesse</div>
+            <div class="card-sub">v = d/t · Triangle · Unités km/h et m/s · Vitesse moyenne</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            La <strong>vitesse</strong> mesure la rapidité d'un déplacement : combien de kilomètres (ou mètres)
+            on parcourt en une heure (ou une seconde). C'est la notion de base de toute la mécanique.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Définition — La vitesse</h3>
+            <p>
+                La <strong>vitesse</strong> est le rapport entre la distance parcourue et le temps mis pour la parcourir.<br>
+                <strong>v = d ÷ t</strong> &nbsp;→&nbsp; vitesse = distance ÷ temps<br>
+                On peut aussi écrire : <strong>d = v × t</strong> et <strong>t = d ÷ v</strong>
+            </p>
+        </div>
+
+        <!-- SVG 1 : triangle v-d-t -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="200" fill="#EEF0FB" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#1A237E" font-family="Nunito, sans-serif">Triangle Vitesse — Distance — Temps</text>
+
+                <!-- Triangle -->
+                <polygon points="280,35 160,155 400,155" fill="none" stroke="#3949AB" stroke-width="3"/>
+
+                <!-- d en haut -->
+                <circle cx="280" cy="35" r="22" fill="#E53935"/>
+                <text x="280" y="41" text-anchor="middle" font-size="14" font-weight="900" fill="white" font-family="Nunito, sans-serif">d</text>
+
+                <!-- v en bas gauche -->
+                <circle cx="160" cy="155" r="22" fill="#3949AB"/>
+                <text x="160" y="161" text-anchor="middle" font-size="14" font-weight="900" fill="white" font-family="Nunito, sans-serif">v</text>
+
+                <!-- t en bas droite -->
+                <circle cx="400" cy="155" r="22" fill="#388E3C"/>
+                <text x="400" y="161" text-anchor="middle" font-size="14" font-weight="900" fill="white" font-family="Nunito, sans-serif">t</text>
+
+                <!-- Ligne séparatrice -->
+                <line x1="160" y1="95" x2="400" y2="95" stroke="#3949AB" stroke-width="2" stroke-dasharray="6,3"/>
+
+                <!-- Formules -->
+                <text x="70" y="50" font-size="11" font-weight="900" fill="#E53935" font-family="Nunito, sans-serif">Cacher d :</text>
+                <text x="70" y="65" font-size="11" fill="#333" font-family="Nunito, sans-serif">d = v × t</text>
+
+                <text x="70" y="90" font-size="11" font-weight="900" fill="#3949AB" font-family="Nunito, sans-serif">Cacher v :</text>
+                <text x="70" y="105" font-size="11" fill="#333" font-family="Nunito, sans-serif">v = d ÷ t</text>
+
+                <text x="70" y="130" font-size="11" font-weight="900" fill="#388E3C" font-family="Nunito, sans-serif">Cacher t :</text>
+                <text x="70" y="145" font-size="11" fill="#333" font-family="Nunito, sans-serif">t = d ÷ v</text>
+
+                <!-- Explication -->
+                <text x="430" y="50" font-size="10" fill="#555" font-family="Nunito, sans-serif">Astuce :</text>
+                <text x="430" y="65" font-size="10" fill="#555" font-family="Nunito, sans-serif">Cache la valeur</text>
+                <text x="430" y="80" font-size="10" fill="#555" font-family="Nunito, sans-serif">cherchée avec</text>
+                <text x="430" y="95" font-size="10" fill="#555" font-family="Nunito, sans-serif">le doigt pour</text>
+                <text x="430" y="110" font-size="10" fill="#555" font-family="Nunito, sans-serif">voir la formule.</text>
+
+                <text x="280" y="190" text-anchor="middle" font-size="10" font-weight="700" fill="#1A237E" font-family="Nunito, sans-serif">d = distance (km ou m) · v = vitesse (km/h ou m/s) · t = temps (h ou s)</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>📏 Unités de vitesse</h3>
+            <p>
+                • <strong>km/h</strong> : kilomètres par heure — utilisé pour les voitures, trains, avions<br>
+                • <strong>m/s</strong> : mètres par seconde — utilisé en physique<br>
+                • <strong>km/min</strong> : kilomètres par minute — parfois utilisé pour les avions<br>
+                <strong>Règle d'or :</strong> les unités doivent être compatibles — si la vitesse est en km/h, la distance doit être en km et le temps en heures.
+            </p>
+        </div>
+
+        <!-- SVG 2 : frise voyage 3h à 90km/h -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 130" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="130" fill="#EEF0FB" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#1A237E" font-family="Nunito, sans-serif">Exemple — Une voiture à 90 km/h pendant 3 heures</text>
+
+                <!-- Route -->
+                <rect x="40" y="55" width="480" height="20" rx="10" fill="#9FA8DA"/>
+                <line x1="40" y1="65" x2="520" y2="65" stroke="white" stroke-width="2" stroke-dasharray="20,15"/>
+
+                <!-- Départ -->
+                <circle cx="40" cy="65" r="12" fill="#3949AB"/>
+                <text x="40" y="90" text-anchor="middle" font-size="9" font-weight="900" fill="#1A237E" font-family="Nunito, sans-serif">Départ</text>
+                <text x="40" y="102" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">0 km</text>
+
+                <!-- Milieu 1h -->
+                <circle cx="200" cy="65" r="8" fill="#5C6BC0"/>
+                <text x="200" y="90" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">1h</text>
+                <text x="200" y="102" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">90 km</text>
+
+                <!-- Milieu 2h -->
+                <circle cx="360" cy="65" r="8" fill="#5C6BC0"/>
+                <text x="360" y="90" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">2h</text>
+                <text x="360" y="102" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">180 km</text>
+
+                <!-- Arrivée 3h -->
+                <circle cx="520" cy="65" r="12" fill="#E53935"/>
+                <text x="520" y="90" text-anchor="middle" font-size="9" font-weight="900" fill="#E53935" font-family="Nunito, sans-serif">Arrivée</text>
+                <text x="520" y="102" text-anchor="middle" font-size="9" font-weight="900" fill="#E53935" font-family="Nunito, sans-serif">3h · 270 km</text>
+
+                <!-- Flèche voiture -->
+                <text x="130" y="50" text-anchor="middle" font-size="16" font-family="Nunito, sans-serif">🚗</text>
+                <text x="130" y="118" text-anchor="middle" font-size="9" font-weight="900" fill="#3949AB" font-family="Nunito, sans-serif">d = 90 × 3 = 270 km</text>
+            </svg>
+        </div>
+
+        <div class="def-box">
+            <h3>📊 La vitesse moyenne</h3>
+            <p>
+                La <strong>vitesse moyenne</strong> = distance totale ÷ temps total<br>
+                Elle peut différer des vitesses instantanées (si on accélère ou freine en route).<br>
+                <strong>Attention :</strong> la vitesse moyenne d'un trajet en deux étapes N'EST PAS la moyenne arithmétique des deux vitesses !
+            </p>
+        </div>
+
+        <!-- SVG 3 : vitesse moyenne deux étapes -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 150" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="150" fill="#EEF0FB" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#1A237E" font-family="Nunito, sans-serif">Vitesse moyenne — Trajet en deux étapes</text>
+
+                <!-- Etape 1 -->
+                <rect x="30" y="30" width="220" height="50" rx="8" fill="#3949AB"/>
+                <text x="140" y="50" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">Étape 1</text>
+                <text x="140" y="68" text-anchor="middle" font-size="10" fill="#C5CAE9" font-family="Nunito, sans-serif">100 km à 50 km/h → 2h</text>
+
+                <!-- Etape 2 -->
+                <rect x="310" y="30" width="220" height="50" rx="8" fill="#5C6BC0"/>
+                <text x="420" y="50" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">Étape 2</text>
+                <text x="420" y="68" text-anchor="middle" font-size="10" fill="#C5CAE9" font-family="Nunito, sans-serif">100 km à 100 km/h → 1h</text>
+
+                <!-- Résultat -->
+                <rect x="130" y="100" width="300" height="38" rx="8" fill="#FFD54F"/>
+                <text x="280" y="114" text-anchor="middle" font-size="10" font-weight="900" fill="#1A237E" font-family="Nunito, sans-serif">Vitesse moyenne = 200 km ÷ 3h ≈ 66,7 km/h</text>
+                <text x="280" y="130" text-anchor="middle" font-size="10" fill="#333" font-family="Nunito, sans-serif">≠ (50 + 100) ÷ 2 = 75 km/h ← FAUX !</text>
+            </svg>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Pièges à éviter</h3>
+            <p>
+                <strong>Unités incompatibles :</strong> si v = 90 km/h et t = 30 min, il faut convertir 30 min = 0,5h avant de calculer.<br>
+                <strong>Vitesse moyenne ≠ moyenne des vitesses :</strong> toujours diviser distance totale par temps total.<br>
+                <strong>2h30min ≠ 2,30h</strong> : 2h30min = 2,5h (30 minutes = 0,5 heure).
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">v = d ÷ t</div>
+                <div class="cas-eq">Trouver la vitesse</div>
+                <div class="cas-desc">Quand on connaît la distance et le temps.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">d = v × t</div>
+                <div class="cas-eq">Trouver la distance</div>
+                <div class="cas-desc">Quand on connaît la vitesse et le temps.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">t = d ÷ v</div>
+                <div class="cas-eq">Trouver le temps</div>
+                <div class="cas-desc">Quand on connaît la distance et la vitesse.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · v = d/t · Distance · Temps · Vitesse moyenne</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Un cycliste parcourt 120 km en 4h. Quelle est sa vitesse ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">480 km/h</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">116 km/h</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">30 km/h</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">48 km/h</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> À 60 km/h, quelle distance parcourt-on en 2h30min ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">150 km</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">120 km</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">180 km</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">90 km</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> À 80 km/h, combien de temps faut-il pour parcourir 200 km ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">2h</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">2h30min</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">3h</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">16 000 min</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Un trajet : 100 km à 50 km/h, puis 100 km à 100 km/h. Quel est le temps total ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">2h</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">2h30min</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">3h</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">1h</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Pour le trajet ci-dessus (200 km en 3h), quelle est la vitesse moyenne ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">200/3 ≈ 66,7 km/h</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">75 km/h</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">50 km/h</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">150 km/h</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Formules · Calculs · Vitesse moyenne</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                v = d ÷ <input class="blank" id="f1a" placeholder="?" style="width:60px">.
+                Pour trouver la distance : d = v ×
+                <input class="blank" id="f1b" placeholder="?" style="width:60px">.
+                Pour trouver le temps : t =
+                <input class="blank" id="f1c" placeholder="?" style="width:60px"> ÷ v.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Un train à 120 km/h pendant 2h30min :
+                d = 120 × <input class="blank" id="f2a" placeholder="?" style="width:60px"> =
+                <input class="blank" id="f2b" placeholder="?" style="width:60px"> km.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                La vitesse <input class="blank" id="f3a" placeholder="?" style="width:90px">
+                = distance totale ÷ temps total.
+                Elle peut différer des vitesses <input class="blank" id="f3b" placeholder="?" style="width:120px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Vitesse moyenne sur deux étapes</div>
+                <div class="ex-stmt">
+                    Une voiture roule 1h à 90 km/h, puis 1h30 à 120 km/h.<br>
+                    a) Calculer la distance totale parcourue.<br>
+                    b) Calculer la vitesse moyenne du trajet.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Distance étape 1 :</strong> d₁ = 90 × 1 = <strong>90 km</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Distance étape 2 :</strong> d₂ = 120 × 1,5 = <strong>180 km</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Distance totale :</strong> d = 90 + 180 = <strong>270 km</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Temps total :</strong> t = 1 + 1,5 = <strong>2,5 h</strong></div></div>
+                <div class="sol-step"><div class="sol-num">5</div><div class="sol-text"><strong>Vitesse moyenne :</strong> v = 270 ÷ 2,5 = <strong>108 km/h</strong></div></div>
+                <div class="final-ans">✅ Distance totale = <strong>270 km</strong> · Vitesse moyenne = <strong>108 km/h</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Calculer la vitesse d'un avion</div>
+                <div class="ex-stmt">
+                    Un avion parcourt 3 500 km en 4h30min.<br>
+                    Calculer sa vitesse (en km/h).
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Convertir le temps :</strong> 4h30min = 4 + 30/60 = <strong>4,5 h</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Formule :</strong> v = d ÷ t = 3 500 ÷ 4,5</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Calcul :</strong> 3 500 ÷ 4,5 ≈ <strong>777,8 km/h</strong></div></div>
+                <div class="final-ans">✅ Vitesse de l'avion ≈ <strong>778 km/h</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Distance possible en temps limité</div>
+                <div class="ex-stmt">
+                    À 90 km/h, peut-on parcourir 300 km en 3h15min ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Convertir :</strong> 3h15min = 3 + 15/60 = <strong>3,25 h</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Distance possible :</strong> d = 90 × 3,25 = <strong>292,5 km</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Comparaison :</strong> 292,5 km &lt; 300 km → <strong>Non</strong>, on ne peut pas parcourir 300 km en 3h15min à 90 km/h.</div></div>
+                <div class="final-ans">✅ Distance parcourue = <strong>292,5 km</strong> &lt; 300 km → <strong>Non, c'est impossible.</strong></div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Heure d'arrivée</div>
+                <div class="bonus-stmt">
+                    Deux villes sont distantes de 420 km. Un train part à 8h00 à 140 km/h.<br>
+                    À quelle heure arrive-t-il ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Temps de trajet :</strong> t = d ÷ v = 420 ÷ 140 = <strong>3 heures</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Heure d'arrivée :</strong> 8h00 + 3h = <strong>11h00</strong></div></div>
+                <div class="bonus-ans">Le train arrive à <strong>11h00</strong>.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 1 terminé !</h2>
+    <p>Bravo ! Tu maîtrises la formule de la vitesse et le triangle v-d-t.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 2 — Le Débit !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Vitesse &amp; Débit</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_vitesse_niveau1.html" class="nav-btn current">▶ N1 — Vitesse</a>
+        <a href="maths_vitesse_niveau2.html" class="nav-btn">N2 — Débit</a>
+        <a href="maths_vitesse_niveau3.html" class="nav-btn">N3 — Conversions</a>
+        <a href="maths_vitesse_niveau4.html" class="nav-btn">N4 — Problèmes</a>
+        <a href="maths_vitesse_niveau5.html" class="nav-btn">N5 — Défi CE1D</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:2, 2:0, 3:1, 4:2, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! v = d ÷ t = 120 ÷ 4 = 30 km/h. On divise la distance par le temps.",
+    2:"✅ Bravo ! 2h30min = 2,5h. d = v × t = 60 × 2,5 = 150 km.",
+    3:"✅ Correct ! t = d ÷ v = 200 ÷ 80 = 2,5h = 2h30min.",
+    4:"✅ Parfait ! t₁ = 100÷50 = 2h ; t₂ = 100÷100 = 1h. Total = 3h.",
+    5:"✅ Exact ! Vitesse moyenne = distance totale ÷ temps total = 200 ÷ 3 ≈ 66,7 km/h. Pas la moyenne de 50 et 100 !"
+};
+
+const QCM_ERR = {
+    1:"❌ Non. v = d ÷ t = 120 ÷ 4 = 30 km/h. On divise la distance (120) par le temps (4), pas le contraire.",
+    2:"❌ Non. 2h30min = 2,5h (pas 2,3h !). d = 60 × 2,5 = 150 km.",
+    3:"❌ Non. t = d ÷ v = 200 ÷ 80 = 2,5h = 2h30min.",
+    4:"❌ Non. t₁ = 100÷50 = 2h et t₂ = 100÷100 = 1h. Temps total = 2 + 1 = 3h.",
+    5:"❌ Non. La vitesse moyenne = distance totale ÷ temps total = 200 ÷ 3 ≈ 66,7 km/h. La moyenne de 50 et 100 km/h donnerait 75 km/h — c'est faux !"
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b','f1c'],
+        accepted:[['t','temps'],['t','temps'],['d','distance']],
+        msgOk:"✅ v = d ÷ t · d = v × t · t = d ÷ v. Le triangle v-d-t résume tout !",
+        msgErr:"❌ Attendus : v = d ÷ 't', d = v × 't', t = 'd' ÷ v."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['2,5','2.5'],['300']],
+        msgOk:"✅ 2h30min = 2,5h. d = 120 × 2,5 = 300 km.",
+        msgErr:"❌ Attendus : 2h30min = '2,5' h (pas 2,30 !), puis d = 120 × 2,5 = '300' km."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['moyenne'],['instantanees','instantanées']],
+        msgOk:"✅ La vitesse moyenne = distance totale ÷ temps total. Elle diffère des vitesses instantanées.",
+        msgErr:"❌ Attendus : vitesse 'moyenne' = distance totale ÷ temps total ; différer des vitesses 'instantanées'."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ,.]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_vitesse_1', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

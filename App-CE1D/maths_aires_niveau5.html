@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Aires & Volumes · Niveau 5 — Défi CE1D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#795548; --primary-dark:#4E342E; --primary-mid:#A1887F; --primary-bg:#EFEBE9;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+        header { background:linear-gradient(135deg,#3E2723 0%,#795548 55%,#BCAAA4 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(62,39,35,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#795548; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#4E342E; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#3E2723,#795548,#BCAAA4); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+        .def-box { background:linear-gradient(135deg,#3E2723,#4E342E); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#BCAAA4; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #BCAAA4; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+        .fill-item { background:var(--primary-bg); border:2px solid #BCAAA4; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+        .completion { display:none; background:linear-gradient(135deg,#3E2723,#795548,#BCAAA4); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #2c1810; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        /* Bannière défi spéciale N5 */
+        .defi-banner { background:linear-gradient(135deg,#3E2723,#6D4C41,#A1887F); color:white; border-radius:14px; padding:20px 24px; margin-bottom:4px; text-align:center; }
+        .defi-banner h2 { font-size:1.35rem; font-weight:900; margin-bottom:6px; }
+        .defi-banner p { font-size:.92rem; opacity:.92; line-height:1.6; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🏆 Aires &amp; Volumes · Défi CE1D</h1>
+            <p>Niveau 5 · Toutes les formules · Style examen belge · Questions mélangées</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <span class="diff-label">Niveau 5 — Défi CE1D 🏆</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- BANNIÈRE DÉFI -->
+<div class="defi-banner">
+    <h2>🏆 Défi CE1D — Aires &amp; Volumes</h2>
+    <p>Toutes les formules mélangées · Conversions · Problèmes concrets · Retrouver une dimension<br>
+       C'est exactement le niveau d'un vrai examen CE1D belge !</p>
+</div>
+
+<!-- 1. FICHE RÉVISION -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">Fiche révision complète — Toutes les formules</div>
+            <div class="card-sub">Aires · Volumes · Conversions · Pièges à éviter</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Avant de relever le défi, vérifie que tu connais toutes ces formules par cœur.
+            Cette fiche résume tout ce qui peut tomber à l'examen CE1D sur les aires et volumes.
+        </p>
+
+        <!-- SVG récap général toutes formules -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 320" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="320" fill="#EFEBE9" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#3E2723" font-family="Nunito, sans-serif">Fiche mémo CE1D — Aires, Volumes, Conversions</text>
+
+                <!-- AIRES 2D -->
+                <rect x="8" y="26" width="268" height="18" fill="#3E2723" rx="3"/>
+                <text x="142" y="39" text-anchor="middle" font-size="9" font-weight="900" fill="#FFD54F" font-family="Nunito, sans-serif">AIRES DES FIGURES PLANES (2D)</text>
+                <rect x="8" y="44" width="268" height="122" fill="white" rx="3"/>
+                <text x="16" y="60" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Carré :</text><text x="80" y="60" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">A = c²</text>
+                <text x="16" y="76" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Rectangle :</text><text x="90" y="76" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">A = l × L</text>
+                <text x="16" y="92" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Triangle :</text><text x="80" y="92" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">A = b × h ÷ 2</text>
+                <text x="16" y="108" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Losange :</text><text x="80" y="108" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">A = d1 × d2 ÷ 2</text>
+                <text x="16" y="124" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Cercle :</text><text x="72" y="124" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">A = π × r²  (r = rayon !)</text>
+                <text x="16" y="140" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Trapèze :</text><text x="78" y="140" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">A = (B + b) × h ÷ 2</text>
+                <text x="16" y="158" font-size="9" fill="#888" font-family="Nunito, sans-serif">h = hauteur perpendiculaire · B = grande base · b = petite base</text>
+
+                <!-- VOLUMES 3D -->
+                <rect x="284" y="26" width="268" height="18" fill="#3E2723" rx="3"/>
+                <text x="418" y="39" text-anchor="middle" font-size="9" font-weight="900" fill="#FFD54F" font-family="Nunito, sans-serif">VOLUMES DES SOLIDES (3D)</text>
+                <rect x="284" y="44" width="268" height="122" fill="white" rx="3"/>
+                <text x="292" y="60" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Pavé droit :</text><text x="365" y="60" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">V = l × L × h</text>
+                <text x="292" y="76" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Cube :</text><text x="340" y="76" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">V = a³</text>
+                <text x="292" y="92" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Cylindre :</text><text x="355" y="92" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">V = π × r² × h</text>
+                <text x="292" y="108" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Prisme :</text><text x="346" y="108" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">V = A_base × h</text>
+                <text x="292" y="124" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Pyramide :</text><text x="355" y="124" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">V = A_base × h ÷ 3</text>
+                <text x="292" y="140" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Sphère :</text><text x="345" y="140" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">V = 4/3 × π × r³</text>
+                <text x="292" y="158" font-size="9" fill="#888" font-family="Nunito, sans-serif">÷ 3 pour pyramide et cône · 1 dm³ = 1 L = 1 000 cm³</text>
+
+                <!-- CONVERSIONS -->
+                <rect x="8" y="174" width="544" height="18" fill="#795548" rx="3"/>
+                <text x="280" y="187" text-anchor="middle" font-size="9" font-weight="900" fill="white" font-family="Nunito, sans-serif">CONVERSIONS D'UNITÉS</text>
+                <rect x="8" y="192" width="268" height="60" fill="white" rx="3"/>
+                <text x="142" y="208" text-anchor="middle" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Longueurs : × 10 par palier</text>
+                <text x="142" y="224" text-anchor="middle" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">km · m · dm · cm · mm</text>
+                <text x="142" y="242" text-anchor="middle" font-size="9" font-weight="900" fill="#E53935" font-family="Nunito, sans-serif">Surfaces : × 100 par palier !</text>
+
+                <rect x="284" y="192" width="268" height="60" fill="white" rx="3"/>
+                <text x="418" y="208" text-anchor="middle" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Volumes : × 1 000 par palier</text>
+                <text x="418" y="224" text-anchor="middle" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">m³ · dm³ · cm³ · mm³</text>
+                <text x="418" y="242" text-anchor="middle" font-size="9" font-weight="900" fill="#1CB0F6" font-family="Nunito, sans-serif">Capacités : 1 dm³ = 1 L · 1 cm³ = 1 mL</text>
+
+                <!-- PIÈGES -->
+                <rect x="8" y="260" width="544" height="18" fill="#B71C1C" rx="3"/>
+                <text x="280" y="273" text-anchor="middle" font-size="9" font-weight="900" fill="white" font-family="Nunito, sans-serif">PIÈGES À ÉVITER</text>
+                <rect x="8" y="278" width="268" height="36" fill="#FFEBEE" rx="3"/>
+                <text x="142" y="292" text-anchor="middle" font-size="8" fill="#B71C1C" font-family="Nunito, sans-serif">Rayon ≠ diamètre (r = d ÷ 2)</text>
+                <text x="142" y="308" text-anchor="middle" font-size="8" fill="#B71C1C" font-family="Nunito, sans-serif">Hauteur ≠ côté oblique (triangle)</text>
+                <rect x="284" y="278" width="268" height="36" fill="#FFEBEE" rx="3"/>
+                <text x="418" y="292" text-anchor="middle" font-size="8" fill="#B71C1C" font-family="Nunito, sans-serif">Cylindre fermé : + 2 bases (πr²)</text>
+                <text x="418" y="308" text-anchor="middle" font-size="8" fill="#B71C1C" font-family="Nunito, sans-serif">1 m² ≠ 100 cm² → 1 m² = 10 000 cm²</text>
+            </svg>
+        </div>
+
+        <div class="def-box">
+            <h3>📌 Les 5 points clés pour réussir au CE1D</h3>
+            <p>
+                <strong>1. Identifier la figure</strong> avant de choisir la formule.<br>
+                <strong>2. Rayon = diamètre ÷ 2</strong> — ne jamais utiliser le diamètre directement dans A = πr².<br>
+                <strong>3. Surfaces : ×100 par palier</strong> — ne pas confondre avec les longueurs (×10).<br>
+                <strong>4. Pyramide et cône : ÷ 3</strong> — ne jamais oublier de diviser par 3.<br>
+                <strong>5. Cylindre fermé : 2 bases</strong> — ajouter 2 × πr² pour l'aire totale.
+            </p>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Les 3 erreurs les plus fréquentes au CE1D</h3>
+            <p>
+                <strong>Erreur 1 — Diamètre vs Rayon :</strong> "Le cercle a un diamètre de 10 cm" → r = 5 cm ! A = π × 5² = 78,5 cm².<br>
+                <strong>Erreur 2 — Surface en m² → cm² :</strong> 1 m² = 10 000 cm² (pas 100 cm²).<br>
+                <strong>Erreur 3 — Pyramide sans ÷3 :</strong> V = A_base × h ÷ 3. Oublier le ÷3 est l'erreur classique.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple — Défi CE1D</div>
+            <div class="card-sub">5 questions mélangées · Niveau examen belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Un cercle a un diamètre de 10 cm. Quelle est son aire ? (π ≈ 3,14)</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">A. 314 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">B. 31,4 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">C. 78,5 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">D. 157 cm²</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> 4,5 m² équivaut à combien de cm² ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">A. 450 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">B. 4 500 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">C. 45 000 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">D. 450 000 cm²</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Quelle est l'aire d'un trapèze de grande base 15 cm, petite base 9 cm et hauteur 6 cm ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">A. 144 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">B. 72 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">C. 90 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">D. 54 cm²</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Quel est le volume d'une pyramide à base carrée de côté 6 cm et de hauteur 12 cm ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">A. 432 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">B. 216 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">C. 144 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">D. 72 cm³</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Un pavé droit a un volume de 480 cm³, une largeur de 6 cm et une hauteur de 4 cm. Quelle est sa longueur ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">A. 15 cm</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">B. 20 cm</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">C. 24 cm</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">D. 80 cm</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous — Récapitulatif</div>
+            <div class="card-sub">3 exercices · Formules, conversions, correspondances</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Aire du losange = <input class="blank" id="f1a" placeholder="?" style="width:50px"> × d2 ÷ 2.
+                Volume de la pyramide = aire de la base × hauteur ÷ <input class="blank" id="f1b" placeholder="?" style="width:50px">.
+                Aire du disque = π × <input class="blank" id="f1c" placeholder="?" style="width:50px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                1 m² = <input class="blank" id="f2a" placeholder="?" style="width:80px"> cm² (surfaces : × 100 par palier).
+                1 m³ = <input class="blank" id="f2b" placeholder="?" style="width:90px"> dm³ (volumes : × 1 000 par palier).
+                1 km² = <input class="blank" id="f2c" placeholder="?" style="width:100px"> m².
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                1 dm³ = <input class="blank" id="f3a" placeholder="?" style="width:50px"> litre.
+                Le volume du cylindre = π × r² × <input class="blank" id="f3b" placeholder="?" style="width:50px">.
+                Pour retrouver la hauteur d'un pavé : h = V ÷ (<input class="blank" id="f3c" placeholder="?" style="width:80px">).
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices style examen CE1D</div>
+            <div class="card-sub">3 exercices complets avec corrigé · + 1 bonus · Niveau certificat belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Problème de carrelage</div>
+                <div class="ex-stmt">
+                    On veut carreler un sol en forme de trapèze. La grande base mesure 8 m, la petite base 5 m et la hauteur 4 m.
+                    Chaque carreau couvre 0,25 m². Combien de carreaux faut-il ? (arrondir à l'entier supérieur)
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Aire du trapèze :</strong> A = (B + b) × h ÷ 2 = (8 + 5) × 4 ÷ 2 = 13 × 4 ÷ 2 = <strong>26 m²</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Nombre de carreaux :</strong> 26 ÷ 0,25 = <strong>104 carreaux</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Vérification :</strong> 104 × 0,25 = 26 m² ✓</div></div>
+                <div class="final-ans">✅ Il faut <strong>104 carreaux</strong>.</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Réservoir cylindrique et conversions</div>
+                <div class="ex-stmt">
+                    Un château d'eau cylindrique a un diamètre de 6 m et une hauteur de 10 m. (π ≈ 3,14)<br>
+                    a) Calcule son volume en m³. b) Exprime cette capacité en litres. c) Combien de cm³ cela représente-t-il ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Rayon :</strong> diamètre = 6 m → r = 3 m</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Volume en m³ :</strong> V = π × r² × h = 3,14 × 9 × 10 = <strong>282,6 m³</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>En litres :</strong> 1 m³ = 1 000 L → 282,6 × 1 000 = <strong>282 600 litres</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>En cm³ :</strong> 1 m³ = 1 000 000 cm³ → 282,6 × 1 000 000 = <strong>282 600 000 cm³</strong></div></div>
+                <div class="final-ans">✅ V = <strong>282,6 m³</strong> = <strong>282 600 L</strong> = <strong>282 600 000 cm³</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Retrouver une dimension</div>
+                <div class="ex-stmt">
+                    Un prisme triangulaire a un volume de 360 cm³ et une hauteur (longueur) de 15 cm.
+                    La base est un triangle isocèle dont la hauteur vaut 6 cm. Quelle est la base du triangle ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Formule prisme :</strong> V = A_base × hauteur du prisme → A_base = V ÷ h_prisme = 360 ÷ 15 = <strong>24 cm²</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Aire du triangle :</strong> A = b × h_triangle ÷ 2 → 24 = b × 6 ÷ 2 = 3b</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Isoler b :</strong> b = 24 ÷ 3 = <strong>8 cm</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Vérification :</strong> A_base = 8 × 6 ÷ 2 = 24 cm² · V = 24 × 15 = 360 cm³ ✓</div></div>
+                <div class="final-ans">✅ La base du triangle est <strong>8 cm</strong>.</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Problème combiné</div>
+                <div class="bonus-stmt">
+                    Un terrain a la forme d'un rectangle de 20 m × 15 m. On y creuse une piscine cylindrique de diamètre 6 m et de profondeur 1,5 m. (π ≈ 3,14)<br>
+                    a) Quelle est l'aire du terrain restant (hors piscine) en m² ?<br>
+                    b) Quel volume d'eau (en litres) peut contenir la piscine ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Aire du terrain :</strong> 20 × 15 = 300 m²</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Aire de la piscine (cercle) :</strong> r = 3 m → A = 3,14 × 9 = 28,26 m²</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>Aire restante :</strong> 300 − 28,26 = <strong>271,74 m²</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text"><strong>Volume piscine en m³ :</strong> V = π × r² × h = 3,14 × 9 × 1,5 = <strong>42,39 m³</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">5</div><div class="sol-text"><strong>En litres :</strong> 42,39 × 1 000 = <strong>42 390 litres</strong></div></div>
+                <div class="bonus-ans">
+                    Aire restante = <strong>271,74 m²</strong> · Volume = <strong>42 390 litres</strong><br>
+                    Astuce : pour un problème combiné, décompose toujours en sous-questions simples.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🏆 🌟 🏆</div>
+    <h2>Défi CE1D relevé !</h2>
+    <p>Félicitations ! Tu as maîtrisé toutes les formules d'aires et de volumes.<br>
+       Tu es prêt(e) pour l'examen CE1D belge !<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP — Champion(ne) des maths !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Aires &amp; Volumes</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_aires_niveau1.html" class="nav-btn">N1 — Aires planes</a>
+        <a href="maths_aires_niveau2.html" class="nav-btn">N2 — Volumes</a>
+        <a href="maths_aires_niveau3.html" class="nav-btn">N3 — Conversions</a>
+        <a href="maths_aires_niveau4.html" class="nav-btn">N4 — Problèmes</a>
+        <a href="maths_aires_niveau5.html" class="nav-btn current">▶ N5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:2, 2:2, 3:1, 4:2, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! Diamètre = 10 cm → rayon r = 5 cm. A = π × r² = 3,14 × 25 = 78,5 cm². Attention : on utilise le rayon, pas le diamètre !",
+    2:"✅ Bravo ! 1 m² = 10 000 cm² (deux paliers : m²→dm²→cm², chacun ×100). Donc 4,5 × 10 000 = 45 000 cm².",
+    3:"✅ Correct ! A = (B + b) × h ÷ 2 = (15 + 9) × 6 ÷ 2 = 24 × 6 ÷ 2 = 144 ÷ 2 = 72 cm².",
+    4:"✅ Parfait ! A_base = 6² = 36 cm². V = 36 × 12 ÷ 3 = 432 ÷ 3 = 144 cm³. N'oublie pas le ÷3 pour la pyramide !",
+    5:"✅ Exact ! l = V ÷ (L × h) = 480 ÷ (6 × 4) = 480 ÷ 24 = 20 cm."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Le diamètre est 10 cm → le rayon r = 5 cm (pas 10 !). A = π × r² = 3,14 × 5² = 3,14 × 25 = 78,5 cm². C'est le piège classique !",
+    2:"❌ Non. Pour les surfaces, chaque palier = ×100. De m² à cm², c'est 2 paliers = ×10 000. Donc 4,5 m² = 45 000 cm².",
+    3:"❌ Non. A = (B + b) × h ÷ 2 = (15 + 9) × 6 ÷ 2 = 72 cm². N'oublie pas de diviser par 2 et d'additionner les deux bases d'abord.",
+    4:"❌ Non. V = A_base × h ÷ 3 = (6² × 12) ÷ 3 = (36 × 12) ÷ 3 = 432 ÷ 3 = 144 cm³. La pyramide : toujours ÷3 !",
+    5:"❌ Non. l = V ÷ (L × h) = 480 ÷ (6 × 4) = 480 ÷ 24 = 20 cm. On isole la longueur en divisant le volume par les deux autres dimensions."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b','f1c'],
+        accepted:[['d1'],['3'],['r²','r2']],
+        msgOk:"✅ Losange : d1 × d2 ÷ 2. Pyramide : A_base × h ÷ 3. Disque : π × r².",
+        msgErr:"❌ Attendus : 'd1' (diagonale), '3' (÷3 pyramide), 'r²' (disque)."
+    },
+    2:{
+        fields:['f2a','f2b','f2c'],
+        accepted:[['10000','10 000'],['1000','1 000'],['1000000','1 000 000']],
+        msgOk:"✅ 1 m² = 10 000 cm². 1 m³ = 1 000 dm³. 1 km² = 1 000 000 m².",
+        msgErr:"❌ Attendus : '10000' cm², '1000' dm³, '1000000' m²."
+    },
+    3:{
+        fields:['f3a','f3b','f3c'],
+        accepted:[['1'],['h'],['l × l','l×l','longueur × largeur','lxl']],
+        msgOk:"✅ 1 dm³ = 1 litre. V cylindre = π × r² × h. h pavé = V ÷ (l × L).",
+        msgErr:"❌ Attendus : '1' (litre), 'h' (hauteur cylindre), 'l × L' (longueur × largeur)."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ²×]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_aires_5', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

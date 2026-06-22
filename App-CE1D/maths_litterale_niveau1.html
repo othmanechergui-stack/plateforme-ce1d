@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Calcul littéral · Niveau 1 — Expressions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#43A047; --primary-dark:#2E7D32; --primary-mid:#66BB6A; --primary-bg:#E8F5E9;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#1B5E20 0%,#43A047 55%,#A5D6A7 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(27,94,32,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#43A047; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#2E7D32; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#1B5E20,#43A047,#A5D6A7); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#1B5E20,#2E7D32); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#A5D6A7; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:#E8F5E9; border:2px solid #A5D6A7; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:#2E7D32; margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:#2E7D32; margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .data-table { width:100%; border-collapse:collapse; border-radius:10px; overflow:hidden; margin:14px 0; font-size:.91rem; }
+        .data-table th { background:#43A047; color:white; padding:9px 12px; font-weight:900; text-align:center; }
+        .data-table td { padding:8px 12px; text-align:center; border-bottom:1px solid var(--border); }
+        .data-table tr:nth-child(even) td { background:var(--primary-bg); }
+        .data-table tr:last-child td { border-bottom:none; }
+        .data-table td.total-row { font-weight:900; background:#E8F5E9; color:var(--primary-dark); }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid #43A047; margin-bottom:11px; }
+        .q-num  { display:inline-block; background:#43A047; color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:#E8F5E9; border:2px solid #A5D6A7; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:#43A047; color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:#43A047; color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 #2E7D32; transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#1B5E20,#43A047,#A5D6A7); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #174a1a; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:#43A047; color:#2E7D32; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>📝 Calcul littéral · Expressions</h1>
+            <p>Niveau 1 · Variables · Substitution · Termes semblables · Simplification</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <div class="diff-pip off"></div>
+            <div class="diff-pip off"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 1 — Expressions</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Expressions littérales</div>
+            <div class="card-sub">Variable · Constante · Substitution · Termes semblables · Simplification</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Le calcul littéral, c'est utiliser des <strong>lettres</strong> pour représenter des nombres inconnus ou variables.
+            C'est la base de toute l'algèbre — et un thème central du CE1D belge.
+            Dans ce niveau, tu vas apprendre à lire, évaluer et simplifier des expressions avec des lettres.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Vocabulaire fondamental</h3>
+            <p>
+                Une <strong>variable</strong> est une lettre qui représente un nombre quelconque (ex : <strong>x</strong>, <strong>a</strong>, <strong>n</strong>).<br>
+                Une <strong>constante</strong> est un nombre fixe (ex : 3, −7, ½).<br>
+                Une <strong>expression littérale</strong> mélange variables et constantes reliées par des opérations.<br>
+                Exemple : <strong>3x + 2</strong> est une expression avec la variable x et la constante 2.
+            </p>
+        </div>
+
+        <!-- SVG 1 : schéma variable/constante/expression -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 160" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="160" fill="#F1F8E9" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">Anatomie d'une expression littérale : 3x + 2</text>
+
+                <!-- Expression centrale -->
+                <rect x="185" y="55" width="190" height="50" rx="10" fill="#43A047" />
+                <text x="280" y="86" text-anchor="middle" font-size="24" font-weight="900" fill="white" font-family="Courier New, monospace">3x + 2</text>
+
+                <!-- Coefficient -->
+                <rect x="30" y="62" width="110" height="36" rx="8" fill="#A5D6A7" stroke="#2E7D32" stroke-width="2"/>
+                <text x="85" y="82" text-anchor="middle" font-size="11" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">Coefficient : 3</text>
+                <line x1="140" y1="80" x2="185" y2="80" stroke="#2E7D32" stroke-width="2" marker-end="url(#arr1)"/>
+
+                <!-- Variable -->
+                <rect x="30" y="108" width="110" height="36" rx="8" fill="#C8E6C9" stroke="#2E7D32" stroke-width="2"/>
+                <text x="85" y="128" text-anchor="middle" font-size="11" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">Variable : x</text>
+                <line x1="140" y1="126" x2="185" y2="100" stroke="#2E7D32" stroke-width="2"/>
+
+                <!-- Constante -->
+                <rect x="420" y="85" width="110" height="36" rx="8" fill="#FFD54F" stroke="#F57F17" stroke-width="2"/>
+                <text x="475" y="105" text-anchor="middle" font-size="11" font-weight="900" fill="#E65100" font-family="Nunito, sans-serif">Constante : 2</text>
+                <line x1="375" y1="80" x2="420" y2="100" stroke="#F57F17" stroke-width="2"/>
+
+                <defs><marker id="arr1" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#2E7D32"/></marker></defs>
+
+                <text x="280" y="150" text-anchor="middle" font-size="10" font-weight="700" fill="#555" font-family="Nunito, sans-serif">Le coefficient 3 multiplie la variable x, et on ajoute la constante 2</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔁 La substitution — Remplacer la variable par un nombre</h3>
+            <p>
+                La <strong>substitution</strong> consiste à remplacer la variable par une valeur donnée, puis à calculer.<br>
+                Exemple : pour <strong>3x + 2</strong> avec x = 5 :<br>
+                → On remplace x par 5 : 3 × <strong>5</strong> + 2 = 15 + 2 = <strong>17</strong><br>
+                Attention : <strong>3x</strong> signifie 3 <em>multiplié par</em> x (le signe × est omis par convention).
+            </p>
+        </div>
+
+        <!-- SVG 2 : tableau de substitution -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 175" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="175" fill="#F1F8E9" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">Tableau de substitution : f(x) = 3x + 2</text>
+
+                <!-- En-têtes -->
+                <rect x="30" y="28" width="100" height="28" rx="5" fill="#43A047"/>
+                <text x="80" y="47" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">x</text>
+                <rect x="135" y="28" width="100" height="28" rx="5" fill="#43A047"/>
+                <text x="185" y="47" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">Calcul</text>
+                <rect x="240" y="28" width="290" height="28" rx="5" fill="#2E7D32"/>
+                <text x="385" y="47" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">3x + 2</text>
+
+                <!-- Lignes données -->
+                <rect x="30" y="56" width="100" height="22" fill="#E8F5E9" stroke="#A5D6A7" stroke-width="1"/>
+                <text x="80" y="72" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Courier New, monospace">0</text>
+                <rect x="135" y="56" width="100" height="22" fill="#F5F5F5" stroke="#ddd" stroke-width="1"/>
+                <text x="185" y="72" text-anchor="middle" font-size="11" fill="#555" font-family="Courier New, monospace">3×0+2</text>
+                <rect x="240" y="56" width="290" height="22" fill="#C8E6C9" stroke="#A5D6A7" stroke-width="1"/>
+                <text x="385" y="72" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Courier New, monospace">2</text>
+
+                <rect x="30" y="78" width="100" height="22" fill="#E8F5E9" stroke="#A5D6A7" stroke-width="1"/>
+                <text x="80" y="94" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Courier New, monospace">1</text>
+                <rect x="135" y="78" width="100" height="22" fill="#F5F5F5" stroke="#ddd" stroke-width="1"/>
+                <text x="185" y="94" text-anchor="middle" font-size="11" fill="#555" font-family="Courier New, monospace">3×1+2</text>
+                <rect x="240" y="78" width="290" height="22" fill="#C8E6C9" stroke="#A5D6A7" stroke-width="1"/>
+                <text x="385" y="94" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Courier New, monospace">5</text>
+
+                <rect x="30" y="100" width="100" height="22" fill="#E8F5E9" stroke="#A5D6A7" stroke-width="1"/>
+                <text x="80" y="116" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Courier New, monospace">2</text>
+                <rect x="135" y="100" width="100" height="22" fill="#F5F5F5" stroke="#ddd" stroke-width="1"/>
+                <text x="185" y="116" text-anchor="middle" font-size="11" fill="#555" font-family="Courier New, monospace">3×2+2</text>
+                <rect x="240" y="100" width="290" height="22" fill="#C8E6C9" stroke="#A5D6A7" stroke-width="1"/>
+                <text x="385" y="116" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Courier New, monospace">8</text>
+
+                <rect x="30" y="122" width="100" height="22" fill="#E8F5E9" stroke="#A5D6A7" stroke-width="1"/>
+                <text x="80" y="138" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Courier New, monospace">3</text>
+                <rect x="135" y="122" width="100" height="22" fill="#F5F5F5" stroke="#ddd" stroke-width="1"/>
+                <text x="185" y="138" text-anchor="middle" font-size="11" fill="#555" font-family="Courier New, monospace">3×3+2</text>
+                <rect x="240" y="122" width="290" height="22" fill="#C8E6C9" stroke="#A5D6A7" stroke-width="1"/>
+                <text x="385" y="138" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Courier New, monospace">11</text>
+
+                <rect x="30" y="144" width="100" height="22" fill="#E8F5E9" stroke="#A5D6A7" stroke-width="1"/>
+                <text x="80" y="160" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Courier New, monospace">4</text>
+                <rect x="135" y="144" width="100" height="22" fill="#F5F5F5" stroke="#ddd" stroke-width="1"/>
+                <text x="185" y="160" text-anchor="middle" font-size="11" fill="#555" font-family="Courier New, monospace">3×4+2</text>
+                <rect x="240" y="144" width="290" height="22" fill="#C8E6C9" stroke="#A5D6A7" stroke-width="1"/>
+                <text x="385" y="160" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Courier New, monospace">14</text>
+            </svg>
+        </div>
+
+        <div class="def-box">
+            <h3>🔗 Termes semblables — Quand peut-on additionner ?</h3>
+            <p>
+                Deux termes sont <strong>semblables</strong> s'ils ont la même partie littérale (même lettre, même exposant).<br>
+                • <strong>4x + 2x = 6x</strong> ✓ (même lettre x, même exposant 1)<br>
+                • <strong>3x² + x² = 4x²</strong> ✓ (même lettre x, même exposant 2)<br>
+                • <strong>5a + 3b</strong> → on ne peut PAS simplifier (a ≠ b)<br>
+                • <strong>3x + 2x² </strong> → on ne peut PAS simplifier (exposants différents)
+            </p>
+        </div>
+
+        <!-- SVG 3 : règle de simplification -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 145" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="145" fill="#F1F8E9" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">Simplification des termes semblables</text>
+
+                <!-- Exemple 1 : peut simplifier -->
+                <rect x="20" y="28" width="240" height="105" rx="8" fill="#C8E6C9" stroke="#43A047" stroke-width="2"/>
+                <text x="140" y="50" text-anchor="middle" font-size="11" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">✅ PEUT se simplifier</text>
+                <text x="140" y="72" text-anchor="middle" font-size="18" font-weight="900" fill="#1B5E20" font-family="Courier New, monospace">5x − 2x + 3</text>
+                <text x="140" y="92" text-anchor="middle" font-size="13" fill="#2E7D32" font-family="Nunito, sans-serif">5x et 2x sont semblables</text>
+                <text x="140" y="112" text-anchor="middle" font-size="18" font-weight="900" fill="#43A047" font-family="Courier New, monospace">= 3x + 3</text>
+                <text x="140" y="128" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">(on regroupe les x entre eux, la constante reste seule)</text>
+
+                <!-- Exemple 2 : ne peut pas -->
+                <rect x="300" y="28" width="240" height="105" rx="8" fill="#FFCDD2" stroke="#E53935" stroke-width="2"/>
+                <text x="420" y="50" text-anchor="middle" font-size="11" font-weight="900" fill="#B71C1C" font-family="Nunito, sans-serif">❌ NE peut PAS se simplifier</text>
+                <text x="420" y="72" text-anchor="middle" font-size="18" font-weight="900" fill="#B71C1C" font-family="Courier New, monospace">3x + 2</text>
+                <text x="420" y="92" text-anchor="middle" font-size="13" fill="#C62828" font-family="Nunito, sans-serif">3x est un terme en x, 2 est une constante</text>
+                <text x="420" y="112" text-anchor="middle" font-size="14" font-weight="900" fill="#E53935" font-family="Courier New, monospace">3x + 2 ≠ 5x</text>
+                <text x="420" y="128" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">(on ne mélange PAS les x et les nombres)</text>
+            </svg>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Le piège classique du CE1D</h3>
+            <p>
+                <strong>3x + 2 ≠ 5x</strong> — Tu ne peux PAS additionner un terme en x et une constante !<br>
+                De même : <strong>x² + x ≠ x³</strong> (les exposants ne s'additionnent pas comme ça).<br>
+                Règle d'or : on n'additionne que des termes qui ont <strong>exactement la même partie littérale</strong>.
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">4x + 2x</div>
+                <div class="cas-eq">= 6x</div>
+                <div class="cas-desc">Termes semblables : on additionne les coefficients (4+2=6).</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">3x² + x²</div>
+                <div class="cas-eq">= 4x²</div>
+                <div class="cas-desc">x² = 1·x², donc 3 + 1 = 4. L'exposant ne change pas.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">5x − 2x + 3</div>
+                <div class="cas-eq">= 3x + 3</div>
+                <div class="cas-desc">On simplifie 5x−2x=3x. La constante 3 reste seule.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Substitution · Simplification · Termes semblables</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Calculer 4x − 1 pour x = 3.</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">11</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">12</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">8</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">13</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Simplifier 5x + 3x.</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">8x</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">15x</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">8x²</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">8</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Simplifier 7x − 2x + 4.</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">9x + 4</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">5x + 4</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">5x</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">13</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Laquelle de ces expressions est une expression littérale ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">3 + 4 = 7</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">12 ÷ 4</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">2n + 5</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">100</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Calculer 2a² + 3 pour a = 2.</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">19</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">11</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">14</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">7</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Vocabulaire · Simplification · Termes semblables</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Dans l'expression 5x + 3, le <input class="blank" id="f1a" placeholder="?" style="width:110px"> de x est 5 et 3 est la <input class="blank" id="f1b" placeholder="?" style="width:100px">. Pour x = 2, l'expression vaut <input class="blank" id="f1c" placeholder="?" style="width:55px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                4x + 2x = <input class="blank" id="f2a" placeholder="?" style="width:55px">x car ce sont des termes <input class="blank" id="f2b" placeholder="?" style="width:110px"> (même partie littérale).
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                7y − 3y + 5 = <input class="blank" id="f3a" placeholder="?" style="width:55px">y + <input class="blank" id="f3b" placeholder="?" style="width:55px">. On ne peut PAS simplifier davantage car <input class="blank" id="f3c" placeholder="?" style="width:55px">y et <input class="blank" id="f3d" placeholder="?" style="width:55px"> ne sont pas semblables.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Calculer une expression pour plusieurs valeurs</div>
+                <div class="ex-stmt">
+                    Soit A = 3x² + 2x − 1. Calcule A pour x = 0, x = 1 et x = −1.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Pour x = 0 :</strong><br>A = 3×(0)² + 2×0 − 1 = 0 + 0 − 1 = <strong>−1</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Pour x = 1 :</strong><br>A = 3×(1)² + 2×1 − 1 = 3 + 2 − 1 = <strong>4</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Pour x = −1 :</strong><br>A = 3×(−1)² + 2×(−1) − 1 = 3×1 + (−2) − 1 = 3 − 2 − 1 = <strong>0</strong><br>⚠️ Attention : (−1)² = +1, car un nombre négatif au carré est positif !</div></div>
+                <div class="final-ans">✅ A(0) = −1 &nbsp;|&nbsp; A(1) = 4 &nbsp;|&nbsp; A(−1) = 0</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Simplifier une expression</div>
+                <div class="ex-stmt">
+                    Simplifier l'expression : 8a − 3a + 2a − a.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Identifier les termes semblables :</strong> 8a, −3a, 2a et −a sont tous des termes en <em>a</em> → ils sont tous semblables.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Regrouper :</strong> (8 − 3 + 2 − 1) × a (rappel : −a = −1 × a)<br>= (8 − 3 + 2 − 1) × a = <strong>6a</strong></div></div>
+                <div class="final-ans">✅ 8a − 3a + 2a − a = <strong>6a</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Application : périmètre d'un rectangle</div>
+                <div class="ex-stmt">
+                    Le périmètre d'un rectangle est P = 2(l + L). Calcule P pour l = 3 cm et L = 7 cm.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Substituer :</strong> remplacer l par 3 et L par 7 dans P = 2(l + L)<br>P = 2(3 + 7)</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Calculer la parenthèse :</strong> 3 + 7 = 10<br>P = 2 × 10</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Résultat :</strong> P = <strong>20 cm</strong></div></div>
+                <div class="final-ans">✅ P = 2(3 + 7) = 2 × 10 = <strong>20 cm</strong></div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Substitution inverse</div>
+                <div class="bonus-stmt">
+                    L'expression 3x + 5 donne le résultat 23 pour une certaine valeur de x.<br>
+                    Retrouve x en réfléchissant à la substitution inversée.
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>On sait que :</strong> 3x + 5 = 23</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>On "retire" la constante 5 :</strong> 3x = 23 − 5 = 18</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>On "retire" le coefficient 3 :</strong> x = 18 ÷ 3 = <strong>6</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text"><strong>Vérification :</strong> 3 × 6 + 5 = 18 + 5 = 23 ✓</div></div>
+                <div class="bonus-ans">
+                    x = <strong>6</strong><br>
+                    Astuce : pour trouver x, on annule les opérations dans l'ordre inverse (d'abord la soustraction, puis la division).
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 1 terminé !</h2>
+    <p>Bravo ! Tu maîtrises les expressions littérales, la substitution et les termes semblables.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Place au Niveau 2 — Développement !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Calcul littéral</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_litterale_niveau1.html" class="nav-btn current">▶ N1 — Expressions</a>
+        <a href="maths_litterale_niveau2.html" class="nav-btn">N2 — Développement</a>
+        <a href="maths_litterale_niveau3.html" class="nav-btn">N3 — Factorisation</a>
+        <a href="maths_litterale_niveau4.html" class="nav-btn">N4 — Identités</a>
+        <a href="maths_litterale_niveau5.html" class="nav-btn">N5 — Défi CE1D</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:1, 4:2, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! 4×3 − 1 = 12 − 1 = 11. On remplace x par 3 et on applique les règles de priorité des opérations.",
+    2:"✅ Bravo ! 5x + 3x = (5+3)x = 8x. On additionne les coefficients des termes semblables.",
+    3:"✅ Correct ! 7x − 2x + 4 = (7−2)x + 4 = 5x + 4. La constante 4 reste seule car elle n'est pas semblable aux termes en x.",
+    4:"✅ Parfait ! 2n + 5 contient une variable (n) et une constante (5) — c'est bien une expression littérale.",
+    5:"✅ Exact ! 2×(2²) + 3 = 2×4 + 3 = 8 + 3 = 11. Attention : on calcule d'abord la puissance, puis la multiplication."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. 4×3 − 1 = 12 − 1 = 11. On substitue x par 3 : 4×3 = 12, puis on soustrait 1.",
+    2:"❌ Non. 5x + 3x = (5+3)x = 8x. On additionne les coefficients (5 et 3), pas les exposants.",
+    3:"❌ Non. 7x − 2x + 4 = 5x + 4. On regroupe d'abord les termes en x : 7−2=5. La constante 4 reste seule.",
+    4:"❌ Non. Une expression littérale doit contenir une variable (lettre). 3+4=7, 12÷4 et 100 sont des expressions purement numériques.",
+    5:"❌ Non. 2×(2²) + 3 : on calcule d'abord 2² = 4, puis 2×4 = 8, puis 8+3 = 11. Attention à l'ordre des opérations !"
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b','f1c'],
+        accepted:[['coefficient'],['constante'],['13']],
+        msgOk:"✅ Exact ! Dans 5x+3 : le coefficient de x est 5, 3 est la constante. Pour x=2 : 5×2+3 = 10+3 = 13.",
+        msgErr:"❌ Attendus : 'coefficient', 'constante', et 13 (car 5×2+3=13)."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['6'],['semblables']],
+        msgOk:"✅ Parfait ! 4x+2x = 6x. Ce sont des termes semblables car ils ont la même partie littérale (x).",
+        msgErr:"❌ Attendus : 6 (4+2=6) et 'semblables' (même partie littérale)."
+    },
+    3:{
+        fields:['f3a','f3b','f3c','f3d'],
+        accepted:[['4'],['5'],['4'],['5']],
+        msgOk:"✅ Exact ! 7y−3y+5 = 4y+5. On ne peut pas simplifier davantage : 4y (terme en y) et 5 (constante) ne sont pas semblables.",
+        msgErr:"❌ Attendus : 4 (7−3=4), 5 (constante reste), puis 4 et 5 pour la partie finale."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_litterale_1', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

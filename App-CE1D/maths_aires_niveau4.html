@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Aires & Volumes · Niveau 4 — Problèmes mixtes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#795548; --primary-dark:#4E342E; --primary-mid:#A1887F; --primary-bg:#EFEBE9;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+        header { background:linear-gradient(135deg,#3E2723 0%,#795548 55%,#BCAAA4 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(62,39,35,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#795548; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#4E342E; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#3E2723,#795548,#BCAAA4); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+        .def-box { background:linear-gradient(135deg,#3E2723,#4E342E); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#BCAAA4; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #BCAAA4; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+        .fill-item { background:var(--primary-bg); border:2px solid #BCAAA4; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+        .completion { display:none; background:linear-gradient(135deg,#3E2723,#795548,#BCAAA4); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #2c1810; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🧩 Aires &amp; Volumes · Problèmes mixtes</h1>
+            <p>Niveau 4 · Aire totale · Aire latérale · Peinture · Réservoir · Retrouver un côté</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 4 — Expert</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Problèmes mixtes aires et volumes</div>
+            <div class="card-sub">Aire totale · Aire latérale · Peinture · Réservoir · Retrouver un côté</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Au CE1D, les problèmes combinent souvent plusieurs notions : choisir la bonne formule selon la figure,
+            distinguer l'<strong>aire totale</strong> (toutes les faces) de l'<strong>aire latérale</strong> (les côtés seulement),
+            et parfois retrouver une dimension inconnue à partir de l'aire ou du volume donnés.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Aire totale vs Aire latérale d'un solide</h3>
+            <p>
+                <strong>Aire latérale :</strong> surface des faces latérales (côtés) seulement — sans les bases.<br>
+                <strong>Aire totale :</strong> toutes les faces, bases comprises.<br><br>
+                <strong>Cylindre :</strong> Aire latérale = 2π × r × h · Aire totale = 2π × r × h + 2 × π × r² (les 2 disques !)<br>
+                <strong>Pavé droit :</strong> Aire totale = 2 × (l×L + l×h + L×h)<br>
+                <strong>Prisme triangulaire :</strong> Aire latérale = périmètre de la base × hauteur
+            </p>
+        </div>
+
+        <!-- SVG : récap formules clés -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 280" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="280" fill="#EFEBE9" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#3E2723" font-family="Nunito, sans-serif">Récap formules — Aires et Volumes</text>
+
+                <!-- Colonne Aires 2D -->
+                <rect x="10" y="26" width="260" height="22" fill="#4E342E" rx="4"/>
+                <text x="140" y="41" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">Aires des figures planes (2D)</text>
+
+                <rect x="10" y="48" width="260" height="110" fill="white" rx="4"/>
+                <text x="20" y="66" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Rectangle :</text>
+                <text x="110" y="66" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">A = l × L</text>
+                <text x="20" y="82" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Triangle :</text>
+                <text x="110" y="82" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">A = b × h ÷ 2</text>
+                <text x="20" y="98" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Disque :</text>
+                <text x="110" y="98" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">A = π × r²</text>
+                <text x="20" y="114" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Losange :</text>
+                <text x="110" y="114" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">A = d1 × d2 ÷ 2</text>
+                <text x="20" y="130" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Trapèze :</text>
+                <text x="110" y="130" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">A = (B + b) × h ÷ 2</text>
+                <text x="20" y="150" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Carré :</text>
+                <text x="110" y="150" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">A = c²</text>
+
+                <!-- Colonne Volumes 3D -->
+                <rect x="290" y="26" width="260" height="22" fill="#4E342E" rx="4"/>
+                <text x="420" y="41" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">Volumes des solides (3D)</text>
+
+                <rect x="290" y="48" width="260" height="110" fill="white" rx="4"/>
+                <text x="300" y="66" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Pavé droit :</text>
+                <text x="390" y="66" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">V = l × L × h</text>
+                <text x="300" y="82" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Cube :</text>
+                <text x="390" y="82" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">V = a³</text>
+                <text x="300" y="98" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Cylindre :</text>
+                <text x="390" y="98" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">V = π × r² × h</text>
+                <text x="300" y="114" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Prisme :</text>
+                <text x="390" y="114" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">V = A_base × h</text>
+                <text x="300" y="130" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Pyramide :</text>
+                <text x="390" y="130" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">V = A_base × h ÷ 3</text>
+                <text x="300" y="150" font-size="9" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Sphère :</text>
+                <text x="390" y="150" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">V = 4/3 × π × r³</text>
+
+                <!-- Section Aire totale cylindre -->
+                <rect x="10" y="168" width="540" height="22" fill="#795548" rx="4"/>
+                <text x="280" y="183" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">Surfaces des solides — Aire totale</text>
+
+                <rect x="10" y="190" width="260" height="78" fill="white" rx="4"/>
+                <text x="140" y="208" text-anchor="middle" font-size="10" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Cylindre</text>
+                <text x="20" y="226" font-size="9" font-weight="900" fill="#4E342E" font-family="Nunito, sans-serif">Aire latérale :</text>
+                <text x="110" y="226" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">2 × π × r × h</text>
+                <text x="20" y="244" font-size="9" font-weight="900" fill="#4E342E" font-family="Nunito, sans-serif">Aire totale :</text>
+                <text x="110" y="244" font-size="9" fill="#E53935" font-family="Nunito, sans-serif">2πrh + 2πr²  (+ 2 bases !)</text>
+                <text x="20" y="260" font-size="8" fill="#555" font-family="Nunito, sans-serif">Piège : oublier les 2 disques !</text>
+
+                <rect x="290" y="190" width="260" height="78" fill="white" rx="4"/>
+                <text x="420" y="208" text-anchor="middle" font-size="10" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Pavé droit</text>
+                <text x="300" y="226" font-size="9" font-weight="900" fill="#4E342E" font-family="Nunito, sans-serif">Aire totale :</text>
+                <text x="390" y="226" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">2(lL + lh + Lh)</text>
+                <text x="300" y="244" font-size="9" font-weight="900" fill="#4E342E" font-family="Nunito, sans-serif">Retrouver h :</text>
+                <text x="390" y="244" font-size="9" fill="#3C3C3C" font-family="Nunito, sans-serif">h = V ÷ (l × L)</text>
+                <text x="300" y="260" font-size="8" fill="#555" font-family="Nunito, sans-serif">On isole l'inconnue depuis V = l×L×h</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔧 Stratégie pour résoudre un problème</h3>
+            <p>
+                <strong>1. Identifier la figure</strong> (2D ou 3D ? quelle forme ?)<br>
+                <strong>2. Choisir la bonne formule</strong> (aire totale ou latérale ? volume ?)<br>
+                <strong>3. Repérer les dimensions données</strong> (rayon, hauteur, base…)<br>
+                <strong>4. Calculer</strong> et exprimer le résultat avec la bonne unité (cm², m², cm³…)<br>
+                <strong>5. Répondre à la question posée</strong> (litres de peinture ? longueur manquante ?)
+            </p>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège : l'aire totale d'un cylindre — les 2 bases !</h3>
+            <p>
+                L'erreur la plus fréquente : calculer seulement l'aire latérale (2πrh) et oublier les <strong>deux disques</strong> (2 × πr²) qui ferment le cylindre en haut et en bas.
+                Si le problème demande la quantité de tôle pour fabriquer une boîte cylindrique <em>fermée</em>, il faut les deux bases.<br>
+                Si le cylindre est <strong>ouvert</strong> (seau, tube), on ajoute seulement le fond (une base).
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">Peinture</div>
+                <div class="cas-eq">Aire × épaisseur/couverture</div>
+                <div class="cas-desc">Ex : 20 m² de mur, 1 pot = 5 m² → 4 pots</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Réservoir</div>
+                <div class="cas-eq">V = l × L × h (ou π×r²×h)</div>
+                <div class="cas-desc">Convertir en litres : ÷ 1 000 si cm³</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Retrouver h</div>
+                <div class="cas-eq">h = V ÷ (l × L)</div>
+                <div class="cas-desc">Isoler l'inconnue depuis la formule</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Retrouver r</div>
+                <div class="cas-eq">r² = V ÷ (π × h)</div>
+                <div class="cas-desc">Puis r = racine carrée du résultat</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Périmètre, trapèze, prisme, cylindre, côté inconnu</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Quel est le périmètre d'un rectangle de longueur 9 cm et de largeur 4 cm ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">A. 36 cm</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">B. 26 cm</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">C. 13 cm</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">D. 52 cm</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Quelle est l'aire d'un trapèze de grande base 12 cm, petite base 8 cm et hauteur 5 cm ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">A. 100 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">B. 50 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">C. 60 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">D. 40 cm²</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Quel est le volume d'un prisme triangulaire dont la base est un triangle de base 6 cm et hauteur 4 cm, et dont la longueur est 10 cm ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">A. 240 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">B. 60 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">C. 120 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">D. 480 cm³</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Quelle est l'aire totale d'un cylindre de rayon 3 cm et hauteur 8 cm ? (π ≈ 3,14 — arrondi à l'unité)</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">A. 150 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">B. 207 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">C. 151 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">D. 75 cm²</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Un pavé droit a un volume de 360 cm³, une longueur de 9 cm et une largeur de 5 cm. Quelle est sa hauteur ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">A. 4 cm</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">B. 40 cm</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">C. 8 cm</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">D. 6 cm</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Cylindre, aire totale, retrouver h</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Volume du cylindre = π × r² × <input class="blank" id="f1a" placeholder="?" style="width:50px">.
+                Pour r = 4 cm et h = 5 cm : V = 3,14 × <input class="blank" id="f1b" placeholder="?" style="width:50px"> × 5 = <input class="blank" id="f1c" placeholder="?" style="width:80px"> cm³.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Aire latérale du cylindre = 2 × π × r × h.
+                Aire totale = aire latérale + <input class="blank" id="f2a" placeholder="?" style="width:120px">.
+                Les deux <input class="blank" id="f2b" placeholder="?" style="width:80px"> forment les bases du cylindre fermé.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Si V = l × L × h et que V = 240 cm³, l = 8 cm, L = 5 cm, alors h = <input class="blank" id="f3a" placeholder="?" style="width:80px">.
+                Méthode : h = V ÷ (<input class="blank" id="f3b" placeholder="?" style="width:60px"> × <input class="blank" id="f3c" placeholder="?" style="width:60px">).
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Quantité de peinture</div>
+                <div class="ex-stmt">
+                    Une pièce rectangulaire mesure 5 m × 4 m et a des murs de 2,5 m de haut. On veut peindre les 4 murs (sans le plafond ni le sol). Un pot de peinture couvre 8 m². Combien de pots faut-il ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Aire des 4 murs :</strong> Périmètre de la base × hauteur = 2 × (5 + 4) × 2,5 = 2 × 9 × 2,5 = <strong>45 m²</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Nombre de pots :</strong> 45 ÷ 8 = 5,625 → on arrondit à l'entier supérieur = <strong>6 pots</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Remarque :</strong> On arrondit toujours vers le haut pour la peinture — mieux avoir trop que pas assez !</div></div>
+                <div class="final-ans">✅ Il faut <strong>6 pots</strong> de peinture.</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Remplir un réservoir cylindrique</div>
+                <div class="ex-stmt">
+                    Un réservoir cylindrique a un rayon de 40 cm et une hauteur de 1,2 m. Quelle est sa capacité en litres ? (π ≈ 3,14)
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Unifier les unités :</strong> hauteur = 1,2 m = 120 cm. Rayon = 40 cm.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Volume en cm³ :</strong> V = π × r² × h = 3,14 × 40² × 120 = 3,14 × 1 600 × 120 = <strong>602 880 cm³</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Convertir en litres :</strong> 1 L = 1 000 cm³ → 602 880 ÷ 1 000 = <strong>602,88 litres</strong></div></div>
+                <div class="final-ans">✅ Le réservoir peut contenir environ <strong>602,88 litres</strong>.</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Retrouver un côté</div>
+                <div class="ex-stmt">
+                    Un carreleur doit recouvrir un sol rectangulaire de 24 m². Si la largeur du sol est 3 m, quelle est sa longueur ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Formule :</strong> Aire = longueur × largeur → A = l × L</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Isoler la longueur :</strong> l = A ÷ L = 24 ÷ 3 = <strong>8 m</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Vérification :</strong> 8 × 3 = 24 m² ✓</div></div>
+                <div class="final-ans">✅ La longueur du sol est <strong>8 m</strong>.</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Aire totale d'un cylindre fermé</div>
+                <div class="bonus-stmt">
+                    On fabrique une boîte de conserve cylindrique (fermée des deux côtés) de rayon 4 cm et hauteur 10 cm.
+                    Quelle surface de métal (en cm²) est nécessaire ? (π ≈ 3,14)
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Aire latérale :</strong> 2 × π × r × h = 2 × 3,14 × 4 × 10 = <strong>251,2 cm²</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Aire des 2 bases (disques) :</strong> 2 × π × r² = 2 × 3,14 × 16 = <strong>100,48 cm²</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>Aire totale :</strong> 251,2 + 100,48 = <strong>351,68 cm²</strong></div></div>
+                <div class="bonus-ans">
+                    Surface nécessaire = <strong>351,68 cm²</strong><br>
+                    Rappel : ne pas oublier les 2 disques ! C'est le piège classique du cylindre fermé.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 4 terminé !</h2>
+    <p>Excellent ! Tu sais résoudre des problèmes concrets d'aires et de volumes.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Relève le Défi CE1D au Niveau 5 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Aires &amp; Volumes</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_aires_niveau1.html" class="nav-btn">N1 — Aires planes</a>
+        <a href="maths_aires_niveau2.html" class="nav-btn">N2 — Volumes</a>
+        <a href="maths_aires_niveau3.html" class="nav-btn">N3 — Conversions</a>
+        <a href="maths_aires_niveau4.html" class="nav-btn current">▶ N4 — Problèmes</a>
+        <a href="maths_aires_niveau5.html" class="nav-btn">N5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:1, 3:2, 4:1, 5:2};
+
+const QCM_OK = {
+    1:"✅ Exact ! Périmètre rectangle = 2 × (longueur + largeur) = 2 × (9 + 4) = 2 × 13 = 26 cm.",
+    2:"✅ Bravo ! Aire trapèze = (B + b) × h ÷ 2 = (12 + 8) × 5 ÷ 2 = 20 × 5 ÷ 2 = 100 ÷ 2 = 50 cm².",
+    3:"✅ Correct ! Aire base triangulaire = 6 × 4 ÷ 2 = 12 cm². Volume prisme = 12 × 10 = 120 cm³.",
+    4:"✅ Parfait ! Aire latérale = 2 × 3,14 × 3 × 8 = 150,72 cm². Deux bases = 2 × 3,14 × 9 = 56,52 cm². Total ≈ 207 cm².",
+    5:"✅ Exact ! h = V ÷ (l × L) = 360 ÷ (9 × 5) = 360 ÷ 45 = 8 cm."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Périmètre = 2 × (longueur + largeur) = 2 × (9 + 4) = 26 cm. Ce n'est pas l'aire (9 × 4 = 36 cm²) !",
+    2:"❌ Non. Aire trapèze = (B + b) × h ÷ 2 = (12 + 8) × 5 ÷ 2 = 50 cm². N'oublie pas de diviser par 2 !",
+    3:"❌ Non. Aire de la base triangulaire = 6 × 4 ÷ 2 = 12 cm². Volume = 12 × 10 = 120 cm³. V = A_base × hauteur du prisme.",
+    4:"❌ Non. Aire totale = 2πrh + 2πr² = (2×3,14×3×8) + (2×3,14×9) = 150,72 + 56,52 ≈ 207 cm². N'oublie pas les 2 bases !",
+    5:"❌ Non. V = l × L × h → h = V ÷ (l × L) = 360 ÷ (9 × 5) = 360 ÷ 45 = 8 cm. On isole h en divisant par l × L."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b','f1c'],
+        accepted:[['h'],['16'],['251,2','251.2']],
+        msgOk:"✅ V = π × r² × h. Pour r=4, h=5 : V = 3,14 × 16 × 5 = 251,2 cm³.",
+        msgErr:"❌ Attendus : 'h', puis '16' (car 4²=16), puis '251,2' cm³."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['2 bases','2 disques','2×πr²','les 2 bases','deux bases','2 πr²'],['disques','cercles']],
+        msgOk:"✅ Aire totale = aire latérale + 2 bases (disques). Sans les bases, c'est l'aire latérale seulement.",
+        msgErr:"❌ Attendus : '2 bases' (ou '2 disques') pour le premier trou, 'disques' pour le second."
+    },
+    3:{
+        fields:['f3a','f3b','f3c'],
+        accepted:[['6 cm','6'],['8','l'],['5','l']],
+        msgOk:"✅ h = V ÷ (l × L) = 240 ÷ (8 × 5) = 240 ÷ 40 = 6 cm.",
+        msgErr:"❌ Attendus : '6 cm' (hauteur), '8' (longueur l), '5' (largeur L). h = 240 ÷ (8 × 5) = 6 cm."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ²×]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_aires_4', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Agrandissement · Niveau 4 — Aires et volumes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#D81B60; --primary-dark:#880E4F; --primary-mid:#E91E63; --primary-bg:#FCE4EC;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+        header { background:linear-gradient(135deg,#560027 0%,#D81B60 55%,#F48FB1 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(86,0,39,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#D81B60; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#880E4F; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#560027,#D81B60,#F48FB1); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+        .def-box { background:linear-gradient(135deg,#560027,#880E4F); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#F48FB1; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #F48FB1; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+        .data-table { width:100%; border-collapse:collapse; border-radius:10px; overflow:hidden; margin:14px 0; font-size:.91rem; }
+        .data-table th { background:var(--primary); color:white; padding:9px 12px; font-weight:900; text-align:center; }
+        .data-table td { padding:8px 12px; text-align:center; border-bottom:1px solid var(--border); }
+        .data-table tr:nth-child(even) td { background:var(--primary-bg); }
+        .data-table tr:last-child td { border-bottom:none; }
+        .data-table td.hi { font-weight:900; color:var(--primary-dark); background:var(--primary-bg); }
+        .data-table td.hi2 { font-weight:900; color:#0892D0; background:#E8F4FD; }
+        .data-table td.hi3 { font-weight:900; color:#46A302; background:#F0FBE4; }
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+        .fill-item { background:var(--primary-bg); border:2px solid #F48FB1; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:70px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+        .completion { display:none; background:linear-gradient(135deg,#560027,#D81B60,#F48FB1); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #3b001a; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>📐 Agrandissement · Aires et volumes</h1>
+            <p>Niveau 4 · Longueurs ×k · Aires ×k² · Volumes ×k³ · Pièges CE1D</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 4 — Expert</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Impact sur les aires et les volumes</div>
+            <div class="card-sub">Longueurs ×k · Aires ×k² · Volumes ×k³ · Applications pratiques</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Tu sais que k multiplie les longueurs. Mais que se passe-t-il pour les <strong>surfaces</strong> et les <strong>volumes</strong> ?
+            C'est ici que beaucoup d'élèves font des erreurs au CE1D. La règle est précise : les longueurs sont ×k,
+            mais les aires sont <strong>×k²</strong> et les volumes sont <strong>×k³</strong>.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Les trois règles fondamentales</h3>
+            <p>
+                Si k est le rapport de similitude pour les longueurs :<br><br>
+                <strong>Longueurs</strong> → multipliées par <strong>k</strong><br>
+                <strong>Aires (surfaces)</strong> → multipliées par <strong>k²</strong> (k au carré)<br>
+                <strong>Volumes</strong> → multipliés par <strong>k³</strong> (k au cube)<br><br>
+                Pourquoi ? Parce qu'une aire = longueur × longueur (deux dimensions → k × k = k²),
+                et un volume = longueur × longueur × longueur (trois dimensions → k × k × k = k³).
+            </p>
+        </div>
+
+        <!-- SVG carré et cube -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="220" fill="#FFF0F5" rx="10"/>
+                <text x="280" y="16" text-anchor="middle" font-size="12" font-weight="900" fill="#560027" font-family="Nunito, sans-serif">Agrandissement k = 2 — Impact sur l'aire</text>
+
+                <!-- Petit carré original -->
+                <rect x="30" y="40" width="60" height="60" fill="#FCE4EC" stroke="#D81B60" stroke-width="2"/>
+                <text x="60" y="75" text-anchor="middle" font-size="11" font-weight="900" fill="#880E4F" font-family="Nunito, sans-serif">3 cm</text>
+                <text x="60" y="120" text-anchor="middle" font-size="10" fill="#880E4F" font-family="Nunito, sans-serif">Aire = 9 cm²</text>
+                <text x="60" y="133" text-anchor="middle" font-size="9" fill="#880E4F" font-family="Nunito, sans-serif">(3 × 3)</text>
+
+                <!-- Flèche k=2 -->
+                <defs><marker id="a4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#880E4F"/></marker></defs>
+                <line x1="105" y1="70" x2="148" y2="70" stroke="#880E4F" stroke-width="2.5" marker-end="url(#a4)"/>
+                <text x="126" y="63" text-anchor="middle" font-size="10" font-weight="900" fill="#880E4F" font-family="Nunito, sans-serif">× k=2</text>
+
+                <!-- Grand carré image -->
+                <rect x="155" y="28" width="120" height="120" fill="#F48FB1" stroke="#880E4F" stroke-width="2.5"/>
+                <text x="215" y="92" text-anchor="middle" font-size="11" font-weight="900" fill="#560027" font-family="Nunito, sans-serif">6 cm</text>
+                <text x="215" y="163" text-anchor="middle" font-size="10" fill="#560027" font-family="Nunito, sans-serif">Aire = 36 cm²</text>
+                <text x="215" y="176" text-anchor="middle" font-size="9" fill="#560027" font-family="Nunito, sans-serif">(6 × 6 = 9 × k²)</text>
+
+                <!-- Annotation rapport -->
+                <rect x="305" y="40" width="235" height="130" rx="8" fill="#FFF0F5" stroke="#D81B60" stroke-width="1.5" stroke-dasharray="5,3"/>
+                <text x="422" y="60" text-anchor="middle" font-size="11" font-weight="900" fill="#560027" font-family="Nunito, sans-serif">Résumé k = 2 :</text>
+                <text x="322" y="82" font-size="11" font-weight="700" fill="#880E4F" font-family="Nunito, sans-serif">Longueur : 3 → 6</text>
+                <text x="480" y="82" text-anchor="end" font-size="11" font-weight="900" fill="#D81B60" font-family="Nunito, sans-serif">× 2 (k)</text>
+                <text x="322" y="104" font-size="11" font-weight="700" fill="#880E4F" font-family="Nunito, sans-serif">Aire : 9 → 36</text>
+                <text x="480" y="104" text-anchor="end" font-size="11" font-weight="900" fill="#D81B60" font-family="Nunito, sans-serif">× 4 (k²)</text>
+                <text x="322" y="126" font-size="11" font-weight="700" fill="#0892D0" font-family="Nunito, sans-serif">Volume : 27 → 216</text>
+                <text x="480" y="126" text-anchor="end" font-size="11" font-weight="900" fill="#0892D0" font-family="Nunito, sans-serif">× 8 (k³)</text>
+                <text x="322" y="148" font-size="9" font-weight="700" fill="#555" font-family="Nunito, sans-serif">(cube de côté 3 → cube de côté 6)</text>
+
+                <text x="280" y="200" text-anchor="middle" font-size="11" font-weight="900" fill="#B71C1C" font-family="Nunito, sans-serif">⚠️ Erreur classique : dire "l'aire est doublée" quand k=2. NON ! Elle est × 4 !</text>
+                <text x="280" y="215" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">k² = 2² = 4  |  k³ = 2³ = 8</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔑 Tableau récapitulatif des puissances</h3>
+            <p>
+                <strong>k = 2 :</strong> longueurs ×2 · aires ×4 · volumes ×8<br>
+                <strong>k = 3 :</strong> longueurs ×3 · aires ×9 · volumes ×27<br>
+                <strong>k = 1/10 :</strong> longueurs ÷10 · aires ÷100 · volumes ÷1000<br>
+                <strong>k = 0,5 :</strong> longueurs ×0,5 · aires ×0,25 · volumes ×0,125
+            </p>
+        </div>
+
+        <!-- Tableau exemples -->
+        <p style="font-size:.93rem;font-weight:700;color:#444;margin-bottom:8px;">Exemple — Maquette d'une maison (k = 1/10 = 0,1) :</p>
+        <table class="data-table">
+            <tr><th>Grandeur</th><th>Formule</th><th>Facteur</th><th>Exemple</th></tr>
+            <tr><td>Longueurs</td><td class="hi">× k = × 0,1</td><td>÷ 10</td><td>10 m → 1 m maquette</td></tr>
+            <tr><td>Aires</td><td class="hi2">× k² = × 0,01</td><td>÷ 100</td><td>50 m² → 0,5 m² maquette</td></tr>
+            <tr><td>Volumes</td><td class="hi3">× k³ = × 0,001</td><td>÷ 1000</td><td>200 m³ → 0,2 m³ maquette</td></tr>
+        </table>
+
+        <div class="trap-box">
+            <h3>⚠️ Le piège le plus fréquent au CE1D !</h3>
+            <p>
+                <strong>"On agrandit une figure de rapport k = 3. Son aire est donc 3 fois plus grande."</strong><br>
+                FAUX ! L'aire est <strong>k² = 9 fois</strong> plus grande. C'est l'erreur la plus répandue en classe de 3e.<br>
+                <strong>Règle d'or :</strong> longueurs ×k · aires ×k² · volumes ×k³. Jamais ×k pour les aires !
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">× k</div>
+                <div class="cas-eq">Longueurs</div>
+                <div class="cas-desc">Périmètre, côtés, rayons, hauteurs : tous multipliés par k.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">× k²</div>
+                <div class="cas-eq">Aires</div>
+                <div class="cas-desc">Surfaces, sections : multipliées par k au carré. k²=k×k.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">× k³</div>
+                <div class="cas-eq">Volumes</div>
+                <div class="cas-desc">Contenances, volumes : multipliés par k au cube. k³=k×k×k.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Aires, volumes, puissances de k</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Un carré a une aire de 5 m². On agrandit la figure avec k = 3. Quelle est l'aire de la nouvelle figure ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">15 m²</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">45 m²</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">8 m²</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">25 m²</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Un cube a un volume de 4 m³. Après une similitude de rapport k = 2, quel est son nouveau volume ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">8 m³</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">16 m³</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">32 m³</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">6 m³</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Une figure a une aire de 20 cm². On la réduit avec k = 0,5. Quelle est l'aire de la figure réduite ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">5 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">10 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">2,5 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">40 cm²</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Pour un agrandissement de rapport k = 4, par quel nombre multiplie-t-on le VOLUME ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">4</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">16</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">64</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">12</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> On agrandit un rectangle de rapport k = 2. Son périmètre passe de 20 cm à ___. Son aire passe de 24 cm² à ___.</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Périmètre → 40 cm · Aire → 48 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Périmètre → 40 cm · Aire → 96 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Périmètre → 22 cm · Aire → 96 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Périmètre → 40 cm · Aire → 192 cm²</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · k, k², k³</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Lors d'une similitude de rapport k, les longueurs sont multipliées par
+                <input class="blank" id="f1a" placeholder="?" style="width:60px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Les aires sont multipliées par
+                <input class="blank" id="f2a" placeholder="?" style="width:60px"> (k au carré).
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Les volumes sont multipliés par
+                <input class="blank" id="f3a" placeholder="?" style="width:60px"> (k au cube).
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Peinture d'une façade (CE1D style)</div>
+                <div class="ex-stmt">
+                    Une maison de maison a une façade de 40 m². Un architecte réalise une maquette à l'échelle 1 : 10 (k = 1/10).<br>
+                    a) Quelle est l'aire de la façade sur la maquette ?<br>
+                    b) On veut peindre la vraie façade. Si la peinture de la maquette coûte 2 €, combien coûtera la peinture de la vraie façade (proportionnellement) ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) k = 1/10 → k² = (1/10)² = 1/100</strong><br>Aire maquette = 40 × (1/100) = <strong>0,4 m²</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Rapport des aires :</strong> Aire réelle / Aire maquette = 40 / 0,4 = 100<br>La vraie façade est 100 fois plus grande → coût = 2 × 100 = <strong>200 €</strong></div></div>
+                <div class="sol-step"><div class="sol-num" style="background:#1CB0F6">💡</div><div class="sol-text" style="color:#0892D0;font-weight:700;">L'aire est × k² = × (1/10)² = × 1/100, donc la vraie façade est 100 fois plus grande que la maquette.</div></div>
+                <div class="final-ans">✅ Aire maquette = <strong>0,4 m²</strong> · Coût réel = <strong>200 €</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Aquarium agrandi (CE1D style)</div>
+                <div class="ex-stmt">
+                    Un aquarium a un volume de 30 litres. On construit un aquarium semblable avec un rapport k = 2.<br>
+                    a) Quel est le volume du nouvel aquarium ?<br>
+                    b) Si l'original pèse 5 kg (sans eau), combien pèse le nouveau (même matériau, même épaisseur proportionnelle) ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Volume :</strong> k = 2 → k³ = 2³ = 8<br>Volume nouvel aquarium = 30 × 8 = <strong>240 litres</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Masse :</strong> La masse est proportionnelle au volume (même matériau).<br>Masse = 5 × k³ = 5 × 8 = <strong>40 kg</strong></div></div>
+                <div class="final-ans">✅ Volume = <strong>240 litres</strong> · Masse = <strong>40 kg</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Trouver k à partir d'une aire (CE1D style)</div>
+                <div class="ex-stmt">
+                    Une photo originale a une surface de 150 cm². On l'agrandit et la nouvelle photo a une surface de 600 cm².<br>
+                    a) Quel est le rapport k² entre les surfaces ?<br>
+                    b) En déduire le rapport de similitude k.<br>
+                    c) Si la photo originale mesure 10 cm de largeur, quelle est la largeur de la grande photo ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) k² :</strong> k² = aire image ÷ aire originale = 600 ÷ 150 = <strong>4</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) k :</strong> k = √(k²) = √4 = <strong>2</strong> (on prend la racine carrée)</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Largeur :</strong> largeur image = largeur originale × k = 10 × 2 = <strong>20 cm</strong></div></div>
+                <div class="final-ans">✅ k² = 4 · k = 2 · Largeur agrandie = <strong>20 cm</strong></div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Trouver k à partir du volume</div>
+                <div class="bonus-stmt">
+                    Une boîte originale a un volume de 8 cm³. Une boîte similaire a un volume de 216 cm³.<br>
+                    a) Calcule k³ (rapport des volumes).<br>
+                    b) En déduire k (rapport de similitude pour les longueurs).<br>
+                    c) Si un côté de la petite boîte mesure 2 cm, quelle est la mesure du côté correspondant dans la grande boîte ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a) k³ :</strong> k³ = volume image ÷ volume original = 216 ÷ 8 = <strong>27</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b) k :</strong> k = ∛(k³) = ∛27 = <strong>3</strong> (racine cubique de 27)</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>c) Côté :</strong> côté image = 2 × 3 = <strong>6 cm</strong><br>Vérification : (6/2)³ = 3³ = 27 = k³ ✓</div></div>
+                <div class="bonus-ans">
+                    k³ = 27 · k = 3 · Côté = <strong>6 cm</strong><br>
+                    Astuce CE1D : volumes → ∛ pour trouver k · aires → √ pour trouver k.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 4 terminé !</h2>
+    <p>Excellent ! Tu maîtrises l'impact de k sur les longueurs, aires et volumes.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Place au grand Défi CE1D — Niveau 5 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Agrandissement &amp; Réduction</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_agrandissement_niveau1.html" class="nav-btn">Niveau 1 — Notion</a>
+        <a href="maths_agrandissement_niveau2.html" class="nav-btn">Niveau 2 — Rapport k</a>
+        <a href="maths_agrandissement_niveau3.html" class="nav-btn">Niveau 3 — Échelles</a>
+        <a href="maths_agrandissement_niveau4.html" class="nav-btn current">▶ Niveau 4 — Aires &amp; volumes</a>
+        <a href="maths_agrandissement_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:2, 3:0, 4:2, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! k=3 → k²=9. Aire image = 5 × 9 = 45 m². L'aire est multipliée par k², pas par k !",
+    2:"✅ Bravo ! k=2 → k³=8. Volume image = 4 × 8 = 32 m³. Le volume est multiplié par k³.",
+    3:"✅ Correct ! k=0,5 → k²=0,25. Aire réduite = 20 × 0,25 = 5 cm².",
+    4:"✅ Parfait ! k=4 → volume ×k³ = ×4³ = ×64. Le volume est multiplié par k au cube.",
+    5:"✅ Exact ! Périmètre ×k=×2 → 20×2=40 cm. Aire ×k²=×4 → 24×4=96 cm². Périmètre ×k, aire ×k² !"
+};
+
+const QCM_ERR = {
+    1:"❌ Non. L'AIRE est multipliée par k², pas par k. k=3 → k²=9. Aire = 5×9 = 45 m². 15 m² serait 5×3 (erreur classique !).",
+    2:"❌ Non. Le VOLUME est multiplié par k³. k=2 → k³=8. Volume = 4×8 = 32 m³. 8 m³ serait 4×2 (erreur), 16 m³ serait 4×4=4×k² (erreur).",
+    3:"❌ Non. k=0,5 → k²=0,5²=0,25. Aire = 20×0,25 = 5 cm². 10 cm² serait 20×0,5 (erreur classique : utiliser k au lieu de k² pour l'aire).",
+    4:"❌ Non. Le volume est multiplié par k³ = 4³ = 64. Pas par k=4, ni k²=16, ni 3×k=12.",
+    5:"❌ Non. Périmètre ×k (longueur) = 20×2 = 40 cm ✓. Mais l'aire ×k² = 24×4 = 96 cm² (pas ×2=48, pas ×8=192 qui serait k³)."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['k']],
+        msgOk:"✅ Exact ! Les longueurs (et périmètres) sont multipliés par k.",
+        msgErr:"❌ Attendu : 'k'. Les longueurs sont multipliées par k (le rapport de similitude)."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['k2','k²','k au carre','k au carré']],
+        msgOk:"✅ Exact ! Les aires sont multipliées par k² (k au carré).",
+        msgErr:"❌ Attendu : 'k²' ou 'k2'. Les aires sont multipliées par k au carré, pas par k."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['k3','k³','k au cube']],
+        msgOk:"✅ Exact ! Les volumes sont multipliés par k³ (k au cube).",
+        msgErr:"❌ Attendu : 'k³' ou 'k3'. Les volumes sont multipliés par k au cube, pas par k ni par k²."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_agrandissement_4', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

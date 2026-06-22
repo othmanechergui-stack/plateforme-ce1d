@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Aires & Volumes · Niveau 1 — Aires des figures planes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#795548; --primary-dark:#4E342E; --primary-mid:#A1887F; --primary-bg:#EFEBE9;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#3E2723 0%,#795548 55%,#BCAAA4 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(62,39,35,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#795548; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#4E342E; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#3E2723,#795548,#BCAAA4); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#3E2723,#4E342E); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#BCAAA4; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #BCAAA4; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .data-table { width:100%; border-collapse:collapse; border-radius:10px; overflow:hidden; margin:14px 0; font-size:.91rem; }
+        .data-table th { background:var(--primary); color:white; padding:9px 12px; font-weight:900; text-align:center; }
+        .data-table th.fc-col { background:#4E342E; }
+        .data-table td { padding:8px 12px; text-align:center; border-bottom:1px solid var(--border); }
+        .data-table tr:nth-child(even) td { background:var(--primary-bg); }
+        .data-table tr:last-child td { border-bottom:none; }
+        .data-table td.total-row { font-weight:900; background:#EFEBE9; color:var(--primary-dark); }
+        .data-table td.fc-cell { font-weight:900; color:#4E342E; background:#D7CCC8; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #BCAAA4; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#3E2723,#795548,#BCAAA4); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #2c1810; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>📐 Aires &amp; Volumes · Aires des figures planes</h1>
+            <p>Niveau 1 · Carré · Rectangle · Triangle · Losange · Cercle · Trapèze</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip off"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 1 — Débutant</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Aires des figures planes (2D)</div>
+            <div class="card-sub">Carré · Rectangle · Triangle · Losange · Cercle · Trapèze · Unités</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            L'<strong>aire</strong> (ou surface) d'une figure, c'est la mesure de l'espace qu'elle occupe.
+            On l'exprime en unités carrées : <strong>cm², m², mm², dm²</strong>.
+            Chaque figure a sa propre formule — apprends-les bien, elles reviennent souvent au CE1D !
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Les 6 formules essentielles</h3>
+            <p>
+                <strong>Carré :</strong> A = côté² = c × c<br>
+                <strong>Rectangle :</strong> A = longueur × largeur = l × L<br>
+                <strong>Triangle :</strong> A = (base × hauteur) ÷ 2 = (b × h) ÷ 2<br>
+                <strong>Losange :</strong> A = (diagonale 1 × diagonale 2) ÷ 2 = (d1 × d2) ÷ 2<br>
+                <strong>Cercle :</strong> A = π × r² ≈ 3,14 × r² (r = rayon)<br>
+                <strong>Trapèze :</strong> A = (grande base + petite base) × hauteur ÷ 2 = (B + b) × h ÷ 2
+            </p>
+        </div>
+
+        <!-- SVG 1 : tableau des 6 formules avec figures annotées -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 260" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="260" fill="#EFEBE9" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#3E2723" font-family="Nunito, sans-serif">Les 6 figures et leurs formules d'aire</text>
+
+                <!-- Carré -->
+                <rect x="20" y="28" width="60" height="60" fill="#BCAAA4" stroke="#795548" stroke-width="2"/>
+                <text x="50" y="57" text-anchor="middle" font-size="9" font-weight="900" fill="#3E2723" font-family="Nunito, sans-serif">côté</text>
+                <text x="50" y="100" text-anchor="middle" font-size="10" font-weight="900" fill="#4E342E" font-family="Nunito, sans-serif">A = c²</text>
+
+                <!-- Rectangle -->
+                <rect x="100" y="38" width="80" height="50" fill="#A1887F" stroke="#795548" stroke-width="2"/>
+                <text x="140" y="67" text-anchor="middle" font-size="9" font-weight="900" fill="white" font-family="Nunito, sans-serif">l × L</text>
+                <text x="140" y="100" text-anchor="middle" font-size="10" font-weight="900" fill="#4E342E" font-family="Nunito, sans-serif">A = l × L</text>
+
+                <!-- Triangle -->
+                <polygon points="220,28 260,88 180,88" fill="#BCAAA4" stroke="#795548" stroke-width="2"/>
+                <line x1="220" y1="28" x2="220" y2="88" stroke="#E65100" stroke-width="1.5" stroke-dasharray="3,2"/>
+                <text x="225" y="60" font-size="8" fill="#E65100" font-family="Nunito, sans-serif" font-weight="900">h</text>
+                <text x="220" y="100" text-anchor="middle" font-size="10" font-weight="900" fill="#4E342E" font-family="Nunito, sans-serif">A = b×h÷2</text>
+
+                <!-- Losange -->
+                <polygon points="330,28 370,58 330,88 290,58" fill="#A1887F" stroke="#795548" stroke-width="2"/>
+                <line x1="290" y1="58" x2="370" y2="58" stroke="#E65100" stroke-width="1.5" stroke-dasharray="3,2"/>
+                <line x1="330" y1="28" x2="330" y2="88" stroke="#E65100" stroke-width="1.5" stroke-dasharray="3,2"/>
+                <text x="330" y="100" text-anchor="middle" font-size="10" font-weight="900" fill="#4E342E" font-family="Nunito, sans-serif">A = d1×d2÷2</text>
+
+                <!-- Cercle -->
+                <circle cx="430" cy="58" r="30" fill="#BCAAA4" stroke="#795548" stroke-width="2"/>
+                <line x1="430" y1="58" x2="460" y2="58" stroke="#E65100" stroke-width="1.5"/>
+                <text x="445" y="53" font-size="8" font-weight="900" fill="#E65100" font-family="Nunito, sans-serif">r</text>
+                <text x="430" y="100" text-anchor="middle" font-size="10" font-weight="900" fill="#4E342E" font-family="Nunito, sans-serif">A = π×r²</text>
+
+                <!-- Trapèze -->
+                <polygon points="30,130 130,130 110,180 50,180" fill="#A1887F" stroke="#795548" stroke-width="2"/>
+                <text x="80" y="148" text-anchor="middle" font-size="8" fill="white" font-weight="900" font-family="Nunito, sans-serif">B (grande base)</text>
+                <text x="80" y="172" text-anchor="middle" font-size="8" fill="white" font-weight="900" font-family="Nunito, sans-serif">b (petite base)</text>
+                <text x="80" y="195" text-anchor="middle" font-size="10" font-weight="900" fill="#4E342E" font-family="Nunito, sans-serif">A = (B+b)×h÷2</text>
+
+                <!-- Unités -->
+                <rect x="160" y="120" width="380" height="80" rx="8" fill="white" stroke="#BCAAA4" stroke-width="2"/>
+                <text x="350" y="138" text-anchor="middle" font-size="11" font-weight="900" fill="#795548" font-family="Nunito, sans-serif">Unités de surface</text>
+                <text x="350" y="158" text-anchor="middle" font-size="10" fill="#3C3C3C" font-family="Nunito, sans-serif">mm²  →  cm²  →  dm²  →  m²  →  km²</text>
+                <text x="350" y="176" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">Chaque palier : × 100 (car surface = longueur × longueur)</text>
+                <text x="350" y="192" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">1 m² = 100 dm² = 10 000 cm² = 1 000 000 mm²</text>
+
+                <text x="280" y="245" text-anchor="middle" font-size="10" font-weight="700" fill="#4E342E" font-family="Nunito, sans-serif">La hauteur (h) est toujours perpendiculaire à la base — pas le côté oblique !</text>
+            </svg>
+        </div>
+
+        <!-- SVG 2 : hauteur vs côté oblique dans le triangle -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 180" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="180" fill="#EFEBE9" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#3E2723" font-family="Nunito, sans-serif">Attention : hauteur ≠ côté oblique</text>
+
+                <!-- Triangle CORRECT avec hauteur perpendiculaire -->
+                <polygon points="80,140 200,140 130,40" fill="#BCAAA4" stroke="#795548" stroke-width="2"/>
+                <line x1="130" y1="40" x2="130" y2="140" stroke="#58CC02" stroke-width="2.5" stroke-dasharray="5,3"/>
+                <rect x="126" y="136" width="8" height="8" fill="none" stroke="#58CC02" stroke-width="2"/>
+                <text x="140" y="100" font-size="9" font-weight="900" fill="#46A302" font-family="Nunito, sans-serif">h ✓</text>
+                <text x="140" y="130" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">(perpendiculaire)</text>
+                <text x="140" y="163" text-anchor="middle" font-size="11" font-weight="900" fill="#46A302" font-family="Nunito, sans-serif">CORRECT</text>
+
+                <!-- Séparateur -->
+                <line x1="280" y1="30" x2="280" y2="160" stroke="#BCAAA4" stroke-width="2" stroke-dasharray="6,4"/>
+
+                <!-- Triangle FAUX avec le côté oblique utilisé comme hauteur -->
+                <polygon points="340,140 460,140 390,40" fill="#FFCDD2" stroke="#E53935" stroke-width="2"/>
+                <line x1="460" y1="140" x2="390" y2="40" stroke="#E53935" stroke-width="2.5"/>
+                <text x="440" y="85" font-size="9" font-weight="900" fill="#B71C1C" font-family="Nunito, sans-serif">côté ✗</text>
+                <text x="400" y="130" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">(oblique ≠ hauteur)</text>
+                <text x="400" y="163" text-anchor="middle" font-size="11" font-weight="900" fill="#B71C1C" font-family="Nunito, sans-serif">FAUX — c'est un côté !</text>
+            </svg>
+        </div>
+
+        <!-- SVG 3 : exemples numériques -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="200" fill="#EFEBE9" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#3E2723" font-family="Nunito, sans-serif">Exemples numériques</text>
+
+                <!-- Rectangle 8×5 -->
+                <rect x="20" y="30" width="80" height="50" fill="#A1887F" stroke="#795548" stroke-width="2"/>
+                <text x="60" y="47" text-anchor="middle" font-size="9" fill="white" font-weight="900" font-family="Nunito, sans-serif">8 cm</text>
+                <text x="15" y="60" text-anchor="end" font-size="9" fill="#3E2723" font-weight="900" font-family="Nunito, sans-serif">5 cm</text>
+                <text x="60" y="95" text-anchor="middle" font-size="10" font-weight="900" fill="#4E342E" font-family="Nunito, sans-serif">A = 8×5 = 40 cm²</text>
+
+                <!-- Triangle b=10, h=6 -->
+                <polygon points="160,80 230,80 175,30" fill="#BCAAA4" stroke="#795548" stroke-width="2"/>
+                <line x1="175" y1="30" x2="175" y2="80" stroke="#E65100" stroke-width="1.5" stroke-dasharray="3,2"/>
+                <text x="183" y="58" font-size="9" fill="#E65100" font-weight="900" font-family="Nunito, sans-serif">6</text>
+                <text x="195" y="93" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">b = 10 cm</text>
+                <text x="195" y="110" text-anchor="middle" font-size="10" font-weight="900" fill="#4E342E" font-family="Nunito, sans-serif">A = 10×6÷2 = 30 cm²</text>
+
+                <!-- Cercle r=5 -->
+                <circle cx="320" cy="58" r="32" fill="#A1887F" stroke="#795548" stroke-width="2"/>
+                <line x1="320" y1="58" x2="352" y2="58" stroke="#E65100" stroke-width="1.5"/>
+                <text x="336" y="53" font-size="9" font-weight="900" fill="#E65100" font-family="Nunito, sans-serif">r=5</text>
+                <text x="320" y="110" text-anchor="middle" font-size="10" font-weight="900" fill="#4E342E" font-family="Nunito, sans-serif">A = 3,14×25 = 78,5 cm²</text>
+
+                <!-- Trapèze B=10, b=6, h=4 -->
+                <polygon points="400,80 480,80 470,40 410,40" fill="#BCAAA4" stroke="#795548" stroke-width="2"/>
+                <text x="440" y="58" text-anchor="middle" font-size="9" fill="#3E2723" font-weight="900" font-family="Nunito, sans-serif">B=10, b=6</text>
+                <text x="440" y="110" text-anchor="middle" font-size="10" font-weight="900" fill="#4E342E" font-family="Nunito, sans-serif">A=(10+6)×4÷2=32 cm²</text>
+
+                <!-- Losange d1=8, d2=6 -->
+                <polygon points="500,58 520,80 500,102 480,80" fill="#A1887F" stroke="#795548" stroke-width="2"/>
+                <text x="500" y="130" text-anchor="middle" font-size="10" font-weight="900" fill="#4E342E" font-family="Nunito, sans-serif">A=8×6÷2=24 cm²</text>
+                <text x="500" y="145" text-anchor="middle" font-size="8" fill="#555" font-family="Nunito, sans-serif">d1=8, d2=6</text>
+
+                <text x="280" y="185" text-anchor="middle" font-size="10" font-weight="700" fill="#555" font-family="Nunito, sans-serif">Toujours indiquer l'unité dans ta réponse finale (cm², m², etc.)</text>
+            </svg>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Pièges classiques sur les aires</h3>
+            <p>
+                <strong>Hauteur ≠ côté oblique :</strong> Dans un triangle, la hauteur (h) est perpendiculaire à la base. Le côté oblique n'est PAS la hauteur !<br>
+                <strong>Rayon ≠ diamètre :</strong> Si on te donne le diamètre (d), le rayon r = d ÷ 2. N'utilise jamais directement le diamètre dans la formule A = π × r².<br>
+                <strong>Unité :</strong> L'aire s'exprime TOUJOURS en unités <em>carrées</em> (cm², m²…), jamais en cm ou m seuls.
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">c²</div>
+                <div class="cas-eq">Carré de côté c</div>
+                <div class="cas-desc">Ex : c = 4 cm → A = 4² = 16 cm²</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">l × L</div>
+                <div class="cas-eq">Rectangle</div>
+                <div class="cas-desc">Ex : 8 × 5 = 40 cm²</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">b × h ÷ 2</div>
+                <div class="cas-eq">Triangle</div>
+                <div class="cas-desc">h perpendiculaire à la base !</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">d1 × d2 ÷ 2</div>
+                <div class="cas-eq">Losange</div>
+                <div class="cas-desc">Ex : 8 × 6 ÷ 2 = 24 cm²</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">π × r²</div>
+                <div class="cas-eq">Cercle (rayon r)</div>
+                <div class="cas-desc">Ex : r=5 → 3,14 × 25 = 78,5 cm²</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">(B+b)×h÷2</div>
+                <div class="cas-eq">Trapèze</div>
+                <div class="cas-desc">B = grande base, b = petite base</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Formules d'aire des figures planes</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Quelle est l'aire d'un rectangle de longueur 8 cm et de largeur 5 cm ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">A. 26 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">B. 40 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">C. 13 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">D. 20 cm²</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Quelle est l'aire d'un triangle de base 10 cm et de hauteur 6 cm ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">A. 60 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">B. 15 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">C. 30 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">D. 45 cm²</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Quelle est l'aire d'un cercle de rayon 5 cm (π ≈ 3,14) ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">A. 78,5 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">B. 31,4 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">C. 15,7 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">D. 314 cm²</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Quelle est l'aire d'un losange dont les diagonales mesurent 8 cm et 6 cm ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">A. 48 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">B. 24 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">C. 14 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">D. 12 cm²</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Quelle est l'aire d'un trapèze de grande base 10 cm, petite base 6 cm et hauteur 4 cm ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">A. 16 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">B. 40 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">C. 32 cm²</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">D. 24 cm²</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Formules des figures planes</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Aire du rectangle = <input class="blank" id="f1a" placeholder="?" style="width:100px"> × largeur.
+                Aire du triangle = base × hauteur ÷ <input class="blank" id="f1b" placeholder="?" style="width:50px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Aire du cercle = π × <input class="blank" id="f2a" placeholder="?" style="width:60px">.
+                Pour r = 3 cm, A ≈ 3,14 × <input class="blank" id="f2b" placeholder="?" style="width:50px"> ≈ <input class="blank" id="f2c" placeholder="?" style="width:70px"> cm².
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Dans un triangle, la hauteur est <input class="blank" id="f3a" placeholder="?" style="width:130px"> à la base.
+                Elle n'est PAS le <input class="blank" id="f3b" placeholder="?" style="width:110px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Triangle rectangle</div>
+                <div class="ex-stmt">
+                    Calcule l'aire d'un triangle rectangle dont les deux cathètes (côtés de l'angle droit) mesurent 6 cm et 8 cm.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Identifier la formule :</strong> Triangle → A = base × hauteur ÷ 2</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Identifier base et hauteur :</strong> Dans un triangle rectangle, les deux cathètes sont perpendiculaires entre elles. L'une joue le rôle de la base (6 cm), l'autre est la hauteur (8 cm).</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Calculer :</strong> A = 6 × 8 ÷ 2 = 48 ÷ 2 = <strong>24 cm²</strong></div></div>
+                <div class="final-ans">✅ Aire = <strong>24 cm²</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Losange</div>
+                <div class="ex-stmt">
+                    Calcule l'aire d'un losange dont les diagonales mesurent 12 cm et 9 cm.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Formule du losange :</strong> A = (d1 × d2) ÷ 2</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Appliquer :</strong> A = (12 × 9) ÷ 2 = 108 ÷ 2 = <strong>54 cm²</strong></div></div>
+                <div class="final-ans">✅ Aire du losange = <strong>54 cm²</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Cercle avec diamètre</div>
+                <div class="ex-stmt">
+                    Calcule l'aire d'un cercle dont le <strong>diamètre</strong> mesure 14 cm. (π ≈ 3,14)
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Trouver le rayon :</strong> diamètre = 14 cm → rayon r = 14 ÷ 2 = <strong>7 cm</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Formule :</strong> A = π × r²</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Calculer :</strong> A = 3,14 × 7² = 3,14 × 49 = <strong>153,86 cm²</strong></div></div>
+                <div class="final-ans">✅ Aire du cercle = <strong>153,86 cm²</strong></div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Carré et rectangle de même aire</div>
+                <div class="bonus-stmt">
+                    Un carré et un rectangle ont la même aire. Le carré a un côté de 6 cm. Le rectangle a une largeur de 4 cm.<br>
+                    Quelle est la longueur du rectangle ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Aire du carré :</strong> A = 6² = 36 cm²</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Le rectangle a la même aire :</strong> l × L = 36 cm²<br>On connaît la largeur : L = 4 cm</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>Calculer la longueur :</strong> l = 36 ÷ 4 = <strong>9 cm</strong></div></div>
+                <div class="bonus-ans">
+                    La longueur du rectangle est <strong>9 cm</strong><br>
+                    Vérification : 9 × 4 = 36 cm² = aire du carré ✓
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 1 terminé !</h2>
+    <p>Bravo ! Tu maîtrises les formules d'aire des figures planes.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 2 — Volumes !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Aires &amp; Volumes</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_aires_niveau1.html" class="nav-btn current">▶ N1 — Aires 2D</a>
+        <a href="maths_aires_niveau2.html" class="nav-btn">N2 — Volumes</a>
+        <a href="maths_aires_niveau3.html" class="nav-btn">N3 — Conversions</a>
+        <a href="maths_aires_niveau4.html" class="nav-btn">N4 — Problèmes</a>
+        <a href="maths_aires_niveau5.html" class="nav-btn">N5 — Défi CE1D</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:2, 3:0, 4:1, 5:2};
+
+const QCM_OK = {
+    1:"✅ Exact ! Aire d'un rectangle = longueur × largeur = 8 × 5 = 40 cm².",
+    2:"✅ Bravo ! Aire d'un triangle = base × hauteur ÷ 2 = 10 × 6 ÷ 2 = 30 cm².",
+    3:"✅ Correct ! A = π × r² = 3,14 × 5² = 3,14 × 25 = 78,5 cm².",
+    4:"✅ Parfait ! Aire du losange = (d1 × d2) ÷ 2 = (8 × 6) ÷ 2 = 48 ÷ 2 = 24 cm².",
+    5:"✅ Exact ! A = (B + b) × h ÷ 2 = (10 + 6) × 4 ÷ 2 = 16 × 4 ÷ 2 = 32 cm²."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Aire rectangle = longueur × largeur = 8 × 5 = 40 cm². Le périmètre serait 2×(8+5) = 26 cm — ne confonds pas aire et périmètre !",
+    2:"❌ Non. Aire triangle = base × hauteur ÷ 2 = 10 × 6 ÷ 2 = 30 cm². N'oublie pas de diviser par 2 !",
+    3:"❌ Non. A = π × r² = 3,14 × 5² = 3,14 × 25 = 78,5 cm². r² = 5 × 5 = 25, pas 5 × 2 = 10 !",
+    4:"❌ Non. Aire losange = (d1 × d2) ÷ 2 = (8 × 6) ÷ 2 = 48 ÷ 2 = 24 cm². N'oublie pas de diviser par 2 !",
+    5:"❌ Non. A = (B + b) × h ÷ 2 = (10 + 6) × 4 ÷ 2 = 64 ÷ 2 = 32 cm². Additionne d'abord les deux bases, puis multiplie par h et divise par 2."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['longueur'],['2']],
+        msgOk:"✅ Aire rectangle = longueur × largeur. Aire triangle = base × hauteur ÷ 2.",
+        msgErr:"❌ Attendus : 'longueur' et '2' (on divise par 2 pour le triangle)."
+    },
+    2:{
+        fields:['f2a','f2b','f2c'],
+        accepted:[['r²','r2','rayon²','rayon au carré'],['9'],['28,26','28.26']],
+        msgOk:"✅ Aire cercle = π × r². Pour r=3 : A = 3,14 × 9 = 28,26 cm².",
+        msgErr:"❌ Attendus : 'r²', puis '9' (car 3² = 9), puis '28,26' cm²."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['perpendiculaire'],['cote oblique','côté oblique','oblique','cote incline','côté incliné']],
+        msgOk:"✅ La hauteur est perpendiculaire à la base. Le côté oblique n'est PAS la hauteur !",
+        msgErr:"❌ Attendus : 'perpendiculaire' et 'côté oblique'."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ²]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_aires_1', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

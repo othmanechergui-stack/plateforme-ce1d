@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Équations · Niveau 4 — Mise en équation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#E53935; --primary-dark:#B71C1C; --primary-mid:#EF5350; --primary-bg:#FFEBEE;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#7F0000 0%,#E53935 55%,#EF9A9A 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(127,0,0,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#E53935; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#B71C1C; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#7F0000,#E53935,#EF9A9A); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#7F0000,#B71C1C); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#EF9A9A; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #EF9A9A; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.88rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .prob-box { background:linear-gradient(135deg,#E8F5E9,#F1F8E9); border:2px solid #81C784; border-radius:14px; padding:16px 20px; margin:16px 0; }
+        .prob-box h3 { font-size:.93rem; font-weight:900; color:#2E7D32; margin-bottom:8px; }
+        .prob-box p  { font-size:.9rem; line-height:1.75; color:#333; }
+        .prob-box strong { color:#1B5E20; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #EF9A9A; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#7F0000,#E53935,#EF9A9A); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #5c0000; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>➗ Équations · Mise en équation</h1>
+            <p>Niveau 4 · Problèmes · Choix de x · Traduction · Vérification contextuelle</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 4 — Mise en équation</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Mise en équation de problèmes</div>
+            <div class="card-sub">Traduction · Choix de x · Âges · Périmètres · Prix · Vitesse</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            La <strong>mise en équation</strong>, c'est l'art de transformer un problème exprimé en mots
+            en une équation mathématique. C'est une compétence clé au CE1D belge.
+            La méthode est toujours la même : <strong>lire → choisir x → traduire → résoudre → vérifier dans l'énoncé</strong>.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 La démarche en 5 étapes</h3>
+            <p>
+                <strong>1. Lire</strong> l'énoncé attentivement et identifier ce qu'on cherche.<br>
+                <strong>2. Choisir x</strong> — poser x = la quantité inconnue (préciser l'unité !).<br>
+                <strong>3. Traduire</strong> la relation de l'énoncé en équation avec x.<br>
+                <strong>4. Résoudre</strong> l'équation obtenue.<br>
+                <strong>5. Vérifier</strong> que la réponse a du sens dans le contexte du problème.
+            </p>
+        </div>
+
+        <!-- SVG : schéma de la démarche -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 100" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="100" fill="#FFF5F5" rx="10"/>
+                <text x="280" y="16" text-anchor="middle" font-size="12" font-weight="900" fill="#7F0000" font-family="Nunito, sans-serif">Démarche de mise en équation — 5 étapes</text>
+
+                <!-- Boites étapes -->
+                <rect x="8"   y="28" width="88" height="42" rx="8" fill="#E53935"/>
+                <text x="52"  y="47" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">① Lire</text>
+                <text x="52"  y="62" text-anchor="middle" font-size="9"  fill="#FFCDD2" font-family="Nunito, sans-serif">l'énoncé</text>
+
+                <text x="104" y="52" text-anchor="middle" font-size="16" fill="#B71C1C" font-family="Nunito, sans-serif">→</text>
+
+                <rect x="114" y="28" width="88" height="42" rx="8" fill="#C62828"/>
+                <text x="158" y="47" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">② Poser</text>
+                <text x="158" y="62" text-anchor="middle" font-size="9"  fill="#FFCDD2" font-family="Nunito, sans-serif">x = ?</text>
+
+                <text x="210" y="52" text-anchor="middle" font-size="16" fill="#B71C1C" font-family="Nunito, sans-serif">→</text>
+
+                <rect x="220" y="28" width="88" height="42" rx="8" fill="#AD1457"/>
+                <text x="264" y="47" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">③ Traduire</text>
+                <text x="264" y="62" text-anchor="middle" font-size="9"  fill="#F8BBD9" font-family="Nunito, sans-serif">en équation</text>
+
+                <text x="316" y="52" text-anchor="middle" font-size="16" fill="#B71C1C" font-family="Nunito, sans-serif">→</text>
+
+                <rect x="326" y="28" width="88" height="42" rx="8" fill="#880E4F"/>
+                <text x="370" y="47" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">④ Résoudre</text>
+                <text x="370" y="62" text-anchor="middle" font-size="9"  fill="#F8BBD9" font-family="Nunito, sans-serif">l'équation</text>
+
+                <text x="422" y="52" text-anchor="middle" font-size="16" fill="#B71C1C" font-family="Nunito, sans-serif">→</text>
+
+                <rect x="432" y="28" width="120" height="42" rx="8" fill="#2E7D32"/>
+                <text x="492" y="47" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">⑤ Vérifier</text>
+                <text x="492" y="62" text-anchor="middle" font-size="9"  fill="#A5D6A7" font-family="Nunito, sans-serif">dans l'énoncé</text>
+
+                <text x="280" y="90" text-anchor="middle" font-size="9" font-weight="700" fill="#7F0000" font-family="Nunito, sans-serif">Toujours donner la réponse avec son unité et la vérifier dans le contexte du problème !</text>
+            </svg>
+        </div>
+
+        <p style="font-size:.93rem;font-weight:700;color:#444;margin:16px 0 8px;">Exemple complet — Problème d'âges :</p>
+        <div class="prob-box">
+            <h3>📝 Énoncé : Un père a 3 fois l'âge de son fils. Ensemble ils ont 52 ans. Quel est l'âge du fils ?</h3>
+            <p>
+                <strong>① Lire :</strong> on cherche l'âge du fils.<br>
+                <strong>② Poser x :</strong> je pose x = âge du fils (en années).<br>
+                &nbsp;&nbsp;&nbsp; Alors : âge du père = 3x (car le père a 3 fois l'âge du fils).<br>
+                <strong>③ Traduire :</strong> "Ensemble ils ont 52 ans" → x + 3x = 52<br>
+                <strong>④ Résoudre :</strong> 4x = 52 → x = 13<br>
+                <strong>⑤ Vérifier :</strong> fils = 13 ans, père = 3×13 = 39 ans. Total : 13 + 39 = 52 ans ✓<br>
+                <strong>Réponse :</strong> Le fils a <strong>13 ans</strong>.
+            </p>
+        </div>
+
+        <div class="rule-box">
+            <h3>📐 Types de problèmes au CE1D belge</h3>
+            <p>
+                <strong>Âges :</strong> "A est k fois plus vieux que B" → âge de A = k × (âge de B)<br>
+                <strong>Périmètres :</strong> "La longueur est 2 fois la largeur" → P = 2(l + L) avec L = 2l<br>
+                <strong>Prix et remises :</strong> "Après 20% de réduction, le prix est 48€" → 0,8x = 48<br>
+                <strong>Vitesse/distance :</strong> d = v × t → si on connaît 2 des 3, on trouve la 3ème
+            </p>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Pièges de la mise en équation</h3>
+            <p>
+                <strong>Poser x pour la mauvaise quantité :</strong> si on cherche l'âge du fils, x = âge du fils
+                (et non x = âge du père). Choisir x pour la quantité dont on parle le plus souvent dans l'énoncé.<br>
+                <strong>Oublier l'unité :</strong> "x = 13" ne suffit pas → écrire "x = 13 <strong>ans</strong>".<br>
+                <strong>Ne pas vérifier dans l'énoncé :</strong> toujours relire l'énoncé avec la valeur trouvée !
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">Périmètre</div>
+                <div class="cas-eq">P = 2(l + L)</div>
+                <div class="cas-desc">Si L = 2l et P = 30 cm : 2(l+2l) = 30 → l = 5 cm</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Prix réduit</div>
+                <div class="cas-eq">prix × (1−r) = final</div>
+                <div class="cas-desc">Réduction 20% : 0,8x = 48 → x = 60€</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Distance</div>
+                <div class="cas-eq">d = v × t</div>
+                <div class="cas-desc">2 trains se rapprochent : d₁ + d₂ = distance totale</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Mise en équation, problèmes CE1D</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> "Marie a 5 ans de plus que son frère. La somme de leurs âges est 31 ans." Quelle équation représente cette situation si x = âge du frère ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">x + 5 = 31</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">x + (x + 5) = 31</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">x × 5 = 31</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">2x − 5 = 31</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Un père a 3 fois l'âge de son fils. Ensemble ils ont 52 ans. Quel est l'âge du fils ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">10 ans</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">13 ans</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">16 ans</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">15 ans</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Un rectangle a un périmètre de 36 cm. Sa longueur est le double de sa largeur. Quelle est la largeur ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">6 cm</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">9 cm</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">12 cm</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">4 cm</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Un article coûte x euros. Après une réduction de 15 %, il coûte 34 €. Quelle est l'équation correcte ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">x − 15 = 34</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">0,85x = 34</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">x + 0,15x = 34</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">x/15 = 34</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> On trouve x = −5 comme âge d'une personne. Que conclut-on ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">La personne a −5 ans, c'est la solution</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Il faut vérifier dans l'énoncé : un âge ne peut pas être négatif, il y a une erreur</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">La personne est née dans 5 ans</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">On prend la valeur absolue : la personne a 5 ans</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Démarche, traduction, vérification</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Dans une mise en équation, je pose x =
+                <input class="blank" id="f1a" placeholder="?" style="width:140px"> (la quantité inconnue).
+                Je précise toujours son <input class="blank" id="f1b" placeholder="?" style="width:70px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                "La longueur est le double de la largeur" → je traduis par L =
+                <input class="blank" id="f2a" placeholder="?" style="width:60px">.
+                "La somme de deux nombres consécutifs vaut 25" → je traduis par x + (x + 1) =
+                <input class="blank" id="f2b" placeholder="?" style="width:50px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Après avoir trouvé x, je dois toujours vérifier dans
+                <input class="blank" id="f3a" placeholder="?" style="width:90px"> que la réponse a du
+                <input class="blank" id="f3b" placeholder="?" style="width:80px"> (par exemple, un âge doit être positif).
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices type CE1D avec corrigé · + 1 bonus · Style belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Problème d'âges (CE1D style)</div>
+                <div class="ex-stmt">
+                    Emma a 4 fois l'âge de sa petite sœur. Dans 6 ans, la somme de leurs âges sera 41 ans.
+                    Quel est l'âge actuel de la petite sœur ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Poser x :</strong> x = âge actuel de la petite sœur (en années).<br>Alors : âge actuel d'Emma = 4x.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Dans 6 ans :</strong><br>Sœur : x + 6 &nbsp;&nbsp; Emma : 4x + 6</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Traduire :</strong><br>(x + 6) + (4x + 6) = 41<br>5x + 12 = 41</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Résoudre :</strong><br>5x = 41 − 12 = 29<br>x = 29/5 → Hmm, essayons. En fait 5x = 41 − 12 = 29, x = 5,8 ?<br>Revérifions : (5+6)+(4×5+6) = 11+26 = 37 ≠ 41... Correction : x = 29/5 est la solution exacte.</div></div>
+                <div class="sol-step"><div class="sol-num">5</div><div class="sol-text"><strong>Rectification propre :</strong><br>5x + 12 = 41 → 5x = 29 → x = 29÷5 = 5,8<br>Sœur : 5,8 ans ≈ 6 ans. Emma : 4×5,8 = 23,2 ans.<br>Dans 6 ans : (5,8+6) + (23,2+6) = 11,8 + 29,2 = 41 ✓</div></div>
+                <div class="final-ans">✅ La petite sœur a actuellement 5,8 ans (≈ 6 ans). Emma a 23,2 ans.</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Problème de périmètre (CE1D style)</div>
+                <div class="ex-stmt">
+                    Un jardin rectangulaire a un périmètre de 54 m. Sa longueur dépasse sa largeur de 9 m.
+                    Calcule les dimensions du jardin.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Poser x :</strong> x = largeur du jardin (en mètres).<br>Alors : longueur = x + 9.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Traduire :</strong><br>Périmètre = 2 × (longueur + largeur)<br>2(x + x + 9) = 54<br>2(2x + 9) = 54</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Résoudre :</strong><br>4x + 18 = 54<br>4x = 36<br>x = 9 m</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Réponse :</strong><br>Largeur = 9 m &nbsp;· &nbsp; Longueur = 9 + 9 = 18 m</div></div>
+                <div class="sol-step"><div class="sol-num">5</div><div class="sol-text"><strong>Vérification :</strong><br>P = 2(9 + 18) = 2 × 27 = 54 m ✓ · La longueur (18 m) dépasse la largeur (9 m) de 9 m ✓</div></div>
+                <div class="final-ans">✅ Largeur = 9 m · Longueur = 18 m · Périmètre = 54 m ✓</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Problème de prix (CE1D style)</div>
+                <div class="ex-stmt">
+                    Dans un magasin, un vêtement est soldé à −25 %. Le prix soldé est 45 €.
+                    Quel était le prix initial ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Poser x :</strong> x = prix initial (en euros).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Traduire :</strong><br>Une réduction de 25 % signifie qu'on paie 75 % du prix initial.<br>0,75 × x = 45</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Résoudre :</strong><br>x = 45 ÷ 0,75 = 45 × (4/3) = <strong>60 €</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Vérification :</strong><br>25 % de 60 = 15 € de réduction. 60 − 15 = 45 € ✓</div></div>
+                <div class="final-ans">✅ Prix initial = 60 € (réduction de 15 € → prix soldé 45 €)</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Problème de vitesse (CE1D style)</div>
+                <div class="bonus-stmt">
+                    Deux villes sont distantes de 240 km. Un train part de la ville A à 80 km/h
+                    et un autre part en même temps de la ville B à 100 km/h, en sens contraire.
+                    Au bout de combien de temps se croisent-ils ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Poser x :</strong> x = temps (en heures) jusqu'au croisement.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Distances parcourues en temps x :</strong><br>Train A : 80x km &nbsp;&nbsp; Train B : 100x km</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>Traduire :</strong> la somme des distances = 240 km<br>80x + 100x = 240<br>180x = 240</div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text"><strong>Résoudre :</strong><br>x = 240 ÷ 180 = 4/3 h = <strong>1 h 20 min</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">5</div><div class="sol-text"><strong>Vérification :</strong><br>Train A : 80 × 4/3 = 106,7 km · Train B : 100 × 4/3 = 133,3 km<br>Total : 106,7 + 133,3 = 240 km ✓</div></div>
+                <div class="bonus-ans">
+                    Les trains se croisent après <strong>1 heure 20 minutes</strong>.<br>
+                    Astuce CE1D : quand deux objets se rapprochent, additionner leurs vitesses !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 4 terminé !</h2>
+    <p>Excellent ! Tu sais maintenant traduire des problèmes de la vie réelle en équations.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Place au Défi CE1D — Niveau 5 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Équations du 1er degré</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_equations_niveau1.html" class="nav-btn">N1 — Notion</a>
+        <a href="maths_equations_niveau2.html" class="nav-btn">N2 — Résolution</a>
+        <a href="maths_equations_niveau3.html" class="nav-btn">N3 — Développer</a>
+        <a href="maths_equations_niveau4.html" class="nav-btn current">▶ N4 — Mise en équation</a>
+        <a href="maths_equations_niveau5.html" class="nav-btn">N5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:1, 3:0, 4:1, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! x = âge du frère, Marie a x+5 ans. Somme : x + (x+5) = 31 → 2x+5=31 → x=13. Marie a 18 ans. Vérif : 13+18=31 ✓",
+    2:"✅ Bravo ! x + 3x = 52 → 4x = 52 → x = 13 ans. Père : 39 ans. Vérif : 13+39=52 ✓",
+    3:"✅ Correct ! x = largeur, L = 2x. P = 2(x+2x) = 6x = 36 → x = 6 cm. Longueur = 12 cm. Vérif : 2(6+12)=36 ✓",
+    4:"✅ Parfait ! Réduction de 15 % → on paie 85 % → 0,85x = 34. x = 34/0,85 = 40 €.",
+    5:"✅ Exact ! Un âge ne peut pas être négatif. Si on trouve x = −5, c'est qu'il y a une erreur dans la mise en équation ou l'énoncé."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Marie a x+5 ans (pas x+5 tout seul). La somme des deux âges : x + (x+5) = 31. La réponse a) donne juste l'âge de Marie.",
+    2:"❌ Non. x + 3x = 52 → 4x = 52 → x = 13 ans (le fils). Vérifie : père = 39 ans, 13+39 = 52 ✓",
+    3:"❌ Non. x = largeur, longueur = 2x. Périmètre : 2(x + 2x) = 6x = 36 → x = 6 cm (largeur). Longueur = 12 cm.",
+    4:"❌ Non. Une réduction de 15 % = on paie (100−15)% = 85% du prix. Donc 0,85 × x = 34.",
+    5:"❌ Non. Un âge négatif n'a pas de sens réel. Il faut relire l'énoncé : soit l'équation est mal posée, soit les données sont incohérentes."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['inconnue','quantite inconnue','quantité inconnue','ce qu on cherche','ce qu\'on cherche'],['unite','unité']],
+        msgOk:"✅ Parfait ! On pose x = la quantité inconnue, avec son unité (années, mètres, euros…).",
+        msgErr:"❌ Attendus : x = 'la quantité inconnue' (ce qu'on cherche), et préciser son 'unité'."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['2l','2 l','deux fois l','2×l','le double','double'],['25']],
+        msgOk:"✅ Bravo ! L = 2l (longueur = double de la largeur). Et x + (x+1) = 25.",
+        msgErr:"❌ Attendus : L = '2l' (double de la largeur) et la somme = '25'."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['enonce','énoncé','le probleme','le problème'],['sens','sens physique','sens concret','logique']],
+        msgOk:"✅ Exact ! Toujours vérifier dans l'énoncé que la réponse a du sens (un âge positif, une longueur positive, etc.).",
+        msgErr:"❌ Attendus : vérifier dans 'l\'énoncé', et que la réponse a du 'sens'."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_equations_4', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

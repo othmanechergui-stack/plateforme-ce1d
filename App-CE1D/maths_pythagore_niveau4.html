@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Théorème de Pythagore · Niveau 4 — Applications concrètes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#0097A7; --primary-dark:#006064; --primary-mid:#26C6DA; --primary-bg:#E0F7FA;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#00363A 0%,#0097A7 55%,#80DEEA 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(0,54,58,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#0097A7; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#006064; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#00363A,#0097A7,#80DEEA); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#00363A,#006064); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#80DEEA; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #80DEEA; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #80DEEA; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#00363A,#0097A7,#80DEEA); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #002729; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>📐 Pythagore · Applications concrètes</h1>
+            <p>Niveau 4 · Échelle · Diagonale · Distance entre points · Hauteur de triangle</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 4 — Applications</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Applications concrètes de Pythagore</div>
+            <div class="card-sub">Échelle · Diagonale de rectangle · Distance entre points · Hauteur de triangle</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Le théorème de Pythagore s'applique partout : dans des problèmes de géométrie en contexte réel.
+            La clé est toujours la même : <strong>identifier le triangle rectangle caché</strong> dans la situation,
+            puis appliquer la formule c² = a² + b².
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Étape clé — Identifier le triangle rectangle dans le problème</h3>
+            <p>
+                Un problème concret contient souvent un triangle rectangle "invisible".<br>
+                <strong>Exemples :</strong><br>
+                • Une échelle contre un mur forme un triangle rectangle (mur vertical, sol horizontal, échelle oblique).<br>
+                • La diagonale d'un rectangle crée deux triangles rectangles.<br>
+                • La distance entre deux points sur quadrillage se calcule avec un triangle rectangle.<br>
+                Une fois le triangle identifié, le reste est du Pythagore classique !
+            </p>
+        </div>
+
+        <!-- SVG 1 : échelle contre un mur -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="230" fill="#E0F7FA" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#00363A" font-family="Nunito, sans-serif">Situation 1 — Échelle contre un mur</text>
+
+                <!-- Sol -->
+                <line x1="30" y1="190" x2="320" y2="190" stroke="#6D4C41" stroke-width="4" stroke-linecap="round"/>
+                <!-- Mur -->
+                <rect x="30" y="50" width="14" height="140" fill="#90A4AE"/>
+                <line x1="37" y1="50" x2="37" y2="190" stroke="#546E7A" stroke-width="3"/>
+
+                <!-- Angle droit sol/mur -->
+                <rect x="37" y="172" width="18" height="18" fill="none" stroke="#0097A7" stroke-width="2"/>
+
+                <!-- Échelle (hypoténuse) -->
+                <line x1="37" y1="60" x2="220" y2="190" stroke="#FF9600" stroke-width="5" stroke-linecap="round"/>
+
+                <!-- Labels -->
+                <text x="22" y="128" text-anchor="end" font-size="13" font-weight="900" fill="#006064" font-family="Nunito, sans-serif">b = 4 m</text>
+                <text x="130" y="208" text-anchor="middle" font-size="13" font-weight="900" fill="#006064" font-family="Nunito, sans-serif">a = 3 m</text>
+                <text x="155" y="115" font-size="13" font-weight="900" fill="#D32F2F" font-family="Nunito, sans-serif">c = ? (échelle)</text>
+
+                <!-- Flèche vers échelle -->
+                <line x1="175" y1="118" x2="145" y2="128" stroke="#D32F2F" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+                <!-- Boîte solution -->
+                <rect x="340" y="40" width="205" height="155" rx="8" fill="white" stroke="#80DEEA" stroke-width="2"/>
+                <text x="442" y="60" text-anchor="middle" font-size="11" font-weight="900" fill="#00363A" font-family="Nunito, sans-serif">Calcul</text>
+                <text x="352" y="82" font-size="10" font-weight="700" fill="#555" font-family="Nunito, sans-serif">Triangle rectangle :</text>
+                <text x="352" y="100" font-size="10" font-weight="700" fill="#555" font-family="Nunito, sans-serif">sol ⊥ mur → angle droit</text>
+                <text x="352" y="120" font-size="11" font-weight="900" fill="#006064" font-family="Nunito, sans-serif">c² = a² + b²</text>
+                <text x="352" y="139" font-size="11" font-weight="900" fill="#006064" font-family="Nunito, sans-serif">c² = 3² + 4²</text>
+                <text x="352" y="158" font-size="11" font-weight="900" fill="#006064" font-family="Nunito, sans-serif">c² = 9 + 16 = 25</text>
+                <text x="352" y="178" font-size="13" font-weight="900" fill="#D32F2F" font-family="Nunito, sans-serif">c = √25 = 5 m</text>
+            </svg>
+        </div>
+
+        <!-- SVG 2 : diagonale d'un rectangle -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="210" fill="#E0F7FA" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#00363A" font-family="Nunito, sans-serif">Situation 2 — Diagonale d'un rectangle</text>
+
+                <!-- Rectangle -->
+                <rect x="40" y="50" width="220" height="130" fill="#B2EBF2" stroke="#0097A7" stroke-width="2.5"/>
+
+                <!-- Angle droit bas-gauche -->
+                <rect x="40" y="162" width="18" height="18" fill="none" stroke="#0097A7" stroke-width="2"/>
+
+                <!-- Diagonale -->
+                <line x1="40" y1="180" x2="260" y2="50" stroke="#D32F2F" stroke-width="2.5" stroke-dasharray="6,3"/>
+
+                <!-- Labels -->
+                <text x="150" y="200" text-anchor="middle" font-size="13" font-weight="900" fill="#006064" font-family="Nunito, sans-serif">L (longueur)</text>
+                <text x="20"  y="118" text-anchor="end"   font-size="13" font-weight="900" fill="#006064" font-family="Nunito, sans-serif">l (largeur)</text>
+                <text x="165" y="108" font-size="13" font-weight="900" fill="#D32F2F" font-family="Nunito, sans-serif">d = ?</text>
+
+                <!-- Boîte formule -->
+                <rect x="300" y="40" width="245" height="155" rx="8" fill="white" stroke="#80DEEA" stroke-width="2"/>
+                <text x="422" y="60" text-anchor="middle" font-size="11" font-weight="900" fill="#00363A" font-family="Nunito, sans-serif">Formule diagonale</text>
+                <text x="312" y="82" font-size="10" font-weight="700" fill="#555" font-family="Nunito, sans-serif">La diagonale et les côtés</text>
+                <text x="312" y="98" font-size="10" font-weight="700" fill="#555" font-family="Nunito, sans-serif">forment un triangle rectangle.</text>
+                <text x="312" y="120" font-size="12" font-weight="900" fill="#006064" font-family="Nunito, sans-serif">d² = L² + l²</text>
+                <text x="312" y="142" font-size="11" font-weight="700" fill="#555" font-family="Nunito, sans-serif">Exemple : L = 5, l = 12</text>
+                <text x="312" y="160" font-size="11" font-weight="700" fill="#555" font-family="Nunito, sans-serif">d² = 25 + 144 = 169</text>
+                <text x="312" y="182" font-size="13" font-weight="900" fill="#D32F2F" font-family="Nunito, sans-serif">d = √169 = 13</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>📏 Distance entre deux points A et B sur un quadrillage</h3>
+            <p>
+                Pour calculer la distance AB entre A(x₁, y₁) et B(x₂, y₂), on dessine un triangle rectangle :<br>
+                • La base horizontale mesure |x₂ − x₁| (différence des abscisses).<br>
+                • La hauteur verticale mesure |y₂ − y₁| (différence des ordonnées).<br>
+                • AB est l'hypoténuse : <strong>AB = √[(x₂−x₁)² + (y₂−y₁)²]</strong><br><br>
+                <strong>Exemple :</strong> A(1, 2) et B(5, 5) → AB = √[(5−1)² + (5−2)²] = √[16 + 9] = √25 = <strong>5</strong>
+            </p>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège — Ne pas identifier le triangle rectangle dans le contexte</h3>
+            <p>
+                Dans un problème en contexte, la difficulté n'est pas le calcul mais <strong>trouver le triangle rectangle</strong>.<br>
+                Mémo : chercher deux directions perpendiculaires (vertical + horizontal, hauteur + base…).<br>
+                <strong>Les mots-clés :</strong> "perpendiculaire", "vertical", "horizontal", "au sol", "à la verticale" → triangle rectangle garanti !
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">Échelle/mur</div>
+                <div class="cas-eq">c² = a² + b²</div>
+                <div class="cas-desc">Sol ⊥ mur → angle droit. L'échelle est l'hypoténuse.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">d = √(L²+l²)</div>
+                <div class="cas-eq">Diagonale rectangle</div>
+                <div class="cas-desc">Les côtés adjacents forment un angle droit, la diagonale est l'hypoténuse.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">AB = √(Δx²+Δy²)</div>
+                <div class="cas-eq">Distance 2 points</div>
+                <div class="cas-desc">Δx = différence abscisses, Δy = différence ordonnées. AB est l'hypoténuse.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Échelle, diagonale, distance, triangle rectangle en contexte</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Une échelle est posée contre un mur. Son pied est à 3 m du mur, et elle atteint 4 m de hauteur sur le mur. Quelle est la longueur de l'échelle ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">7 m</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">5 m</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">√7 m</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">25 m</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Un rectangle a une longueur de 5 cm et une largeur de 12 cm. Quelle est la longueur de sa diagonale ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">17 cm</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">13 cm</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">√17 cm</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">119 cm</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Quelle est la distance entre les points A(1, 2) et B(5, 5) dans un repère orthonormé ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">7</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">5</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">√7</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">25</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Dans quelle situation géométrique se trouve toujours un triangle rectangle exploitable par Pythagore ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">Un triangle quelconque avec ses trois côtés connus</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">La diagonale d'un rectangle avec ses deux côtés</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">Un cercle et son diamètre</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">Deux parallèles coupées par une sécante</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Un câble tendu part du sol à 9 m d'un poteau et est fixé au sommet du poteau à 12 m de hauteur. Quelle est la longueur du câble ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">21 m</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">15 m</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">√21 m</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">3 m</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Identifier le triangle, formule diagonale, distance entre points</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Dans un problème en contexte, la première étape est d'identifier le
+                <input class="blank" id="f1a" placeholder="?" style="width:160px"> caché.
+                Les mots "vertical" et "horizontal" indiquent souvent un angle
+                <input class="blank" id="f1b" placeholder="?" style="width:80px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                La diagonale d'un rectangle de longueur L et largeur l vaut d = √(<input class="blank" id="f2a" placeholder="?" style="width:50px"> + <input class="blank" id="f2b" placeholder="?" style="width:50px">).
+                Pour un rectangle 5 × 12, la diagonale vaut
+                <input class="blank" id="f2c" placeholder="?" style="width:50px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                La distance entre A(1, 2) et B(5, 5) : on calcule Δx = 5 − 1 =
+                <input class="blank" id="f3a" placeholder="?" style="width:50px"> et Δy = 5 − 2 =
+                <input class="blank" id="f3b" placeholder="?" style="width:50px">.
+                Donc AB = √(16 + 9) = √<input class="blank" id="f3c" placeholder="?" style="width:50px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Hauteur d'un triangle isocèle (CE1D style)</div>
+                <div class="ex-stmt">
+                    Un triangle isocèle a une base AB = 10 cm et des côtés égaux de 13 cm chacun.
+                    Calcule la hauteur h issue du sommet C (la hauteur tombe au milieu de AB).
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Identifier le triangle rectangle :</strong> la hauteur h divise le triangle isocèle en deux triangles rectangles. Chaque demi-base = 10 ÷ 2 = <strong>5 cm</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Dans le triangle rectangle :</strong> hypoténuse = côté = 13 cm, cathète = demi-base = 5 cm, hauteur h = cathète inconnue.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Formule :</strong> h² = 13² − 5² = 169 − 25 = <strong>144</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Résultat :</strong> h = √144 = <strong>12 cm</strong></div></div>
+                <div class="final-ans">✅ La hauteur du triangle isocèle est h = 12 cm. Triplet (5, 12, 13) reconnu !</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Distance entre deux points A et B</div>
+                <div class="ex-stmt">
+                    On donne les points A(2, 1) et B(8, 9) dans un repère orthonormé.
+                    Calcule la distance AB.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Différences :</strong> Δx = 8 − 2 = <strong>6</strong> &nbsp; Δy = 9 − 1 = <strong>8</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Triangle rectangle :</strong> base = 6, hauteur = 8, hypoténuse = AB.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Formule :</strong> AB² = 6² + 8² = 36 + 64 = <strong>100</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Résultat :</strong> AB = √100 = <strong>10</strong></div></div>
+                <div class="final-ans">✅ AB = 10 unités. Triplet (6, 8, 10) = 2 × (3, 4, 5) reconnu !</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Longueur d'un câble (CE1D style)</div>
+                <div class="ex-stmt">
+                    Un pylône électrique est vertical et mesure 24 m de hauteur.
+                    Un câble de sécurité est ancré au sol à 7 m de la base du pylône et est fixé au sommet.
+                    Quelle est la longueur du câble ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Schéma :</strong> le pylône (vertical), le sol (horizontal) et le câble forment un triangle rectangle. L'angle droit est entre le sol et le pylône.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Identification :</strong> a = 7 m (sol), b = 24 m (pylône), c = câble = hypoténuse.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Calcul :</strong> c² = 7² + 24² = 49 + 576 = <strong>625</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Résultat :</strong> c = √625 = <strong>25 m</strong></div></div>
+                <div class="final-ans">✅ Le câble mesure 25 m. Triplet (7, 24, 25) — un classique du CE1D !</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Profondeur d'un puits</div>
+                <div class="bonus-stmt">
+                    Une corde de 17 m est tendue depuis le bord d'un puits jusqu'à un point sur le fond.
+                    Le fond du puits est à 15 m sous le bord, et la corde part d'un point situé à l'horizontale
+                    du bord. Quelle est la distance horizontale entre le point de départ de la corde et le centre du puits ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Triangle rectangle :</strong> hypoténuse = corde = 17 m, cathète verticale = profondeur = 15 m, cathète horizontale = distance cherchée.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Formule :</strong> a² = c² − b² = 17² − 15² = 289 − 225 = <strong>64</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>Résultat :</strong> a = √64 = <strong>8 m</strong></div></div>
+                <div class="bonus-ans">
+                    La distance horizontale est de <strong>8 m</strong>.<br>
+                    Astuce : reconnaître le triplet (8, 15, 17) permet de répondre très rapidement à ce type de problème !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 4 terminé !</h2>
+    <p>Impressionnant ! Tu sais appliquer Pythagore dans des situations concrètes.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Place au Défi CE1D — Niveau 5 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Pythagore</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_pythagore_niveau1.html" class="nav-btn">N1 — Triangle rect.</a>
+        <a href="maths_pythagore_niveau2.html" class="nav-btn">N2 — Calculs</a>
+        <a href="maths_pythagore_niveau3.html" class="nav-btn">N3 — Réciproque</a>
+        <a href="maths_pythagore_niveau4.html" class="nav-btn current">▶ N4 — Applications</a>
+        <a href="maths_pythagore_niveau5.html" class="nav-btn">N5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:1, 3:1, 4:1, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! c² = 3² + 4² = 9 + 16 = 25 → c = √25 = 5 m. Le sol (3 m) et le mur (4 m) forment l'angle droit, l'échelle est l'hypoténuse.",
+    2:"✅ Bravo ! d² = 5² + 12² = 25 + 144 = 169 → d = √169 = 13 cm. Les côtés adjacents du rectangle forment l'angle droit.",
+    3:"✅ Correct ! AB = √[(5−1)² + (5−2)²] = √[4² + 3²] = √[16 + 9] = √25 = 5. Triangle rectangle invisible avec base 4 et hauteur 3.",
+    4:"✅ Parfait ! La diagonale d'un rectangle crée deux triangles rectangles car les angles d'un rectangle sont tous droits — parfait pour Pythagore !",
+    5:"✅ Exact ! c² = 9² + 12² = 81 + 144 = 225 → c = √225 = 15 m. Le sol (9 m) et le poteau (12 m) sont perpendiculaires : triplet (9, 12, 15) = 3 × (3, 4, 5)."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. L'échelle est l'hypoténuse du triangle rectangle formé par le sol (3 m) et le mur (4 m). c² = 3² + 4² = 25 → c = 5 m. '7 m' serait 3 + 4 (addition simple).",
+    2:"❌ Non. d² = 5² + 12² = 25 + 144 = 169 → d = √169 = 13 cm. '17 cm' serait 5 + 12 (addition simple, faux !). Toujours utiliser la formule de Pythagore.",
+    3:"❌ Non. AB = √[(5−1)² + (5−2)²] = √[16 + 9] = √25 = 5. Il faut calculer les carrés des différences, pas additionner directement les coordonnées.",
+    4:"❌ Non. La diagonale d'un rectangle est l'hypoténuse d'un triangle rectangle dont les cathètes sont les deux côtés. C'est la situation idéale pour Pythagore !",
+    5:"❌ Non. c² = 9² + 12² = 81 + 144 = 225 → c = √225 = 15 m. Le câble est l'hypoténuse du triangle rectangle formé par le sol (9 m) et le poteau vertical (12 m)."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['triangle rectangle','triangle rect'],['droit']],
+        msgOk:"✅ Exact ! Il faut identifier le triangle rectangle caché. 'Vertical' et 'horizontal' indiquent toujours un angle droit.",
+        msgErr:"❌ Attendus : 'triangle rectangle' (à identifier) et 'droit' (l'angle formé par vertical et horizontal)."
+    },
+    2:{
+        fields:['f2a','f2b','f2c'],
+        accepted:[['L²','l2','l carre'],['l²','l2','l carre'],['13']],
+        msgOk:"✅ Bravo ! d = √(L² + l²). Pour 5 × 12 : d = √(25 + 144) = √169 = 13.",
+        msgErr:"❌ Attendus : 'L²' et 'l²' (les carrés des côtés), et '13' (la diagonale du rectangle 5 × 12)."
+    },
+    3:{
+        fields:['f3a','f3b','f3c'],
+        accepted:[['4'],['3'],['25']],
+        msgOk:"✅ Parfait ! Δx = 4, Δy = 3, AB = √(16 + 9) = √25 = 5. Triangle (3, 4, 5) classique !",
+        msgErr:"❌ Attendus : '4' (= 5−1), '3' (= 5−2), '25' (= 16+9, sous la racine)."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ²]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_pythagore_4', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

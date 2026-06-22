@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Agrandissement · Niveau 1 — Notion de similitude</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#D81B60; --primary-dark:#880E4F; --primary-mid:#E91E63; --primary-bg:#FCE4EC;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#560027 0%,#D81B60 55%,#F48FB1 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(86,0,39,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#D81B60; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#880E4F; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#560027,#D81B60,#F48FB1); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#560027,#880E4F); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#F48FB1; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #F48FB1; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .data-table { width:100%; border-collapse:collapse; border-radius:10px; overflow:hidden; margin:14px 0; font-size:.91rem; }
+        .data-table th { background:var(--primary); color:white; padding:9px 12px; font-weight:900; text-align:center; }
+        .data-table td { padding:8px 12px; text-align:center; border-bottom:1px solid var(--border); }
+        .data-table tr:nth-child(even) td { background:var(--primary-bg); }
+        .data-table tr:last-child td { border-bottom:none; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #F48FB1; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:100px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#560027,#D81B60,#F48FB1); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #3b001a; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>📐 Agrandissement · Notion de similitude</h1>
+            <p>Niveau 1 · Rapport k · Agrandissement · Réduction · Angles conservés</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 1 — Débutant</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Agrandissement et réduction</div>
+            <div class="card-sub">Similitude · Rapport k · Figure originale · Figure image · Angles conservés</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Quand on <strong>agrandit</strong> ou <strong>réduit</strong> une figure, on obtient une nouvelle figure qui a exactement la même forme mais pas la même taille.
+            Ces deux figures sont dites <strong>semblables</strong> (ou similaires). La clé de tout cela, c'est le <strong>rapport de similitude k</strong>.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Définition — Rapport de similitude k</h3>
+            <p>
+                Le <strong>rapport de similitude k</strong> est le nombre par lequel on multiplie toutes les longueurs de la figure originale pour obtenir la figure image.<br><br>
+                <strong>Si k &gt; 1</strong> → c'est un <strong>agrandissement</strong> (la figure image est plus grande).<br>
+                <strong>Si 0 &lt; k &lt; 1</strong> → c'est une <strong>réduction</strong> (la figure image est plus petite).<br>
+                <strong>Si k = 1</strong> → les deux figures sont identiques (même taille).
+            </p>
+        </div>
+
+        <!-- SVG 1 : deux triangles similaires -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="200" fill="#FFF0F5" rx="10"/>
+                <text x="280" y="16" text-anchor="middle" font-size="12" font-weight="900" fill="#560027" font-family="Nunito, sans-serif">Agrandissement d'un triangle — rapport k = 2</text>
+
+                <!-- Triangle original (petit) -->
+                <polygon points="40,160 100,60 160,160" fill="#FCE4EC" stroke="#D81B60" stroke-width="2"/>
+                <text x="100" y="180" text-anchor="middle" font-size="11" font-weight="900" fill="#880E4F" font-family="Nunito, sans-serif">Figure originale</text>
+                <!-- Côtés annotés -->
+                <text x="68" y="115" font-size="10" font-weight="900" fill="#D81B60" font-family="Nunito, sans-serif">3 cm</text>
+                <text x="132" y="115" font-size="10" font-weight="900" fill="#D81B60" font-family="Nunito, sans-serif">3 cm</text>
+                <text x="95" y="156" font-size="10" font-weight="900" fill="#D81B60" font-family="Nunito, sans-serif">4 cm</text>
+
+                <!-- Flèche -->
+                <defs><marker id="arr1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#880E4F"/></marker></defs>
+                <line x1="185" y1="110" x2="240" y2="110" stroke="#880E4F" stroke-width="2.5" marker-end="url(#arr1)"/>
+                <text x="213" y="103" text-anchor="middle" font-size="11" font-weight="900" fill="#880E4F" font-family="Nunito, sans-serif">× k = 2</text>
+
+                <!-- Triangle image (grand) -->
+                <polygon points="260,160 380,40 500,160" fill="#F48FB1" stroke="#880E4F" stroke-width="2.5"/>
+                <text x="380" y="185" text-anchor="middle" font-size="11" font-weight="900" fill="#560027" font-family="Nunito, sans-serif">Figure image</text>
+                <!-- Côtés annotés -->
+                <text x="303" y="108" font-size="10" font-weight="900" fill="#560027" font-family="Nunito, sans-serif">6 cm</text>
+                <text x="448" y="108" font-size="10" font-weight="900" fill="#560027" font-family="Nunito, sans-serif">6 cm</text>
+                <text x="370" y="155" font-size="10" font-weight="900" fill="#560027" font-family="Nunito, sans-serif">8 cm</text>
+
+                <!-- Note k -->
+                <text x="280" y="196" text-anchor="start" font-size="10" font-weight="700" fill="#880E4F" font-family="Nunito, sans-serif">k = 6 ÷ 3 = 2  |  Les angles sont identiques dans les deux triangles !</text>
+            </svg>
+        </div>
+
+        <!-- SVG 2 : deux rectangles agrandissement/réduction -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 160" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="160" fill="#FFF0F5" rx="10"/>
+                <text x="280" y="16" text-anchor="middle" font-size="12" font-weight="900" fill="#560027" font-family="Nunito, sans-serif">Réduction d'un rectangle — rapport k = 0,5</text>
+
+                <!-- Grand rectangle original -->
+                <rect x="20" y="30" width="200" height="100" fill="#FCE4EC" stroke="#D81B60" stroke-width="2"/>
+                <text x="120" y="145" text-anchor="middle" font-size="10" font-weight="900" fill="#880E4F" font-family="Nunito, sans-serif">Originale : 10 × 6 cm</text>
+                <text x="120" y="82" text-anchor="middle" font-size="13" font-weight="900" fill="#880E4F" font-family="Nunito, sans-serif">10 cm</text>
+                <text x="10" y="82" font-size="11" font-weight="900" fill="#880E4F" font-family="Nunito, sans-serif" writing-mode="tb">6</text>
+
+                <!-- Flèche -->
+                <defs><marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#880E4F"/></marker></defs>
+                <line x1="240" y1="80" x2="300" y2="80" stroke="#880E4F" stroke-width="2.5" marker-end="url(#arr2)"/>
+                <text x="270" y="73" text-anchor="middle" font-size="11" font-weight="900" fill="#880E4F" font-family="Nunito, sans-serif">× k = 0,5</text>
+
+                <!-- Petit rectangle image -->
+                <rect x="315" y="55" width="100" height="50" fill="#F48FB1" stroke="#880E4F" stroke-width="2.5"/>
+                <text x="365" y="125" text-anchor="middle" font-size="10" font-weight="900" fill="#560027" font-family="Nunito, sans-serif">Image : 5 × 3 cm</text>
+                <text x="365" y="82" text-anchor="middle" font-size="11" font-weight="900" fill="#560027" font-family="Nunito, sans-serif">5 cm</text>
+                <text x="422" y="85" font-size="10" font-weight="900" fill="#560027" font-family="Nunito, sans-serif">3cm</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>📐 Ce qui change et ce qui ne change PAS</h3>
+            <p>
+                Lors d'une similitude (agrandissement ou réduction) :<br>
+                <strong>Ce qui change :</strong> les longueurs (toutes multipliées par k), les aires (×k²), les volumes (×k³).<br>
+                <strong>Ce qui ne change PAS :</strong> les <strong>angles</strong> — ils sont toujours conservés ! Les figures restent de la même forme.
+            </p>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège classique — k et les aires</h3>
+            <p>
+                <strong>k s'applique UNIQUEMENT aux longueurs !</strong><br>
+                Si k = 2, les longueurs sont × 2, mais l'aire est × 4 (k² = 4) et le volume × 8 (k³ = 8).<br>
+                <strong>Erreur fréquente :</strong> dire "l'aire est doublée" quand k = 2. Non ! L'aire est quadruplée.
+            </p>
+        </div>
+
+        <!-- Vocabulaire -->
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">k &gt; 1</div>
+                <div class="cas-eq">Agrandissement</div>
+                <div class="cas-desc">La figure image est plus grande que l'originale.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">0 &lt; k &lt; 1</div>
+                <div class="cas-eq">Réduction</div>
+                <div class="cas-desc">La figure image est plus petite que l'originale.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Angles</div>
+                <div class="cas-eq">Conservés</div>
+                <div class="cas-desc">Une similitude conserve toujours les angles — la forme reste identique.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Agrandissement, réduction, rapport k, angles</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Un rapport de similitude vaut k = 0,3. De quelle transformation s'agit-il ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">Un agrandissement</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">Une réduction</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">Une translation</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">Impossible à déterminer</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Un côté mesure 4 cm dans la figure originale et 6 cm dans la figure image. Quel est le rapport k ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">k = 2</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">k = 0,5</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">k = 1,5</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">k = 10</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Lors d'une similitude de rapport k = 3, qu'est-ce qui est CONSERVÉ ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">Les longueurs des côtés</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">Les aires</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">Les angles</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">Les volumes</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Si k = 3 et qu'un côté de la figure originale mesure 5 cm, quelle sera sa longueur dans la figure image ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">8 cm</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">15 cm</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">1,67 cm</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">5 cm</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Un triangle a des angles de 40°, 60° et 80°. Son image par une similitude de rapport k = 2 aura quels angles ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">80°, 120° et 160°</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">20°, 30° et 40°</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">40°, 60° et 80°</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Impossible à savoir</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Rapport k, agrandissement, angles</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Si le rapport de similitude k est supérieur à 1, alors la transformation est un
+                <input class="blank" id="f1a" placeholder="?" style="width:130px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Si 0 &lt; k &lt; 1, la transformation est une
+                <input class="blank" id="f2a" placeholder="?" style="width:100px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Lors d'une similitude, les
+                <input class="blank" id="f3a" placeholder="?" style="width:90px"> sont toujours conservés.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Identifier agrandissement ou réduction</div>
+                <div class="ex-stmt">
+                    Un rectangle original mesure 8 cm × 5 cm. Son image mesure 12 cm × 7,5 cm.<br>
+                    a) S'agit-il d'un agrandissement ou d'une réduction ?<br>
+                    b) Calcule le rapport de similitude k.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Vérification :</strong> La figure image (12 × 7,5) est plus grande que l'originale (8 × 5) → c'est un <strong>agrandissement</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Calcul de k :</strong> k = mesure image ÷ mesure originale<br>• Largeur : k = 12 ÷ 8 = <strong>1,5</strong><br>• Hauteur : k = 7,5 ÷ 5 = <strong>1,5</strong> ✓ (même k pour tous les côtés)</div></div>
+                <div class="final-ans">✅ Agrandissement · k = 1,5 · k &gt; 1 → agrandissement confirmé</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Calculer une longueur inconnue</div>
+                <div class="ex-stmt">
+                    Deux triangles sont semblables de rapport k = 0,4.<br>
+                    Le plus grand triangle a un côté de 15 cm.<br>
+                    Quelle est la longueur du côté correspondant dans le petit triangle ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Identification :</strong> k = 0,4 &lt; 1 → c'est une réduction. Le "grand triangle" est la figure originale, le "petit" est la figure image.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Calcul :</strong> longueur image = longueur originale × k<br>= 15 × 0,4 = <strong>6 cm</strong></div></div>
+                <div class="final-ans">✅ Le côté correspondant dans le petit triangle mesure <strong>6 cm</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Rapport de similitude et angles (CE1D style)</div>
+                <div class="ex-stmt">
+                    Un pentagone ABCDE est agrandi par une similitude de rapport k = 2,5.<br>
+                    Dans le pentagone original, l'angle en A vaut 108°.<br>
+                    a) Quelle est la valeur de l'angle en A' dans la figure image ?<br>
+                    b) Si AB = 4 cm, combien mesure A'B' ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Angle en A' :</strong> Les angles sont <strong>conservés</strong> lors d'une similitude → A' = <strong>108°</strong> (identique à A).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) A'B' :</strong> Les longueurs sont multipliées par k.<br>A'B' = AB × k = 4 × 2,5 = <strong>10 cm</strong></div></div>
+                <div class="final-ans">✅ Angle A' = <strong>108°</strong> (conservé) · A'B' = <strong>10 cm</strong></div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Trouver k à partir d'une aire</div>
+                <div class="bonus-stmt">
+                    Un carré original a une aire de 9 cm². Son image a une aire de 36 cm².<br>
+                    a) Quel est le rapport k² entre les aires ?<br>
+                    b) En déduire le rapport de similitude k.<br>
+                    c) S'agit-il d'un agrandissement ou d'une réduction ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a) Rapport des aires :</strong> k² = aire image ÷ aire originale = 36 ÷ 9 = <strong>4</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b) Rapport k :</strong> k = √(k²) = √4 = <strong>2</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>c) Type :</strong> k = 2 &gt; 1 → c'est un <strong>agrandissement</strong>.</div></div>
+                <div class="bonus-ans">
+                    k² = 4 · k = 2 · Agrandissement<br>
+                    Astuce CE1D : aire × k² → pour trouver k, on prend la racine carrée du rapport des aires !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 1 terminé !</h2>
+    <p>Bravo ! Tu comprends la notion d'agrandissement et de réduction.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Passe au Niveau 2 pour calculer k !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Agrandissement &amp; Réduction</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_agrandissement_niveau1.html" class="nav-btn current">▶ Niveau 1 — Notion</a>
+        <a href="maths_agrandissement_niveau2.html" class="nav-btn">Niveau 2 — Rapport k</a>
+        <a href="maths_agrandissement_niveau3.html" class="nav-btn">Niveau 3 — Échelles</a>
+        <a href="maths_agrandissement_niveau4.html" class="nav-btn">Niveau 4 — Aires &amp; volumes</a>
+        <a href="maths_agrandissement_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:2, 3:2, 4:1, 5:2};
+
+const QCM_OK = {
+    1:"✅ Exact ! Quand k est compris entre 0 et 1 (ici k = 0,3 &lt; 1), la figure image est plus petite → c'est une réduction.",
+    2:"✅ Bravo ! k = mesure image ÷ mesure originale = 6 ÷ 4 = 1,5. Comme k &gt; 1, c'est un agrandissement.",
+    3:"✅ Correct ! Lors d'une similitude, les angles sont toujours conservés. La forme reste identique, seule la taille change.",
+    4:"✅ Parfait ! longueur image = longueur originale × k = 5 × 3 = 15 cm.",
+    5:"✅ Exact ! Les angles sont conservés lors d'une similitude, quel que soit k. Les trois angles restent 40°, 60° et 80°."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. k = 0,3 est compris entre 0 et 1 → c'est une RÉDUCTION (la figure devient plus petite). Un agrandissement aurait k &gt; 1.",
+    2:"❌ Non. k = image ÷ original = 6 ÷ 4 = 1,5. Ce n'est pas 2 (6−4), ni 0,5 (4÷8), ni 10 (addition).",
+    3:"❌ Non. Lors d'une similitude, ce qui est conservé ce sont les ANGLES. Les longueurs, aires et volumes changent (multiplié par k, k², k³).",
+    4:"❌ Non. longueur image = 5 × k = 5 × 3 = 15 cm. On multiplie par k, on ne l'additionne pas.",
+    5:"❌ Non. Les angles sont CONSERVÉS lors d'une similitude — ils ne sont ni multipliés, ni divisés par k. Les angles restent 40°, 60° et 80°."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['agrandissement']],
+        msgOk:"✅ Exact ! Si k &gt; 1, la figure image est plus grande → c'est un agrandissement.",
+        msgErr:"❌ Attendu : 'agrandissement' (k &gt; 1 signifie que la figure image est plus grande)."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['reduction','réduction']],
+        msgOk:"✅ Exact ! Si 0 &lt; k &lt; 1, la figure image est plus petite → c'est une réduction.",
+        msgErr:"❌ Attendu : 'réduction' (0 &lt; k &lt; 1 signifie que la figure image est plus petite)."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['angles']],
+        msgOk:"✅ Exact ! Les angles sont toujours conservés lors d'une similitude. La forme reste la même.",
+        msgErr:"❌ Attendu : 'angles'. Ce sont les angles qui sont conservés lors d'une similitude."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_agrandissement_1', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

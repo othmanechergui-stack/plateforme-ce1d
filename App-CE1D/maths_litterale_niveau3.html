@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Calcul littéral · Niveau 3 — Factoriser</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#43A047; --primary-dark:#2E7D32; --primary-mid:#66BB6A; --primary-bg:#E8F5E9;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#1B5E20 0%,#43A047 55%,#A5D6A7 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(27,94,32,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#43A047; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#2E7D32; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#1B5E20,#43A047,#A5D6A7); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#1B5E20,#2E7D32); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#A5D6A7; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:#E8F5E9; border:2px solid #A5D6A7; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:#2E7D32; margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:#2E7D32; margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .data-table { width:100%; border-collapse:collapse; border-radius:10px; overflow:hidden; margin:14px 0; font-size:.91rem; }
+        .data-table th { background:#43A047; color:white; padding:9px 12px; font-weight:900; text-align:center; }
+        .data-table td { padding:8px 12px; text-align:center; border-bottom:1px solid var(--border); }
+        .data-table tr:nth-child(even) td { background:var(--primary-bg); }
+        .data-table tr:last-child td { border-bottom:none; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid #43A047; margin-bottom:11px; }
+        .q-num  { display:inline-block; background:#43A047; color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:#E8F5E9; border:2px solid #A5D6A7; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:#43A047; color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:#43A047; color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 #2E7D32; transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#1B5E20,#43A047,#A5D6A7); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #174a1a; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:#43A047; color:#2E7D32; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>📝 Calcul littéral · Factoriser</h1>
+            <p>Niveau 3 · Facteur commun · PGCD · Mise en évidence</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 3 — Factoriser</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Factoriser des expressions</div>
+            <div class="card-sub">Facteur commun · PGCD · Mise en évidence · Vérification</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Factoriser, c'est l'opération <strong>inverse de développer</strong>.
+            Au lieu de supprimer les parenthèses, on les <em>crée</em> en extrayant un facteur commun.
+            C'est une compétence fondamentale du CE1D belge, notamment pour simplifier des fractions algébriques.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Le facteur commun — Méthode de mise en évidence</h3>
+            <p>
+                Pour factoriser ax + bx, on remarque que <strong>x est présent dans les deux termes</strong>.<br>
+                On "sort" x devant une parenthèse : ax + bx = <strong>x(a + b)</strong><br>
+                Étapes :<br>
+                1. Trouver le <strong>PGCD</strong> (Plus Grand Commun Diviseur) des coefficients.<br>
+                2. Trouver la partie littérale commune (lettre à la plus petite puissance).<br>
+                3. Extraire ce facteur et écrire ce qui reste dans la parenthèse.
+            </p>
+        </div>
+
+        <!-- SVG 1 : processus factorisation 6x²+4x = 2x(3x+2) -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 190" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="190" fill="#F1F8E9" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">Factorisation de 6x² + 4x — étape par étape</text>
+
+                <!-- Expression originale -->
+                <rect x="170" y="28" width="220" height="38" rx="10" fill="#43A047"/>
+                <text x="280" y="52" text-anchor="middle" font-size="20" font-weight="900" fill="white" font-family="Courier New, monospace">6x² + 4x</text>
+
+                <!-- Étape 1 : PGCD des coefficients -->
+                <rect x="20" y="85" width="160" height="55" rx="8" fill="#C8E6C9" stroke="#2E7D32" stroke-width="2"/>
+                <text x="100" y="106" text-anchor="middle" font-size="10" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">PGCD(6, 4)</text>
+                <text x="100" y="122" text-anchor="middle" font-size="15" font-weight="900" fill="#2E7D32" font-family="Courier New, monospace">= 2</text>
+                <text x="100" y="136" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">diviseurs communs : 1, 2</text>
+
+                <!-- Étape 2 : partie littérale commune -->
+                <rect x="200" y="85" width="160" height="55" rx="8" fill="#C8E6C9" stroke="#2E7D32" stroke-width="2"/>
+                <text x="280" y="106" text-anchor="middle" font-size="10" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">Lettre commune</text>
+                <text x="280" y="122" text-anchor="middle" font-size="15" font-weight="900" fill="#2E7D32" font-family="Courier New, monospace">= x</text>
+                <text x="280" y="136" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">x² et x → prendre x¹</text>
+
+                <!-- Étape 3 : facteur = 2x -->
+                <rect x="380" y="85" width="160" height="55" rx="8" fill="#A5D6A7" stroke="#1B5E20" stroke-width="2"/>
+                <text x="460" y="106" text-anchor="middle" font-size="10" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">Facteur commun</text>
+                <text x="460" y="122" text-anchor="middle" font-size="18" font-weight="900" fill="#1B5E20" font-family="Courier New, monospace">2x</text>
+                <text x="460" y="136" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">= PGCD × lettre</text>
+
+                <!-- Flèche vers résultat -->
+                <line x1="280" y1="66" x2="100" y2="85" stroke="#2E7D32" stroke-width="1.5"/>
+                <line x1="280" y1="66" x2="280" y2="85" stroke="#2E7D32" stroke-width="1.5"/>
+                <line x1="280" y1="66" x2="460" y2="85" stroke="#2E7D32" stroke-width="1.5"/>
+
+                <!-- Résultat final -->
+                <rect x="140" y="155" width="280" height="28" rx="8" fill="#2E7D32"/>
+                <text x="280" y="174" text-anchor="middle" font-size="18" font-weight="900" fill="white" font-family="Courier New, monospace">= 2x(3x + 2)</text>
+                <line x1="460" y1="140" x2="360" y2="155" stroke="#1B5E20" stroke-width="1.5"/>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔁 Toujours vérifier par développement</h3>
+            <p>
+                Après avoir factorisé, on vérifie que c'est correct en <strong>redéveloppant</strong> :<br>
+                2x(3x + 2) = 2x × 3x + 2x × 2 = 6x² + 4x ✓<br>
+                Si on retrouve l'expression de départ, la factorisation est bonne.<br>
+                <strong>Règle : on ne peut pas vérifier autrement que de redévelopper !</strong>
+            </p>
+        </div>
+
+        <!-- SVG 2 : tableau développer ↔ factoriser -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 130" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="130" fill="#F1F8E9" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">Développer et factoriser : deux opérations inverses</text>
+
+                <!-- Boite gauche : forme développée -->
+                <rect x="30" y="35" width="190" height="70" rx="10" fill="#E8F5E9" stroke="#43A047" stroke-width="2"/>
+                <text x="125" y="60" text-anchor="middle" font-size="11" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">Forme développée</text>
+                <text x="125" y="82" text-anchor="middle" font-size="17" font-weight="900" fill="#2E7D32" font-family="Courier New, monospace">6x² + 4x</text>
+                <text x="125" y="98" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">sans parenthèses</text>
+
+                <!-- Boite droite : forme factorisée -->
+                <rect x="340" y="35" width="190" height="70" rx="10" fill="#C8E6C9" stroke="#2E7D32" stroke-width="2.5"/>
+                <text x="435" y="60" text-anchor="middle" font-size="11" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">Forme factorisée</text>
+                <text x="435" y="82" text-anchor="middle" font-size="17" font-weight="900" fill="#1B5E20" font-family="Courier New, monospace">2x(3x + 2)</text>
+                <text x="435" y="98" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">avec parenthèses</text>
+
+                <!-- Flèche développer (haut) -->
+                <line x1="220" y1="58" x2="340" y2="58" stroke="#43A047" stroke-width="2.5" marker-end="url(#arr3)"/>
+                <text x="280" y="53" text-anchor="middle" font-size="10" font-weight="900" fill="#2E7D32" font-family="Nunito, sans-serif">Développer</text>
+
+                <!-- Flèche factoriser (bas) -->
+                <line x1="340" y1="82" x2="220" y2="82" stroke="#1B5E20" stroke-width="2.5" marker-end="url(#arr4)"/>
+                <text x="280" y="100" text-anchor="middle" font-size="10" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">Factoriser</text>
+
+                <defs>
+                    <marker id="arr3" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#43A047"/></marker>
+                    <marker id="arr4" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#1B5E20"/></marker>
+                </defs>
+            </svg>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège : factorisation partielle</h3>
+            <p>
+                Pour 6x + 9, la réponse <strong>3(2x + 3)</strong> est correcte, mais <strong>1(6x + 9)</strong> ou <strong>6x + 9</strong> sans parenthèses n'est PAS une factorisation.<br>
+                On doit toujours sortir le <strong>plus grand</strong> facteur commun possible (ici le PGCD de 6 et 9 est 3, pas 1).<br>
+                Si on sort un facteur trop petit, la parenthèse peut encore être simplifiée — ce n'est pas terminé.
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">6x + 9</div>
+                <div class="cas-eq">= 3(2x + 3)</div>
+                <div class="cas-desc">PGCD(6,9) = 3. On sort 3 devant.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">4x² − 8x</div>
+                <div class="cas-eq">= 4x(x − 2)</div>
+                <div class="cas-desc">PGCD(4,8)=4, lettre commune=x. Facteur = 4x.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">15a²b + 10ab²</div>
+                <div class="cas-eq">= 5ab(3a + 2b)</div>
+                <div class="cas-desc">PGCD(15,10)=5, lettres communes: a¹ et b¹ → 5ab.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Facteur commun · PGCD · Vérification</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Factoriser 8x − 12.</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">4(2x − 3)</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">2(4x − 6)</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">8(x − 12)</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">4(2x − 12)</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Factoriser 6x² + 9x.</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">3(2x² + 3x)</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">3x(2x + 3)</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">6x(x + 9)</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">x(6x + 9)</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Quel est le facteur commun de 12x³ et 8x² ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">4x</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">4x²</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">8x²</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">12x³</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Factoriser 10a²b − 15ab².</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">5ab(2a − 3b)</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">5a(2ab − 3b²)</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">5(2a²b − 3ab²)</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">ab(10a − 15b)</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Laquelle de ces factorisations est correcte et complète ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">6x + 4 = 2(3x + 2) ✓</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">6x + 4 = 1(6x + 4) ✓</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">6x + 4 = 6(x + 4) ✓</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">6x + 4 = 2(3x + 4) ✓</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · PGCD · Vérification · Facteur commun</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Dans ax + bx, le facteur commun de ax et bx est <input class="blank" id="f1a" placeholder="?" style="width:55px">. Donc ax + bx = <input class="blank" id="f1b" placeholder="?" style="width:90px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Pour vérifier une factorisation, on la <input class="blank" id="f2a" placeholder="?" style="width:120px"> et on doit retrouver l'expression de <input class="blank" id="f2b" placeholder="?" style="width:80px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Le PGCD de 6 et 9 est <input class="blank" id="f3a" placeholder="?" style="width:45px">. Donc 6x + 9 se factorise en <input class="blank" id="f3b" placeholder="?" style="width:55px">(2x + 3).
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Factoriser et vérifier</div>
+                <div class="ex-stmt">
+                    Factoriser A = 12x² + 18x, puis vérifier par développement.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>PGCD des coefficients :</strong> PGCD(12, 18) = 6</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Partie littérale commune :</strong> x² et x → on prend x¹</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Facteur commun :</strong> 6x<br>12x² ÷ 6x = 2x &nbsp;|&nbsp; 18x ÷ 6x = 3<br>Donc A = <strong>6x(2x + 3)</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Vérification :</strong> 6x(2x + 3) = 6x×2x + 6x×3 = 12x² + 18x ✓</div></div>
+                <div class="final-ans">✅ A = 12x² + 18x = <strong>6x(2x + 3)</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Factorisation avec deux variables</div>
+                <div class="ex-stmt">
+                    Factoriser B = 8a²b + 12ab².
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>PGCD des coefficients :</strong> PGCD(8, 12) = 4</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Lettre a :</strong> a² et a → on prend a¹<br><strong>Lettre b :</strong> b et b² → on prend b¹<br>Partie littérale commune = ab</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Facteur commun = 4ab</strong><br>8a²b ÷ 4ab = 2a &nbsp;|&nbsp; 12ab² ÷ 4ab = 3b<br>B = <strong>4ab(2a + 3b)</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Vérification :</strong> 4ab(2a+3b) = 8a²b + 12ab² ✓</div></div>
+                <div class="final-ans">✅ B = 8a²b + 12ab² = <strong>4ab(2a + 3b)</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Factoriser pour simplifier une fraction</div>
+                <div class="ex-stmt">
+                    Simplifier la fraction : F = (6x² + 9x) ÷ (3x).
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Factoriser le numérateur :</strong> 6x² + 9x = 3x(2x + 3)</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Écrire la fraction :</strong> F = 3x(2x + 3) ÷ 3x</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Simplifier :</strong> on divise le numérateur et le dénominateur par 3x<br>F = <strong>2x + 3</strong></div></div>
+                <div class="final-ans">✅ (6x² + 9x) ÷ 3x = <strong>2x + 3</strong> (après factorisation et simplification)</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Factoriser une expression avec 3 termes</div>
+                <div class="bonus-stmt">
+                    Factoriser C = 6x³ + 4x² − 10x, puis vérifier par développement.
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>PGCD(6, 4, 10) :</strong> diviseurs communs de 6, 4, 10 → PGCD = 2</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Lettre commune :</strong> x³, x², x → plus petite puissance = x¹ → facteur = 2x</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>Diviser chaque terme :</strong><br>6x³ ÷ 2x = 3x² &nbsp;|&nbsp; 4x² ÷ 2x = 2x &nbsp;|&nbsp; −10x ÷ 2x = −5<br>C = <strong>2x(3x² + 2x − 5)</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text"><strong>Vérification :</strong> 2x(3x²+2x−5) = 6x³+4x²−10x ✓</div></div>
+                <div class="bonus-ans">
+                    C = <strong>2x(3x² + 2x − 5)</strong><br>
+                    Astuce : même avec 3 termes ou plus, la méthode est identique — on cherche toujours le PGCD et la lettre à la plus petite puissance.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 3 terminé !</h2>
+    <p>Excellent ! Tu maîtrises la factorisation par mise en évidence du facteur commun.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Place au Niveau 4 — Identités remarquables !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Calcul littéral</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_litterale_niveau1.html" class="nav-btn">N1 — Expressions</a>
+        <a href="maths_litterale_niveau2.html" class="nav-btn">N2 — Développer</a>
+        <a href="maths_litterale_niveau3.html" class="nav-btn current">▶ N3 — Factoriser</a>
+        <a href="maths_litterale_niveau4.html" class="nav-btn">N4 — Identités remarquables</a>
+        <a href="maths_litterale_niveau5.html" class="nav-btn">N5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:1, 3:1, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! PGCD(8,12) = 4. 8x÷4=2x et 12÷4=3. Donc 8x−12 = 4(2x−3).",
+    2:"✅ Bravo ! PGCD(6,9)=3, lettre commune=x → facteur=3x. 6x²÷3x=2x et 9x÷3x=3. Donc 6x²+9x = 3x(2x+3).",
+    3:"✅ Correct ! PGCD(12,8)=4, lettres: x³ et x² → on prend x². Facteur commun = 4x².",
+    4:"✅ Parfait ! PGCD(10,15)=5, lettres: a²b et ab² → a¹b¹=ab. Facteur=5ab. 10a²b÷5ab=2a et 15ab²÷5ab=3b.",
+    5:"✅ Exact ! 2(3x+2) : on redéveloppe 2×3x=6x et 2×2=4 → 6x+4 ✓. C'est la seule factorisation complète avec le PGCD maximal (2)."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. PGCD(8,12)=4. La réponse 2(4x−6) est incomplète (on peut encore sortir 2). 8(x−12) et 4(2x−12) sont faux.",
+    2:"❌ Non. PGCD(6,9)=3 ET la lettre x est aussi commune → facteur = 3x. 3(2x²+3x) est correct mais incomplet.",
+    3:"❌ Non. PGCD(12,8)=4 et la lettre commune est x (puissance min entre x³ et x²=x²). Facteur commun = 4x².",
+    4:"❌ Non. PGCD(10,15)=5, lettre commune a¹b¹=ab → facteur=5ab. 5ab(2a−3b) est la bonne réponse.",
+    5:"❌ Non. 1(6x+4) n'est pas une factorisation réelle. 6(x+4) est faux (6×4≠4). 2(3x+4) est faux (2×4=8≠4). Seule 2(3x+2) est correcte."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['x'],['x(a+b)','x(a + b)']],
+        msgOk:"✅ Dans ax+bx, le facteur commun est x. Donc ax+bx = x(a+b).",
+        msgErr:"❌ Attendus : 'x' (facteur commun) et 'x(a+b)' (forme factorisée)."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['developpe','développe','redeveloppe','redéveloppe'],['depart','départ']],
+        msgOk:"✅ On vérifie en redéveloppant et on doit retrouver l'expression de départ.",
+        msgErr:"❌ Attendus : 'développe' (ou 'redéveloppe') et 'départ'."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['3'],['3']],
+        msgOk:"✅ PGCD(6,9)=3. Donc 6x+9 = 3(2x+3).",
+        msgErr:"❌ Attendus : '3' (PGCD de 6 et 9) et '3' (le facteur devant la parenthèse)."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_litterale_3', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

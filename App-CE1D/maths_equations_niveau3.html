@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Équations · Niveau 3 — Développer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#E53935; --primary-dark:#B71C1C; --primary-mid:#EF5350; --primary-bg:#FFEBEE;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#7F0000 0%,#E53935 55%,#EF9A9A 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(127,0,0,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#E53935; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#B71C1C; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#7F0000,#E53935,#EF9A9A); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#7F0000,#B71C1C); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#EF9A9A; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #EF9A9A; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.05rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.88rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #EF9A9A; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#7F0000,#E53935,#EF9A9A); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #5c0000; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>➗ Équations · Développer</h1>
+            <p>Niveau 3 · Parenthèses · Termes des deux côtés · Fractions</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div><div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 3 — Développer</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Équations avec développement</div>
+            <div class="card-sub">Parenthèses · Termes des deux côtés · Fractions</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Certaines équations contiennent des <strong>parenthèses</strong>, des <strong>termes en x des deux côtés</strong>
+            ou des <strong>fractions</strong>. Avant de résoudre, il faut d'abord
+            <strong>développer</strong> et <strong>regrouper</strong> les termes semblables.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Stratégie générale en 3 phases</h3>
+            <p>
+                <strong>Phase 1 — Développer :</strong> supprimer les parenthèses en distribuant le facteur extérieur.<br>
+                <strong>Phase 2 — Regrouper :</strong> rassembler tous les termes en x d'un côté, les nombres de l'autre.<br>
+                <strong>Phase 3 — Résoudre :</strong> diviser par le coefficient de x et vérifier.
+            </p>
+        </div>
+
+        <!-- SVG 1 : résolution pas à pas de 3(x+2) = 2x+9 -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="230" fill="#FFF5F5" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#7F0000" font-family="Nunito, sans-serif">Résolution pas à pas — 3(x + 2) = 2x + 9</text>
+
+                <!-- Étape 1 -->
+                <rect x="10" y="28" width="250" height="44" rx="8" fill="#E53935"/>
+                <text x="135" y="48" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Nunito, sans-serif">3(x + 2) = 2x + 9</text>
+                <text x="135" y="64" text-anchor="middle" font-size="10" fill="#FFCDD2" font-family="Nunito, sans-serif">Équation de départ</text>
+
+                <!-- Flèche 1→2 -->
+                <text x="278" y="55" text-anchor="middle" font-size="20" fill="#B71C1C" font-family="Nunito, sans-serif">→</text>
+                <text x="278" y="70" text-anchor="middle" font-size="9" fill="#B71C1C" font-weight="700" font-family="Nunito, sans-serif">développer</text>
+
+                <!-- Étape 2 -->
+                <rect x="300" y="28" width="250" height="44" rx="8" fill="#C62828"/>
+                <text x="425" y="48" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Nunito, sans-serif">3x + 6 = 2x + 9</text>
+                <text x="425" y="64" text-anchor="middle" font-size="10" fill="#FFCDD2" font-family="Nunito, sans-serif">3×x + 3×2 = 2x + 9</text>
+
+                <!-- Flèche vers étape 3 -->
+                <line x1="135" y1="72" x2="135" y2="96" stroke="#B71C1C" stroke-width="2" stroke-dasharray="4,3"/>
+                <text x="145" y="88" font-size="9" fill="#B71C1C" font-weight="700" font-family="Nunito, sans-serif">− 2x des 2 côtés</text>
+
+                <!-- Étape 3 -->
+                <rect x="10" y="100" width="250" height="44" rx="8" fill="#AD1457"/>
+                <text x="135" y="120" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Nunito, sans-serif">x + 6 = 9</text>
+                <text x="135" y="136" text-anchor="middle" font-size="10" fill="#F8BBD9" font-family="Nunito, sans-serif">3x − 2x = x · les 2x se regroupent</text>
+
+                <!-- Flèche 3→4 -->
+                <line x1="260" y1="122" x2="298" y2="122" stroke="#B71C1C" stroke-width="2" stroke-dasharray="4,3"/>
+                <text x="278" y="115" text-anchor="middle" font-size="9" fill="#B71C1C" font-weight="700" font-family="Nunito, sans-serif">− 6</text>
+
+                <!-- Étape 4 -->
+                <rect x="300" y="100" width="250" height="44" rx="8" fill="#880E4F"/>
+                <text x="425" y="120" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Nunito, sans-serif">x = 3</text>
+                <text x="425" y="136" text-anchor="middle" font-size="10" fill="#F8BBD9" font-family="Nunito, sans-serif">9 − 6 = 3 → solution !</text>
+
+                <!-- Vérification -->
+                <rect x="10" y="172" width="540" height="44" rx="8" fill="#2E7D32"/>
+                <text x="280" y="192" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="Nunito, sans-serif">Vérification : 3(3+2) = 3×5 = 15 · et · 2×3+9 = 6+9 = 15 ✓</text>
+                <text x="280" y="208" text-anchor="middle" font-size="10" fill="#A5D6A7" font-family="Nunito, sans-serif">Les deux membres donnent 15 — x = 3 est bien la solution</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>⚠️ Distribuer le signe négatif devant une parenthèse</h3>
+            <p>
+                Quand un signe <strong>−</strong> précède une parenthèse, il change le signe de <strong>tous</strong> les termes à l'intérieur :<br>
+                <strong>−(a + b) = −a − b</strong> &nbsp;|&nbsp; <strong>−(a − b) = −a + b</strong><br>
+                Exemple : −(x + 3) = <strong>−x − 3</strong> (et pas −x + 3 !)<br>
+                De même : −2(x − 4) = −2x + 8 (distribuer aussi le coefficient).
+            </p>
+        </div>
+
+        <!-- SVG 2 : résolution avec fractions 2x/3 + 1 = x/2 - 2 -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="210" fill="#FFF5F5" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#7F0000" font-family="Nunito, sans-serif">Équation avec fractions — 2x/3 + 1 = x/2 − 2</text>
+
+                <!-- Étape 1 -->
+                <rect x="10" y="28" width="250" height="50" rx="8" fill="#E53935"/>
+                <text x="135" y="50" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="Nunito, sans-serif">2x/3 + 1 = x/2 − 2</text>
+                <text x="135" y="68" text-anchor="middle" font-size="10" fill="#FFCDD2" font-family="Nunito, sans-serif">Dénominateurs : 3 et 2 · LCD = 6</text>
+
+                <!-- Flèche -->
+                <text x="278" y="58" text-anchor="middle" font-size="20" fill="#B71C1C" font-family="Nunito, sans-serif">→</text>
+                <text x="278" y="72" text-anchor="middle" font-size="9" fill="#B71C1C" font-weight="700" font-family="Nunito, sans-serif">× 6 partout</text>
+
+                <!-- Étape 2 -->
+                <rect x="300" y="28" width="250" height="50" rx="8" fill="#C62828"/>
+                <text x="425" y="50" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="Nunito, sans-serif">4x + 6 = 3x − 12</text>
+                <text x="425" y="68" text-anchor="middle" font-size="10" fill="#FFCDD2" font-family="Nunito, sans-serif">6×2x/3=4x · 6×1=6 · 6×x/2=3x · 6×2=12</text>
+
+                <!-- Flèche 2→3 -->
+                <line x1="135" y1="78" x2="135" y2="108" stroke="#B71C1C" stroke-width="2" stroke-dasharray="4,3"/>
+                <text x="145" y="98" font-size="9" fill="#B71C1C" font-weight="700" font-family="Nunito, sans-serif">4x−3x des 2 côtés</text>
+
+                <!-- Étape 3 -->
+                <rect x="10" y="112" width="250" height="44" rx="8" fill="#AD1457"/>
+                <text x="135" y="132" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Nunito, sans-serif">x + 6 = −12</text>
+                <text x="135" y="148" text-anchor="middle" font-size="10" fill="#F8BBD9" font-family="Nunito, sans-serif">4x − 3x = x</text>
+
+                <!-- Flèche 3→4 -->
+                <line x1="260" y1="134" x2="298" y2="134" stroke="#B71C1C" stroke-width="2" stroke-dasharray="4,3"/>
+                <text x="278" y="127" text-anchor="middle" font-size="9" fill="#B71C1C" font-weight="700" font-family="Nunito, sans-serif">− 6</text>
+
+                <!-- Étape 4 -->
+                <rect x="300" y="112" width="250" height="44" rx="8" fill="#880E4F"/>
+                <text x="425" y="132" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Nunito, sans-serif">x = −18</text>
+                <text x="425" y="148" text-anchor="middle" font-size="10" fill="#F8BBD9" font-family="Nunito, sans-serif">−12 − 6 = −18</text>
+
+                <!-- Note bas -->
+                <text x="280" y="185" text-anchor="middle" font-size="10" font-weight="900" fill="#7F0000" font-family="Nunito, sans-serif">Vérif : 2(−18)/3 + 1 = −12+1 = −11 · et · (−18)/2 − 2 = −9−2 = −11 ✓</text>
+                <text x="280" y="200" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">Astuce LCD : multiplier par le plus petit commun multiple des dénominateurs élimine toutes les fractions</text>
+            </svg>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège — Le signe − devant une parenthèse</h3>
+            <p>
+                <strong>Erreur fréquente :</strong> écrire −(2x − 5) = −2x − 5 → <strong>FAUX</strong> !<br>
+                La bonne réponse : −(2x − 5) = −2x <strong>+ 5</strong> (le signe du −5 change aussi).<br>
+                <strong>Règle :</strong> − devant une parenthèse = changer le signe de <em>chaque</em> terme à l'intérieur.
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">2(x+3) = 10</div>
+                <div class="cas-eq">2x+6=10 → x=2</div>
+                <div class="cas-desc">Développer avant de résoudre.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">3x−4 = x+8</div>
+                <div class="cas-eq">2x=12 → x=6</div>
+                <div class="cas-desc">Regrouper : 3x−x des deux côtés.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">x/2 + 3 = 7</div>
+                <div class="cas-eq">x/2=4 → x=8</div>
+                <div class="cas-desc">×2 des deux membres.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Parenthèses, termes des deux côtés, fractions</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Résous 2(x + 3) = 10. Quelle est la valeur de x ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">x = 5</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">x = 2</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">x = 8</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">x = 3</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Résous 3x − 4 = x + 8. Quelle est la valeur de x ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">x = 2</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">x = 6</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">x = 4</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">x = 12</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Résous x/2 + 3 = 7. Quelle est la valeur de x ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">x = 2</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">x = 5</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">x = 8</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">x = 20</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Un élève développe −(x + 5) = −x + 5. Est-ce correct ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">Oui, car −×+ = − et −×+ = +</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">Non, le résultat correct est −x − 5</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">Oui, car le − ne change que le premier terme</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">Non, le résultat correct est x + 5</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Résous 4(x − 1) = 2(x + 3). Quelle est la valeur de x ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">x = 5</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">x = 3</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">x = 7</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">x = 1</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Développer, signe négatif, LCD fractions</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Pour résoudre une équation avec parenthèses, on commence par
+                <input class="blank" id="f1a" placeholder="?" style="width:110px">,
+                puis on <input class="blank" id="f1b" placeholder="?" style="width:100px"> les termes semblables,
+                et enfin on <input class="blank" id="f1c" placeholder="?" style="width:80px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                −(a + b) = <input class="blank" id="f2a" placeholder="?" style="width:80px">.
+                Exemple : −(3x − 2) = <input class="blank" id="f2b" placeholder="?" style="width:90px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Pour éliminer les fractions dans une équation, on multiplie tous les membres par le
+                <input class="blank" id="f3a" placeholder="?" style="width:60px"> commun multiple (
+                <input class="blank" id="f3b" placeholder="?" style="width:40px"> en anglais) des dénominateurs.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Équations avec parenthèses</div>
+                <div class="ex-stmt">
+                    Résous en développant d'abord :<br>
+                    a) 3(x + 4) = 21 &nbsp;&nbsp; b) 2(x − 3) = x + 5 &nbsp;&nbsp; c) −(2x − 1) = 7
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">a</div><div class="sol-text"><strong>3(x + 4) = 21</strong><br>Développer : 3x + 12 = 21<br>3x = 21 − 12 = 9<br>x = 3<br>Vérif : 3(3+4) = 3×7 = 21 ✓</div></div>
+                <div class="sol-step"><div class="sol-num">b</div><div class="sol-text"><strong>2(x − 3) = x + 5</strong><br>Développer : 2x − 6 = x + 5<br>Regrouper : 2x − x = 5 + 6<br>x = 11<br>Vérif : 2(11−3) = 2×8 = 16 · x+5 = 16 ✓</div></div>
+                <div class="sol-step"><div class="sol-num">c</div><div class="sol-text"><strong>−(2x − 1) = 7</strong><br>Développer : −2x + 1 = 7<br>−2x = 7 − 1 = 6<br>x = 6 ÷ (−2) = −3<br>Vérif : −(2×(−3)−1) = −(−6−1) = −(−7) = 7 ✓</div></div>
+                <div class="final-ans">✅ a) x = 3 · b) x = 11 · c) x = −3</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Termes en x des deux côtés (CE1D style)</div>
+                <div class="ex-stmt">
+                    Résous : 5x − 3 = 2x + 9. Montre toutes les étapes.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Regrouper les x à gauche :</strong><br>5x − 2x − 3 = 9<br>3x − 3 = 9</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Isoler le terme en x :</strong><br>3x = 9 + 3 = 12</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Calculer x :</strong><br>x = 12 ÷ 3 = <strong>4</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Vérification :</strong><br>5×4 − 3 = 20 − 3 = 17 · et · 2×4 + 9 = 8 + 9 = 17 ✓</div></div>
+                <div class="final-ans">✅ Solution : x = 4 (vérification : 17 = 17 ✓)</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Équation avec fractions</div>
+                <div class="ex-stmt">
+                    Résous l'équation : x/3 + x/6 = 5. Élimine les fractions et résous.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Trouver le LCD :</strong> les dénominateurs sont 3 et 6. LCD = 6.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Multiplier par 6 :</strong><br>6 × x/3 + 6 × x/6 = 6 × 5<br>2x + x = 30</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Simplifier :</strong><br>3x = 30<br>x = 10</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Vérification :</strong><br>10/3 + 10/6 = 20/6 + 10/6 = 30/6 = 5 ✓</div></div>
+                <div class="final-ans">✅ Solution : x = 10 (vérification : 10/3 + 10/6 = 5 ✓)</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Équation complexe combinée</div>
+                <div class="bonus-stmt">
+                    Résous : 2(3x − 1) − 3(x + 2) = x + 7. Montre toutes les étapes.
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Développer :</strong><br>2(3x−1) = 6x − 2<br>−3(x+2) = −3x − 6<br>Équation : 6x − 2 − 3x − 6 = x + 7</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Simplifier le membre gauche :</strong><br>3x − 8 = x + 7</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>Regrouper :</strong><br>3x − x = 7 + 8<br>2x = 15<br>x = 7,5</div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text"><strong>Vérification :</strong><br>2(3×7,5−1) − 3(7,5+2) = 2(21,5) − 3(9,5) = 43 − 28,5 = 14,5<br>x + 7 = 7,5 + 7 = 14,5 ✓</div></div>
+                <div class="bonus-ans">
+                    Solution : x = 7,5<br>
+                    Attention à bien distribuer le signe − devant la 2ème parenthèse !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 3 terminé !</h2>
+    <p>Bravo ! Tu sais maintenant développer, regrouper et résoudre des équations complexes.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue vers le Niveau 4 — Mise en équation !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Équations du 1er degré</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_equations_niveau1.html" class="nav-btn">N1 — Notion</a>
+        <a href="maths_equations_niveau2.html" class="nav-btn">N2 — Résolution</a>
+        <a href="maths_equations_niveau3.html" class="nav-btn current">▶ N3 — Développer</a>
+        <a href="maths_equations_niveau4.html" class="nav-btn">N4 — Mise en équation</a>
+        <a href="maths_equations_niveau5.html" class="nav-btn">N5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:1, 3:2, 4:1, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! 2(x+3) = 10 → 2x+6=10 → 2x=4 → x=2. Vérif : 2(2+3)=2×5=10 ✓",
+    2:"✅ Bravo ! 3x−4=x+8 → 3x−x=8+4 → 2x=12 → x=6. Vérif : 3×6−4=14 · 6+8=14 ✓",
+    3:"✅ Correct ! x/2+3=7 → x/2=4 → x=8. Vérif : 8/2+3=4+3=7 ✓",
+    4:"✅ Parfait ! Le − distribue sur chaque terme : −(a+b)=−a−b. Donc −(x+5)=−x−5.",
+    5:"✅ Exact ! 4(x−1)=2(x+3) → 4x−4=2x+6 → 2x=10 → x=5. Vérif : 4×4=16 · 2×8=16 ✓"
+};
+
+const QCM_ERR = {
+    1:"❌ Non. 2(x+3)=10 → développer : 2x+6=10 → 2x=4 → x=2. Vérif : 2(2+3)=10 ✓",
+    2:"❌ Non. 3x−4=x+8 → faire passer x à gauche : 3x−x=8+4 → 2x=12 → x=6.",
+    3:"❌ Non. x/2+3=7 → x/2=4 → multiplier par 2 → x=8. Vérif : 8/2+3=7 ✓",
+    4:"❌ Non. Le − devant une parenthèse change le signe de TOUS les termes. −(x+5)=−x−5 (et pas −x+5).",
+    5:"❌ Non. 4(x−1)=2(x+3) → 4x−4=2x+6 → 2x=10 → x=5. Vérif : 4(5−1)=16 · 2(5+3)=16 ✓"
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b','f1c'],
+        accepted:[['developper','développer'],['regrouper','grouper','rassembler'],['resoudre','résoudre','diviser']],
+        msgOk:"✅ Parfait ! Les 3 phases : développer les parenthèses → regrouper les termes semblables → résoudre.",
+        msgErr:"❌ Attendus : 'développer', 'regrouper' (ou 'rassembler'), 'résoudre' (ou 'diviser')."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['-a-b','−a−b','- a - b','moins a moins b'],['−3x+2','-3x+2','−3x + 2','-3x + 2']],
+        msgOk:"✅ Exact ! −(a+b)=−a−b. Et −(3x−2)=−3x+2 (le signe de −2 change en +2).",
+        msgErr:"❌ Attendus : −(a+b) = '−a−b', et −(3x−2) = '−3x+2' (attention : −×− = +)."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['plus petit','ppcm','commun','plus petit commun'],['lcd','ppcm','lcm']],
+        msgOk:"✅ Bravo ! On multiplie par le plus petit commun multiple (PPCM ou LCD) pour éliminer les fractions.",
+        msgErr:"❌ Attendus : 'plus petit' (commun multiple), et 'LCD' ou 'PPCM' (abréviation)."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 \+\-]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_equations_3', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>
