@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique — Énergie · Niveau 5 — Défi CE1D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#558B2F; --primary-dark:#33691E; --primary-mid:#7CB342; --primary-bg:#F1F8E9;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+        header { background:linear-gradient(135deg,#1B5E20 0%,#558B2F 55%,#AED581 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(27,94,32,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#558B2F; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#33691E; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#1B5E20,#558B2F,#AED581); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+        .recap-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; margin:10px 0; }
+        .recap-item { background:var(--primary-bg); border:2px solid #AED581; border-radius:12px; padding:14px 16px; }
+        .recap-item h4 { font-size:.88rem; font-weight:900; color:var(--primary-dark); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+        .recap-item ul { font-size:.84rem; color:#444; line-height:1.8; padding-left:16px; }
+        .recap-item ul li { margin-bottom:2px; }
+        .formule-box { background:linear-gradient(135deg,#1B5E20,#33691E); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .formule-box h3 { font-size:.95rem; font-weight:900; color:#AED581; margin-bottom:10px; }
+        .formule-row { display:flex; flex-wrap:wrap; gap:14px; }
+        .formule-pill { background:rgba(255,255,255,.15); border:1.5px solid rgba(255,255,255,.3); border-radius:10px; padding:8px 14px; font-family:'Courier New',monospace; font-size:.95rem; font-weight:900; color:white; }
+        .formule-pill span { color:#FFD54F; }
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+        .fill-item { background:var(--primary-bg); border:2px solid #AED581; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:110px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+        .completion { display:none; background:linear-gradient(135deg,#1B5E20,#558B2F,#AED581); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #1B5E20; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .trophy-banner { background:linear-gradient(135deg,#F57F17,#FFB300,#FFD54F); border-radius:var(--radius); padding:22px 24px; text-align:center; color:#1B5E20; box-shadow:0 4px 16px rgba(245,127,23,.3); margin-bottom:4px; }
+        .trophy-banner .trophy-icon { font-size:2.8rem; margin-bottom:6px; }
+        .trophy-banner h2 { font-size:1.4rem; font-weight:900; margin-bottom:4px; }
+        .trophy-banner p { font-size:.92rem; font-weight:700; opacity:.85; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>⚡ Énergie · Défi CE1D 🏆</h1>
+            <p>Niveau 5 · Récapitulatif complet · Questions style examen · Exercices CE1D</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <span class="diff-label">Niveau 5 — Défi CE1D</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- BANNER TROPHÉE -->
+<div class="trophy-banner">
+    <div class="trophy-icon">🏆</div>
+    <h2>Défi Énergie CE1D</h2>
+    <p>Le récapitulatif complet et les questions style examen pour être prêt le jour J !</p>
+</div>
+
+<!-- 1. FICHE RÉVISION -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📋</div>
+        <div>
+            <div class="card-title">Fiche de révision complète — Énergie</div>
+            <div class="card-sub">Tout ce qu'il faut savoir pour le CE1D en un coup d'œil</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="recap-grid">
+            <div class="recap-item">
+                <h4>⚡ Notion d'énergie (N1)</h4>
+                <ul>
+                    <li>Capacité à produire un travail, un mouvement, de la lumière ou de la chaleur</li>
+                    <li>Unité : <strong>Joule (J)</strong> · 1 kWh = 3 600 000 J</li>
+                    <li>6 formes : cinétique, potentielle, thermique, lumineuse, chimique, électrique</li>
+                    <li>L'énergie ne se crée pas — elle se <strong>transforme</strong></li>
+                </ul>
+            </div>
+            <div class="recap-item">
+                <h4>♻️ Sources d'énergie (N2)</h4>
+                <ul>
+                    <li><strong>Renouvelables</strong> : solaire, éolien, hydraulique, géothermique, biomasse</li>
+                    <li><strong>Non renouvelables</strong> : pétrole, gaz, charbon, uranium (nucléaire)</li>
+                    <li>Combustion : C + O₂ → CO₂ + énergie</li>
+                    <li>Nucléaire : non renouvelable mais pas de CO₂ direct</li>
+                </ul>
+            </div>
+            <div class="recap-item">
+                <h4>🔄 Transformations (N3)</h4>
+                <ul>
+                    <li>Convertisseur : transforme une forme d'énergie en une autre</li>
+                    <li>Chaîne : source → convertisseur → énergie utile (+ pertes)</li>
+                    <li>Diagramme de Sankey : largeur ∝ quantité d'énergie</li>
+                    <li>Les pertes sont toujours sous forme de <strong>chaleur</strong></li>
+                </ul>
+            </div>
+            <div class="recap-item">
+                <h4>📐 Conservation &amp; rendement (N4)</h4>
+                <ul>
+                    <li>Loi de conservation : <strong>Ef = Eu + Ep</strong></li>
+                    <li>Rendement : <strong>η = (Eu ÷ Ef) × 100</strong></li>
+                    <li>Eu = Ef × η ÷ 100 · Ep = Ef − Eu</li>
+                    <li>η toujours ≤ 100 % · LED ≈ 80 % · Incandescente ≈ 5 %</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="formule-box">
+            <h3>📐 Formules essentielles à maîtriser</h3>
+            <div class="formule-row">
+                <div class="formule-pill"><span>η</span> = (Eu ÷ Ef) × 100</div>
+                <div class="formule-pill">Eu = Ef × <span>η</span> ÷ 100</div>
+                <div class="formule-pill">Ep = Ef − Eu</div>
+                <div class="formule-pill">Ef = Eu + Ep</div>
+                <div class="formule-pill">1 kWh = 3 600 000 J</div>
+                <div class="formule-pill">C + O₂ → CO₂ + <span>E</span></div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Les 5 pièges les plus fréquents au CE1D</h3>
+            <p>
+                <strong>1.</strong> L'énergie ne se crée pas — elle se <em>transforme</em> (piège : dire qu'on "produit" de l'énergie).<br>
+                <strong>2.</strong> Nucléaire = non renouvelable (piège : confondre avec "propre").<br>
+                <strong>3.</strong> Si η = 80 %, les pertes = 20 %, pas 80 % (piège classique d'examen !).<br>
+                <strong>4.</strong> 1 kWh = 3 600 000 J (pas 1 000 J ni 3 600 J).<br>
+                <strong>5.</strong> η toujours ≤ 100 % — un résultat &gt; 100 % signifie une erreur de calcul.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM MÉLANGÉS STYLE EXAMEN -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">🏆</div>
+        <div>
+            <div class="card-title">Questions style examen CE1D</div>
+            <div class="card-sub">5 questions mélangées · Tous les chapitres · Niveau CE1D réel</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Une centrale éolienne transforme l'énergie du vent. Quelle transformation est correcte ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">Thermique → Électrique</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">Cinétique → Électrique</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">Chimique → Mécanique</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">Lumineuse → Électrique</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Un chauffe-eau électrique reçoit 1 200 J et a un rendement de 95 %. Quelle énergie thermique produit-il ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">95 J</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">1 140 J</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">1 200 J</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">60 J</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Quelle affirmation sur le nucléaire est VRAIE ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">Le nucléaire est une énergie renouvelable</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">Le nucléaire produit beaucoup de CO₂ lors de la fission</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">Le nucléaire est non renouvelable et ne produit pas de CO₂ directement</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">Le nucléaire utilise du charbon comme combustible</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Un moteur reçoit 800 J et produit 200 J de pertes thermiques. Quel est son rendement ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">25 %</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">75 %</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">80 %</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">200 %</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Combien de Joules correspondent à 0,5 kWh ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">500 J</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">1 800 000 J</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">3 600 000 J</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">1 800 J</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS RÉCAP -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous — Récapitulatif</div>
+            <div class="card-sub">3 exercices · Tous chapitres mélangés · Style CE1D</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Une énergie <input class="blank" id="f1a" placeholder="?" style="width:140px"> est une source qui se reconstitue naturellement, comme le soleil ou le vent.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Le rendement se calcule : η = Eu ÷ Ef × <input class="blank" id="f2a" placeholder="?" style="width:60px"> et est toujours <input class="blank" id="f2b" placeholder="?" style="width:100px"> 100 %.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                La loi de conservation de l'énergie dit que l'énergie totale est <input class="blank" id="f3a" placeholder="?" style="width:120px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES COMPLETS STYLE CE1D -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices complets style CE1D</div>
+            <div class="card-sub">3 exercices guidés + 1 bonus · Format examen belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Chaîne d'énergie complète + rendement (CE1D style)</div>
+                <div class="ex-stmt">
+                    Un véhicule électrique utilise une batterie (énergie chimique).<br>
+                    La batterie alimente un moteur électrique (η = 90 %) qui produit de l'énergie cinétique.<br>
+                    La batterie fournit Ef = 2 000 J au moteur.<br>
+                    a) Décris la chaîne d'énergie de la batterie jusqu'aux roues.<br>
+                    b) Calcule l'énergie cinétique utile produite.<br>
+                    c) Calcule l'énergie perdue.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Chaîne d'énergie :</strong><br>Énergie chimique (batterie) → Énergie électrique (circuit) → Énergie cinétique (moteur → roues)<br>+ Énergie thermique perdue (chaleur du moteur)</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Énergie cinétique utile :</strong><br>Eu = Ef × η ÷ 100 = 2 000 × 90 ÷ 100 = <strong>1 800 J</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Énergie perdue :</strong><br>Ep = Ef − Eu = 2 000 − 1 800 = <strong>200 J</strong><br>Vérif : 1 800 + 200 = 2 000 J = Ef ✓</div></div>
+                <div class="final-ans">✅ a) Chimique → Électrique → Cinétique (+thermique perdue) &nbsp;|&nbsp; b) Eu = 1 800 J &nbsp;|&nbsp; c) Ep = 200 J</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Sources d'énergie + combustion (CE1D style)</div>
+                <div class="ex-stmt">
+                    Une école belge chauffe ses locaux avec du gaz naturel.<br>
+                    La réaction de combustion du méthane est : CH₄ + 2 O₂ → CO₂ + 2 H₂O + énergie<br>
+                    a) Cette énergie est-elle renouvelable ou non ? Justifie.<br>
+                    b) Quel gaz produit par la combustion est problématique pour le climat ?<br>
+                    c) Propose deux sources d'énergie alternatives renouvelables pour chauffer l'école.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Non renouvelable</strong><br>Le gaz naturel est un combustible fossile formé pendant des millions d'années. Il s'épuise à l'usage et ne se reconstitue pas à l'échelle humaine.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) CO₂ (dioxyde de carbone)</strong><br>C'est un gaz à effet de serre. En grandes quantités, il provoque le réchauffement climatique en piégeant la chaleur dans l'atmosphère.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Alternatives renouvelables :</strong><br>• <strong>Énergie géothermique</strong> : pompe à chaleur utilisant la chaleur du sol<br>• <strong>Énergie solaire thermique</strong> : capteurs solaires sur le toit pour chauffer l'eau<br>• <strong>Biomasse</strong> (bois/pellets) : renouvelable si replantation</div></div>
+                <div class="final-ans">✅ a) Non renouvelable (fossile) &nbsp;|&nbsp; b) CO₂ (gaz à effet de serre) &nbsp;|&nbsp; c) Géothermique, solaire thermique, biomasse</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Calcul rendement + loi de conservation (CE1D style)</div>
+                <div class="ex-stmt">
+                    Un panneau solaire photovoltaïque reçoit 5 000 J d'énergie lumineuse du soleil.<br>
+                    Il produit 1 000 J d'énergie électrique.<br>
+                    a) Calcule le rendement η du panneau solaire.<br>
+                    b) Quelle énergie est perdue ? Sous quelle forme ?<br>
+                    c) Vérifie la loi de conservation de l'énergie.<br>
+                    d) Ce panneau est-il plus ou moins efficace qu'une LED (η ≈ 80 %) ? Que peux-tu conclure ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Rendement du panneau :</strong><br>η = (Eu ÷ Ef) × 100 = (1 000 ÷ 5 000) × 100 = <strong>20 %</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Énergie perdue :</strong><br>Ep = Ef − Eu = 5 000 − 1 000 = <strong>4 000 J</strong><br>Sous forme de chaleur (les panneaux chauffent au soleil) et de lumière réfléchie.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Vérification conservation :</strong><br>Ef = Eu + Ep → 5 000 = 1 000 + 4 000 = <strong>5 000 J ✓</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>d) Comparaison :</strong><br>Panneau solaire η = 20 % &lt; LED η = 80 %<br>La LED est bien plus efficace pour convertir l'électricité en lumière. Les panneaux solaires ont un faible rendement mais utilisent une énergie gratuite et inépuisable (le soleil).</div></div>
+                <div class="final-ans">✅ a) η = 20 % &nbsp;|&nbsp; b) 4 000 J (chaleur) &nbsp;|&nbsp; c) 5 000 = 1 000 + 4 000 ✓ &nbsp;|&nbsp; d) Moins efficace que LED mais source gratuite</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Problème complet intégrateur</div>
+                <div class="bonus-stmt">
+                    Une maison belge consomme 3 500 kWh d'électricité par an, fournie par des panneaux solaires (η = 20 %).<br>
+                    a) Convertis 3 500 kWh en Joules.<br>
+                    b) Quelle énergie solaire totale (en J) les panneaux doivent-ils recevoir pour produire 3 500 kWh utiles ?<br>
+                    c) Si les panneaux reçoivent en moyenne 1 400 kWh/m²/an du soleil, quelle surface de panneaux est nécessaire ?<br>
+                    (Surface = Ef_total ÷ Ef_par_m²)
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a) Conversion en Joules :</strong><br>3 500 kWh × 3 600 000 J/kWh = <strong>12 600 000 000 J = 12,6 GJ</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b) Énergie solaire nécessaire :</strong><br>η = 20 % → Ef = Eu ÷ (η/100) = 3 500 kWh ÷ 0,20 = <strong>17 500 kWh</strong><br>Les panneaux doivent recevoir 17 500 kWh du soleil pour produire 3 500 kWh électriques.</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>c) Surface nécessaire :</strong><br>Surface = Ef_total ÷ Ef_par_m² = 17 500 ÷ 1 400 = <strong>12,5 m²</strong><br>Environ 12 à 13 m² de panneaux solaires suffisent pour alimenter la maison en électricité !</div></div>
+                <div class="bonus-ans">
+                    a) <strong>12,6 GJ</strong> &nbsp;|&nbsp; b) <strong>17 500 kWh</strong> solaires nécessaires &nbsp;|&nbsp; c) <strong>12,5 m²</strong> de panneaux<br>
+                    En Belgique, un toit moyen peut accueillir 20–30 m² de panneaux — une maison peut donc être autonome en électricité !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🏆 🌟 🏆</div>
+    <h2>🏆 Défi Énergie réussi !</h2>
+    <p>Félicitations ! Tu as maîtrisé tout le module Énergie du CE1D :<br>
+       notions, sources, transformations, conservation et rendement !<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Tu es prêt(e) pour l'examen !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Énergie</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="physique_energie_niveau1.html" class="nav-btn">Niveau 1 — Notion d'énergie</a>
+        <a href="physique_energie_niveau2.html" class="nav-btn">Niveau 2 — Sources d'énergie</a>
+        <a href="physique_energie_niveau3.html" class="nav-btn">Niveau 3 — Transformations</a>
+        <a href="physique_energie_niveau4.html" class="nav-btn">Niveau 4 — Conservation &amp; pertes</a>
+        <a href="physique_energie_niveau5.html" class="nav-btn current">▶ Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:1, 3:2, 4:1, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! Le vent est de l'air en mouvement (énergie cinétique). L'éolienne le convertit en énergie électrique via un générateur.",
+    2:"✅ Bravo ! Eu = Ef × η ÷ 100 = 1 200 × 95 ÷ 100 = 1 140 J. Un chauffe-eau à 95 % est très efficace !",
+    3:"✅ Correct ! Le nucléaire utilise de l'uranium (ressource limitée → non renouvelable), mais la fission ne produit pas de CO₂ directement (contrairement aux combustibles fossiles).",
+    4:"✅ Parfait ! Eu = Ef − Ep = 800 − 200 = 600 J. η = (600 ÷ 800) × 100 = 75 %. Les 25 % restants (200 J) sont les pertes.",
+    5:"✅ Exact ! 0,5 kWh = 0,5 × 3 600 000 = 1 800 000 J. La moitié d'un kWh donne la moitié de 3 600 000 J."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Le vent est de l'énergie CINÉTIQUE (air en mouvement). L'éolienne convertit cette énergie cinétique en énergie électrique (pas thermique, chimique ou lumineuse).",
+    2:"❌ Non. Eu = Ef × η ÷ 100 = 1 200 × 95 ÷ 100 = 1 140 J. 95 J serait incorrect (c'est juste le pourcentage, pas l'énergie en J).",
+    3:"❌ Non. Le nucléaire est NON renouvelable (uranium limité), il ne produit pas de CO₂ direct (pas de combustion), et il utilise de l'uranium (pas du charbon).",
+    4:"❌ Non. Les pertes sont 200 J. Donc Eu = 800 − 200 = 600 J. η = (600 ÷ 800) × 100 = 75 %. 25 % est le pourcentage de pertes, pas le rendement.",
+    5:"❌ Non. 0,5 kWh = 0,5 × 3 600 000 J = 1 800 000 J. Attention : 1 kWh = 3 600 000 J (pas 1 000 J, pas 3 600 J)."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['renouvelable','renouvelables']],
+        msgOk:"✅ Une énergie renouvelable se reconstitue naturellement. Exemples : soleil (solaire), vent (éolien), eau (hydraulique).",
+        msgErr:"❌ Attendu : 'renouvelable'. La source qui se reconstitue naturellement est une énergie renouvelable."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['100'],['inferieur a','inférieur à','inferieur','inférieur','≤','<=','plus petit que','inferieur ou egal']],
+        msgOk:"✅ η = Eu ÷ Ef × 100 — et le rendement est toujours inférieur (ou égal) à 100 %.",
+        msgErr:"❌ Attendus : '100' (pour ×100) et 'inférieur à' (ou '≤'). Le rendement est toujours ≤ 100 %."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['constante','conservee','conservée','la meme','la même','invariable','inchangee','inchangée']],
+        msgOk:"✅ La loi de conservation : l'énergie totale est constante. Elle change de forme mais pas de quantité totale.",
+        msgErr:"❌ Attendu : 'constante' (ou 'conservée'). L'énergie totale d'un système isolé reste toujours la même."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_energie_5', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

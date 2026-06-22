@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique — Forces · Niveau 3 — Types de forces</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#7B1FA2; --primary-dark:#4A148C; --primary-mid:#AB47BC; --primary-bg:#F3E5F5;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#2D0066 0%,#7B1FA2 55%,#CE93D8 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(45,0,102,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#7B1FA2; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#4A148C; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#2D0066,#7B1FA2,#CE93D8); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#2D0066,#4A148C); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#CE93D8; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #AB47BC; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #AB47BC; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#2D0066,#7B1FA2,#CE93D8); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #1A0040; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>⚡ Forces · Types de forces</h1>
+            <p>Niveau 3 · Poids · Réaction du support · Frottement · Archimède</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 3 — Intermédiaire</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Les 4 grandes forces de la physique quotidienne</div>
+            <div class="card-sub">Poids · Réaction normale · Frottement · Poussée d'Archimède</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            En physique, plusieurs types de forces agissent sur les objets au quotidien.
+            Les reconnaître et savoir les représenter est essentiel pour réussir le CE1D.
+        </p>
+
+        <!-- Poids -->
+        <div class="def-box">
+            <h3>1️⃣ Le poids — Force gravitationnelle</h3>
+            <p>
+                Le <strong>poids</strong> est la force exercée par la Terre (pesanteur) sur tout objet.<br>
+                • Direction : <strong>verticale</strong><br>
+                • Sens : toujours <strong>vers le bas</strong> (vers le centre de la Terre)<br>
+                • Intensité : P = m × g (en Newton)<br>
+                • Point d'application : le <strong>centre de gravité</strong> de l'objet
+            </p>
+        </div>
+
+        <!-- Réaction du support -->
+        <div class="def-box">
+            <h3>2️⃣ La réaction du support (force normale)</h3>
+            <p>
+                Quand un objet est posé sur une surface, la surface exerce une force sur l'objet : la <strong>réaction du support</strong> (notée R ou N).<br>
+                • Direction : <strong>perpendiculaire à la surface</strong> (d'où le nom "normale")<br>
+                • Sens : <strong>vers l'objet</strong> (s'éloignant de la surface)<br>
+                • Sur une surface horizontale : R est verticale vers le <strong>haut</strong><br>
+                Si l'objet est en équilibre sur une surface horizontale : <strong>R = P</strong> (elles s'annulent)
+            </p>
+        </div>
+
+        <!-- SVG livre sur table -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="200" fill="#F8F0FF" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#4A148C" font-family="Nunito, sans-serif">Livre posé sur une table — Bilan des forces</text>
+
+                <!-- Table -->
+                <rect x="100" y="130" width="360" height="18" rx="4" fill="#8D6E63" stroke="#5D4037" stroke-width="1.5"/>
+                <rect x="130" y="148" width="20" height="40" fill="#8D6E63"/>
+                <rect x="410" y="148" width="20" height="40" fill="#8D6E63"/>
+
+                <!-- Livre -->
+                <rect x="220" y="90" width="120" height="42" rx="6" fill="#CE93D8" stroke="#7B1FA2" stroke-width="2"/>
+                <text x="280" y="116" text-anchor="middle" font-size="13" font-weight="900" fill="#4A148C" font-family="Nunito, sans-serif">LIVRE</text>
+
+                <!-- Poids (vers le bas) -->
+                <defs>
+                    <marker id="arn3a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#E53935"/></marker>
+                    <marker id="arn3b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#1565C0"/></marker>
+                </defs>
+                <line x1="280" y1="111" x2="280" y2="158" stroke="#E53935" stroke-width="3" marker-end="url(#arn3a)"/>
+                <text x="310" y="145" font-size="11" font-weight="900" fill="#E53935" font-family="Nunito, sans-serif">P (poids ↓)</text>
+
+                <!-- Réaction (vers le haut) -->
+                <line x1="260" y1="130" x2="260" y2="70" stroke="#1565C0" stroke-width="3" marker-end="url(#arn3b)"/>
+                <text x="165" y="82" font-size="11" font-weight="900" fill="#1565C0" font-family="Nunito, sans-serif">R (réaction ↑)</text>
+
+                <!-- Égalité -->
+                <text x="280" y="185" text-anchor="middle" font-size="10" font-weight="900" fill="#4A148C" font-family="Nunito, sans-serif">Équilibre : P = R (forces opposées, même intensité → se compensent)</text>
+            </svg>
+        </div>
+
+        <!-- Frottement -->
+        <div class="rule-box">
+            <h3>3️⃣ La force de frottement</h3>
+            <p>
+                Le <strong>frottement</strong> est une force qui s'oppose au mouvement (ou à la tendance au mouvement) d'un objet sur une surface.<br>
+                • Direction : <strong>parallèle à la surface</strong><br>
+                • Sens : <strong>opposé au mouvement</strong><br>
+                • Elle freine les objets qui glissent (sol sur une voiture, air sur un avion…)<br>
+                <strong>Frottement solide :</strong> entre deux surfaces solides (glissement).<br>
+                <strong>Frottement fluide :</strong> résistance de l'air ou de l'eau (trainée).
+            </p>
+        </div>
+
+        <!-- Poussée d'Archimède -->
+        <div class="def-box">
+            <h3>4️⃣ La poussée d'Archimède</h3>
+            <p>
+                Tout corps <strong>immergé</strong> dans un fluide (eau, air…) subit une poussée vers le <strong>haut</strong>.<br>
+                • Sens : verticalement <strong>vers le haut</strong><br>
+                • Intensité : égale au <strong>poids du fluide déplacé</strong> par l'objet<br>
+                <strong>Principe d'Archimède :</strong> "Tout corps plongé dans un fluide reçoit de ce fluide une poussée verticale vers le haut, égale au poids du fluide déplacé."<br>
+                <strong>Un objet flotte si la poussée d'Archimède ≥ poids de l'objet.</strong>
+            </p>
+        </div>
+
+        <!-- SVG objet dans l'eau -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="210" fill="#F8F0FF" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#4A148C" font-family="Nunito, sans-serif">Objet dans l'eau — Poids vs Poussée d'Archimède</text>
+
+                <!-- Récipient eau -->
+                <rect x="80" y="40" width="180" height="150" rx="8" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+                <text x="170" y="185" text-anchor="middle" font-size="9" fill="#1565C0" font-family="Nunito, sans-serif">eau</text>
+
+                <!-- Objet immergé (coule) -->
+                <rect x="120" y="100" width="60" height="50" rx="6" fill="#AB47BC" stroke="#7B1FA2" stroke-width="2"/>
+                <text x="150" y="129" text-anchor="middle" font-size="9" font-weight="700" fill="white" font-family="Nunito, sans-serif">objet lourd</text>
+                <!-- Poids bas -->
+                <defs>
+                    <marker id="ar3c" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#E53935"/></marker>
+                    <marker id="ar3d" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#00897B"/></marker>
+                </defs>
+                <line x1="140" y1="150" x2="140" y2="175" stroke="#E53935" stroke-width="2.5" marker-end="url(#ar3c)"/>
+                <text x="80" y="178" font-size="9" font-weight="900" fill="#E53935" font-family="Nunito, sans-serif">P (grand)</text>
+                <!-- Archimède haut -->
+                <line x1="160" y1="100" x2="160" y2="72" stroke="#00897B" stroke-width="2.5" marker-end="url(#ar3d)"/>
+                <text x="172" y="70" font-size="9" font-weight="900" fill="#00897B" font-family="Nunito, sans-serif">F_A (petit)</text>
+                <text x="170" y="195" text-anchor="middle" font-size="9" fill="#E53935" font-family="Nunito, sans-serif">P > F_A → coule</text>
+
+                <!-- Séparateur -->
+                <line x1="290" y1="30" x2="290" y2="195" stroke="#CE93D8" stroke-width="1.5" stroke-dasharray="5,4"/>
+
+                <!-- Côté flottant -->
+                <rect x="310" y="40" width="180" height="150" rx="8" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+                <!-- Objet flottant (moitié immergée) -->
+                <rect x="360" y="80" width="70" height="40" rx="6" fill="#CE93D8" stroke="#7B1FA2" stroke-width="2"/>
+                <text x="395" y="104" text-anchor="middle" font-size="9" font-weight="700" fill="#4A148C" font-family="Nunito, sans-serif">objet léger</text>
+                <!-- Ligne eau -->
+                <line x1="310" y1="100" x2="490" y2="100" stroke="#1565C0" stroke-width="1.5" stroke-dasharray="4,3"/>
+                <!-- Poids bas -->
+                <line x1="380" y1="120" x2="380" y2="145" stroke="#E53935" stroke-width="2.5" marker-end="url(#ar3c)"/>
+                <text x="320" y="152" font-size="9" font-weight="900" fill="#E53935" font-family="Nunito, sans-serif">P (petit)</text>
+                <!-- Archimède haut -->
+                <line x1="410" y1="100" x2="410" y2="62" stroke="#00897B" stroke-width="2.5" marker-end="url(#ar3d)"/>
+                <text x="418" y="60" font-size="9" font-weight="900" fill="#00897B" font-family="Nunito, sans-serif">F_A (égal)</text>
+                <text x="400" y="195" text-anchor="middle" font-size="9" fill="#00897B" font-family="Nunito, sans-serif">F_A ≥ P → flotte</text>
+            </svg>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Pièges classiques</h3>
+            <p>
+                <strong>Réaction ≠ Poids :</strong> la réaction du support est exercée par la surface SUR l'objet. Le poids est exercé par la Terre. Ce sont deux forces distinctes de même intensité en équilibre.<br>
+                <strong>Archimède :</strong> la poussée dépend du volume immergé, pas de la masse de l'objet. Un objet flotte si sa densité moyenne est inférieure à celle du fluide.<br>
+                <strong>Frottement :</strong> toujours opposé au sens du mouvement (pas à la force motrice).
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">Poids P</div>
+                <div class="cas-eq">↓ vertical</div>
+                <div class="cas-desc">Force gravitationnelle. Toujours vers le bas. P = m × g.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Réaction R</div>
+                <div class="cas-eq">⊥ surface, ↑</div>
+                <div class="cas-desc">Perpendiculaire à la surface de contact, vers l'objet.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Archimède F_A</div>
+                <div class="cas-eq">↑ vertical</div>
+                <div class="cas-desc">= poids du fluide déplacé. Flotte si F_A ≥ P.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Réaction, Archimède, frottement, flottaison, chute libre</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Un livre est posé sur une table horizontale. Dans quel sens est dirigée la réaction du support exercée par la table sur le livre ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">Vers le bas</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">Vers le haut</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">Horizontalement</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">Elle n'existe pas</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Dans quel sens est dirigée la poussée d'Archimède sur un objet immergé dans l'eau ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">Vers le bas</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">Horizontalement</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">Verticalement vers le haut</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">Dans le sens du courant</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Une voiture roule vers la droite. Dans quel sens agit la force de frottement de l'air sur la voiture ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">Vers la droite (même sens que le mouvement)</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">Vers la gauche (sens opposé au mouvement)</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">Vers le haut</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">La voiture ne subit pas de frottement</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Un objet a un poids de 10 N. Pour qu'il flotte dans l'eau, la poussée d'Archimède doit être :</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">Strictement inférieure à 10 N</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">Supérieure ou égale à 10 N</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">Exactement 0 N</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">Égale au double du poids (20 N)</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Une balle tombe en chute libre (sans résistance de l'air). Quelle force s'exerce sur elle ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Aucune force (elle tombe toute seule)</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Le poids uniquement (vers le bas)</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Le poids vers le bas + réaction vers le haut</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Le frottement de l'air uniquement</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Poids, réaction, Archimède</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Le poids est dirigé vers le
+                <input class="blank" id="f1a" placeholder="?" style="width:60px"> et s'exerce en tout point
+                <input class="blank" id="f1b" placeholder="?" style="width:110px"> de l'objet.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                La réaction du support est
+                <input class="blank" id="f2a" placeholder="?" style="width:130px"> à la surface
+                de contact. Sur une table horizontale, elle est dirigée vers le
+                <input class="blank" id="f2b" placeholder="?" style="width:60px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                La poussée d'Archimède est égale au poids du
+                <input class="blank" id="f3a" placeholder="?" style="width:80px"> déplacé.
+                Un objet flotte si la poussée d'Archimède est
+                <input class="blank" id="f3b" placeholder="?" style="width:120px"> au poids.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Identifier et décrire les forces sur un objet</div>
+                <div class="ex-stmt">
+                    Un livre de 0,5 kg est posé sur une table horizontale. Il est au repos.<br>
+                    a) Identifie toutes les forces qui s'exercent sur le livre.<br>
+                    b) Pour chaque force, indique son sens et son intensité (g = 10 N/kg).<br>
+                    c) Que peut-on dire de la somme des forces ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">a</div><div class="sol-text"><strong>Forces sur le livre :</strong><br>• Le <strong>poids P</strong> (Terre sur le livre)<br>• La <strong>réaction du support R</strong> (table sur le livre)</div></div>
+                <div class="sol-step"><div class="sol-num">b</div><div class="sol-text"><strong>Intensités :</strong><br>• P = m × g = 0,5 × 10 = <strong>5 N</strong>, dirigé verticalement vers le bas<br>• R = <strong>5 N</strong>, dirigé verticalement vers le haut</div></div>
+                <div class="sol-step"><div class="sol-num">c</div><div class="sol-text"><strong>Somme des forces :</strong> P + R = 5 N (↓) + 5 N (↑) = <strong>0 N</strong>. Les forces se compensent → le livre est en équilibre.</div></div>
+                <div class="final-ans">✅ P = 5 N ↓, R = 5 N ↑ · Somme = 0 N (équilibre)</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Flottaison et poussée d'Archimède</div>
+                <div class="ex-stmt">
+                    Un bouchon de liège a une masse de 5 g (= 0,005 kg).<br>
+                    Quand on le pose sur l'eau, il s'enfonce partiellement et la poussée d'Archimède est de 0,05 N.<br>
+                    a) Calcule le poids du bouchon (g = 10 N/kg).<br>
+                    b) Compare poids et poussée d'Archimède.<br>
+                    c) Le bouchon flotte-t-il ? Justifie.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Poids :</strong> P = m × g = 0,005 × 10 = <strong>0,05 N</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Comparaison :</strong> P = 0,05 N et F_A = 0,05 N → <strong>P = F_A</strong> (elles sont égales)</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Flottaison :</strong> Oui, le bouchon flotte ! La condition est F_A ≥ P. Ici F_A = P, donc il flotte à l'équilibre (ni montée, ni descente).</div></div>
+                <div class="final-ans">✅ P = 0,05 N = F_A → le bouchon flotte en équilibre</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Objet sur plan incliné : forces (CE1D style)</div>
+                <div class="ex-stmt">
+                    Une caisse est posée sur un plan incliné à 30°. Elle ne glisse pas.<br>
+                    a) Cite les forces qui s'exercent sur la caisse.<br>
+                    b) La réaction du support est-elle verticale ou perpendiculaire à la surface inclinée ?<br>
+                    c) Pourquoi la caisse ne glisse-t-elle pas ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">a</div><div class="sol-text"><strong>Forces sur la caisse :</strong><br>• Le <strong>poids P</strong> (vertical, vers le bas)<br>• La <strong>réaction du support R</strong> (perpendiculaire au plan)<br>• La <strong>force de frottement f</strong> (parallèle au plan, vers le haut du plan)</div></div>
+                <div class="sol-step"><div class="sol-num">b</div><div class="sol-text"><strong>Réaction du support :</strong> elle est <strong>perpendiculaire à la surface inclinée</strong> (pas verticale !). Sur un plan incliné, la normale est inclinée par rapport à la verticale.</div></div>
+                <div class="sol-step"><div class="sol-num">c</div><div class="sol-text"><strong>Pourquoi pas de glissement :</strong> la force de frottement compense la composante du poids parallèle au plan (qui pousse la caisse vers le bas). Les 3 forces s'équilibrent → pas de mouvement.</div></div>
+                <div class="final-ans">✅ Forces : P (↓), R (⊥ plan), frottement (↑ le long du plan) · Équilibre des 3 forces</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Densité et flottaison</div>
+                <div class="bonus-stmt">
+                    Un cube de bois de côté 10 cm a une masse de 600 g. La densité de l'eau est 1 000 kg/m³.<br>
+                    a) Calcule le volume du cube en m³.<br>
+                    b) Calcule la masse d'eau déplacée si le cube est entièrement immergé.<br>
+                    c) Calcule la poussée d'Archimède (g = 10 N/kg). Le cube coule-t-il ou flotte-t-il ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a) Volume :</strong> côté = 10 cm = 0,1 m → V = 0,1³ = <strong>0,001 m³</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b) Masse d'eau déplacée :</strong> m_eau = ρ × V = 1 000 × 0,001 = <strong>1 kg</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>c) Poussée d'Archimède :</strong> F_A = m_eau × g = 1 × 10 = <strong>10 N</strong><br>Poids du cube : P = 0,6 × 10 = <strong>6 N</strong><br>F_A (10 N) > P (6 N) → le cube <strong>flotte !</strong> Il ne s'enfonce pas entièrement.</div></div>
+                <div class="bonus-ans">
+                    F_A = 10 N > P = 6 N → le cube de bois flotte !<br>
+                    Astuce : si densité objet &lt; densité fluide → flottaison (600 kg/m³ &lt; 1 000 kg/m³).
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 3 terminé !</h2>
+    <p>Excellent ! Tu maîtrises les 4 types de forces : poids, réaction, frottement, Archimède.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Place au Niveau 4 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Forces et leurs effets</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="physique_forces_niveau1.html" class="nav-btn">Niveau 1 — Notion de force</a>
+        <a href="physique_forces_niveau2.html" class="nav-btn">Niveau 2 — Mesure &amp; unités</a>
+        <a href="physique_forces_niveau3.html" class="nav-btn current">▶ Niveau 3 — Types de forces</a>
+        <a href="physique_forces_niveau4.html" class="nav-btn">Niveau 4 — Effets &amp; équilibre</a>
+        <a href="physique_forces_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:2, 3:1, 4:1, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! La réaction du support sur une surface horizontale est dirigée vers le haut. Elle s'oppose au poids et permet à l'objet de rester en équilibre.",
+    2:"✅ Bravo ! La poussée d'Archimède est toujours verticale vers le haut — c'est elle qui fait flotter les bateaux et les bouées.",
+    3:"✅ Correct ! Le frottement s'oppose toujours au mouvement. La voiture va à droite, donc le frottement de l'air agit vers la gauche (résistance de l'air).",
+    4:"✅ Parfait ! Pour flotter, il faut que F_A ≥ P. Si la poussée d'Archimède est au moins égale au poids, l'objet ne coule pas.",
+    5:"✅ Exact ! En chute libre (sans air), seul le poids agit. Il n'y a pas de réaction du support (pas de surface de contact) ni de frottement de l'air."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. La réaction du support est vers le HAUT sur une surface horizontale. Elle s'oppose au poids (vers le bas) et maintient le livre en équilibre.",
+    2:"❌ Non. La poussée d'Archimède est verticale vers le HAUT. C'est ce qui pousse les objets immergés vers la surface.",
+    3:"❌ Non. Le frottement s'oppose au mouvement. La voiture va à droite → le frottement de l'air agit vers la gauche.",
+    4:"❌ Non. Pour flotter, F_A ≥ P. Si F_A < P, l'objet coule. La poussée d'Archimède doit compenser ou dépasser le poids.",
+    5:"❌ Non. En chute libre, seul le poids agit (sans résistance de l'air). La balle n'est plus en contact avec une surface, donc pas de réaction du support."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['bas'],['centre de gravite','centre de gravité','au centre de gravite','au centre de gravité','centre']],
+        msgOk:"✅ Le poids est toujours dirigé vers le bas et s'applique au centre de gravité de l'objet.",
+        msgErr:"❌ Attendus : vers le 'bas', et le point d'application est le 'centre de gravité'."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['perpendiculaire'],['haut']],
+        msgOk:"✅ La réaction est perpendiculaire à la surface. Sur table horizontale, elle pointe vers le haut.",
+        msgErr:"❌ Attendus : 'perpendiculaire' à la surface, dirigée vers le 'haut' sur surface horizontale."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['fluide','liquide','eau'],['superieure ou egale','supérieure ou égale','superieure','supérieure','plus grande ou egale','plus grande ou égale','egale ou superieure','égale ou supérieure']],
+        msgOk:"✅ La poussée d'Archimède = poids du fluide déplacé. L'objet flotte si F_A ≥ P.",
+        msgErr:"❌ Attendus : poids du 'fluide' déplacé, et flotte si F_A 'supérieure ou égale' au poids."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_forces_3', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique — Chaleur · Niveau 2 — Chaleur et énergie thermique</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#E64A19; --primary-dark:#BF360C; --primary-mid:#FF7043; --primary-bg:#FBE9E7;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#7F2700 0%,#E64A19 55%,#FFAB91 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(127,39,0,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#E64A19; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#BF360C; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#7F2700,#E64A19,#FFAB91); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#7F2700,#BF360C); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#FFAB91; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #FFAB91; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .data-table { width:100%; border-collapse:collapse; border-radius:10px; overflow:hidden; margin:14px 0; font-size:.91rem; }
+        .data-table th { background:var(--primary); color:white; padding:9px 12px; font-weight:900; text-align:center; }
+        .data-table td { padding:8px 12px; text-align:center; border-bottom:1px solid var(--border); }
+        .data-table tr:nth-child(even) td { background:var(--primary-bg); }
+        .data-table tr:last-child td { border-bottom:none; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #FFAB91; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#7F2700,#E64A19,#FFAB91); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #5D1A00; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🔥 Chaleur · Énergie thermique</h1>
+            <p>Niveau 2 · Q = m·c·ΔT · Capacité thermique · Joules</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 2 — Facile</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Chaleur et énergie thermique</div>
+            <div class="card-sub">Q = m·c·ΔT · Capacité thermique massique · Joules</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            La <strong>chaleur</strong> n'est pas la même chose que la température !
+            La chaleur est une <strong>énergie transférée</strong> d'un corps chaud vers un corps froid.
+            Pour calculer la quantité de chaleur nécessaire pour chauffer un objet, on utilise la formule
+            <strong>Q = m × c × ΔT</strong>.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Chaleur vs Température</h3>
+            <p>
+                • La <strong>température</strong> mesure l'agitation des molécules (état d'un corps).<br>
+                • La <strong>chaleur Q</strong> est une énergie <strong>transférée</strong> d'un corps à un autre — elle se mesure en <strong>Joules (J)</strong>.<br>
+                Un corps chaud <strong>cède</strong> de la chaleur à un corps froid. La chaleur va toujours du chaud vers le froid.
+            </p>
+        </div>
+
+        <div class="rule-box">
+            <h3>🧮 La formule fondamentale : Q = m × c × ΔT</h3>
+            <p>
+                <strong>Q</strong> = chaleur reçue ou cédée (en Joules, J)<br>
+                <strong>m</strong> = masse de la matière (en kilogrammes, kg)<br>
+                <strong>c</strong> = capacité thermique massique (en J/(kg·°C))<br>
+                <strong>ΔT</strong> = variation de température = T<sub>finale</sub> − T<sub>initiale</sub> (en °C)<br><br>
+                Si ΔT &gt; 0 → le corps <strong>se réchauffe</strong> (absorbe de la chaleur)<br>
+                Si ΔT &lt; 0 → le corps <strong>se refroidit</strong> (cède de la chaleur)
+            </p>
+        </div>
+
+        <!-- SVG triangle des grandeurs -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="200" fill="#FFF3F0" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#7F2700" font-family="Nunito, sans-serif">Formule Q = m × c × ΔT — Triangle des grandeurs</text>
+
+                <!-- Triangle -->
+                <polygon points="280,30 160,150 400,150" fill="none" stroke="#E64A19" stroke-width="3"/>
+                <rect x="240" y="30" width="80" height="40" rx="8" fill="#E64A19"/>
+                <text x="280" y="56" text-anchor="middle" font-size="18" font-weight="900" fill="white" font-family="Nunito, sans-serif">Q</text>
+                <text x="280" y="72" text-anchor="middle" font-size="9" fill="white" font-family="Nunito, sans-serif">(Joules)</text>
+
+                <rect x="110" y="148" width="80" height="40" rx="8" fill="#BF360C"/>
+                <text x="150" y="172" text-anchor="middle" font-size="18" font-weight="900" fill="white" font-family="Nunito, sans-serif">m</text>
+                <text x="150" y="185" text-anchor="middle" font-size="9" fill="white" font-family="Nunito, sans-serif">(kg)</text>
+
+                <rect x="255" y="148" width="80" height="40" rx="8" fill="#FF7043"/>
+                <text x="295" y="172" text-anchor="middle" font-size="16" font-weight="900" fill="white" font-family="Nunito, sans-serif">c × ΔT</text>
+                <text x="295" y="185" text-anchor="middle" font-size="9" fill="white" font-family="Nunito, sans-serif">(J/(kg·°C) × °C)</text>
+
+                <!-- Formules dérivées -->
+                <text x="80" y="100" text-anchor="middle" font-size="10" font-weight="900" fill="#E64A19" font-family="Nunito, sans-serif">Q = m × c × ΔT</text>
+                <text x="470" y="100" text-anchor="middle" font-size="10" font-weight="900" fill="#E64A19" font-family="Nunito, sans-serif">m = Q ÷ (c × ΔT)</text>
+                <text x="280" y="165" text-anchor="middle" font-size="10" font-weight="900" fill="#7F2700" font-family="Nunito, sans-serif">ΔT = Q ÷ (m × c)</text>
+            </svg>
+        </div>
+
+        <!-- Tableau valeurs de c -->
+        <p style="font-size:.93rem;font-weight:700;color:#444;margin-bottom:8px;">Valeurs de la capacité thermique massique c :</p>
+        <table class="data-table">
+            <tr>
+                <th>Matériau</th>
+                <th>c en J/(kg·°C)</th>
+                <th>Interprétation</th>
+            </tr>
+            <tr><td>Eau</td><td>4 200</td><td>Difficile à chauffer → excellent régulateur</td></tr>
+            <tr><td>Aluminium</td><td>900</td><td>Chauffe plus vite que l'eau</td></tr>
+            <tr><td>Fer / acier</td><td>450</td><td>Chauffe encore plus vite</td></tr>
+        </table>
+
+        <p style="font-size:.9rem;color:#555;margin-bottom:14px;">
+            💡 <strong>Exemple :</strong> Chauffer 2 kg d'eau de 20 °C à 80 °C →
+            ΔT = 80 − 20 = 60 °C → Q = 2 × 4 200 × 60 = <strong>504 000 J</strong>
+        </p>
+
+        <div class="trap-box">
+            <h3>⚠️ Pièges à éviter !</h3>
+            <p>
+                <strong>ΔT = T_finale − T_initiale</strong> (et non l'inverse). Si le corps refroidit, ΔT est négatif → Q est négatif (chaleur cédée).<br>
+                <strong>Q se mesure en Joules</strong>, jamais en degrés ! Les degrés mesurent la température, pas l'énergie.<br>
+                <strong>Un matériau avec un grand c</strong> nécessite plus d'énergie pour la même variation de température.
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">Q = m·c·ΔT</div>
+                <div class="cas-eq">Chaleur (J)</div>
+                <div class="cas-desc">Énergie nécessaire pour chauffer ou refroidir</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">ΔT = T_f − T_i</div>
+                <div class="cas-eq">Variation de T</div>
+                <div class="cas-desc">Peut être positive (chauffage) ou négative (refroidissement)</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">c eau = 4 200</div>
+                <div class="cas-eq">J/(kg·°C)</div>
+                <div class="cas-desc">L'eau a la plus grande capacité → régulateur thermique naturel</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Q = m·c·ΔT, unités, comparaisons</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Quelle quantité de chaleur faut-il pour chauffer 1 kg d'eau de 20 °C à 70 °C ? (c eau = 4 200 J/(kg·°C))</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">4 200 J</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">210 000 J</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">50 J</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">294 000 J</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> On chauffe 2 kg de fer (c = 450 J/(kg·°C)) avec 9 000 J. Quelle est la variation de température ΔT ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">20 °C</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">10 °C</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">5 °C</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">45 °C</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Dans quelle unité se mesure la chaleur Q ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">Degrés Celsius (°C)</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">Kelvin (K)</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">Joules (J)</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">Watts (W)</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> On chauffe 1 kg d'eau et 1 kg de fer avec la même quantité d'énergie. Lequel se réchauffe le plus vite ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">L'eau (c = 4 200 J/(kg·°C))</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">Le fer (c = 450 J/(kg·°C))</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">Les deux se réchauffent pareil</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">Impossible à savoir sans la température initiale</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Un corps chaud est mis en contact avec un corps froid. Dans quel sens se fait le transfert de chaleur ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Du froid vers le chaud</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Du chaud vers le froid</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Dans les deux sens simultanément</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Le transfert dépend de la masse des corps</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Formule Q, capacité thermique, ΔT</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                La formule de la chaleur est Q = m × c ×
+                <input class="blank" id="f1a" placeholder="?" style="width:60px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                La lettre c dans la formule représente la capacité
+                <input class="blank" id="f2a" placeholder="?" style="width:120px"> massique.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                ΔT = T_f −
+                <input class="blank" id="f3a" placeholder="?" style="width:60px">.
+                Si ΔT est négatif, le corps se
+                <input class="blank" id="f3b" placeholder="?" style="width:110px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Calculer Q (style CE1D)</div>
+                <div class="ex-stmt">
+                    On chauffe 2 kg d'eau de 20 °C à 80 °C. La capacité thermique de l'eau est c = 4 200 J/(kg·°C).<br>
+                    Calcule la quantité de chaleur Q nécessaire.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Données :</strong> m = 2 kg · c = 4 200 J/(kg·°C) · T_i = 20 °C · T_f = 80 °C</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>ΔT :</strong> T_f − T_i = 80 − 20 = <strong>60 °C</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Q :</strong> m × c × ΔT = 2 × 4 200 × 60 = <strong>504 000 J</strong></div></div>
+                <div class="final-ans">✅ Q = 504 000 J = 504 kJ</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Calculer ΔT à partir de Q</div>
+                <div class="ex-stmt">
+                    On apporte 18 000 J à 500 g d'aluminium (c = 900 J/(kg·°C)).<br>
+                    De combien de degrés la température de l'aluminium augmente-t-elle ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Données :</strong> Q = 18 000 J · m = 500 g = <strong>0,5 kg</strong> · c = 900 J/(kg·°C)</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Formule :</strong> Q = m × c × ΔT → ΔT = Q ÷ (m × c)</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Calcul :</strong> ΔT = 18 000 ÷ (0,5 × 900) = 18 000 ÷ 450 = <strong>40 °C</strong></div></div>
+                <div class="final-ans">✅ ΔT = 40 °C — La température augmente de 40 degrés.</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Comparaison de deux matériaux (CE1D style)</div>
+                <div class="ex-stmt">
+                    On apporte 4 500 J à 1 kg d'eau (c = 4 200 J/(kg·°C)) et 4 500 J à 1 kg de fer (c = 450 J/(kg·°C)).<br>
+                    a) Calcule ΔT pour l'eau et pour le fer.<br>
+                    b) Lequel des deux se réchauffe le plus vite ? Pourquoi ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>ΔT eau :</strong> 4 500 ÷ (1 × 4 200) = 4 500 ÷ 4 200 ≈ <strong>1,07 °C</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>ΔT fer :</strong> 4 500 ÷ (1 × 450) = 4 500 ÷ 450 = <strong>10 °C</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Conclusion :</strong> Le fer se réchauffe beaucoup plus (10 °C contre ~1 °C) car sa capacité thermique c est 9 fois plus petite. Moins c est grand, plus ΔT est grand pour la même énergie.</div></div>
+                <div class="final-ans">✅ ΔT eau ≈ 1 °C · ΔT fer = 10 °C → Le fer se réchauffe bien plus vite.</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Calculer la masse à partir de Q</div>
+                <div class="bonus-stmt">
+                    On chauffe de l'eau de 15 °C à 65 °C avec 840 000 J. La capacité thermique de l'eau est c = 4 200 J/(kg·°C).<br>
+                    Quelle est la masse d'eau chauffée ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>ΔT :</strong> 65 − 15 = <strong>50 °C</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Formule :</strong> Q = m × c × ΔT → m = Q ÷ (c × ΔT)</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>Calcul :</strong> m = 840 000 ÷ (4 200 × 50) = 840 000 ÷ 210 000 = <strong>4 kg</strong></div></div>
+                <div class="bonus-ans">
+                    m = <strong>4 kg</strong> d'eau<br>
+                    Astuce CE1D : isoler la grandeur inconnue avant de calculer → m = Q ÷ (c × ΔT).
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 2 terminé !</h2>
+    <p>Excellent ! Tu maîtrises la formule Q = m·c·ΔT et la capacité thermique massique.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 3 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Chaleur &amp; Transferts thermiques</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="physique_chaleur_niveau1.html" class="nav-btn">Niveau 1 — Température</a>
+        <a href="physique_chaleur_niveau2.html" class="nav-btn current">▶ Niveau 2 — Chaleur &amp; énergie</a>
+        <a href="physique_chaleur_niveau3.html" class="nav-btn">Niveau 3 — Modes de transfert</a>
+        <a href="physique_chaleur_niveau4.html" class="nav-btn">Niveau 4 — Changements d'état</a>
+        <a href="physique_chaleur_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:1, 3:2, 4:1, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! ΔT = 70 − 20 = 50 °C → Q = 1 × 4 200 × 50 = 210 000 J.",
+    2:"✅ Bravo ! ΔT = Q ÷ (m × c) = 9 000 ÷ (2 × 450) = 9 000 ÷ 900 = 10 °C.",
+    3:"✅ Correct ! La chaleur Q est une énergie et se mesure en Joules (J). Les °C mesurent la température, pas l'énergie.",
+    4:"✅ Parfait ! Le fer (c = 450) a un c 9 fois plus petit que l'eau (c = 4 200). Pour la même énergie, ΔT_fer = 9 × ΔT_eau.",
+    5:"✅ Exact ! La chaleur se transfère toujours du corps le plus chaud vers le corps le plus froid — jamais dans l'autre sens spontanément."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. ΔT = 70 − 20 = 50 °C → Q = 1 × 4 200 × 50 = 210 000 J. Il faut multiplier par ΔT, pas juste utiliser c.",
+    2:"❌ Non. ΔT = Q ÷ (m × c) = 9 000 ÷ (2 × 450) = 9 000 ÷ 900 = 10 °C. Formule : ΔT = Q ÷ (m × c).",
+    3:"❌ Non. La chaleur Q est une énergie — elle se mesure en Joules (J). La température se mesure en °C ou K, la puissance en Watts.",
+    4:"❌ Non. Pour la même énergie et la même masse, le matériau avec le plus petit c se réchauffe le plus. Le fer (c = 450) se réchauffe bien plus que l'eau (c = 4 200).",
+    5:"❌ Non. La chaleur va TOUJOURS du corps chaud vers le corps froid (jamais l'inverse spontanément). C'est le 2e principe de la thermodynamique."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['ΔT','delta t','delta T','ΔT']],
+        msgOk:"✅ Q = m × c × ΔT. La variation de température ΔT = T_finale − T_initiale.",
+        msgErr:"❌ Attendu : ΔT (delta T). La formule complète est Q = m × c × ΔT."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['thermique']],
+        msgOk:"✅ c est la capacité thermique massique — elle indique l'énergie nécessaire pour chauffer 1 kg d'un matériau de 1 °C.",
+        msgErr:"❌ Attendu : 'thermique'. c est la capacité thermique massique."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['T_i','Ti','t_i','ti','t initiale','temperature initiale','température initiale'],['refroidit','refroidit']],
+        msgOk:"✅ ΔT = T_f − T_i. Si ΔT < 0, le corps se refroidit (il cède de la chaleur).",
+        msgErr:"❌ Attendus : T_i (ou température initiale), et 'refroidit'. ΔT = T_f − T_i, négatif = refroidissement."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_chaleur_2', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique — Énergie · Niveau 4 — Conservation &amp; rendement</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#558B2F; --primary-dark:#33691E; --primary-mid:#7CB342; --primary-bg:#F1F8E9;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+        header { background:linear-gradient(135deg,#1B5E20 0%,#558B2F 55%,#AED581 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(27,94,32,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#558B2F; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#33691E; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#1B5E20,#558B2F,#AED581); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+        .def-box { background:linear-gradient(135deg,#1B5E20,#33691E); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#AED581; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #AED581; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+        .fill-item { background:var(--primary-bg); border:2px solid #AED581; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+        .completion { display:none; background:linear-gradient(135deg,#1B5E20,#558B2F,#AED581); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #1B5E20; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>⚡ Énergie · Conservation &amp; rendement</h1>
+            <p>Niveau 4 · Loi de conservation · Rendement η · Calculs Eu, Ef, pertes</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 4 — Expert</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Conservation de l'énergie &amp; rendement</div>
+            <div class="card-sub">Loi de conservation · Formule η · Calcul Eu, Ef, pertes · Exemples concrets</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            On sait que l'énergie se transforme. Mais quelle quantité d'énergie est réellement "utile" ?
+            C'est ce que mesure le <strong>rendement</strong>. Apprendre à le calculer est une compétence clé au CE1D.
+        </p>
+
+        <div class="def-box">
+            <h3>⚖️ La loi de conservation de l'énergie</h3>
+            <p>
+                <strong>L'énergie totale d'un système isolé est constante.</strong><br>
+                Elle ne se crée pas et ne se détruit pas — elle se transforme.<br>
+                Bilan d'une transformation : <strong>Ef = Eu + Ep</strong><br>
+                • <strong>Ef</strong> = énergie fournie (entrante)<br>
+                • <strong>Eu</strong> = énergie utile (ce qu'on veut obtenir)<br>
+                • <strong>Ep</strong> = énergie perdue (chaleur dissipée)
+            </p>
+        </div>
+
+        <div class="rule-box">
+            <h3>📐 La formule du rendement η (êta)</h3>
+            <p>
+                Le <strong>rendement η</strong> (lettre grecque "êta") mesure l'efficacité d'un convertisseur :<br><br>
+                <strong>η (%) = (Eu ÷ Ef) × 100</strong><br><br>
+                On peut aussi calculer :<br>
+                • <strong>Eu = Ef × η ÷ 100</strong> (si on connaît η et Ef)<br>
+                • <strong>Ep = Ef − Eu</strong> (énergie perdue)<br>
+                • <strong>η est toujours ≤ 100 %</strong> (jamais supérieur à 100 %)
+            </p>
+        </div>
+
+        <!-- SVG : schéma rendement -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 150" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="150" fill="#F1F8E9" rx="10"/>
+                <text x="280" y="16" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">Schéma rendement — Ef = 200 J, η = 75 %, Eu = 150 J, Ep = 50 J</text>
+
+                <!-- Barre Ef totale -->
+                <rect x="20" y="35" width="520" height="40" rx="6" fill="#BDBDBD" opacity=".4"/>
+                <text x="280" y="60" text-anchor="middle" font-size="11" font-weight="900" fill="#555" font-family="Nunito, sans-serif">Ef = 200 J (énergie fournie totale)</text>
+
+                <!-- Partie utile (75% = 390px) -->
+                <rect x="20" y="35" width="390" height="40" rx="6" fill="#558B2F"/>
+                <text x="215" y="60" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">Eu = 150 J — utile ✅ (75 %)</text>
+
+                <!-- Partie pertes (25% = 130px) -->
+                <rect x="410" y="35" width="130" height="40" rx="0" fill="#E53935"/>
+                <text x="475" y="60" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">Ep = 50 J ❌</text>
+
+                <!-- Flèche bilan -->
+                <text x="280" y="100" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Courier New, monospace">η = 150 ÷ 200 × 100 = 75 %</text>
+                <text x="280" y="118" text-anchor="middle" font-size="11" font-weight="700" fill="#558B2F" font-family="Nunito, sans-serif">Ef = Eu + Ep → 200 = 150 + 50 ✓</text>
+
+                <!-- Exemples -->
+                <text x="20" y="140" font-size="10" fill="#555" font-family="Nunito, sans-serif">Exemples : ampoule incandescente η ≈ 5 % · LED η ≈ 80 % · Moteur électrique η ≈ 90 %</text>
+            </svg>
+        </div>
+
+        <!-- Tableau exemples -->
+        <p style="font-size:.93rem;font-weight:700;color:#444;margin-bottom:8px;">Rendements typiques de quelques appareils :</p>
+        <table style="width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;margin:14px 0;font-size:.91rem;">
+            <tr>
+                <th style="background:var(--primary);color:white;padding:9px 12px;font-weight:900;text-align:center;">Appareil</th>
+                <th style="background:var(--primary);color:white;padding:9px 12px;font-weight:900;text-align:center;">Énergie utile</th>
+                <th style="background:var(--primary);color:white;padding:9px 12px;font-weight:900;text-align:center;">Rendement η</th>
+                <th style="background:var(--primary);color:white;padding:9px 12px;font-weight:900;text-align:center;">Pertes</th>
+            </tr>
+            <tr style="background:var(--primary-bg);">
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--border);">Ampoule incandescente</td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--border);">Lumineuse</td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--border);font-weight:900;color:#B71C1C;">≈ 5 %</td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--border);color:#B71C1C;">95 % en chaleur</td>
+            </tr>
+            <tr>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--border);">Ampoule LED</td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--border);">Lumineuse</td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--border);font-weight:900;color:#558B2F;">≈ 80 %</td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--border);color:#558B2F;">20 % en chaleur</td>
+            </tr>
+            <tr style="background:var(--primary-bg);">
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--border);">Moteur électrique</td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--border);">Cinétique</td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--border);font-weight:900;color:#1B5E20;">≈ 90 %</td>
+                <td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--border);color:#1B5E20;">10 % en chaleur</td>
+            </tr>
+            <tr>
+                <td style="padding:8px 12px;text-align:center;">Moteur thermique (voiture)</td>
+                <td style="padding:8px 12px;text-align:center;">Mécanique</td>
+                <td style="padding:8px 12px;text-align:center;font-weight:900;color:#E65100;">≈ 25–35 %</td>
+                <td style="padding:8px 12px;text-align:center;color:#E65100;">65–75 % en chaleur</td>
+            </tr>
+        </table>
+
+        <div class="trap-box">
+            <h3>⚠️ Pièges sur le rendement</h3>
+            <p>
+                <strong>η toujours ≤ 100 % :</strong> un rendement &gt; 100 % est physiquement impossible.<br>
+                <strong>Attention à η = 80 % :</strong> il y a <strong>20 % de pertes</strong>, pas 80 % de pertes !<br>
+                Les 80 % sont l'énergie <em>utile</em>. Les 20 % restants sont les pertes.<br>
+                <strong>Ne pas confondre η et Eu :</strong> η est un pourcentage, Eu est une quantité en Joules.
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">η = Eu/Ef × 100</div>
+                <div class="cas-eq">Rendement (%)</div>
+                <div class="cas-desc">Toujours entre 0 % et 100 %.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Ef = Eu + Ep</div>
+                <div class="cas-eq">Conservation</div>
+                <div class="cas-desc">L'énergie totale se conserve : utile + pertes = fournie.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Ep = Ef − Eu</div>
+                <div class="cas-eq">Pertes</div>
+                <div class="cas-desc">Énergie dissipée en chaleur. Ep = Ef × (1 − η/100).</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Calcul η, Eu, pertes, comparaison, loi de conservation</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Un appareil reçoit Ef = 100 J et produit Eu = 60 J d'énergie utile. Quel est son rendement ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">40 %</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">60 %</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">160 %</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">6 %</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Un moteur a η = 75 % et reçoit Ef = 200 J. Quelle est son énergie utile Eu ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">75 J</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">125 J</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">150 J</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">200 J</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Un appareil reçoit 500 J et a un rendement de 40 %. Quelle est l'énergie perdue ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">200 J</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">300 J</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">40 J</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">460 J</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Appareil A : η = 80 %. Appareil B : η = 55 %. Lequel est le plus efficace ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">Appareil B</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">Appareil A</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">Ils sont identiques</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">On ne peut pas comparer</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Selon la loi de conservation de l'énergie, l'énergie totale dans un système isolé est :</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Toujours croissante</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Toujours décroissante</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Constante</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Égale à zéro</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Formule rendement, conservation, limite du rendement</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                η = Eu / Ef × <input class="blank" id="f1a" placeholder="?" style="width:70px">
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Conservation de l'énergie : Ef = Eu + <input class="blank" id="f2a" placeholder="?" style="width:70px">
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Le rendement est toujours <input class="blank" id="f3a" placeholder="?" style="width:80px"> 100 %.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés type CE1D</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Calculs complets</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Calculer le rendement d'une ampoule (CE1D style)</div>
+                <div class="ex-stmt">
+                    Une ampoule à incandescence reçoit 60 W d'énergie électrique.<br>
+                    Elle émet 3 W sous forme de lumière et le reste en chaleur.<br>
+                    a) Quelle est la puissance perdue en chaleur ?<br>
+                    b) Calcule le rendement lumineux η de cette ampoule.<br>
+                    c) Quelle fraction de l'énergie est "gaspillée" ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Puissance perdue :</strong><br>Ep = Ef − Eu = 60 − 3 = <strong>57 W</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Rendement lumineux :</strong><br>η = (Eu ÷ Ef) × 100 = (3 ÷ 60) × 100 = <strong>5 %</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Fraction gaspillée :</strong><br>100 % − 5 % = <strong>95 %</strong> de l'énergie est perdue en chaleur inutile.</div></div>
+                <div class="final-ans">✅ a) 57 W pertes &nbsp;|&nbsp; b) η = 5 % &nbsp;|&nbsp; c) 95 % gaspillé</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Calculer l'énergie utile à partir du rendement</div>
+                <div class="ex-stmt">
+                    Un moteur électrique a un rendement η = 85 %.<br>
+                    Il reçoit Ef = 400 J d'énergie électrique.<br>
+                    a) Calcule l'énergie mécanique utile produite Eu.<br>
+                    b) Calcule l'énergie perdue Ep.<br>
+                    c) Vérifie avec la loi de conservation : Ef = Eu + Ep.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Énergie utile :</strong><br>Eu = Ef × η ÷ 100 = 400 × 85 ÷ 100 = <strong>340 J</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Énergie perdue :</strong><br>Ep = Ef − Eu = 400 − 340 = <strong>60 J</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Vérification :</strong><br>Eu + Ep = 340 + 60 = <strong>400 J = Ef ✓</strong><br>La loi de conservation est bien vérifiée.</div></div>
+                <div class="final-ans">✅ Eu = 340 J &nbsp;|&nbsp; Ep = 60 J &nbsp;|&nbsp; 340 + 60 = 400 J ✓</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Retrouver l'énergie fournie (CE1D style)</div>
+                <div class="ex-stmt">
+                    Un panneau solaire a un rendement η = 20 %.<br>
+                    Il produit Eu = 50 J d'énergie électrique.<br>
+                    a) Quelle énergie lumineuse Ef a-t-il reçue du soleil ?<br>
+                    b) Quelle énergie a été "perdue" (non convertie) ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Énergie fournie :</strong><br>η = Eu ÷ Ef × 100<br>Ef = Eu ÷ (η ÷ 100) = 50 ÷ 0,20 = <strong>250 J</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Énergie perdue :</strong><br>Ep = Ef − Eu = 250 − 50 = <strong>200 J</strong><br>80 % de l'énergie solaire n'est pas convertie (réfléchie, thermique…)</div></div>
+                <div class="final-ans">✅ Ef = 250 J &nbsp;|&nbsp; Ep = 200 J (80 % perdu)</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Chaîne de rendements en cascade</div>
+                <div class="bonus-stmt">
+                    Une centrale thermique convertit l'énergie du gaz (η₁ = 40 %) en électricité.<br>
+                    Cette électricité est transportée avec des pertes (η₂ = 90 %).<br>
+                    Enfin, un moteur électrique l'utilise (η₃ = 85 %).<br>
+                    Si la centrale reçoit 10 000 J de gaz, quelle énergie mécanique finale obtient-on ?<br>
+                    (Rendement total = η₁ × η₂ × η₃ ÷ 10 000)
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Après la centrale (η₁ = 40 %) :</strong><br>E₁ = 10 000 × 0,40 = <strong>4 000 J</strong> d'électricité produite</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Après transport (η₂ = 90 %) :</strong><br>E₂ = 4 000 × 0,90 = <strong>3 600 J</strong> arrive au moteur</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>Après le moteur (η₃ = 85 %) :</strong><br>E₃ = 3 600 × 0,85 = <strong>3 060 J</strong> d'énergie mécanique utile</div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text"><strong>Rendement total :</strong><br>η_total = 3 060 ÷ 10 000 × 100 = <strong>30,6 %</strong><br>On commence avec 10 000 J de gaz et on récupère seulement 3 060 J de mouvement !</div></div>
+                <div class="bonus-ans">
+                    Énergie utile finale = <strong>3 060 J</strong> &nbsp;|&nbsp; Rendement total ≈ <strong>30,6 %</strong><br>
+                    Morale : chaque étape de transformation ajoute des pertes. Une chaîne de convertisseurs est toujours moins efficace que chaque convertisseur pris séparément !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 4 terminé !</h2>
+    <p>Excellent ! Tu maîtrises la loi de conservation et le calcul du rendement.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Place au Défi CE1D — Niveau 5 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Énergie</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="physique_energie_niveau1.html" class="nav-btn">Niveau 1 — Notion d'énergie</a>
+        <a href="physique_energie_niveau2.html" class="nav-btn">Niveau 2 — Sources d'énergie</a>
+        <a href="physique_energie_niveau3.html" class="nav-btn">Niveau 3 — Transformations</a>
+        <a href="physique_energie_niveau4.html" class="nav-btn current">▶ Niveau 4 — Conservation &amp; pertes</a>
+        <a href="physique_energie_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:2, 3:1, 4:1, 5:2};
+
+const QCM_OK = {
+    1:"✅ Exact ! η = (Eu ÷ Ef) × 100 = (60 ÷ 100) × 100 = 60 %. Les 40 % restants sont les pertes.",
+    2:"✅ Bravo ! Eu = Ef × η ÷ 100 = 200 × 75 ÷ 100 = 150 J. Les 50 J restants sont des pertes.",
+    3:"✅ Correct ! Eu = 500 × 40 % = 200 J (utile). Ep = Ef − Eu = 500 − 200 = 300 J de pertes.",
+    4:"✅ Parfait ! Plus le rendement η est élevé, plus l'appareil est efficace. A (80 %) > B (55 %).",
+    5:"✅ Exact ! La loi de conservation : l'énergie totale est constante. Elle change de forme mais la quantité totale reste la même."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. η = (Eu ÷ Ef) × 100 = (60 ÷ 100) × 100 = 60 %. 40 % correspond aux pertes, pas au rendement.",
+    2:"❌ Non. Eu = Ef × η ÷ 100 = 200 × 75 ÷ 100 = 150 J. Attention : 75 J serait si on divisait par 200 sans ×η.",
+    3:"❌ Non. D'abord Eu = 500 × 0,40 = 200 J. Ensuite Ep = 500 − 200 = 300 J. Les pertes sont 300 J, pas 200 J.",
+    4:"❌ Non. L'appareil A a η = 80 %, l'appareil B a η = 55 %. Un rendement plus élevé signifie plus d'énergie utile — A est plus efficace.",
+    5:"❌ Non. La loi de conservation dit que l'énergie totale est CONSTANTE dans un système isolé. Elle se transforme mais ne disparaît pas."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['100']],
+        msgOk:"✅ η = Eu / Ef × 100. On multiplie par 100 pour obtenir un pourcentage.",
+        msgErr:"❌ Attendu : '100'. La formule complète est η (%) = (Eu ÷ Ef) × 100."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['ep','pertes','energie perdue','énergie perdue','ep (pertes)']],
+        msgOk:"✅ Ef = Eu + Ep. L'énergie fournie = énergie utile + énergie perdue (chaleur).",
+        msgErr:"❌ Attendu : 'Ep' (ou 'pertes'). La loi de conservation : Ef = Eu + Ep."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['inferieur a','inférieur à','inferieur','inférieur','<=','≤','plus petit','inférieur ou égal']],
+        msgOk:"✅ Le rendement est toujours inférieur (ou égal) à 100 %. Un rendement > 100 % est impossible.",
+        msgErr:"❌ Attendu : 'inférieur à' (ou '≤'). Aucun appareil ne peut produire plus d'énergie utile qu'il n'en reçoit."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_energie_4', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

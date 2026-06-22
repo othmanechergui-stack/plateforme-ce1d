@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique — Forces · Niveau 5 — Défi CE1D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#7B1FA2; --primary-dark:#4A148C; --primary-mid:#AB47BC; --primary-bg:#F3E5F5;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#2D0066 0%,#7B1FA2 55%,#CE93D8 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(45,0,102,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#7B1FA2; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#4A148C; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#2D0066,#7B1FA2,#CE93D8); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#2D0066,#4A148C); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#CE93D8; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #AB47BC; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #AB47BC; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#2D0066,#7B1FA2,#CE93D8); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #1A0040; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+
+        .recap-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin:20px 0; }
+        .recap-card { border-radius:14px; padding:16px 18px; }
+        .recap-card.n1 { background:linear-gradient(135deg,#F3E5F5,#E1BEE7); border:2px solid #CE93D8; }
+        .recap-card.n2 { background:linear-gradient(135deg,#E3F2FD,#BBDEFB); border:2px solid #90CAF9; }
+        .recap-card.n3 { background:linear-gradient(135deg,#FFF3E0,#FFE0B2); border:2px solid #FFCC80; }
+        .recap-card.n4 { background:linear-gradient(135deg,#F1F8E9,#DCEDC8); border:2px solid #AED581; }
+        .recap-level { font-size:.72rem; font-weight:900; text-transform:uppercase; letter-spacing:.8px; margin-bottom:6px; }
+        .n1 .recap-level { color:#4A148C; }
+        .n2 .recap-level { color:#1565C0; }
+        .n3 .recap-level { color:#E65100; }
+        .n4 .recap-level { color:#33691E; }
+        .recap-title { font-size:.98rem; font-weight:900; margin-bottom:8px; }
+        .recap-formulas { font-size:.85rem; line-height:1.8; }
+        .recap-formulas code { background:rgba(0,0,0,.1); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🏆 Forces · Défi CE1D</h1>
+            <p>Niveau 5 · Récapitulatif complet · Style examen belge</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <span class="diff-label">Niveau 5 — Défi CE1D 🏆</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. FICHE DE RÉVISION -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📋</div>
+        <div>
+            <div class="card-title">Fiche de révision — Forces et leurs effets</div>
+            <div class="card-sub">Récapitulatif N1 à N4 · Formules clés · Pièges CE1D</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Ce défi couvre l'intégralité du chapitre <strong>Forces et leurs effets</strong> au programme CE1D belge.
+            Revois la fiche de révision, puis affronte les questions de style examen.
+        </p>
+
+        <div class="recap-grid">
+            <div class="recap-card n1">
+                <div class="recap-level">Niveau 1</div>
+                <div class="recap-title">Notion de force</div>
+                <div class="recap-formulas">
+                    Force = action sur un objet<br>
+                    Unité : <code>Newton (N)</code><br>
+                    Représentation : vecteur<br>
+                    (point, direction, sens, valeur)<br>
+                    Contact ↔ À distance
+                </div>
+            </div>
+            <div class="recap-card n2">
+                <div class="recap-level">Niveau 2</div>
+                <div class="recap-title">Mesure & poids</div>
+                <div class="recap-formulas">
+                    <code>P = m × g</code><br>
+                    g ≈ 10 N/kg (Terre)<br>
+                    g ≈ 1,6 N/kg (Lune)<br>
+                    Masse en kg · Poids en N<br>
+                    Dynamomètre mesure P
+                </div>
+            </div>
+            <div class="recap-card n3">
+                <div class="recap-level">Niveau 3</div>
+                <div class="recap-title">Types de forces</div>
+                <div class="recap-formulas">
+                    Poids → vers le bas<br>
+                    Réaction du support → ⊥ surface<br>
+                    Frottement → oppose mouvement<br>
+                    Poussée d'Archimède → vers le haut<br>
+                    Flotte si F<sub>A</sub> ≥ Poids
+                </div>
+            </div>
+            <div class="recap-card n4">
+                <div class="recap-level">Niveau 4</div>
+                <div class="recap-title">Effets & équilibre</div>
+                <div class="recap-formulas">
+                    Force → modifie vitesse ou déforme<br>
+                    <code>Équilibre : ΣF = 0</code><br>
+                    Newton 1 : si ΣF = 0<br>
+                    → repos ou MRU conservé<br>
+                    Déséquilibre → accélération
+                </div>
+            </div>
+        </div>
+
+        <!-- SVG récap formules -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 160" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="160" fill="#FAF5FF" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#4A148C" font-family="Nunito, sans-serif">Formules et relations clés — Forces CE1D</text>
+
+                <!-- P = mg -->
+                <rect x="14" y="28" width="120" height="118" rx="8" fill="#EDE7F6" stroke="#CE93D8" stroke-width="1.5"/>
+                <rect x="14" y="28" width="120" height="26" rx="8" fill="#7B1FA2"/>
+                <text x="74" y="45" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">Poids</text>
+                <text x="74" y="70"  text-anchor="middle" font-size="14" font-weight="900" fill="#4A148C" font-family="Courier New, monospace">P = m×g</text>
+                <text x="74" y="90"  text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">P en Newton (N)</text>
+                <text x="74" y="105" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">m en kilogramme (kg)</text>
+                <text x="74" y="120" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">g = 10 N/kg (Terre)</text>
+                <text x="74" y="138" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">g = 1,6 N/kg (Lune)</text>
+
+                <!-- Vecteur force -->
+                <rect x="148" y="28" width="120" height="118" rx="8" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1.5"/>
+                <rect x="148" y="28" width="120" height="26" rx="8" fill="#1565C0"/>
+                <text x="208" y="45" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">Vecteur force</text>
+                <text x="208" y="68" text-anchor="middle" font-size="9" fill="#1565C0" font-family="Nunito, sans-serif" font-weight="700">4 caractéristiques :</text>
+                <text x="208" y="84" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">• Point d'application</text>
+                <text x="208" y="99" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">• Direction (droite d'action)</text>
+                <text x="208" y="114" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">• Sens (flèche)</text>
+                <text x="208" y="129" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">• Valeur / intensité (N)</text>
+
+                <!-- Equilibre -->
+                <rect x="282" y="28" width="120" height="118" rx="8" fill="#F1F8E9" stroke="#AED581" stroke-width="1.5"/>
+                <rect x="282" y="28" width="120" height="26" rx="8" fill="#33691E"/>
+                <text x="342" y="45" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">Équilibre</text>
+                <text x="342" y="66" text-anchor="middle" font-size="13" font-weight="900" fill="#33691E" font-family="Courier New, monospace">ΣF = 0</text>
+                <text x="342" y="84" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">Forces qui se compensent</text>
+                <text x="342" y="100" text-anchor="middle" font-size="9" fill="#33691E" font-weight="700" font-family="Nunito, sans-serif">→ repos conservé</text>
+                <text x="342" y="116" text-anchor="middle" font-size="9" fill="#33691E" font-weight="700" font-family="Nunito, sans-serif">→ mouvement uniforme</text>
+                <text x="342" y="132" text-anchor="middle" font-size="9" fill="#E53935" font-weight="700" font-family="Nunito, sans-serif">Si ΣF ≠ 0 → accélère</text>
+
+                <!-- Archimède -->
+                <rect x="416" y="28" width="130" height="118" rx="8" fill="#FFF3E0" stroke="#FFCC80" stroke-width="1.5"/>
+                <rect x="416" y="28" width="130" height="26" rx="8" fill="#E65100"/>
+                <text x="481" y="45" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">Archimède</text>
+                <text x="481" y="66" text-anchor="middle" font-size="9" fill="#E65100" font-weight="700" font-family="Nunito, sans-serif">F_A = Poids du fluide déplacé</text>
+                <text x="481" y="84" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">Dirigée vers le haut</text>
+                <text x="481" y="100" text-anchor="middle" font-size="9" fill="#33691E" font-weight="700" font-family="Nunito, sans-serif">Flotte si F_A ≥ Poids</text>
+                <text x="481" y="116" text-anchor="middle" font-size="9" fill="#E53935" font-weight="700" font-family="Nunito, sans-serif">Coule si F_A &lt; Poids</text>
+                <text x="481" y="132" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">ΣF = P − F_A</text>
+            </svg>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Les 5 pièges classiques CE1D — Forces</h3>
+            <p>
+                <strong>1. Masse ≠ Poids :</strong> la masse (kg) est une propriété de la matière ; le poids (N) dépend du champ gravitationnel. Sur la Lune, la masse ne change pas, le poids est 6× plus faible.<br>
+                <strong>2. Équilibre ≠ Immobilité :</strong> un objet peut être en équilibre (ΣF = 0) tout en étant en mouvement uniforme (Newton 1).<br>
+                <strong>3. Réaction ⊥ surface :</strong> la réaction du support n'est pas verticale sur un plan incliné — elle est perpendiculaire à la surface d'appui.<br>
+                <strong>4. Poussée d'Archimède :</strong> elle dépend du <em>volume de fluide déplacé</em>, pas de la masse de l'objet. Un gros objet léger déplace plus de fluide qu'un petit objet lourd.<br>
+                <strong>5. Force ≠ Énergie :</strong> une force en Newton n'est pas une énergie en Joule. Une force peut agir sans déplacer l'objet (travail nul).
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple — Défi CE1D</div>
+            <div class="card-sub">5 questions · Tous niveaux mélangés · Style examen</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Un objet a une masse de 3 kg. Quel est son poids sur Terre (g = 10 N/kg) ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">3 N</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">30 N</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">3 kg</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">0,3 N</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Un livre est posé sur une table horizontale. Dans quelle direction est orientée la réaction du support ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">Vers le bas, dans le même sens que le poids</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">Horizontalement</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">Vers le haut, perpendiculaire à la table</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">Dans n'importe quelle direction</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Un vecteur force est caractérisé par quatre éléments. Lesquels ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">Point d'application, direction, sens et valeur (intensité)</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">Masse, volume, densité et température</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">Vitesse, accélération, temps et distance</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">Couleur, taille, position et forme</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Un objet flotte immobile dans l'eau. Que peut-on affirmer sur la résultante des forces qui s'exercent sur lui ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">La résultante est dirigée vers le haut</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">La résultante est nulle (les forces se compensent)</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">La résultante est dirigée vers le bas</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">Il n'y a aucune force sur un objet immobile</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Une astronaute a une masse de 60 kg sur Terre (g = 10 N/kg). Sur la Lune (g = 1,6 N/kg), que valent sa masse et son poids ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Masse = 9,6 kg · Poids = 96 N</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Masse = 60 kg · Poids = 600 N</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Masse = 60 kg · Poids = 96 N</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Masse = 60 N · Poids = 96 kg</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous — Récapitulatif</div>
+            <div class="card-sub">3 exercices · Un piège par trou</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Le poids d'un objet se calcule par la formule P = m ×
+                <input class="blank" id="f1a" placeholder="?" style="width:50px">.
+                L'unité du poids est le <input class="blank" id="f1b" placeholder="?" style="width:90px">,
+                tandis que la masse s'exprime en <input class="blank" id="f1c" placeholder="?" style="width:80px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Une force de <input class="blank" id="f2a" placeholder="?" style="width:80px"> nécessite un contact physique entre les objets.
+                La poussée d'Archimède est dirigée vers le
+                <input class="blank" id="f2b" placeholder="?" style="width:60px"> et est égale au poids du
+                <input class="blank" id="f2c" placeholder="?" style="width:100px"> déplacé.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Un objet est en <input class="blank" id="f3a" placeholder="?" style="width:90px"> quand la somme de toutes les forces qui s'exercent sur lui est
+                <input class="blank" id="f3b" placeholder="?" style="width:60px">.
+                Selon la première loi de Newton, un tel objet reste au repos ou en mouvement
+                <input class="blank" id="f3c" placeholder="?" style="width:110px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés — Style CE1D</div>
+            <div class="card-sub">3 exercices complets · Corrigés détaillés · + 1 bonus</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Poids sur Terre et sur la Lune</div>
+                <div class="ex-stmt">
+                    Un sac à dos a une masse de 4,5 kg.<br>
+                    a) Calcule son poids sur Terre (g = 10 N/kg).<br>
+                    b) Calcule son poids sur la Lune (g = 1,6 N/kg).<br>
+                    c) Quelle est sa masse sur la Lune ? Justifie.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Poids sur Terre :</strong><br>P = m × g = 4,5 × 10 = <strong>45 N</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Poids sur la Lune :</strong><br>P_Lune = m × g_Lune = 4,5 × 1,6 = <strong>7,2 N</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Masse sur la Lune :</strong><br>La masse est une propriété intrinsèque de la matière — elle ne dépend pas du lieu. La masse reste <strong>4,5 kg</strong> sur la Lune.<br>Seul le poids change selon le champ gravitationnel.</div></div>
+                <div class="final-ans">✅ P_Terre = <strong>45 N</strong> · P_Lune = <strong>7,2 N</strong> · Masse Lune = <strong>4,5 kg</strong> (inchangée)</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Bilan des forces sur un plongeur</div>
+                <div class="ex-stmt">
+                    Un plongeur de masse 80 kg est immergé dans l'eau. La poussée d'Archimède qui s'exerce sur lui est de 500 N. (g = 10 N/kg)<br>
+                    a) Calcule le poids du plongeur.<br>
+                    b) Calcule la résultante des forces verticales.<br>
+                    c) Le plongeur monte-t-il, descend-il ou reste-t-il immobile ? Justifie.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Poids :</strong><br>P = m × g = 80 × 10 = <strong>800 N</strong> (dirigé vers le bas)</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Résultante :</strong><br>F_A = 500 N (vers le haut) · P = 800 N (vers le bas)<br>ΣF = F_A − P = 500 − 800 = <strong>−300 N</strong> (soit 300 N vers le bas)</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Mouvement :</strong><br>La résultante est de 300 N vers le bas → les forces ne se compensent pas → le plongeur <strong>descend</strong> (accélération vers le bas).</div></div>
+                <div class="final-ans">✅ Poids = <strong>800 N</strong> · Résultante = <strong>300 N vers le bas</strong> · Le plongeur <strong>descend</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Équilibre d'un objet posé sur un plan</div>
+                <div class="ex-stmt">
+                    Un livre de 0,6 kg est posé à plat sur une table horizontale. (g = 10 N/kg)<br>
+                    a) Identifie les deux forces qui s'exercent sur le livre et précise leur sens.<br>
+                    b) Calcule le poids du livre.<br>
+                    c) Quelle est la valeur de la réaction du support ? Justifie à partir de la condition d'équilibre.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Les deux forces :</strong><br>• Le <strong>poids P</strong> : exercé par la Terre sur le livre, dirigé verticalement <strong>vers le bas</strong>.<br>• La <strong>réaction du support R</strong> : exercée par la table sur le livre, dirigée verticalement <strong>vers le haut</strong>, perpendiculaire à la table.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Poids :</strong><br>P = m × g = 0,6 × 10 = <strong>6 N</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Réaction du support :</strong><br>Le livre est en équilibre → ΣF = 0 → R + P = 0<br>Donc R = P = <strong>6 N</strong> (vers le haut).<br>La réaction est égale en valeur au poids, mais de sens opposé.</div></div>
+                <div class="final-ans">✅ Poids = <strong>6 N ↓</strong> · Réaction = <strong>6 N ↑</strong> · Équilibre car ΣF = 6 − 6 = <strong>0 N</strong></div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Retrouver une masse depuis un poids mesuré</div>
+                <div class="bonus-stmt">
+                    Un dynamomètre indique 36 N quand on accroche un objet sur Terre (g = 10 N/kg).<br>
+                    a) Quelle est la masse de l'objet ?<br>
+                    b) Si on emporte cet objet sur Mars où g = 3,7 N/kg, que lira le dynamomètre sur Mars ?<br>
+                    c) Sa masse change-t-elle ? Explique.
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a) Masse :</strong><br>P = m × g → m = P ÷ g = 36 ÷ 10 = <strong>3,6 kg</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b) Poids sur Mars :</strong><br>P_Mars = m × g_Mars = 3,6 × 3,7 = <strong>13,32 N</strong><br>Le dynamomètre lira donc environ <strong>13,3 N</strong> sur Mars.</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>c) Masse sur Mars :</strong><br>La masse reste <strong>3,6 kg</strong> sur Mars. La masse est une propriété de la matière qui ne dépend pas du lieu. Seul le poids (= force gravitationnelle) change.</div></div>
+                <div class="bonus-ans">
+                    Masse = <strong>3,6 kg</strong> (identique partout) · Poids sur Mars ≈ <strong>13,3 N</strong><br>
+                    Méthode : m = P ÷ g · P_ailleurs = m × g_ailleurs
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🏆 🌟 🏆</div>
+    <h2>Défi Forces réussi !</h2>
+    <p>Félicitations ! Tu maîtrises les forces, le poids, l'équilibre et la poussée d'Archimède.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP — prêt(e) pour l'examen CE1D !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Forces et leurs effets</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="physique_forces_niveau1.html" class="nav-btn">Niveau 1 — Notion de force</a>
+        <a href="physique_forces_niveau2.html" class="nav-btn">Niveau 2 — Mesure &amp; unités</a>
+        <a href="physique_forces_niveau3.html" class="nav-btn">Niveau 3 — Types de forces</a>
+        <a href="physique_forces_niveau4.html" class="nav-btn">Niveau 4 — Effets &amp; équilibre</a>
+        <a href="physique_forces_niveau5.html" class="nav-btn current">▶ Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:2, 3:0, 4:1, 5:2};
+
+const QCM_OK = {
+    1:"✅ Exact ! P = m × g = 3 × 10 = 30 N. Le poids est en Newtons, pas en kg. La masse reste 3 kg, le poids est 30 N.",
+    2:"✅ Parfait ! La réaction du support est toujours perpendiculaire à la surface d'appui. Sur une table horizontale, elle est donc verticale vers le haut.",
+    3:"✅ Exact ! Un vecteur force est défini par : son point d'application (où s'applique la force), sa direction (droite d'action), son sens (flèche) et sa valeur en Newton.",
+    4:"✅ Bravo ! Si l'objet flotte sans bouger, il est en équilibre : la résultante des forces est nulle. Le poids vers le bas est exactement compensé par la poussée d'Archimède vers le haut.",
+    5:"✅ Correct ! La masse est une propriété intrinsèque → reste 60 kg partout. Seul le poids change : P_Lune = 60 × 1,6 = 96 N. Ne jamais confondre masse (kg) et poids (N)."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. P = m × g = 3 × 10 = 30 N. Le poids n'est PAS égal à la masse (3 kg ≠ 3 N). L'unité du poids est le Newton (N), celle de la masse est le kilogramme (kg).",
+    2:"❌ Non. La réaction du support est PERPENDICULAIRE à la surface d'appui, et s'oppose au poids. Sur une table horizontale, elle est donc verticale vers le HAUT, jamais vers le bas ni horizontalement.",
+    3:"❌ Non. Les 4 caractéristiques d'un vecteur force sont : point d'application, direction, sens et valeur (intensité). Ce sont des grandeurs physiques, pas des propriétés visuelles ou cinématiques.",
+    4:"❌ Non. Un objet immobile (ou en mouvement uniforme) a une résultante NULLE — les forces se compensent parfaitement. Si la résultante était non nulle, l'objet accélérerait (Newton 1).",
+    5:"❌ Non. La masse est une propriété intrinsèque de la matière — elle NE CHANGE PAS selon le lieu. Sur la Lune : masse = toujours 60 kg. Poids = 60 × 1,6 = 96 N (pas 600 N qui serait le poids sur Terre)."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b','f1c'],
+        accepted:[['g','10'],['newton','n'],['kg','kilogramme','kilogrammes']],
+        msgOk:"✅ P = m × g · Poids en Newton (N) · Masse en kilogramme (kg).",
+        msgErr:"❌ Attendus : 'g' (ou 10), 'Newton' (ou N), 'kg' (ou kilogramme)."
+    },
+    2:{
+        fields:['f2a','f2b','f2c'],
+        accepted:[['contact'],['haut'],['fluide','liquide']],
+        msgOk:"✅ Force de contact → nécessite un contact. Archimède → vers le haut = poids du fluide déplacé.",
+        msgErr:"❌ Attendus : force de 'contact', dirigée vers le 'haut', poids du 'fluide' déplacé."
+    },
+    3:{
+        fields:['f3a','f3b','f3c'],
+        accepted:[['equilibre','équilibre'],['nulle','zero','0','egale a zero','égale à zéro'],['rectiligne uniforme','uniforme','constant','constante']],
+        msgOk:"✅ Équilibre → ΣF = 0 (nulle) → Newton 1 : mouvement rectiligne uniforme (ou repos) conservé.",
+        msgErr:"❌ Attendus : 'équilibre', résultante 'nulle' (ou 0), mouvement 'rectiligne uniforme' (ou uniforme)."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.8)) {
+        localStorage.setItem('edu_completed_forces_5', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

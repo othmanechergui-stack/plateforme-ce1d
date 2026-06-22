@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique — Forces · Niveau 4 — Effets et équilibre</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#7B1FA2; --primary-dark:#4A148C; --primary-mid:#AB47BC; --primary-bg:#F3E5F5;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#2D0066 0%,#7B1FA2 55%,#CE93D8 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(45,0,102,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#7B1FA2; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#4A148C; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#2D0066,#7B1FA2,#CE93D8); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#2D0066,#4A148C); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#CE93D8; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #AB47BC; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #AB47BC; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#2D0066,#7B1FA2,#CE93D8); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #1A0040; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>⚡ Forces · Effets et équilibre</h1>
+            <p>Niveau 4 · Effets des forces · Équilibre · 1ère loi de Newton</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 4 — Expert</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Effets des forces et équilibre</div>
+            <div class="card-sub">Effets · Équilibre statique · 1ère loi de Newton · Plan incliné</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Une force peut modifier le mouvement d'un objet, le déformer ou le mettre en rotation.
+            Comprendre l'équilibre des forces est la clé pour analyser toute situation physique au CE1D.
+        </p>
+
+        <!-- Effets d'une force -->
+        <div class="def-box">
+            <h3>🎯 Les 3 effets possibles d'une force</h3>
+            <p>
+                Une force peut produire <strong>3 types d'effets</strong> sur un objet :<br>
+                • <strong>Modifier le mouvement</strong> : accélérer, freiner ou changer la trajectoire (effet cinétique)<br>
+                • <strong>Déformer l'objet</strong> : étirer, comprimer, plier… (effet statique)<br>
+                • <strong>Mettre en rotation</strong> : faire tourner l'objet autour d'un axe (effet de levier)<br><br>
+                Plusieurs effets peuvent se produire simultanément (ex : une balle de tennis frappée — elle se déforme ET change de direction).
+            </p>
+        </div>
+
+        <!-- Équilibre -->
+        <div class="rule-box">
+            <h3>⚖️ L'équilibre d'un objet</h3>
+            <p>
+                Un objet est en <strong>équilibre</strong> quand la <strong>somme vectorielle de toutes les forces</strong> qui s'exercent sur lui est nulle.<br>
+                <strong>Σ F = 0</strong> (la résultante est nulle)<br><br>
+                Sur une surface horizontale, l'équilibre implique :<br>
+                • Verticalement : Poids P = Réaction R (forces opposées, même intensité)<br>
+                • Horizontalement : pas de force déséquilibrante (sinon l'objet glisserait)<br><br>
+                <strong>Attention :</strong> l'équilibre ne signifie pas l'immobilité ! Un objet peut être en mouvement à vitesse constante et être en équilibre des forces.
+            </p>
+        </div>
+
+        <!-- SVG bilan des forces table -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 190" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="190" fill="#F8F0FF" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#4A148C" font-family="Nunito, sans-serif">Bilan des forces — Objet posé sur table (équilibre)</text>
+
+                <!-- Table -->
+                <rect x="150" y="120" width="260" height="14" rx="3" fill="#8D6E63" stroke="#5D4037" stroke-width="1.5"/>
+                <rect x="175" y="134" width="16" height="35" fill="#8D6E63"/>
+                <rect x="369" y="134" width="16" height="35" fill="#8D6E63"/>
+
+                <!-- Objet -->
+                <rect x="220" y="80" width="120" height="42" rx="6" fill="#CE93D8" stroke="#7B1FA2" stroke-width="2"/>
+                <text x="280" y="106" text-anchor="middle" font-size="12" font-weight="900" fill="#4A148C" font-family="Nunito, sans-serif">OBJET (10 N)</text>
+
+                <!-- Poids flèche vers bas -->
+                <defs>
+                    <marker id="ar4a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#E53935"/></marker>
+                    <marker id="ar4b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#1565C0"/></marker>
+                </defs>
+                <line x1="265" y1="101" x2="265" y2="130" stroke="#E53935" stroke-width="3" marker-end="url(#ar4a)"/>
+                <text x="200" y="128" font-size="10" font-weight="900" fill="#E53935" font-family="Nunito, sans-serif">P = 10 N ↓</text>
+
+                <!-- Réaction flèche vers haut -->
+                <line x1="295" y1="120" x2="295" y2="68" stroke="#1565C0" stroke-width="3" marker-end="url(#ar4b)"/>
+                <text x="310" y="80" font-size="10" font-weight="900" fill="#1565C0" font-family="Nunito, sans-serif">R = 10 N ↑</text>
+
+                <!-- Bilan -->
+                <rect x="100" y="155" width="360" height="28" rx="8" fill="#E8F5E9" stroke="#58CC02" stroke-width="1.5"/>
+                <text x="280" y="174" text-anchor="middle" font-size="11" font-weight="900" fill="#2E7D32" font-family="Nunito, sans-serif">Σ F = P + R = 10 N (↓) + 10 N (↑) = 0 N → ÉQUILIBRE ✓</text>
+            </svg>
+        </div>
+
+        <!-- 1ère loi de Newton -->
+        <div class="def-box">
+            <h3>🍎 1ère loi de Newton — Principe d'inertie</h3>
+            <p>
+                <strong>"Un objet reste au repos ou en mouvement rectiligne uniforme (MRU) si et seulement si la résultante des forces qui s'exercent sur lui est nulle."</strong><br><br>
+                En clair :<br>
+                • Si <strong>Σ F = 0</strong> : l'objet reste immobile OU continue à la même vitesse en ligne droite<br>
+                • Si <strong>Σ F ≠ 0</strong> : la vitesse change (accélération ou décélération) ou la trajectoire change<br><br>
+                <strong>Exemple :</strong> une voiture en MRU (100 km/h constant) → les forces se compensent.
+            </p>
+        </div>
+
+        <!-- SVG plan incliné -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="200" fill="#F8F0FF" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#4A148C" font-family="Nunito, sans-serif">Équilibre sur un plan incliné — Décomposition du poids</text>
+
+                <!-- Plan incliné -->
+                <polygon points="60,165 400,165 400,80" fill="#D7CCC8" stroke="#8D6E63" stroke-width="2"/>
+                <text x="430" y="125" font-size="9" fill="#8D6E63" font-family="Nunito, sans-serif">θ = 30°</text>
+
+                <!-- Arc angle -->
+                <path d="M 390,165 A 15,15 0 0,0 390,110" fill="none" stroke="#8D6E63" stroke-width="1.5"/>
+
+                <!-- Objet sur le plan -->
+                <rect x="195" y="98" width="55" height="38" rx="5" fill="#CE93D8" stroke="#7B1FA2" stroke-width="2" transform="rotate(-18 222 117)"/>
+                <text x="222" y="120" text-anchor="middle" font-size="9" font-weight="700" fill="#4A148C" font-family="Nunito, sans-serif" transform="rotate(-18 222 117)">OBJET</text>
+
+                <!-- Poids vers le bas -->
+                <defs>
+                    <marker id="ar4c" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#E53935"/></marker>
+                    <marker id="ar4d" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#1565C0"/></marker>
+                    <marker id="ar4e" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#FF6F00"/></marker>
+                    <marker id="ar4f" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#2E7D32"/></marker>
+                </defs>
+                <line x1="222" y1="117" x2="222" y2="162" stroke="#E53935" stroke-width="2.5" marker-end="url(#ar4c)"/>
+                <text x="228" y="155" font-size="9" font-weight="900" fill="#E53935" font-family="Nunito, sans-serif">P ↓</text>
+
+                <!-- Réaction perpendiculaire au plan -->
+                <line x1="222" y1="117" x2="192" y2="75" stroke="#1565C0" stroke-width="2.5" marker-end="url(#ar4d)"/>
+                <text x="155" y="72" font-size="9" font-weight="900" fill="#1565C0" font-family="Nunito, sans-serif">R ⊥ plan</text>
+
+                <!-- Composante parallèle (vers bas du plan) -->
+                <line x1="222" y1="117" x2="265" y2="138" stroke="#E53935" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ar4c)"/>
+                <text x="268" y="145" font-size="9" fill="#E53935" font-family="Nunito, sans-serif">P∥ (vers bas)</text>
+
+                <!-- Frottement (vers haut du plan) -->
+                <line x1="222" y1="117" x2="178" y2="96" stroke="#2E7D32" stroke-width="2.5" marker-end="url(#ar4f)"/>
+                <text x="110" y="93" font-size="9" font-weight="900" fill="#2E7D32" font-family="Nunito, sans-serif">f ↑ plan</text>
+
+                <!-- Légende -->
+                <text x="280" y="185" text-anchor="middle" font-size="10" font-weight="700" fill="#555" font-family="Nunito, sans-serif">Équilibre : R + f + P = 0 · La composante P∥ est compensée par le frottement f</text>
+            </svg>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Pièges sur l'équilibre et Newton 1</h3>
+            <p>
+                <strong>Forces égales ≠ forces opposées :</strong> deux forces peuvent avoir la même intensité (20 N chacune) sans être opposées. Pour s'annuler, elles doivent avoir la même droite d'action, la même intensité ET des sens contraires.<br>
+                <strong>Mouvement constant ≠ force résultante :</strong> un objet qui avance à vitesse constante a une résultante nulle (il n'accélère pas). Ne pas confondre "avoir une vitesse" et "avoir une force résultante".<br>
+                <strong>Déséquilibre → modification du mouvement :</strong> si Σ F ≠ 0, la vitesse change (pas forcément arrêt).
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">Σ F = 0</div>
+                <div class="cas-eq">→ Équilibre</div>
+                <div class="cas-desc">Repos OU MRU (vitesse constante en ligne droite).</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Σ F ≠ 0</div>
+                <div class="cas-eq">→ Déséquilibre</div>
+                <div class="cas-desc">La vitesse change (accélération ou décélération).</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Inertie</div>
+                <div class="cas-eq">Newton 1</div>
+                <div class="cas-desc">Un objet "résiste" au changement de mouvement.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Équilibre, résultante, Newton 1, effets</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Un objet est soumis à deux forces : 15 N vers la droite et 15 N vers la gauche, sur la même droite d'action. Quel est son état ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">Il accélère vers la droite</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">Il est en équilibre (résultante = 0)</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">Il décélère</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">Il fait une rotation</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Deux forces de 20 N dans le même sens s'exercent sur un objet. Quelle est la résultante ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">0 N (elles s'annulent)</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">20 N</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">40 N dans ce sens</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">400 N</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Une balle de foot est frappée. Quels sont les effets de la force du pied sur la balle ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">Uniquement changer la direction de la balle</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">Déformer la balle ET modifier son mouvement</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">Aucun effet car la balle est ronde</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">Uniquement déformer la balle</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Une pierre tombe en chute libre (sans air). La résultante des forces est-elle nulle ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">Oui, car elle tombe à vitesse constante</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">Non, car elle accélère (seul le poids agit)</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">Oui, car poids = réaction du sol</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">Non, car le frottement freine la chute</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Quelle est la condition pour qu'un objet soit en équilibre selon la 1ère loi de Newton ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">L'objet doit être immobile</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">La somme des forces = 0</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Une seule force doit agir</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">L'objet doit se déplacer</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Équilibre, Newton 1, déséquilibre</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Un objet est en équilibre quand la somme des forces vaut
+                <input class="blank" id="f1a" placeholder="?" style="width:40px">.
+                La résultante est alors
+                <input class="blank" id="f1b" placeholder="?" style="width:60px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Selon la 1ère loi de Newton, si la force résultante est nulle, l'objet reste
+                <input class="blank" id="f2a" placeholder="?" style="width:100px"> ou en mouvement
+                <input class="blank" id="f2b" placeholder="?" style="width:130px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Si les forces ne se compensent pas (déséquilibre), l'objet subit une modification de sa
+                <input class="blank" id="f3a" placeholder="?" style="width:80px">
+                (il accélère ou décélère).
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Analyser l'équilibre d'une voiture (CE1D style)</div>
+                <div class="ex-stmt">
+                    Une voiture roule à vitesse constante sur une route horizontale.
+                    Le moteur exerce une force de 1 200 N vers l'avant.<br>
+                    a) La voiture est-elle en équilibre ? Justifie avec Newton 1.<br>
+                    b) Quelle est l'intensité de la force de frottement total (air + route) ?<br>
+                    c) Si le moteur pousse soudain avec 1 500 N, que se passe-t-il ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">a</div><div class="sol-text"><strong>Équilibre :</strong> Oui, la voiture est en équilibre des forces. Vitesse constante → MRU → selon Newton 1, Σ F = 0.</div></div>
+                <div class="sol-step"><div class="sol-num">b</div><div class="sol-text"><strong>Frottement :</strong> Σ F = 0 → F_moteur + F_frottement = 0<br>1 200 N (avant) + F_f = 0 → F_f = <strong>1 200 N vers l'arrière</strong></div></div>
+                <div class="sol-step"><div class="sol-num">c</div><div class="sol-text"><strong>F = 1 500 N :</strong> Σ F = 1 500 − 1 200 = 300 N vers l'avant ≠ 0. La résultante n'est plus nulle → la voiture <strong>accélère</strong> vers l'avant.</div></div>
+                <div class="final-ans">✅ a) Oui, MRU → Σ F = 0 · b) F_f = 1 200 N (arrière) · c) Accélération car Σ F = 300 N ≠ 0</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Bilan des forces et résultante</div>
+                <div class="ex-stmt">
+                    Trois forces agissent sur un objet :<br>
+                    • F1 = 30 N vers la droite<br>
+                    • F2 = 15 N vers la gauche<br>
+                    • F3 = 10 N vers la gauche<br>
+                    a) Calcule la résultante horizontale.<br>
+                    b) L'objet est-il en équilibre ?<br>
+                    c) Quelle force faudrait-il ajouter pour rétablir l'équilibre ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Convention :</strong> droite = positif (+), gauche = négatif (−)</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>a) Résultante :</strong> Σ F = +30 − 15 − 10 = +30 − 25 = <strong>+5 N vers la droite</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>b) Équilibre :</strong> Non, Σ F = 5 N ≠ 0 → l'objet n'est pas en équilibre. Il accélère vers la droite.</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>c) Force manquante :</strong> Il faut annuler la résultante de 5 N à droite → ajouter une force de <strong>5 N vers la gauche</strong>.</div></div>
+                <div class="final-ans">✅ a) Σ F = 5 N (droite) · b) Non, pas en équilibre · c) Ajouter 5 N vers la gauche</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Décomposer le poids sur plan incliné (CE1D style)</div>
+                <div class="ex-stmt">
+                    Un objet de 4 kg est posé immobile sur un plan incliné à 30° (g = 10 N/kg).<br>
+                    a) Calcule le poids de l'objet.<br>
+                    b) La composante du poids parallèle au plan vaut P × sin(30°) = P × 0,5. Calcule-la.<br>
+                    c) Quelle force doit exercer le frottement pour maintenir l'équilibre ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Poids :</strong> P = m × g = 4 × 10 = <strong>40 N</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Composante parallèle :</strong> P∥ = P × sin(30°) = 40 × 0,5 = <strong>20 N</strong> (le long du plan, vers le bas)</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Frottement :</strong> Pour l'équilibre sur le plan, le frottement doit compenser P∥ :<br>f = P∥ = <strong>20 N</strong> (le long du plan, vers le haut du plan)</div></div>
+                <div class="final-ans">✅ a) P = 40 N · b) P∥ = 20 N · c) f = 20 N vers le haut du plan</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Trouver une force manquante par bilan vectoriel</div>
+                <div class="bonus-stmt">
+                    Un lustre de 3 kg est suspendu par deux câbles symétriques, chacun faisant un angle de 60° avec l'horizontal.<br>
+                    a) Calcule le poids du lustre (g = 10 N/kg).<br>
+                    b) Pour l'équilibre, la somme des composantes verticales des tensions doit compenser P.<br>
+                    Sachant que chaque câble exerce une tension T, et que la composante verticale est T × sin(60°) ≈ T × 0,866,<br>
+                    calcule la tension T dans chaque câble.
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a) Poids :</strong> P = 3 × 10 = <strong>30 N</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b) Équilibre vertical :</strong><br>2 × T × sin(60°) = P<br>2 × T × 0,866 = 30<br>1,732 × T = 30<br>T = 30 ÷ 1,732 ≈ <strong>17,3 N</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>Vérification :</strong> 2 × 17,3 × 0,866 ≈ 2 × 15 = 30 N = P ✓</div></div>
+                <div class="bonus-ans">
+                    P = 30 N · T ≈ <strong>17,3 N</strong> par câble<br>
+                    Astuce CE1D : avec 2 câbles symétriques, 2 × T × sin(θ) = P pour l'équilibre vertical.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 4 terminé !</h2>
+    <p>Bravo ! Tu maîtrises les effets des forces, l'équilibre et la 1ère loi de Newton.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Place au Défi CE1D — Niveau 5 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Forces et leurs effets</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="physique_forces_niveau1.html" class="nav-btn">Niveau 1 — Notion de force</a>
+        <a href="physique_forces_niveau2.html" class="nav-btn">Niveau 2 — Mesure &amp; unités</a>
+        <a href="physique_forces_niveau3.html" class="nav-btn">Niveau 3 — Types de forces</a>
+        <a href="physique_forces_niveau4.html" class="nav-btn current">▶ Niveau 4 — Effets &amp; équilibre</a>
+        <a href="physique_forces_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:2, 3:1, 4:1, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! Deux forces égales et opposées sur la même droite d'action s'annulent : 15 N (→) + 15 N (←) = 0 N. L'objet est en équilibre.",
+    2:"✅ Bravo ! Deux forces dans le même sens s'additionnent : 20 + 20 = 40 N dans ce sens. Les forces ne s'annulent que si elles sont opposées.",
+    3:"✅ Correct ! La force du pied déforme la balle (elle s'aplatit au contact) ET modifie son mouvement (elle est propulsée). Les deux effets ont lieu simultanément.",
+    4:"✅ Parfait ! En chute libre sans air, seul le poids agit. Σ F = P ≠ 0, donc la pierre accélère (elle ne tombe pas à vitesse constante).",
+    5:"✅ Exact ! Selon Newton 1, l'équilibre (repos ou MRU) est obtenu quand la somme des forces = 0. L'objet peut très bien être en mouvement !"
+};
+
+const QCM_ERR = {
+    1:"❌ Non. 15 N à droite + 15 N à gauche sur la même droite → résultante = 0 → équilibre. Les forces se compensent parfaitement.",
+    2:"❌ Non. Deux forces dans le même sens s'additionnent : 20 + 20 = 40 N. Elles s'annulent seulement si elles sont opposées (sens contraires).",
+    3:"❌ Non. La force du pied produit deux effets simultanés : elle déforme la balle (qui s'aplatit) ET modifie son mouvement (elle part en l'air).",
+    4:"❌ Non. En chute libre, seul le poids agit → Σ F = P ≠ 0 → la pierre accélère. Elle ne tombe pas à vitesse constante (et il n'y a pas de réaction du sol car la pierre est en l'air).",
+    5:"❌ Non. Selon Newton 1, la condition d'équilibre est Σ F = 0. L'objet peut être immobile OU en mouvement à vitesse constante — les deux sont possibles en équilibre."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['0','zero','zéro'],['nulle','nulle vectorielle','0','zero','zéro']],
+        msgOk:"✅ En équilibre : Σ F = 0. La résultante est nulle.",
+        msgErr:"❌ Attendus : somme = '0', résultante 'nulle'."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['au repos','immobile','en repos'],['rectiligne uniforme','mru','MRU','rectiligne uniforme MRU','a vitesse constante','à vitesse constante']],
+        msgOk:"✅ Newton 1 : Σ F = 0 → repos ou mouvement rectiligne uniforme (MRU).",
+        msgErr:"❌ Attendus : 'au repos' OU 'immobile', et 'rectiligne uniforme' (ou MRU)."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['vitesse']],
+        msgOk:"✅ Si Σ F ≠ 0, la vitesse change : l'objet accélère ou décélère.",
+        msgErr:"❌ Attendu : modification de la 'vitesse' (accélération ou décélération)."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_forces_4', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique — Chaleur · Niveau 5 — Défi CE1D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#E64A19; --primary-dark:#BF360C; --primary-mid:#FF7043; --primary-bg:#FBE9E7;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#7F2700 0%,#E64A19 55%,#FFAB91 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(127,39,0,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#E64A19; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#BF360C; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#7F2700,#E64A19,#FFAB91); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        /* Fiche révision */
+        .recap-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; margin:14px 0; }
+        .recap-box { border-radius:12px; padding:14px 16px; }
+        .recap-box.orange { background:linear-gradient(135deg,#7F2700,#BF360C); color:white; }
+        .recap-box.blue   { background:linear-gradient(135deg,#1A237E,#283593); color:white; }
+        .recap-box.green  { background:linear-gradient(135deg,#1B5E20,#388E3C); color:white; }
+        .recap-box.purple { background:linear-gradient(135deg,#4A148C,#6A1B9A); color:white; }
+        .recap-box h4 { font-size:.9rem; font-weight:900; margin-bottom:8px; opacity:.9; }
+        .recap-box p  { font-size:.83rem; line-height:1.7; opacity:.92; }
+        .recap-box strong { color:#FFD54F; }
+
+        .def-box { background:linear-gradient(135deg,#7F2700,#BF360C); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#FFAB91; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #FFAB91; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#7F2700,#E64A19,#FFAB91); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #5D1A00; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .trophy-banner { background:linear-gradient(135deg,#7F2700,#E64A19); color:white; border-radius:14px; padding:22px 24px; text-align:center; margin-bottom:8px; }
+        .trophy-banner h2 { font-size:1.5rem; font-weight:900; margin-bottom:6px; }
+        .trophy-banner p  { font-size:.92rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🏆 Chaleur · Défi CE1D</h1>
+            <p>Niveau 5 · Récapitulatif complet · Questions style examen belge</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <span class="diff-label">Niveau 5 — Défi CE1D</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- BANNIÈRE TROPHÉE -->
+<div class="trophy-banner">
+    <h2>🏆 Défi Chaleur &amp; Thermique</h2>
+    <p>Tu as parcouru tous les niveaux. Ici, on mélange tout — comme au vrai CE1D belge.<br>
+       Consulte la fiche de révision, puis relève le défi !</p>
+</div>
+
+<!-- 1. FICHE RÉVISION -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📋</div>
+        <div>
+            <div class="card-title">Fiche de révision complète</div>
+            <div class="card-sub">Tout le module Chaleur &amp; Transferts thermiques en un coup d'œil</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="recap-grid">
+            <div class="recap-box orange">
+                <h4>🌡️ N1 — Température</h4>
+                <p>
+                    T = agitation des molécules<br>
+                    <strong>T(K) = T(°C) + 273</strong><br>
+                    0 °C = 273 K (fusion eau)<br>
+                    100 °C = 373 K (ébullition eau)<br>
+                    −273 °C = 0 K (zéro absolu)<br>
+                    Température ≠ chaleur (énergie)
+                </p>
+            </div>
+            <div class="recap-box blue">
+                <h4>🔥 N2 — Q = m·c·ΔT</h4>
+                <p>
+                    Q = chaleur (Joules)<br>
+                    m = masse (kg)<br>
+                    c = capacité thermique massique<br>
+                    <strong>ΔT = T_finale − T_initiale</strong><br>
+                    c eau = 4 200 J/(kg·°C)<br>
+                    c fer = 450 · c alu = 900 J/(kg·°C)
+                </p>
+            </div>
+            <div class="recap-box green">
+                <h4>♨️ N3 — Modes de transfert</h4>
+                <p>
+                    <strong>Conduction</strong> : contact, solides<br>
+                    <strong>Convection</strong> : mouvement de fluide<br>
+                    <strong>Rayonnement</strong> : ondes, sans matière<br>
+                    Sens : toujours chaud → froid<br>
+                    Isolants : laine de verre, air, liège<br>
+                    Conducteurs : métaux
+                </p>
+            </div>
+            <div class="recap-box purple">
+                <h4>🧊 N4 — Changements d'état</h4>
+                <p>
+                    Fusion · Solidification · Vaporisation<br>
+                    Liquéfaction · Sublimation<br>
+                    <strong>Q = m × L</strong> (chaleur latente)<br>
+                    Pendant changement d'état : <strong>T = cste</strong><br>
+                    L_fusion eau = 334 000 J/kg<br>
+                    L_vapori. eau = 2 260 000 J/kg
+                </p>
+            </div>
+        </div>
+
+        <!-- Mini-courbe récap -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 160" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="160" fill="#FFF3F0" rx="10"/>
+                <text x="280" y="14" text-anchor="middle" font-size="11" font-weight="900" fill="#7F2700" font-family="Nunito, sans-serif">Récap — Courbe de chauffage de l'eau + Formules clés</text>
+
+                <!-- Axes -->
+                <line x1="45" y1="18" x2="45" y2="130" stroke="#333" stroke-width="1.5"/>
+                <line x1="45" y1="130" x2="310" y2="130" stroke="#333" stroke-width="1.5"/>
+
+                <!-- Axe Y labels -->
+                <text x="38" y="130" text-anchor="end" font-size="8" fill="#1CB0F6" font-weight="900" font-family="Nunito, sans-serif">0°C</text>
+                <line x1="42" y1="100" x2="45" y2="100" stroke="#1CB0F6" stroke-width="1.5"/>
+                <text x="38" y="104" text-anchor="end" font-size="8" fill="#E64A19" font-weight="900" font-family="Nunito, sans-serif">100</text>
+                <line x1="42" y1="50" x2="45" y2="50" stroke="#E64A19" stroke-width="1.5"/>
+                <text x="38" y="22" text-anchor="end" font-size="8" fill="#555" font-family="Nunito, sans-serif">120</text>
+
+                <!-- Courbe de chauffage (simplifiée) -->
+                <!-- glace montée 70→50→100 -->
+                <polyline points="45,140 80,100 80,100 120,100 120,100 210,50 210,50 260,50 260,50 310,22"
+                    fill="none" stroke="#E64A19" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+
+                <!-- Palier annotations -->
+                <text x="100" y="93" text-anchor="middle" font-size="8" font-weight="900" fill="#1CB0F6" font-family="Nunito, sans-serif">Fusion</text>
+                <text x="100" y="103" text-anchor="middle" font-size="7" fill="#1CB0F6" font-family="Nunito, sans-serif">Q=mL</text>
+                <text x="235" y="43" text-anchor="middle" font-size="8" font-weight="900" fill="#E64A19" font-family="Nunito, sans-serif">Ébullition</text>
+                <text x="235" y="53" text-anchor="middle" font-size="7" fill="#E64A19" font-family="Nunito, sans-serif">Q=mL</text>
+
+                <!-- Formules à droite -->
+                <rect x="325" y="18" width="225" height="118" rx="8" fill="#FBE9E7" stroke="#FFAB91" stroke-width="1.5"/>
+                <text x="437" y="34" text-anchor="middle" font-size="10" font-weight="900" fill="#7F2700" font-family="Nunito, sans-serif">Formules à retenir</text>
+                <text x="335" y="52" font-size="9" font-weight="900" fill="#E64A19" font-family="Courier New, monospace">T(K) = T(°C) + 273</text>
+                <text x="335" y="67" font-size="9" font-weight="900" fill="#E64A19" font-family="Courier New, monospace">Q = m × c × ΔT</text>
+                <text x="335" y="82" font-size="9" font-weight="900" fill="#E64A19" font-family="Courier New, monospace">Q = m × L</text>
+                <text x="335" y="100" font-size="8" fill="#555" font-family="Nunito, sans-serif">ΔT = T_f − T_i (peut être &lt; 0)</text>
+                <text x="335" y="113" font-size="8" fill="#555" font-family="Nunito, sans-serif">Pendant changement d'état : T cste</text>
+                <text x="335" y="126" font-size="8" fill="#555" font-family="Nunito, sans-serif">Chaleur : toujours chaud → froid</text>
+            </svg>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM MÉLANGÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">QCM — Style examen CE1D</div>
+            <div class="card-sub">5 questions mélangées · Tous les niveaux · Difficulté maximale</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Une barre de fer à 200 °C est posée sur une table en bois à 20 °C. Par quel mode la chaleur se transfère-t-elle, et dans quel sens ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">Par rayonnement, du bois vers le fer (froid vers chaud)</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">Par conduction, du fer vers le bois (chaud vers froid)</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">Par convection, du fer vers le bois</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">Aucun transfert — les deux matériaux sont différents</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> On chauffe 3 kg d'eau (c = 4 200 J/(kg·°C)) de 10 °C à 40 °C. Quelle est la quantité de chaleur Q nécessaire ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">126 000 J</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">378 000 J</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">42 000 J</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">504 000 J</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Sur la courbe de chauffage de l'eau, il y a un palier horizontal à 0 °C. Quelle est la valeur de ce palier en Kelvin, et que signifie-t-il ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">0 K — le zéro absolu, l'eau est à sa température minimale</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">273 K — fusion de l'eau, la température reste constante pendant le changement d'état</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">100 K — l'eau commence à se réchauffer</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">373 K — ébullition de l'eau</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> On veut vaporiser complètement 200 g d'eau à 100 °C. Combien d'énergie faut-il ? (L<sub>vapori.</sub> = 2 260 000 J/kg)</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">2 260 000 J</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">452 000 J</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">226 000 J</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">11 300 J</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> La neige carbonique (CO₂ solide) disparaît directement en gaz sans passer par l'état liquide. Quel changement d'état cela illustre-t-il ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Fusion</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Vaporisation</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Sublimation</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Liquéfaction</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS RÉCAP -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous — Récapitulatif</div>
+            <div class="card-sub">3 exercices · Toutes les notions clés du module</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Pour convertir 25 °C en Kelvin : T(K) = 25 +
+                <input class="blank" id="f1a" placeholder="?" style="width:60px"> =
+                <input class="blank" id="f1b" placeholder="?" style="width:60px"> K.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                La chaleur se transfère toujours du corps le plus
+                <input class="blank" id="f2a" placeholder="?" style="width:80px"> vers le corps le plus
+                <input class="blank" id="f2b" placeholder="?" style="width:70px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Pendant un changement d'état, la température est
+                <input class="blank" id="f3a" placeholder="?" style="width:100px">.
+                L'énergie apportée sert à casser les
+                <input class="blank" id="f3b" placeholder="?" style="width:100px"> entre molécules.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES COMPLETS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices complets — Style CE1D belge</div>
+            <div class="card-sub">3 exercices complexes + 1 bonus · Tous les niveaux mélangés</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Calcul complet multi-étapes (CE1D style)</div>
+                <div class="ex-stmt">
+                    On veut chauffer 1 kg de glace de −10 °C jusqu'à obtenir de la vapeur à 110 °C.<br>
+                    Données : c<sub>glace</sub> = 2 100 J/(kg·°C) · L<sub>fusion</sub> = 334 000 J/kg · c<sub>eau</sub> = 4 200 J/(kg·°C) · L<sub>vapori.</sub> = 2 260 000 J/kg · c<sub>vapeur</sub> = 2 000 J/(kg·°C)<br>
+                    Calcule l'énergie totale nécessaire en listant chaque étape.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Étape 1 — Chauffer la glace de −10 à 0 °C :</strong><br>Q₁ = m × c<sub>glace</sub> × ΔT = 1 × 2 100 × 10 = <strong>21 000 J</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Étape 2 — Faire fondre la glace à 0 °C (fusion) :</strong><br>Q₂ = m × L<sub>fusion</sub> = 1 × 334 000 = <strong>334 000 J</strong> · T reste à 0 °C</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Étape 3 — Chauffer l'eau de 0 à 100 °C :</strong><br>Q₃ = 1 × 4 200 × 100 = <strong>420 000 J</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Étape 4 — Vaporiser l'eau à 100 °C :</strong><br>Q₄ = 1 × 2 260 000 = <strong>2 260 000 J</strong> · T reste à 100 °C</div></div>
+                <div class="sol-step"><div class="sol-num">5</div><div class="sol-text"><strong>Étape 5 — Chauffer la vapeur de 100 à 110 °C :</strong><br>Q₅ = 1 × 2 000 × 10 = <strong>20 000 J</strong></div></div>
+                <div class="sol-step"><div class="sol-num">6</div><div class="sol-text"><strong>Total :</strong> Q = 21 000 + 334 000 + 420 000 + 2 260 000 + 20 000 = <strong>3 055 000 J</strong></div></div>
+                <div class="final-ans">✅ Q_total = 3 055 000 J ≈ 3,06 MJ · La vaporisation consomme à elle seule 74 % de l'énergie totale !</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Modes de transfert et isolation (CE1D style)</div>
+                <div class="ex-stmt">
+                    Une maison perd de la chaleur par trois voies :<br>
+                    a) Par les murs en béton (contact avec l'air froid extérieur)<br>
+                    b) Par le toit — l'air chaud monte et s'échappe par des fissures<br>
+                    c) Par les fenêtres — la chaleur part vers l'extérieur froid par rayonnement infrarouge<br>
+                    Pour chaque voie, identifie le mode de transfert. Propose une solution d'isolation adaptée.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Murs :</strong> <strong>Conduction</strong> — le béton conduit la chaleur de l'intérieur vers l'extérieur. Solution : isoler les murs avec de la laine de roche ou du polystyrène (mauvais conducteurs).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Toit :</strong> <strong>Convection</strong> — l'air chaud (moins dense) monte et s'échappe. Solution : isoler le plafond (laine de verre) et colmater les fissures pour bloquer la circulation d'air.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Fenêtres :</strong> <strong>Rayonnement</strong> — les infrarouges passent à travers le verre simple. Solution : double vitrage avec film réfléchissant (Low-E) qui renvoie les infrarouges vers l'intérieur.</div></div>
+                <div class="final-ans">✅ a) Conduction → isolant de mur · b) Convection → isolation plafond · c) Rayonnement → double vitrage Low-E</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Problème complet mixte (CE1D style)</div>
+                <div class="ex-stmt">
+                    Un glaçon de 100 g est sorti du congélateur à −18 °C et placé dans une boisson à 20 °C.<br>
+                    c<sub>glace</sub> = 2 100 J/(kg·°C) · L<sub>fusion</sub> = 334 000 J/kg<br>
+                    a) Quelle énergie faut-il pour amener la glace de −18 °C à 0 °C ?<br>
+                    b) Quelle énergie faut-il pour faire fondre complètement le glaçon à 0 °C ?<br>
+                    c) La boisson se réchauffe-t-elle ou se refroidit-elle ? Justifie avec le sens du transfert.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Données :</strong> m = 100 g = <strong>0,1 kg</strong> · ΔT = 0 − (−18) = <strong>18 °C</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>a) Chauffage de −18 à 0 °C :</strong><br>Q₁ = 0,1 × 2 100 × 18 = <strong>3 780 J</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>b) Fusion à 0 °C :</strong><br>Q₂ = 0,1 × 334 000 = <strong>33 400 J</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>c)</strong> La boisson (20 °C) est <strong>plus chaude</strong> que la glace (−18 °C) → la chaleur va de la boisson vers la glace → <strong>la boisson se refroidit</strong> (elle cède son énergie pour chauffer et fondre le glaçon).</div></div>
+                <div class="final-ans">✅ a) Q₁ = 3 780 J · b) Q₂ = 33 400 J · c) La boisson se refroidit — chaleur du chaud (boisson) vers le froid (glace)</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — La transpiration : un système de refroidissement</div>
+                <div class="bonus-stmt">
+                    Quand tu fais du sport, tu transpires. La sueur s'évapore sur ta peau et tu te refroidis.<br>
+                    On estime que 1 g d'eau évaporée absorbe environ 2 260 J.<br>
+                    a) Quel changement d'état décrit ce phénomène ? Quelle formule utiliser ?<br>
+                    b) Si tu évapores 50 g de sueur en 1 heure, quelle énergie est dissipée ?<br>
+                    c) Expliquer pourquoi souffler sur une brûlure refroidit (même avec de l'air chaud).
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a) Vaporisation</strong> (liquide → gaz). Formule : Q = m × L<sub>vaporisation</sub>. L'eau absorbe l'énergie thermique de ta peau pour s'évaporer.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b)</strong> m = 50 g = 0,05 kg · Q = 0,05 × 2 260 000 = <strong>113 000 J</strong> dissipés en 1 heure.</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>c)</strong> Souffler accélère l'évaporation de l'eau sur la brûlure (convection forcée). Plus l'eau s'évapore vite, plus elle absorbe d'énergie à ta peau → refroidissement. Ce n'est pas la température de l'air soufflé qui compte, c'est la vaporisation accélérée.</div></div>
+                <div class="bonus-ans">
+                    a) Vaporisation · Q = m × L<br>
+                    b) Q = 113 000 J dissipés par évaporation<br>
+                    c) L'évaporation accélérée absorbe l'énergie → refroidissement par chaleur latente
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🏆 🌟 🏆</div>
+    <h2>🏆 Défi Chaleur &amp; Thermique réussi !</h2>
+    <p>Félicitations ! Tu as maîtrisé tout le module Chaleur &amp; Transferts thermiques du CE1D belge.<br>
+       Tu es prêt(e) pour l'examen ! Tu as gagné <strong id="finalXP">0</strong> XP !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Chaleur &amp; Transferts thermiques</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="physique_chaleur_niveau1.html" class="nav-btn">Niveau 1 — Température</a>
+        <a href="physique_chaleur_niveau2.html" class="nav-btn">Niveau 2 — Chaleur &amp; énergie</a>
+        <a href="physique_chaleur_niveau3.html" class="nav-btn">Niveau 3 — Modes de transfert</a>
+        <a href="physique_chaleur_niveau4.html" class="nav-btn">Niveau 4 — Changements d'état</a>
+        <a href="physique_chaleur_niveau5.html" class="nav-btn current">▶ Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:1, 3:1, 4:1, 5:2};
+
+const QCM_OK = {
+    1:"✅ Exact ! Conduction dans les solides en contact. La chaleur va du fer chaud (200 °C) vers le bois froid (20 °C) — toujours du chaud vers le froid.",
+    2:"✅ Bravo ! ΔT = 40 − 10 = 30 °C → Q = 3 × 4 200 × 30 = 378 000 J.",
+    3:"✅ Correct ! 0 °C = 273 K. Le palier à 0 °C = 273 K correspond à la fusion de l'eau — la température reste constante pendant que la glace fond.",
+    4:"✅ Parfait ! m = 200 g = 0,2 kg → Q = 0,2 × 2 260 000 = 452 000 J. Ne pas oublier de convertir les grammes en kilogrammes !",
+    5:"✅ Exact ! La neige carbonique passe directement de l'état solide à l'état gazeux — c'est la sublimation. Le CO₂ ne passe pas par l'état liquide dans les conditions normales."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Une barre de fer (solide) en contact avec du bois (solide) → la chaleur se transfère par conduction. Le sens est toujours du chaud (fer 200 °C) vers le froid (bois 20 °C).",
+    2:"❌ Non. ΔT = 40 − 10 = 30 °C (pas 40 °C !). Q = 3 × 4 200 × 30 = 378 000 J. Attention : ΔT = T_finale − T_initiale.",
+    3:"❌ Non. 0 °C = 273 K. Ce palier correspond à la fusion de l'eau (glace → liquide). La T reste constante à 0 °C = 273 K pendant toute la durée de la fusion.",
+    4:"❌ Non. Il faut convertir : 200 g = 0,2 kg → Q = 0,2 × 2 260 000 = 452 000 J. Erreur fréquente : oublier de diviser les grammes par 1 000.",
+    5:"❌ Non. Solide → gaz directement = sublimation. La fusion (solide → liquide), la vaporisation (liquide → gaz) et la liquéfaction (gaz → liquide) impliquent le passage par l'état liquide."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['273'],['298']],
+        msgOk:"✅ T(K) = 25 + 273 = 298 K. On ajoute toujours 273 pour passer de °C en Kelvin.",
+        msgErr:"❌ Attendus : 273 et 298. T(K) = 25 + 273 = 298 K."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['chaud'],['froid']],
+        msgOk:"✅ La chaleur va toujours du corps le plus chaud vers le corps le plus froid — jamais l'inverse spontanément.",
+        msgErr:"❌ Attendus : 'chaud' et 'froid'. La chaleur va toujours du chaud vers le froid."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['constante','stable','invariable','ne change pas'],['liaisons','liens']],
+        msgOk:"✅ Pendant un changement d'état : T constante. L'énergie sert à casser les liaisons entre molécules.",
+        msgErr:"❌ Attendus : 'constante' et 'liaisons'. T reste constante car l'énergie casse les liaisons entre molécules."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_chaleur_5', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>
