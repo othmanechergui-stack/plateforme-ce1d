@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chimie — Atomes &amp; Molécules · Niveau 2 — Tableau périodique</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#00897B; --primary-dark:#004D40; --primary-mid:#26A69A; --primary-bg:#E0F2F1;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#00251A 0%,#00897B 55%,#80CBC4 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(0,37,26,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#00897B; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#004D40; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#00251A,#00897B,#80CBC4); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#00251A,#004D40); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#80CBC4; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#00251A,#00897B,#80CBC4); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #00251A; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+
+        /* Mini tableau périodique */
+        .ptable { display:grid; grid-template-columns: repeat(18, 1fr); gap:2px; margin:18px 0; font-size:.65rem; }
+        .pt-cell { background:var(--primary-bg); border:1px solid #80CBC4; border-radius:4px; padding:3px 2px; text-align:center; font-weight:900; color:var(--primary-dark); line-height:1.3; }
+        .pt-cell.metal { background:#E3F2FD; border-color:#90CAF9; color:#0D47A1; }
+        .pt-cell.nonmetal { background:#F3E5F5; border-color:#CE93D8; color:#6A1B9A; }
+        .pt-cell.noble { background:#FFF9C4; border-color:#F9A825; color:#E65100; }
+        .pt-cell.empty { background:transparent; border:none; }
+        .pt-sym { font-size:.85rem; font-weight:900; }
+        .pt-z { font-size:.6rem; opacity:.7; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>⚗️ Atomes &amp; Molécules · Tableau périodique</h1>
+            <p>Niveau 2 · Groupes · Périodes · Symboles · Métaux · Non-métaux</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 2 — Élémentaire</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Le tableau périodique</div>
+            <div class="card-sub">Groupes · Périodes · Symboles des éléments courants</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Le <strong>tableau périodique des éléments</strong> (ou tableau de Mendeleïev) classe tous les éléments chimiques connus selon leur numéro atomique Z. Il permet de retrouver rapidement les propriétés d'un élément et de comprendre comment les atomes réagissent entre eux.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Le tableau périodique — Définition</h3>
+            <p>
+                Le <strong>tableau périodique</strong> est un classement de tous les éléments chimiques par <strong>numéro atomique Z croissant</strong>.<br>
+                • Les <strong>colonnes</strong> s'appellent des <strong>groupes</strong> (1 à 18) — les éléments d'un même groupe ont le même nombre d'électrons sur leur couche externe.<br>
+                • Les <strong>lignes</strong> s'appellent des <strong>périodes</strong> (1 à 7) — les éléments d'une même période ont le même nombre de couches électroniques.
+            </p>
+        </div>
+
+        <!-- SVG : extrait simplifié du tableau périodique -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="200" fill="#E0F2F1" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Extrait du tableau périodique (premières périodes)</text>
+
+                <!-- En-têtes groupes -->
+                <text x="46" y="32" text-anchor="middle" font-size="9" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">G1</text>
+                <text x="510" y="32" text-anchor="middle" font-size="9" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">G18</text>
+
+                <!-- Période 1 -->
+                <rect x="28" y="36" width="36" height="36" rx="5" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1.5"/>
+                <text x="46" y="52" text-anchor="middle" font-size="13" font-weight="900" fill="#0D47A1" font-family="Nunito, sans-serif">H</text>
+                <text x="46" y="64" text-anchor="middle" font-size="9" fill="#0D47A1" font-family="Nunito, sans-serif">Z=1</text>
+
+                <rect x="492" y="36" width="36" height="36" rx="5" fill="#FFF9C4" stroke="#F9A825" stroke-width="1.5"/>
+                <text x="510" y="52" text-anchor="middle" font-size="13" font-weight="900" fill="#E65100" font-family="Nunito, sans-serif">He</text>
+                <text x="510" y="64" text-anchor="middle" font-size="9" fill="#E65100" font-family="Nunito, sans-serif">Z=2</text>
+
+                <!-- Période 2 -->
+                <rect x="28" y="80" width="36" height="36" rx="5" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1.5"/>
+                <text x="46" y="96" text-anchor="middle" font-size="13" font-weight="900" fill="#0D47A1" font-family="Nunito, sans-serif">Li</text>
+                <text x="46" y="108" text-anchor="middle" font-size="9" fill="#0D47A1" font-family="Nunito, sans-serif">Z=3</text>
+
+                <rect x="70" y="80" width="36" height="36" rx="5" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1.5"/>
+                <text x="88" y="96" text-anchor="middle" font-size="13" font-weight="900" fill="#0D47A1" font-family="Nunito, sans-serif">Be</text>
+                <text x="88" y="108" text-anchor="middle" font-size="9" fill="#0D47A1" font-family="Nunito, sans-serif">Z=4</text>
+
+                <rect x="280" y="80" width="36" height="36" rx="5" fill="#F3E5F5" stroke="#CE93D8" stroke-width="1.5"/>
+                <text x="298" y="96" text-anchor="middle" font-size="13" font-weight="900" fill="#6A1B9A" font-family="Nunito, sans-serif">C</text>
+                <text x="298" y="108" text-anchor="middle" font-size="9" fill="#6A1B9A" font-family="Nunito, sans-serif">Z=6</text>
+
+                <rect x="322" y="80" width="36" height="36" rx="5" fill="#F3E5F5" stroke="#CE93D8" stroke-width="1.5"/>
+                <text x="340" y="96" text-anchor="middle" font-size="13" font-weight="900" fill="#6A1B9A" font-family="Nunito, sans-serif">N</text>
+                <text x="340" y="108" text-anchor="middle" font-size="9" fill="#6A1B9A" font-family="Nunito, sans-serif">Z=7</text>
+
+                <rect x="364" y="80" width="36" height="36" rx="5" fill="#F3E5F5" stroke="#CE93D8" stroke-width="1.5"/>
+                <text x="382" y="96" text-anchor="middle" font-size="13" font-weight="900" fill="#6A1B9A" font-family="Nunito, sans-serif">O</text>
+                <text x="382" y="108" text-anchor="middle" font-size="9" fill="#6A1B9A" font-family="Nunito, sans-serif">Z=8</text>
+
+                <rect x="448" y="80" width="36" height="36" rx="5" fill="#F3E5F5" stroke="#CE93D8" stroke-width="1.5"/>
+                <text x="466" y="96" text-anchor="middle" font-size="13" font-weight="900" fill="#6A1B9A" font-family="Nunito, sans-serif">F</text>
+                <text x="466" y="108" text-anchor="middle" font-size="9" fill="#6A1B9A" font-family="Nunito, sans-serif">Z=9</text>
+
+                <rect x="492" y="80" width="36" height="36" rx="5" fill="#FFF9C4" stroke="#F9A825" stroke-width="1.5"/>
+                <text x="510" y="96" text-anchor="middle" font-size="13" font-weight="900" fill="#E65100" font-family="Nunito, sans-serif">Ne</text>
+                <text x="510" y="108" text-anchor="middle" font-size="9" fill="#E65100" font-family="Nunito, sans-serif">Z=10</text>
+
+                <!-- Période 3 -->
+                <rect x="28" y="124" width="36" height="36" rx="5" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1.5"/>
+                <text x="46" y="140" text-anchor="middle" font-size="13" font-weight="900" fill="#0D47A1" font-family="Nunito, sans-serif">Na</text>
+                <text x="46" y="152" text-anchor="middle" font-size="9" fill="#0D47A1" font-family="Nunito, sans-serif">Z=11</text>
+
+                <rect x="70" y="124" width="36" height="36" rx="5" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1.5"/>
+                <text x="88" y="140" text-anchor="middle" font-size="13" font-weight="900" fill="#0D47A1" font-family="Nunito, sans-serif">Mg</text>
+                <text x="88" y="152" text-anchor="middle" font-size="9" fill="#0D47A1" font-family="Nunito, sans-serif">Z=12</text>
+
+                <rect x="448" y="124" width="36" height="36" rx="5" fill="#F3E5F5" stroke="#CE93D8" stroke-width="1.5"/>
+                <text x="466" y="140" text-anchor="middle" font-size="13" font-weight="900" fill="#6A1B9A" font-family="Nunito, sans-serif">Cl</text>
+                <text x="466" y="152" text-anchor="middle" font-size="9" fill="#6A1B9A" font-family="Nunito, sans-serif">Z=17</text>
+
+                <rect x="492" y="124" width="36" height="36" rx="5" fill="#FFF9C4" stroke="#F9A825" stroke-width="1.5"/>
+                <text x="510" y="140" text-anchor="middle" font-size="13" font-weight="900" fill="#E65100" font-family="Nunito, sans-serif">Ar</text>
+                <text x="510" y="152" text-anchor="middle" font-size="9" fill="#E65100" font-family="Nunito, sans-serif">Z=18</text>
+
+                <!-- Légende -->
+                <rect x="140" y="168" width="14" height="14" rx="3" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1.5"/>
+                <text x="158" y="179" font-size="10" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Métal</text>
+                <rect x="210" y="168" width="14" height="14" rx="3" fill="#F3E5F5" stroke="#CE93D8" stroke-width="1.5"/>
+                <text x="228" y="179" font-size="10" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Non-métal</text>
+                <rect x="310" y="168" width="14" height="14" rx="3" fill="#FFF9C4" stroke="#F9A825" stroke-width="1.5"/>
+                <text x="328" y="179" font-size="10" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Gaz noble</text>
+
+                <!-- Flèches groupes / périodes -->
+                <text x="155" y="55" font-size="9" font-weight="700" fill="#555" font-family="Nunito, sans-serif">→ Groupes (colonnes) →</text>
+                <text x="8" y="130" font-size="9" font-weight="700" fill="#555" font-family="Nunito, sans-serif" transform="rotate(-90,8,130)">Périodes</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔢 Groupes et périodes — La règle essentielle</h3>
+            <p>
+                • <strong>Même groupe (colonne)</strong> → mêmes propriétés chimiques car même nombre d'électrons sur la couche externe.<br>
+                • <strong>Même période (ligne)</strong> → même nombre de couches électroniques.<br><br>
+                Exemple : Na (sodium) et K (potassium) sont dans le <strong>groupe 1</strong> → ils réagissent tous les deux violemment avec l'eau !
+            </p>
+        </div>
+
+        <!-- Symboles courants -->
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">H · He · C · N · O</div>
+                <div class="cas-eq">Non-métaux légers</div>
+                <div class="cas-desc">Hydrogène, Hélium, Carbone, Azote, Oxygène</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Na · Mg · Al · K · Ca</div>
+                <div class="cas-eq">Métaux courants</div>
+                <div class="cas-desc">Sodium, Magnésium, Aluminium, Potassium, Calcium</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Fe · Cu · Zn · Si · Cl</div>
+                <div class="cas-eq">Éléments importants</div>
+                <div class="cas-desc">Fer, Cuivre, Zinc, Silicium, Chlore</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège classique : Majuscule obligatoire !</h3>
+            <p>
+                Le symbole d'un élément commence <strong>TOUJOURS par une majuscule</strong>.<br>
+                • <strong>Na</strong> = sodium (métal) &nbsp;≠&nbsp; <strong>na</strong> (incorrect !)<br>
+                • <strong>CO</strong> = monoxyde de carbone (molécule avec C et O) &nbsp;≠&nbsp; <strong>Co</strong> = cobalt (un métal !)<br>
+                <strong>Une majuscule mal placée change complètement l'élément !</strong>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Symboles, groupes, périodes, métaux</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Quel est le symbole chimique correct de l'oxygène ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">ox</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">O</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">Ox</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">OX</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Dans le tableau périodique, les éléments d'un même groupe (colonne) ont en commun :</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(2,0)">Le même nombre de masse A</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">Le même nombre de couches électroniques</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">Le même nombre d'électrons sur la couche externe</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">La même masse atomique</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Na est le symbole de quel élément ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">L'azote</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">Le nickel</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">Le sodium</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">Le néon</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Le fer est un métal. Quel est son symbole dans le tableau périodique ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">Fr</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">Fe</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">F</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">Fer</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Les gaz nobles (He, Ne, Ar…) sont classés dans le groupe 18. Quelle propriété les caractérise ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Ils réagissent très facilement avec tous les métaux</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Ils sont quasi inertes chimiquement (ne réagissent presque pas)</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Ils conduisent très bien l'électricité</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Ils sont tous solides à température ambiante</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Éléments, groupes, symboles</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                H₂O contient les éléments
+                <input class="blank" id="f1a" placeholder="?" style="width:110px">
+                (H) et
+                <input class="blank" id="f1b" placeholder="?" style="width:110px">
+                (O).
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Na (sodium) et K (potassium) sont dans le même
+                <input class="blank" id="f2a" placeholder="?" style="width:80px">
+                du tableau périodique, donc ils ont des propriétés
+                <input class="blank" id="f2b" placeholder="?" style="width:100px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Le symbole du calcium est
+                <input class="blank" id="f3a" placeholder="?" style="width:60px">
+                et celui du chlore est
+                <input class="blank" id="f3b" placeholder="?" style="width:60px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Lire le tableau périodique</div>
+                <div class="ex-stmt">
+                    Donne le symbole chimique de chacun des éléments suivants :<br>
+                    a) Carbone &nbsp; b) Azote &nbsp; c) Aluminium &nbsp; d) Cuivre
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Carbone :</strong> C (Z=6)</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Azote :</strong> N (Z=7)</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Aluminium :</strong> Al (Z=13)</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>d) Cuivre :</strong> Cu (Z=29) — du latin "cuprum"</div></div>
+                <div class="final-ans">✅ a) C &nbsp;|&nbsp; b) N &nbsp;|&nbsp; c) Al &nbsp;|&nbsp; d) Cu</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Groupes et propriétés</div>
+                <div class="ex-stmt">
+                    Le lithium (Li, Z=3) et le sodium (Na, Z=11) appartiennent tous les deux au groupe 1 du tableau périodique.<br>
+                    a) Ont-ils le même nombre de couches électroniques ?<br>
+                    b) Pourquoi ont-ils des propriétés chimiques similaires ?<br>
+                    c) Donne un autre élément du groupe 1.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Non : Li est en période 2 (2 couches), Na est en période 3 (3 couches).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Même groupe → même nombre d'électrons sur la couche externe (1 seul) → propriétés chimiques similaires.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> Potassium (K, Z=19) — aussi dans le groupe 1.</div></div>
+                <div class="final-ans">✅ a) Non &nbsp;|&nbsp; b) 1 électron externe &nbsp;|&nbsp; c) K (potassium)</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Identifier un élément (style CE1D)</div>
+                <div class="ex-stmt">
+                    Un atome X a Z = 17.<br>
+                    a) Quel est cet élément ? (Cl = chlore, Z=17)<br>
+                    b) Est-ce un métal ou un non-métal ?<br>
+                    c) Dans quelle famille chimique les halogènes se trouvent-ils ? (groupe 17 = halogènes : F, Cl, Br, I)
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Z = 17 → c'est le <strong>chlore (Cl)</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Le chlore est un <strong>non-métal</strong> (gaz jaune-verdâtre à température ambiante).</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> Les halogènes sont dans le <strong>groupe 17</strong> : F (fluor), Cl (chlore), Br (brome), I (iode).</div></div>
+                <div class="final-ans">✅ a) Cl (chlore) &nbsp;|&nbsp; b) Non-métal &nbsp;|&nbsp; c) Groupe 17 (halogènes)</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Pourquoi "périodique" ?</div>
+                <div class="bonus-stmt">
+                    Le tableau s'appelle "périodique" parce que les propriétés des éléments se répètent à intervalles réguliers.<br>
+                    a) L'oxygène (O, Z=8), le soufre (S, Z=16) et le sélénium (Se, Z=34) sont dans le groupe 16. Que partagent-ils ?<br>
+                    b) Le néon (Ne, Z=10), l'argon (Ar, Z=18) et le krypton (Kr, Z=36) sont des gaz nobles. Pourquoi ne réagissent-ils presque pas ?<br>
+                    c) Dans quel groupe du tableau périodique les gaz nobles se trouvent-ils ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> O, S et Se ont tous <strong>6 électrons sur leur couche externe</strong> → mêmes propriétés chimiques (forment souvent 2 liaisons).</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b)</strong> Les gaz nobles ont leur couche externe <strong>complète</strong> (8 électrons, sauf He qui en a 2) → aucun besoin de former des liaisons → quasi inertes.</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>c)</strong> Les gaz nobles sont dans le <strong>groupe 18</strong> (dernière colonne du tableau).</div></div>
+                <div class="bonus-ans">
+                    Groupe 16 → 6 électrons externes · Groupe 18 → couche externe complète → inertie chimique.<br>
+                    "Périodique" = les propriétés se répètent à chaque nouvelle ligne !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 2 terminé !</h2>
+    <p>🏆 Bravo ! Tu connais les éléments essentiels du tableau périodique.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 3 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Chimie · Atomes &amp; Molécules</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="chimie_atomes_niveau1.html" class="nav-btn">N1 — L'atome</a>
+        <a href="chimie_atomes_niveau2.html" class="nav-btn current">▶ N2 — Tableau périodique</a>
+        <a href="chimie_atomes_niveau3.html" class="nav-btn">N3 — Molécules &amp; formules</a>
+        <a href="chimie_atomes_niveau4.html" class="nav-btn">N4 — Liaisons chimiques</a>
+        <a href="chimie_atomes_niveau5.html" class="nav-btn">N5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:2, 3:2, 4:1, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! O est le symbole de l'oxygène. Le symbole commence TOUJOURS par une majuscule et s'écrit avec une seule lettre ici.",
+    2:"✅ Bravo ! Même groupe → même nombre d'électrons sur la couche externe → mêmes propriétés chimiques.",
+    3:"✅ Correct ! Na vient du latin 'Natrium'. C'est le symbole du sodium, un métal mou qui réagit avec l'eau.",
+    4:"✅ Parfait ! Fe vient du latin 'Ferrum' = fer. Attention : F = fluor (non-métal), Fr = francium (métal radioactif).",
+    5:"✅ Exact ! Les gaz nobles ont leur couche externe complète → ils ne cherchent pas à former de liaisons → quasi inertes chimiquement."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Le symbole correct de l'oxygène est O (une majuscule, une seule lettre). 'ox', 'Ox' et 'OX' sont incorrects.",
+    2:"❌ Non. Le même groupe → même nombre d'électrons sur la couche EXTERNE (pas de couches, pas de masse). C'est ça qui détermine les propriétés chimiques.",
+    3:"❌ Non. Na = sodium (Natrium en latin). N = azote (nitrogen), Ni = nickel, Ne = néon.",
+    4:"❌ Non. Fe = fer (Ferrum en latin). Fr = francium, F = fluor, 'Fer' n'est pas un symbole valide.",
+    5:"❌ Non. Les gaz nobles sont quasi inertes — ils ne réagissent presque pas. Leur couche externe est complète donc ils n'ont pas besoin de former de liaisons."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['hydrogene','hydrogen'],['oxygene','oxygen']],
+        msgOk:"✅ H₂O contient de l'hydrogène (H) et de l'oxygène (O). C'est la formule de l'eau !",
+        msgErr:"❌ Attendus : 'hydrogène' et 'oxygène'. H₂O = eau = 2 hydrogènes + 1 oxygène."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['groupe'],['similaires','semblables','chimiques']],
+        msgOk:"✅ Na et K sont dans le même groupe → mêmes propriétés chimiques (tous les deux réagissent avec l'eau).",
+        msgErr:"❌ Attendus : 'groupe' et 'similaires' (ou semblables / chimiques). Même groupe = mêmes propriétés."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['ca','Ca'],['cl','Cl']],
+        msgOk:"✅ Ca = calcium et Cl = chlore. Attention à la majuscule : Ca ≠ CA, Cl ≠ CL !",
+        msgErr:"❌ Attendus : 'Ca' (calcium) et 'Cl' (chlore). Attention aux majuscules !"
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_atomes_2', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

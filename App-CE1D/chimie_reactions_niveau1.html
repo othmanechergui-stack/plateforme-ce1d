@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chimie — Transformations chimiques · Niveau 1 — Notion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#512DA8; --primary-dark:#311B92; --primary-mid:#7E57C2; --primary-bg:#EDE7F6;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#1A0A40 0%,#512DA8 55%,#B39DDB 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(26,10,64,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#512DA8; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#311B92; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#1A0A40,#512DA8,#B39DDB); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#1A0A40,#311B92); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#B39DDB; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #B39DDB; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #B39DDB; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#1A0A40,#512DA8,#B39DDB); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #1A0A40; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🔬 Transformations chimiques · Notion</h1>
+            <p>Niveau 1 · Réactifs · Produits · Transformation · Corps</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 1 — Débutant</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Notion de réaction chimique</div>
+            <div class="card-sub">Réactifs · Produits · Transformation · Indices d'une réaction</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Une <strong>réaction chimique</strong> est une transformation au cours de laquelle des substances initiales (les <strong>réactifs</strong>) disparaissent
+            et de nouvelles substances (les <strong>produits</strong>) apparaissent. Les atomes ne sont <strong>pas créés ni détruits</strong> :
+            ils sont simplement <strong>réarrangés</strong> pour former de nouveaux corps.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Réaction chimique — Définition</h3>
+            <p>
+                Une <strong>réaction chimique</strong> est une transformation de <strong>RÉACTIFS</strong> en <strong>PRODUITS</strong>.<br>
+                Notation : <strong>Réactifs → Produits</strong><br><br>
+                Les réactifs disparaissent. Les produits apparaissent. Les atomes sont conservés : seuls leurs arrangements changent.
+            </p>
+        </div>
+
+        <!-- SVG avant/après -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="200" fill="#EDE7F6" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#311B92" font-family="Nunito, sans-serif">Schéma d'une réaction chimique — Avant / Après</text>
+
+                <!-- Réactifs -->
+                <rect x="10" y="28" width="160" height="155" rx="10" fill="#D1C4E9" stroke="#7E57C2" stroke-width="2"/>
+                <text x="90" y="46" text-anchor="middle" font-size="11" font-weight="900" fill="#311B92" font-family="Nunito, sans-serif">RÉACTIFS</text>
+                <!-- Molécule A -->
+                <circle cx="55" cy="90" r="20" fill="#512DA8" opacity=".9"/>
+                <text x="55" y="95" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="Nunito, sans-serif">A</text>
+                <!-- Molécule B -->
+                <circle cx="125" cy="115" r="20" fill="#7E57C2" opacity=".9"/>
+                <text x="125" y="120" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="Nunito, sans-serif">B</text>
+                <text x="90" y="170" text-anchor="middle" font-size="10" font-weight="700" fill="#512DA8" font-family="Nunito, sans-serif">Corps A et B présents</text>
+
+                <!-- Flèche centrale -->
+                <line x1="185" y1="100" x2="365" y2="100" stroke="#311B92" stroke-width="3" marker-end="url(#arrowhead)"/>
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#311B92"/>
+                    </marker>
+                </defs>
+                <rect x="205" y="85" width="115" height="28" rx="6" fill="#512DA8"/>
+                <text x="262" y="103" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">RÉACTION</text>
+
+                <!-- Produits -->
+                <rect x="375" y="28" width="175" height="155" rx="10" fill="#B39DDB" stroke="#311B92" stroke-width="2"/>
+                <text x="462" y="46" text-anchor="middle" font-size="11" font-weight="900" fill="#1A0A40" font-family="Nunito, sans-serif">PRODUITS</text>
+                <!-- Molécule C -->
+                <circle cx="430" cy="100" r="28" fill="#1A0A40" opacity=".85"/>
+                <text x="430" y="105" text-anchor="middle" font-size="13" font-weight="900" fill="#B39DDB" font-family="Nunito, sans-serif">C</text>
+                <text x="462" y="155" text-anchor="middle" font-size="10" font-weight="700" fill="#1A0A40" font-family="Nunito, sans-serif">Nouveau corps C formé</text>
+                <text x="462" y="170" text-anchor="middle" font-size="10" font-weight="700" fill="#1A0A40" font-family="Nunito, sans-serif">(A et B ont disparu)</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔢 Loi de conservation des atomes</h3>
+            <p>
+                Les atomes sont <strong>conservés</strong> lors d'une réaction chimique : pas créés, pas détruits.<br>
+                Seuls leurs <strong>arrangements changent</strong> pour former de nouveaux corps.<br><br>
+                Conséquence : la <strong>masse totale est conservée</strong> (loi de Lavoisier).<br>
+                Exemples : <strong>Fe + O₂ → Fe₂O₃</strong> (rouille) &nbsp;|&nbsp; <strong>bois + O₂ → CO₂ + H₂O</strong> (combustion)<br>
+                <strong>NaHCO₃ + CH₃COOH → CO₂ + H₂O + sel</strong> (effervescence bicarbonate + vinaigre)
+            </p>
+        </div>
+
+        <!-- Cas : indices de réaction -->
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">🎨</div>
+                <div class="cas-eq">Changement de couleur</div>
+                <div class="cas-desc">Le fer rouille devient roux-orangé (Fe₂O₃)</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">💨</div>
+                <div class="cas-eq">Formation de gaz</div>
+                <div class="cas-desc">Bulles dans le vinaigre + bicarbonate (CO₂)</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🌡️</div>
+                <div class="cas-eq">Dégagement de chaleur</div>
+                <div class="cas-desc">Combustion du bois : flamme et chaleur</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">☁️</div>
+                <div class="cas-eq">Précipité</div>
+                <div class="cas-desc">Dépôt solide qui se forme dans une solution</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège classique : Transformation physique ≠ Transformation chimique !</h3>
+            <p>
+                La <strong>glace qui fond</strong> (changement d'état) est une transformation <strong>physique</strong> : c'est toujours H₂O, le corps ne change pas.<br>
+                La <strong>combustion du bois</strong> est chimique : le bois (cellulose) devient <strong>CO₂ + H₂O</strong> — ce sont des corps différents !<br>
+                <strong>Physique = même corps · Chimique = nouveaux corps formés</strong>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Réaction chimique, réactifs, produits, indices</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Laquelle de ces transformations est une réaction chimique ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">La glace qui fond en eau</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">L'eau qui s'évapore</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">Le fer qui rouille (Fe → Fe₂O₃)</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">Du sucre qui se dissout dans l'eau</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Dans la réaction <code>Fe + S → FeS</code>, qu'est-ce que Fe et S représentent ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">Les produits</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">Les réactifs</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">Les catalyseurs</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">Les atomes perdus</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Dans la réaction <code>C + O₂ → CO₂</code>, quel est le produit formé ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">C (carbone)</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">O₂ (dioxygène)</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">CO₂ (dioxyde de carbone)</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">CO (monoxyde de carbone)</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Lequel de ces indices indique qu'une réaction chimique a eu lieu ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">L'eau change de forme selon son contenant</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">Un glaçon fond dans un verre</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">Des bulles apparaissent quand on mélange du vinaigre et du bicarbonate</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">Du sel se dissout dans l'eau</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Que se passe-t-il avec les atomes lors d'une réaction chimique ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Des atomes sont créés pour former les produits</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Des atomes sont détruits quand les réactifs disparaissent</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Les atomes sont conservés : ils se réarrangent pour former de nouveaux corps</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Les atomes changent de nature (le carbone devient de l'oxygène)</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Réactifs, produits, indices de réaction</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Les substances qui disparaissent lors d'une réaction chimique s'appellent les
+                <input class="blank" id="f1a" placeholder="?" style="width:110px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Les nouvelles substances formées lors d'une réaction chimique s'appellent les
+                <input class="blank" id="f2a" placeholder="?" style="width:100px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Un <strong>changement</strong> de
+                <input class="blank" id="f3a" placeholder="?" style="width:90px">
+                peut indiquer qu'une réaction chimique a eu lieu.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Identifier la réaction chimique</div>
+                <div class="ex-stmt">
+                    Pour chaque transformation, dis si elle est <strong>physique</strong> ou <strong>chimique</strong> et justifie :<br>
+                    a) Le sucre fond dans un verre d'eau chaude.<br>
+                    b) Le bicarbonate de soude réagit avec le vinaigre : il se forme du CO₂, de l'eau et un sel.<br>
+                    c) La cire d'une bougie fond sous l'effet de la chaleur.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Physique.</strong> Le sucre se dissout mais reste du sucre (saccharose). Aucun nouveau corps n'est formé.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Chimique.</strong> De nouveaux corps sont formés : CO₂, H₂O et un sel. Les réactifs (bicarbonate + vinaigre) ont disparu pour donner des produits différents.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Physique.</strong> La cire fond (changement d'état liquide → solide) mais reste de la cire. Si on la refroidit, elle redevient solide.</div></div>
+                <div class="final-ans">✅ a) Physique · b) Chimique · c) Physique</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Réactifs et produits</div>
+                <div class="ex-stmt">
+                    Dans la réaction de combustion du méthane : <strong>CH₄ + 2O₂ → CO₂ + 2H₂O</strong><br>
+                    a) Quels sont les réactifs ?<br>
+                    b) Quels sont les produits ?<br>
+                    c) Cite deux indices qui indiquent que cette réaction a bien eu lieu.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Réactifs :</strong> CH₄ (méthane) et O₂ (dioxygène). Ce sont les corps à gauche de la flèche.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Produits :</strong> CO₂ (dioxyde de carbone) et H₂O (eau). Ce sont les corps à droite de la flèche.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Indices :</strong> dégagement de chaleur et de lumière (flamme) ; formation de vapeur d'eau visible (condensation).</div></div>
+                <div class="final-ans">✅ Réactifs : CH₄ + O₂ | Produits : CO₂ + H₂O | Indices : chaleur/lumière + vapeur d'eau</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Observation de laboratoire (style CE1D)</div>
+                <div class="ex-stmt">
+                    Un élève mélange deux solutions incolores dans un bécher. Après quelques secondes,
+                    il observe un dépôt jaune au fond du bécher et la solution devient trouble.<br>
+                    a) Quel indice montre qu'une réaction chimique a eu lieu ?<br>
+                    b) Comment appelle-t-on ce dépôt solide qui se forme ?<br>
+                    c) Ce phénomène est-il réversible facilement ? Justifie.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Deux indices : <strong>formation d'un précipité</strong> (dépôt solide) et <strong>changement de couleur</strong> (solution trouble et jaune). Ce sont deux indices classiques d'une réaction chimique.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Ce dépôt solide qui se forme dans une solution s'appelle un <strong>précipité</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Non, pas facilement.</strong> Une réaction chimique produit de nouveaux corps. Pour retrouver les réactifs, il faudrait une autre réaction chimique — on ne peut pas simplement refroidir ou chauffer comme pour un changement d'état.</div></div>
+                <div class="final-ans">✅ Indices : précipité + changement de couleur | Nom : précipité | Non réversible facilement</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Rouille et conservation des atomes</div>
+                <div class="bonus-stmt">
+                    La réaction de formation de la rouille est : <strong>4 Fe + 3 O₂ → 2 Fe₂O₃</strong><br>
+                    a) Quels sont les réactifs ? Les produits ?<br>
+                    b) Combien d'atomes de Fe se trouvent à gauche ? À droite ? Que constates-tu ?<br>
+                    c) Donne deux indices visibles que cette réaction a eu lieu sur un objet en fer laissé à l'air humide.
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a) Réactifs :</strong> Fe (fer) et O₂ (dioxygène). <strong>Produit :</strong> Fe₂O₃ (oxyde de fer = rouille).</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b)</strong> À gauche : 4 Fe. À droite : 2 × Fe₂ = 4 Fe. Les atomes de fer sont <strong>conservés</strong> (4 = 4). Même chose pour l'oxygène (6 O des deux côtés). Les atomes se réarrangent mais ne disparaissent pas.</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>c) Indices visibles :</strong> taches brunes-orangées (changement de couleur) sur la surface du métal ; la surface devient rugueuse et s'effrite (nouveau corps solide formé).</div></div>
+                <div class="bonus-ans">
+                    Réactifs : Fe + O₂ | Produit : Fe₂O₃<br>
+                    Atomes conservés : 4 Fe de chaque côté ✓<br>
+                    Indices : couleur brune-orange + surface rugueuse
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>🏆 Niveau 1 terminé ! Tu identifies une réaction chimique.</h2>
+    <p>Bravo ! Tu sais distinguer réactifs et produits, et reconnaître les indices d'une réaction chimique.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 2 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Chimie · Transformations chimiques</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="chimie_reactions_niveau1.html" class="nav-btn current">▶ Niveau 1 — Notion</a>
+        <a href="chimie_reactions_niveau2.html" class="nav-btn">Niveau 2 — Équation</a>
+        <a href="chimie_reactions_niveau3.html" class="nav-btn">Niveau 3 — Lavoisier</a>
+        <a href="chimie_reactions_niveau4.html" class="nav-btn">Niveau 4 — Combustion</a>
+        <a href="chimie_reactions_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:2, 2:1, 3:2, 4:2, 5:2};
+
+const QCM_OK = {
+    1:"✅ Exact ! Le fer qui rouille forme un nouveau corps (Fe₂O₃) différent du fer. C'est bien une réaction chimique.",
+    2:"✅ Bravo ! Fe et S sont à gauche de la flèche → ce sont les réactifs. Ils disparaissent pour former FeS.",
+    3:"✅ Correct ! CO₂ est à droite de la flèche → c'est le produit. Il n'existait pas avant la réaction.",
+    4:"✅ Parfait ! Les bulles de CO₂ indiquent la formation d'un nouveau gaz → indice d'une réaction chimique.",
+    5:"✅ Exact ! Les atomes se réarrangent mais ne sont ni créés ni détruits. C'est la loi de conservation des atomes."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. La glace qui fond, l'eau qui s'évapore et le sucre qui se dissout sont des transformations physiques : le corps (H₂O ou sucre) reste le même. Le fer qui rouille forme Fe₂O₃ — un corps différent.",
+    2:"❌ Non. Les réactifs sont les substances à GAUCHE de la flèche — elles disparaissent. Ici Fe et S sont les réactifs. FeS (à droite) est le produit.",
+    3:"❌ Non. Le produit est le corps formé, à DROITE de la flèche. C + O₂ → CO₂ : CO₂ est le produit.",
+    4:"❌ Non. Les transformations physiques (fonte, évaporation, dissolution) ne produisent pas de nouveaux corps. Les bulles de CO₂ lors d'un mélange vinaigre + bicarbonate indiquent bien une réaction chimique.",
+    5:"❌ Non. Les atomes ne sont jamais créés ni détruits lors d'une réaction chimique. Ils se réarrangent simplement pour former de nouveaux corps."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['reactifs','réactifs']],
+        msgOk:"✅ Les réactifs sont les substances qui disparaissent. Ils se trouvent à gauche de la flèche.",
+        msgErr:"❌ Attendu : réactifs. Les substances qui disparaissent = les réactifs (à gauche de →)."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['produits']],
+        msgOk:"✅ Les produits sont les nouvelles substances formées. Ils se trouvent à droite de la flèche.",
+        msgErr:"❌ Attendu : produits. Les nouvelles substances formées = les produits (à droite de →)."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['couleur']],
+        msgOk:"✅ Un changement de couleur est bien un indice d'une réaction chimique (ex : le fer rouille devient brun-orangé).",
+        msgErr:"❌ Attendu : couleur. Un changement de couleur est l'un des indices d'une réaction chimique."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_reactions_1', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

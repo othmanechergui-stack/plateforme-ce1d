@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chimie — Atomes &amp; Molécules · Niveau 5 — Défi CE1D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#00897B; --primary-dark:#004D40; --primary-mid:#26A69A; --primary-bg:#E0F2F1;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#00251A 0%,#00897B 55%,#80CBC4 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(0,37,26,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#00897B; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#004D40; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#00251A,#00897B,#80CBC4); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#00251A,#004D40); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#80CBC4; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        /* Fiches récap */
+        .recap-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin:18px 0; }
+        .recap-card { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:14px; padding:16px; }
+        .recap-card h4 { font-size:.88rem; font-weight:900; color:var(--primary-dark); margin-bottom:10px; padding-bottom:6px; border-bottom:2px solid #80CBC4; }
+        .recap-card ul { list-style:none; padding:0; }
+        .recap-card li { font-size:.83rem; line-height:1.7; color:#444; padding-left:14px; position:relative; }
+        .recap-card li::before { content:'•'; position:absolute; left:0; color:var(--primary); font-weight:900; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* Pièges CE1D */
+        .pieges-list { display:flex; flex-direction:column; gap:12px; margin:18px 0; }
+        .piege-item { background:#FFF3E0; border:2px solid #FFB300; border-radius:12px; padding:14px 18px; }
+        .piege-num { display:inline-block; background:#FF9600; color:white; border-radius:5px; padding:1px 8px; font-size:.75rem; font-weight:900; margin-bottom:6px; }
+        .piege-title { font-size:.9rem; font-weight:900; color:#E65100; margin-bottom:4px; }
+        .piege-text { font-size:.85rem; line-height:1.6; color:#444; }
+        .piege-text strong { color:#BF360C; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:90px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#00251A,#00897B,#80CBC4); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #00251A; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>⚗️ Atomes &amp; Molécules · Défi CE1D 🏆</h1>
+            <p>Niveau 5 · Récapitulatif complet · Questions style CE1D belge</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <span class="diff-label">Niveau 5 — Défi CE1D 🏆</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. FICHE DE RÉVISION -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📋</div>
+        <div>
+            <div class="card-title">Fiche de révision — Les 4 niveaux en un coup d'œil</div>
+            <div class="card-sub">N1 : atome · N2 : tableau périodique · N3 : formules · N4 : liaisons</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="recap-grid">
+            <div class="recap-card">
+                <h4>⚗️ N1 — L'atome</h4>
+                <ul>
+                    <li>Noyau = protons (+) + neutrons (0)</li>
+                    <li>Nuage = électrons (−) autour</li>
+                    <li>Z = nb de protons (définit l'élément)</li>
+                    <li>A = Z + N (masse = noyau)</li>
+                    <li>N = A − Z (nb neutrons)</li>
+                </ul>
+            </div>
+            <div class="recap-card">
+                <h4>🗂️ N2 — Tableau périodique</h4>
+                <ul>
+                    <li>Colonnes = groupes → mêmes propriétés</li>
+                    <li>Lignes = périodes → mêmes couches</li>
+                    <li>Symbole : 1ère lettre = MAJUSCULE</li>
+                    <li>Na=sodium, Fe=fer, Cu=cuivre</li>
+                    <li>CO ≠ Co (monoxyde ≠ cobalt)</li>
+                </ul>
+            </div>
+            <div class="recap-card">
+                <h4>🔗 N3 — Molécules &amp; formules</h4>
+                <ul>
+                    <li>Molécule = atomes liés</li>
+                    <li>Indice = nb d'atomes de l'élément avant</li>
+                    <li>H₂O = 2H + 1O = 3 atomes</li>
+                    <li>CO₂ = 1C + 2O = 3 atomes</li>
+                    <li>CH₄ = 1C + 4H = 5 atomes</li>
+                </ul>
+            </div>
+            <div class="recap-card">
+                <h4>⚡ N4 — Liaisons chimiques</h4>
+                <ul>
+                    <li>Covalente = partage e⁻ (non-métaux)</li>
+                    <li>Ionique = transfert e⁻ (métal + non-métal)</li>
+                    <li>H₂O, CO₂, CH₄ → covalentes</li>
+                    <li>NaCl, MgO, KCl → ioniques</li>
+                    <li>Métal dans la formule → ionique !</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SVG récapitulatif -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 190" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="190" fill="#E0F2F1" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Récapitulatif — Formules essentielles CE1D</text>
+
+                <!-- Ligne 1 : Z, A, N -->
+                <rect x="20" y="28" width="155" height="44" rx="8" fill="#004D40"/>
+                <text x="97" y="46" text-anchor="middle" font-size="12" font-weight="900" fill="#80CBC4" font-family="Nunito, sans-serif">A = Z + N</text>
+                <text x="97" y="63" text-anchor="middle" font-size="10" font-weight="700" fill="white" font-family="Nunito, sans-serif">N = A − Z</text>
+
+                <rect x="195" y="28" width="170" height="44" rx="8" fill="#1A237E"/>
+                <text x="280" y="44" text-anchor="middle" font-size="10" font-weight="900" fill="#90CAF9" font-family="Nunito, sans-serif">Z = nb protons</text>
+                <text x="280" y="60" text-anchor="middle" font-size="10" font-weight="700" fill="white" font-family="Nunito, sans-serif">A = nb protons + neutrons</text>
+
+                <rect x="385" y="28" width="155" height="44" rx="8" fill="#B71C1C"/>
+                <text x="462" y="44" text-anchor="middle" font-size="10" font-weight="900" fill="#FFCDD2" font-family="Nunito, sans-serif">Covalente = partage</text>
+                <text x="462" y="60" text-anchor="middle" font-size="10" font-weight="700" fill="white" font-family="Nunito, sans-serif">Ionique = transfert</text>
+
+                <!-- Ligne 2 : formules brutes -->
+                <rect x="20" y="82" width="120" height="38" rx="8" fill="white" stroke="#00897B" stroke-width="2"/>
+                <text x="80" y="97" text-anchor="middle" font-size="13" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">H₂O</text>
+                <text x="80" y="112" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">2H + 1O · covalente</text>
+
+                <rect x="155" y="82" width="120" height="38" rx="8" fill="white" stroke="#00897B" stroke-width="2"/>
+                <text x="215" y="97" text-anchor="middle" font-size="13" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">CO₂</text>
+                <text x="215" y="112" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">1C + 2O · covalente</text>
+
+                <rect x="290" y="82" width="120" height="38" rx="8" fill="white" stroke="#00897B" stroke-width="2"/>
+                <text x="350" y="97" text-anchor="middle" font-size="13" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">CH₄</text>
+                <text x="350" y="112" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">1C + 4H · covalente</text>
+
+                <rect x="425" y="82" width="115" height="38" rx="8" fill="white" stroke="#B71C1C" stroke-width="2"/>
+                <text x="482" y="97" text-anchor="middle" font-size="13" font-weight="900" fill="#B71C1C" font-family="Nunito, sans-serif">NaCl</text>
+                <text x="482" y="112" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">Na⁺ + Cl⁻ · ionique</text>
+
+                <!-- Ligne 3 : pièges -->
+                <rect x="20" y="132" width="520" height="44" rx="8" fill="#FFF3E0" stroke="#FFB300" stroke-width="1.5"/>
+                <text x="280" y="149" text-anchor="middle" font-size="11" font-weight="900" fill="#E65100" font-family="Nunito, sans-serif">⚠️ Pièges CE1D à ne PAS confondre</text>
+                <text x="280" y="167" text-anchor="middle" font-size="10" font-weight="700" fill="#555" font-family="Nunito, sans-serif">Z ≠ A &nbsp;|&nbsp; CO₂ ≠ 2CO &nbsp;|&nbsp; CO ≠ Co &nbsp;|&nbsp; NaCl = ionique (pas covalente) &nbsp;|&nbsp; H₂O = covalente (pas ionique)</text>
+            </svg>
+        </div>
+
+        <!-- 5 pièges CE1D -->
+        <div class="pieges-list">
+            <div class="piege-item">
+                <div class="piege-num">Piège 1</div>
+                <div class="piege-title">Atome ≠ Molécule</div>
+                <div class="piege-text">Un <strong>atome</strong> est une seule particule (ex : un atome de O). Une <strong>molécule</strong> est un assemblage d'atomes liés (ex : O₂ = 2 atomes d'oxygène liés). L'oxygène qu'on respire est la molécule O₂, pas l'atome O seul !</div>
+            </div>
+            <div class="piege-item">
+                <div class="piege-num">Piège 2</div>
+                <div class="piege-title">Z = nombre de PROTONS (pas de neutrons !)</div>
+                <div class="piege-text">Z = numéro atomique = nombre de <strong>protons</strong> uniquement. A = nombre de protons + neutrons. Si Z = 11, il y a 11 protons, mais le nombre de neutrons = A − Z (par exemple A = 23 → N = 23 − 11 = 12 neutrons pour Na).</div>
+            </div>
+            <div class="piege-item">
+                <div class="piege-num">Piège 3</div>
+                <div class="piege-title">L'indice s'applique à UN seul élément</div>
+                <div class="piege-text">Dans CO₂, l'indice 2 s'applique uniquement à l'oxygène (O), pas à tout. CO₂ = <strong>1 C + 2 O</strong>. Mais dans 2 CO, le 2 devant s'applique à TOUTE la molécule → 2 × (1C + 1O) = 2C + 2O. L'indice en bas ≠ le coefficient devant.</div>
+            </div>
+            <div class="piege-item">
+                <div class="piege-num">Piège 4</div>
+                <div class="piege-title">CO ≠ Co (la majuscule change tout !)</div>
+                <div class="piege-text"><strong>CO</strong> = monoxyde de carbone (1 carbone + 1 oxygène, gaz toxique). <strong>Co</strong> = cobalt (un métal, Z=27). Une simple différence de majuscule change complètement la nature de la substance !</div>
+            </div>
+            <div class="piege-item">
+                <div class="piege-num">Piège 5</div>
+                <div class="piege-title">Covalente vs Ionique — Le critère est simple</div>
+                <div class="piege-text">Si la formule contient un <strong>métal</strong> (Na, K, Ca, Mg, Fe…) → liaison <strong>ionique</strong>. Si elle ne contient que des <strong>non-métaux</strong> (H, C, N, O, F, Cl, S…) → liaison <strong>covalente</strong>. H₂O = covalente car H et O sont non-métaux. NaCl = ionique car Na est un métal.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM STYLE CE1D -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">🏆</div>
+        <div>
+            <div class="card-title">QCM style CE1D — Mélange des 4 niveaux</div>
+            <div class="card-sub">5 questions · Niveau CE1D belge · Mélange atome, tableau, formules, liaisons</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Un atome a Z = 17 et A = 35. Combien de neutrons possède-t-il ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">17 neutrons</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">35 neutrons</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">18 neutrons</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">52 neutrons</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> La molécule de méthane CH₄ contient-elle une liaison covalente ou ionique ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(2,0)">Ionique, car le carbone est un métal</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">Covalente, car C et H sont tous les deux des non-métaux</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">Ionique, car il y a 4 atomes d'hydrogène</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">Ni l'une ni l'autre, c'est une liaison métallique</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Combien d'atomes au total contient la molécule H₂SO₄ (acide sulfurique) ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">3 atomes</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">5 atomes</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">7 atomes</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">9 atomes</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Le potassium (K, Z=19) et le sodium (Na, Z=11) appartiennent au groupe 1 du tableau périodique. Qu'est-ce que cela implique ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">Ils ont le même nombre de masse A</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">Ils ont le même nombre d'électrons sur leur couche externe → mêmes propriétés chimiques</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">Ils ont le même nombre de couches électroniques</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">Ils ont le même numéro atomique Z</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Parmi les composés suivants, lequel est ionique : H₂O · CO₂ · MgO · N₂ ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">H₂O</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">CO₂</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">MgO</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">N₂</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS RÉCAP -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous — Récapitulatif CE1D</div>
+            <div class="card-sub">3 exercices · Mélange des 4 niveaux</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Z est le numéro
+                <input class="blank" id="f1a" placeholder="?" style="width:100px">
+                et représente le nombre de
+                <input class="blank" id="f1b" placeholder="?" style="width:90px">
+                dans le noyau.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                CO₂ contient
+                <input class="blank" id="f2a" placeholder="?" style="width:50px">
+                atome(s) de carbone et
+                <input class="blank" id="f2b" placeholder="?" style="width:50px">
+                atomes d'oxygène. C'est une liaison
+                <input class="blank" id="f2c" placeholder="?" style="width:110px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                NaCl est un composé
+                <input class="blank" id="f3a" placeholder="?" style="width:90px">
+                car Na est un
+                <input class="blank" id="f3b" placeholder="?" style="width:90px">
+                et Cl est un non-métal.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES STYLE CE1D -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices style CE1D</div>
+            <div class="card-sub">3 exercices intégrateurs + 1 bonus · Questions type examen CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Analyse d'un atome (style CE1D)</div>
+                <div class="ex-stmt">
+                    L'aluminium (Al) a Z = 13 et A = 27.<br>
+                    a) Combien de protons, neutrons et électrons possède un atome d'aluminium neutre ?<br>
+                    b) Dans quel groupe du tableau périodique se trouve l'aluminium ? (groupe 13)<br>
+                    c) AlCl₃ est formé d'aluminium (métal) et de chlore. Quel type de liaison contient-il ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Protons = Z = <strong>13</strong> · Neutrons = A − Z = 27 − 13 = <strong>14</strong> · Électrons = protons = <strong>13</strong> (atome neutre)</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> L'aluminium est dans le <strong>groupe 13</strong> → il a 3 électrons sur sa couche externe.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> Al (métal) + Cl (non-métal) → liaison <strong>ionique</strong> (Al³⁺ + 3 Cl⁻)</div></div>
+                <div class="final-ans">✅ a) 13p / 14n / 13e⁻ &nbsp;|&nbsp; b) Groupe 13 &nbsp;|&nbsp; c) Ionique</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Lire et comparer des formules (style CE1D)</div>
+                <div class="ex-stmt">
+                    On donne les formules : H₂O · H₂O₂ · 2 H₂O<br>
+                    a) Combien d'atomes au total contient H₂O ?<br>
+                    b) Combien d'atomes au total contient H₂O₂ (eau oxygénée) ?<br>
+                    c) "2 H₂O" représente-t-il une molécule ou deux molécules ? Combien d'atomes au total ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) H₂O :</strong> 2H + 1O = <strong>3 atomes</strong> dans une molécule d'eau.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) H₂O₂ :</strong> 2H + 2O = <strong>4 atomes</strong>. C'est l'eau oxygénée (H₂O₂ ≠ H₂O ! Deux molécules différentes).</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) 2 H₂O :</strong> c'est <strong>deux molécules</strong> d'eau. Total = 2 × 3 = <strong>6 atomes</strong> (4H + 2O).</div></div>
+                <div class="final-ans">✅ H₂O = 3 at. &nbsp;|&nbsp; H₂O₂ = 4 at. &nbsp;|&nbsp; 2 H₂O = 2 molécules = 6 at.</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Synthèse complète (style CE1D)</div>
+                <div class="ex-stmt">
+                    Le dioxyde de soufre a pour formule SO₂ (soufre S et oxygène O, tous deux non-métaux).<br>
+                    a) Combien d'atomes de soufre et d'oxygène contient SO₂ ?<br>
+                    b) Quel type de liaison y a-t-il dans SO₂ ?<br>
+                    c) Le soufre a Z = 16 et A = 32. Combien de neutrons possède-t-il ?<br>
+                    d) Dans quel groupe du tableau périodique se trouve-t-il ? (même groupe que O → groupe 16)
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) SO₂ :</strong> 1 S + 2 O = <strong>3 atomes</strong> au total.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> S et O sont tous les deux des non-métaux → liaison <strong>covalente</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> N = A − Z = 32 − 16 = <strong>16 neutrons</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>d)</strong> S est dans le <strong>groupe 16</strong> (comme O, Se, Te) → 6 électrons externes.</div></div>
+                <div class="final-ans">✅ a) 1S + 2O &nbsp;|&nbsp; b) Covalente &nbsp;|&nbsp; c) 16n &nbsp;|&nbsp; d) Groupe 16</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus CE1D — Analyse d'une réaction</div>
+                <div class="bonus-stmt">
+                    La combustion du méthane s'écrit : CH₄ + 2 O₂ → CO₂ + 2 H₂O<br>
+                    a) Compte le nombre total d'atomes de C, H et O à gauche (réactifs).<br>
+                    b) Compte le nombre total d'atomes de C, H et O à droite (produits).<br>
+                    c) Les nombres sont-ils égaux des deux côtés ? Que concluez-vous ?<br>
+                    d) Les liaisons dans CH₄, O₂, CO₂ et H₂O sont-elles covalentes ou ioniques ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a) Réactifs :</strong> CH₄ (1C, 4H) + 2 O₂ (4O) → total : <strong>1C, 4H, 4O</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b) Produits :</strong> CO₂ (1C, 2O) + 2 H₂O (4H, 2O) → total : <strong>1C, 4H, 4O</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>c) OUI</strong>, les atomes sont conservés des deux côtés. C'est la <strong>loi de conservation de la matière</strong> (les atomes ne se créent pas et ne disparaissent pas).</div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text"><strong>d)</strong> CH₄ (C et H = non-métaux) · O₂ (O = non-métal) · CO₂ (C et O = non-métaux) · H₂O (H et O = non-métaux) → <strong>TOUTES covalentes</strong> !</div></div>
+                <div class="bonus-ans">
+                    1C + 4H + 4O des deux côtés → conservation de la matière !<br>
+                    CH₄, O₂, CO₂, H₂O → toutes liaisons covalentes (que des non-métaux).
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Défi Atomes &amp; Molécules réussi !</h2>
+    <p>🏆 Félicitations ! Tu maîtrises tout le module Atomes &amp; Molécules.<br>
+       Tu es prêt(e) pour le CE1D ! Tu as gagné <strong id="finalXP">0</strong> XP !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Chimie · Atomes &amp; Molécules</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="chimie_atomes_niveau1.html" class="nav-btn">N1 — L'atome</a>
+        <a href="chimie_atomes_niveau2.html" class="nav-btn">N2 — Tableau périodique</a>
+        <a href="chimie_atomes_niveau3.html" class="nav-btn">N3 — Molécules &amp; formules</a>
+        <a href="chimie_atomes_niveau4.html" class="nav-btn">N4 — Liaisons chimiques</a>
+        <a href="chimie_atomes_niveau5.html" class="nav-btn current">▶ N5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:2, 2:1, 3:2, 4:1, 5:2};
+
+const QCM_OK = {
+    1:"✅ Exact ! N = A − Z = 35 − 17 = 18 neutrons. C'est le chlore (Cl), un non-métal du groupe 17 !",
+    2:"✅ Bravo ! C (carbone) et H (hydrogène) sont tous les deux des non-métaux → liaison covalente (partage d'e⁻). Le carbone n'est pas un métal !",
+    3:"✅ Correct ! H₂SO₄ = 2H + 1S + 4O = 2+1+4 = 7 atomes au total. C'est l'acide sulfurique, très corrosif !",
+    4:"✅ Parfait ! Même groupe 1 → même nombre d'électrons externes (1 seul) → mêmes propriétés chimiques (tous deux réagissent vivement avec l'eau).",
+    5:"✅ Exact ! MgO est ionique : Mg est un métal (groupe 2) + O est un non-métal → transfert d'e⁻ → Mg²⁺ + O²⁻. H₂O, CO₂, N₂ sont covalents."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. N = A − Z = 35 − 17 = 18 neutrons. Attention : Z = protons (17), A = protons + neutrons (35), donc N = 35 − 17 = 18.",
+    2:"❌ Non. C (carbone) est un NON-MÉTAL (il est dans le tableau côté non-métaux). C + H = deux non-métaux → liaison COVALENTE.",
+    3:"❌ Non. H₂SO₄ : compter chaque élément — 2H + 1S + 4O = 2+1+4 = 7 atomes. Chaque indice s'applique à l'élément qui précède.",
+    4:"❌ Non. Même groupe → même nombre d'électrons sur la couche EXTERNE (pas de couches, pas de Z identique). K et Na ont le même groupe (1) donc 1 électron externe chacun.",
+    5:"❌ Non. Le seul composé ionique est MgO : Mg est un métal + O est un non-métal. H₂O, CO₂ et N₂ ne contiennent que des non-métaux → covalents."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['atomique'],['protons','proton']],
+        msgOk:"✅ Z = numéro atomique = nombre de protons dans le noyau. C'est ce qui définit l'élément chimique !",
+        msgErr:"❌ Attendus : 'atomique' et 'protons'. Z = numéro atomique = nombre de protons."
+    },
+    2:{
+        fields:['f2a','f2b','f2c'],
+        accepted:[['1'],['2'],['covalente']],
+        msgOk:"✅ CO₂ = 1C + 2O. C et O sont des non-métaux → liaison covalente.",
+        msgErr:"❌ Attendus : '1' (carbone), '2' (oxygènes), 'covalente'. CO₂ = 1C + 2O, non-métaux → covalente."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['ionique'],['metal','métal']],
+        msgOk:"✅ NaCl est ionique : Na (métal) + Cl (non-métal) → transfert d'e⁻ → Na⁺ + Cl⁻.",
+        msgErr:"❌ Attendus : 'ionique' et 'métal'. NaCl = Na (métal) + Cl (non-métal) → ionique."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_atomes_5', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

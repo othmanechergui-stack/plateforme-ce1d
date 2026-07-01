@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chimie — Mélanges & Corps purs · Niveau 4 — Dissolution</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#388E3C; --primary-dark:#1B5E20; --primary-mid:#66BB6A; --primary-bg:#E8F5E9;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#0A2E0C 0%,#388E3C 55%,#A5D6A7 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(10,46,12,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#388E3C; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#1B5E20; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#0A2E0C,#388E3C,#A5D6A7); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#0A2E0C,#1B5E20); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#A5D6A7; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #A5D6A7; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #A5D6A7; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#0A2E0C,#388E3C,#A5D6A7); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #0A2E0C; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🧪 Mélanges &amp; Corps purs · Dissolution</h1>
+            <p>Niveau 4 · Soluté · Solvant · Solubilité · Solution saturée</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 4 — Avancé</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Dissolution &amp; Solubilité</div>
+            <div class="card-sub">Soluté · Solvant · Solution · Solubilité · Solution saturée</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            La <strong>dissolution</strong> est le phénomène par lequel un soluté se disperse uniformément dans un solvant
+            pour former une <strong>solution homogène</strong>.
+            La <strong>solubilité</strong> indique la quantité maximale de soluté qui peut se dissoudre dans une quantité donnée de solvant.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Soluté, Solvant, Solution — Définitions</h3>
+            <p>
+                • <strong>Soluté</strong> : substance qui se dissout (ex : sel NaCl, sucre).<br>
+                • <strong>Solvant</strong> : substance dans laquelle le soluté se dissout (ex : eau H₂O).<br>
+                • <strong>Solution</strong> = soluté + solvant → mélange homogène résultant.<br><br>
+                Exemple : sel (soluté) + eau (solvant) → eau salée (solution homogène).<br>
+                Le soluté ne disparaît pas : il est toujours là, juste dispersé en ions Na⁺ et Cl⁻.
+            </p>
+        </div>
+
+        <!-- SVG : dissolution NaCl -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="200" fill="#E8F5E9" rx="10"/>
+                <text x="280" y="17" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">Dissolution du sel NaCl dans l'eau</text>
+
+                <!-- Bécher gauche : avant dissolution -->
+                <rect x="30" y="28" width="150" height="130" rx="8" fill="white" stroke="#388E3C" stroke-width="2"/>
+                <text x="105" y="46" text-anchor="middle" font-size="10" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">AVANT dissolution</text>
+                <!-- Eau -->
+                <rect x="35" y="90" width="140" height="62" rx="4" fill="#B3E5FC" opacity=".6"/>
+                <!-- Cristaux NaCl -->
+                <rect x="75" y="68" width="16" height="16" rx="3" fill="white" stroke="#FF9600" stroke-width="2"/>
+                <text x="83" y="79" text-anchor="middle" font-size="8" font-weight="900" fill="#FF9600" font-family="Nunito, sans-serif">NaCl</text>
+                <rect x="100" y="62" width="16" height="16" rx="3" fill="white" stroke="#FF9600" stroke-width="2"/>
+                <text x="108" y="73" text-anchor="middle" font-size="8" font-weight="900" fill="#FF9600" font-family="Nunito, sans-serif">NaCl</text>
+                <rect x="120" y="70" width="16" height="16" rx="3" fill="white" stroke="#FF9600" stroke-width="2"/>
+                <text x="128" y="81" text-anchor="middle" font-size="8" font-weight="900" fill="#FF9600" font-family="Nunito, sans-serif">NaCl</text>
+                <text x="105" y="172" text-anchor="middle" font-size="9" font-weight="700" fill="#555" font-family="Nunito, sans-serif">Soluté (NaCl) + Solvant (H₂O)</text>
+
+                <!-- Flèche -->
+                <text x="205" y="100" text-anchor="middle" font-size="22" fill="#388E3C" font-family="Nunito, sans-serif">→</text>
+                <text x="205" y="120" text-anchor="middle" font-size="9" font-weight="700" fill="#388E3C" font-family="Nunito, sans-serif">agitation</text>
+
+                <!-- Bécher droite : après dissolution -->
+                <rect x="230" y="28" width="150" height="130" rx="8" fill="white" stroke="#388E3C" stroke-width="2"/>
+                <text x="305" y="46" text-anchor="middle" font-size="10" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">APRÈS dissolution</text>
+                <!-- Solution uniforme -->
+                <rect x="235" y="52" width="140" height="100" rx="4" fill="#B3E5FC" opacity=".5"/>
+                <!-- Ions dispersés -->
+                <circle cx="265" cy="75" r="7" fill="#FF7043" opacity=".9"/>
+                <text x="265" y="79" text-anchor="middle" font-size="7" font-weight="900" fill="white" font-family="Nunito, sans-serif">Na⁺</text>
+                <circle cx="290" cy="100" r="7" fill="#1CB0F6" opacity=".9"/>
+                <text x="290" y="104" text-anchor="middle" font-size="7" font-weight="900" fill="white" font-family="Nunito, sans-serif">Cl⁻</text>
+                <circle cx="320" cy="78" r="7" fill="#FF7043" opacity=".9"/>
+                <text x="320" y="82" text-anchor="middle" font-size="7" font-weight="900" fill="white" font-family="Nunito, sans-serif">Na⁺</text>
+                <circle cx="348" cy="105" r="7" fill="#1CB0F6" opacity=".9"/>
+                <text x="348" y="109" text-anchor="middle" font-size="7" font-weight="900" fill="white" font-family="Nunito, sans-serif">Cl⁻</text>
+                <circle cx="275" cy="125" r="7" fill="#1CB0F6" opacity=".9"/>
+                <text x="275" y="129" text-anchor="middle" font-size="7" font-weight="900" fill="white" font-family="Nunito, sans-serif">Cl⁻</text>
+                <circle cx="338" cy="135" r="7" fill="#FF7043" opacity=".9"/>
+                <text x="338" y="139" text-anchor="middle" font-size="7" font-weight="900" fill="white" font-family="Nunito, sans-serif">Na⁺</text>
+                <text x="305" y="172" text-anchor="middle" font-size="9" font-weight="700" fill="#555" font-family="Nunito, sans-serif">Solution homogène (Na⁺ + Cl⁻ dispersés)</text>
+
+                <!-- Légende ions -->
+                <circle cx="420" cy="70" r="7" fill="#FF7043" opacity=".9"/>
+                <text x="432" y="74" font-size="9" font-weight="700" fill="#555" font-family="Nunito, sans-serif">= ion Na⁺</text>
+                <circle cx="420" cy="92" r="7" fill="#1CB0F6" opacity=".9"/>
+                <text x="432" y="96" font-size="9" font-weight="700" fill="#555" font-family="Nunito, sans-serif">= ion Cl⁻</text>
+                <text x="450" y="120" text-anchor="middle" font-size="9" font-weight="700" fill="#388E3C" font-family="Nunito, sans-serif">Le sel reste</text>
+                <text x="450" y="133" text-anchor="middle" font-size="9" font-weight="700" fill="#388E3C" font-family="Nunito, sans-serif">présent sous</text>
+                <text x="450" y="146" text-anchor="middle" font-size="9" font-weight="700" fill="#388E3C" font-family="Nunito, sans-serif">forme d'ions !</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>📏 Solubilité et solution saturée</h3>
+            <p>
+                La <strong>solubilité</strong> = masse maximale (en g) de soluté pouvant se dissoudre dans <strong>100 g de solvant</strong> à une température donnée.<br><br>
+                Exemple : solubilité de NaCl dans l'eau à 20 °C ≈ <strong>36 g / 100 g d'eau</strong>.<br>
+                → On peut dissoudre au maximum 36 g de sel dans 100 g d'eau à 20 °C.<br><br>
+                <strong>Solution saturée</strong> : on a atteint la solubilité maximale → tout soluté supplémentaire se dépose au fond (solide non dissous).<br><br>
+                <strong>Facteurs qui augmentent la solubilité</strong> :<br>
+                • ↑ Température (pour les solides en général) → ↑ solubilité<br>
+                • Agitation → dissolution plus rapide (mais ne change pas la solubilité max)<br>
+                • Taille des particules plus petites → dissolution plus rapide
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">NaCl</div>
+                <div class="cas-eq">36 g / 100 g H₂O</div>
+                <div class="cas-desc">Solubilité à 20 °C — sel de cuisine</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Sucre</div>
+                <div class="cas-eq">≈ 200 g / 100 g H₂O</div>
+                <div class="cas-desc">Solubilité à 20 °C — très soluble !</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">↑ T°</div>
+                <div class="cas-eq">→ ↑ Solubilité</div>
+                <div class="cas-desc">Eau chaude dissout plus de solide</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Dissoudre ≠ Fondre !</h3>
+            <p>
+                <strong>Fondre</strong> = changement d'état (solide → liquide) sous l'effet de la chaleur. La glace fond à 0 °C.<br>
+                <strong>Se dissoudre</strong> = mélange d'un soluté dans un solvant (changement de mélange, pas d'état).<br>
+                Le sel <strong>se dissout</strong> dans l'eau — il ne fond pas ! Il reste du NaCl (sous forme d'ions Na⁺ et Cl⁻).<br>
+                Il ne s'est <strong>pas transformé</strong> en eau : c'est toujours du sel, juste dispersé.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Solubilité, dissolution, solution saturée</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Dans la dissolution du sel dans l'eau, quel est le soluté ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">L'eau (H₂O)</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">Le sel (NaCl)</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">La solution salée</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">Les ions Na⁺</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> La solubilité du NaCl dans l'eau à 20 °C est d'environ 36 g / 100 g d'eau. Que se passe-t-il si on ajoute 40 g de NaCl à 100 g d'eau à 20 °C ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(2,0)">Tout se dissout, car l'eau peut absorber autant de sel qu'on veut</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">36 g se dissolvent, les 4 g restants se déposent au fond — solution saturée</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">Rien ne se dissout</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">40 g se dissolvent si on agite suffisamment</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Comment augmenter la solubilité d'un solide dans l'eau (en dissoudre plus) ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">Refroidir l'eau</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">Chauffer l'eau</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">Filtrer la solution</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">Utiliser moins de solvant</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Qu'est-ce qu'une solution saturée ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">Une solution très concentrée en eau</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">Une solution dans laquelle on ne peut plus dissoudre de soluté supplémentaire</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">Une solution qui contient plusieurs solutés</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">Une solution chauffée à 100 °C</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Quelle affirmation est VRAIE à propos de la dissolution du sel dans l'eau ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Le sel fond — il passe de l'état solide à l'état liquide</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Le sel disparaît définitivement dans l'eau</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Le sel se dissout et reste présent sous forme d'ions Na⁺ et Cl⁻ dispersés</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Le sel se transforme en eau par dissolution</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Soluté, solvant, solution</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Dans NaCl dissous dans l'eau : NaCl est le <input class="blank" id="f1a" placeholder="?" style="width:90px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Dans NaCl dissous dans l'eau : l'eau est le <input class="blank" id="f2a" placeholder="?" style="width:90px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Quand on atteint la limite de solubilité, la solution devient <input class="blank" id="f3a" placeholder="?" style="width:100px"> et le soluté en excès se dépose.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus calcul · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Identifier soluté, solvant, solution</div>
+                <div class="ex-stmt">
+                    Pour chaque dissolution, identifie le soluté, le solvant et nomme la solution :<br>
+                    a) Sucre dans l'eau &nbsp; b) Alcool dans l'eau &nbsp; c) CO₂ dans l'eau (eau gazeuse)
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Soluté : <strong>sucre</strong> · Solvant : <strong>eau</strong> · Solution : eau sucrée (sirop)</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Soluté : <strong>alcool (éthanol)</strong> · Solvant : <strong>eau</strong> · Solution : solution eau-alcool</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> Soluté : <strong>CO₂</strong> (gaz) · Solvant : <strong>eau</strong> · Solution : eau gazeuse (eau pétillante)</div></div>
+                <div class="final-ans">✅ Soluté = substance qui se dissout · Solvant = eau (en général)</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Solution saturée</div>
+                <div class="ex-stmt">
+                    La solubilité du sucre dans l'eau à 20 °C est de 200 g pour 100 g d'eau.<br>
+                    a) Peut-on dissoudre 150 g de sucre dans 100 g d'eau à 20 °C ?<br>
+                    b) Peut-on dissoudre 250 g de sucre dans 100 g d'eau à 20 °C ? Que se passe-t-il ?<br>
+                    c) Comment pourrait-on dissoudre ces 250 g ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Oui ! 150 g &lt; 200 g (solubilité max) → tout se dissout → solution non saturée.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Non. 250 g &gt; 200 g → seulement 200 g se dissolvent → la solution est <strong>saturée</strong> → les 50 g restants se <strong>déposent au fond</strong> sans se dissoudre.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> Chauffer l'eau → la solubilité augmente avec la température → on peut alors dissoudre les 250 g.</div></div>
+                <div class="final-ans">✅ a) Oui, 150g &lt; 200g · b) Non, saturée + dépôt de 50g · c) Chauffer l'eau</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Dissoudre vs Fondre (style CE1D)</div>
+                <div class="ex-stmt">
+                    Un élève met des glaçons (H₂O solide) dans une boisson sucrée.<br>
+                    Il observe que les glaçons disparaissent et que la boisson est moins sucrée qu'avant.<br>
+                    a) Les glaçons ont-ils fondu ou se sont-ils dissous ? Explique.<br>
+                    b) Pourquoi la boisson est-elle moins sucrée ?<br>
+                    c) Le sucre a-t-il disparu ? Justifie.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Les glaçons ont <strong>fondu</strong> (changement d'état : solide H₂O → liquide H₂O). Ce n'est pas une dissolution car il n'y a qu'une espèce (H₂O).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> En fondant, les glaçons ont ajouté de l'eau à la boisson → la <strong>concentration en sucre a diminué</strong> (même quantité de sucre dans plus de liquide = dilution).</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> Non, le sucre n'a pas disparu ! Il est toujours là, <strong>dissous</strong> dans la solution, juste dilué dans plus de liquide.</div></div>
+                <div class="final-ans">✅ Glaçons = fondus (changement d'état) · Dilution · Sucre toujours présent</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Calcul de solubilité</div>
+                <div class="bonus-stmt">
+                    La solubilité du NaCl est 36 g pour 100 g d'eau à 20 °C.<br>
+                    a) On ajoute 40 g de NaCl à 100 g d'eau à 20 °C. Que se passe-t-il ? Quelle masse reste non dissoute ?<br>
+                    b) Quelle masse maximale de NaCl peut-on dissoudre dans 250 g d'eau à 20 °C ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> Solubilité max = 36 g / 100 g eau. On ajoute 40 g → seulement 36 g se dissolvent → <strong>solution saturée</strong> → 40 − 36 = <strong>4 g restent non dissous</strong> au fond.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b)</strong> Règle de proportionnalité :<br>100 g eau → 36 g NaCl<br>250 g eau → ? g NaCl<br>? = (36 × 250) / 100 = <strong>90 g de NaCl</strong> maximum dans 250 g d'eau.</div></div>
+                <div class="bonus-ans">
+                    a) Solution saturée + 4 g non dissous au fond<br>
+                    b) 90 g de NaCl max dans 250 g d'eau à 20 °C
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>🏆 Niveau 4 terminé !</h2>
+    <p>Tu maîtrises la dissolution et la solubilité !<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue vers le Défi CE1D !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Mélanges &amp; Corps purs</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="chimie_melanges_niveau1.html" class="nav-btn">Niveau 1 — Corps pur/mélange</a>
+        <a href="chimie_melanges_niveau2.html" class="nav-btn">Niveau 2 — Homo/Hétérogène</a>
+        <a href="chimie_melanges_niveau3.html" class="nav-btn">Niveau 3 — Séparation</a>
+        <a href="chimie_melanges_niveau4.html" class="nav-btn current">▶ Niveau 4 — Dissolution</a>
+        <a href="chimie_melanges_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:1, 3:1, 4:1, 5:2};
+
+const QCM_OK = {
+    1:"✅ Exact ! Le soluté est la substance qui SE DISSOUT = le sel (NaCl). L'eau est le solvant.",
+    2:"✅ Bravo ! Solubilité max = 36 g. 40 g > 36 g → 36 g se dissolvent, les 4 g restants se déposent → solution saturée.",
+    3:"✅ Correct ! Chauffer augmente l'agitation des molécules → le soluté se dissout plus facilement → solubilité augmente.",
+    4:"✅ Parfait ! Solution saturée = on a atteint la limite de solubilité → rien de plus ne peut se dissoudre.",
+    5:"✅ Exact ! Le sel se dissout (≠ fond). Il reste présent sous forme d'ions Na⁺ et Cl⁻ dispersés dans l'eau."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. L'eau est le SOLVANT (substance dans laquelle on dissout). Le soluté = la substance qui se dissout = NaCl.",
+    2:"❌ Non. La solubilité est une limite physique. 40 g > 36 g → seulement 36 g se dissolvent, les 4 g restants se déposent. L'agitation accélère la dissolution mais ne change pas la limite.",
+    3:"❌ Non. Refroidir diminue la solubilité des solides. Filtrer ne change rien à la solubilité. Il faut CHAUFFER pour augmenter la solubilité.",
+    4:"❌ Non. Solution saturée = limite de solubilité atteinte. Ce n'est pas une solution d'eau, ni de plusieurs solutés, ni forcément chauffée.",
+    5:"❌ Non. Le sel ne FOND pas (la fonte = changement d'état). Le sel ne disparaît pas et ne devient pas de l'eau. Il se dissout et reste présent sous forme d'ions Na⁺ et Cl⁻."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['solute','soluté']],
+        msgOk:"✅ Soluté ! NaCl est la substance qui se dissout dans l'eau → c'est le soluté.",
+        msgErr:"❌ Attendu : 'soluté'. NaCl se dissout dans l'eau → NaCl est le soluté."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['solvant']],
+        msgOk:"✅ Solvant ! L'eau est la substance dans laquelle NaCl se dissout → c'est le solvant.",
+        msgErr:"❌ Attendu : 'solvant'. L'eau est la substance dans laquelle on dissout → solvant."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['saturee','saturée']],
+        msgOk:"✅ Saturée ! Une solution saturée = on a atteint la solubilité maximale, le reste se dépose.",
+        msgErr:"❌ Attendu : 'saturée'. Quand on dépasse la solubilité → solution saturée + dépôt."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_melanges_4', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

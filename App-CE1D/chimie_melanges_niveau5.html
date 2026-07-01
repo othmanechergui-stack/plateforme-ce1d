@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chimie — Mélanges &amp; Corps purs · Niveau 5 — Défi CE1D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#388E3C; --primary-dark:#1B5E20; --primary-mid:#66BB6A; --primary-bg:#E8F5E9;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#0A2E0C 0%,#388E3C 55%,#A5D6A7 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(10,46,12,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#388E3C; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#1B5E20; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#0A2E0C,#388E3C,#A5D6A7); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#0A2E0C,#1B5E20); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#A5D6A7; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        /* Fiches récap */
+        .recap-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin:18px 0; }
+        .recap-card { background:var(--primary-bg); border:2px solid #A5D6A7; border-radius:14px; padding:16px; }
+        .recap-card h4 { font-size:.88rem; font-weight:900; color:var(--primary-dark); margin-bottom:10px; padding-bottom:6px; border-bottom:2px solid #A5D6A7; }
+        .recap-card ul { list-style:none; padding:0; }
+        .recap-card li { font-size:.83rem; line-height:1.7; color:#444; padding-left:14px; position:relative; }
+        .recap-card li::before { content:'•'; position:absolute; left:0; color:var(--primary); font-weight:900; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #A5D6A7; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* Pièges CE1D */
+        .pieges-list { display:flex; flex-direction:column; gap:12px; margin:18px 0; }
+        .piege-item { background:#FFF3E0; border:2px solid #FFB300; border-radius:12px; padding:14px 18px; }
+        .piege-num { display:inline-block; background:#FF9600; color:white; border-radius:5px; padding:1px 8px; font-size:.75rem; font-weight:900; margin-bottom:6px; }
+        .piege-title { font-size:.9rem; font-weight:900; color:#E65100; margin-bottom:4px; }
+        .piege-text { font-size:.85rem; line-height:1.6; color:#444; }
+        .piege-text strong { color:#BF360C; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #A5D6A7; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:90px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#0A2E0C,#388E3C,#A5D6A7); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #0A2E0C; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🧪 Mélanges &amp; Corps purs · Défi CE1D 🏆</h1>
+            <p>Niveau 5 · Récapitulatif complet · CE1D</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <span class="diff-label">Niveau 5 — Défi CE1D 🏆</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. FICHE DE RÉVISION -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📋</div>
+        <div>
+            <div class="card-title">Fiche de révision — Les 4 niveaux en un coup d'œil</div>
+            <div class="card-sub">N1 : corps pur/mélange · N2 : homo/hétérogène · N3 : séparation · N4 : dissolution</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="recap-grid">
+            <div class="recap-card">
+                <h4>🧪 N1 — Corps pur vs mélange</h4>
+                <ul>
+                    <li>Corps pur : une seule espèce chimique</li>
+                    <li>T°C fusion et ébullition fixes</li>
+                    <li>Ex corps pur : eau distillée, or pur, O₂</li>
+                    <li>Mélange : plusieurs espèces chimiques</li>
+                    <li>Ex mélange : air, eau du robinet, lait</li>
+                </ul>
+            </div>
+            <div class="recap-card">
+                <h4>🔍 N2 — Homogène vs hétérogène</h4>
+                <ul>
+                    <li>Homogène : une seule phase visible</li>
+                    <li>Ex : eau salée, alliage</li>
+                    <li>Hétérogène : plusieurs phases visibles</li>
+                    <li>Ex : eau + huile, vinaigrette</li>
+                    <li>Ex : eau + sable</li>
+                </ul>
+            </div>
+            <div class="recap-card">
+                <h4>⚗️ N3 — Techniques de séparation</h4>
+                <ul>
+                    <li>Filtration → solide/liquide</li>
+                    <li>Décantation → non miscibles ou dépôt</li>
+                    <li>Distillation → liquides miscibles, T° diff.</li>
+                    <li>Chromatographie → substances colorées</li>
+                </ul>
+            </div>
+            <div class="recap-card">
+                <h4>💧 N4 — Dissolution &amp; solubilité</h4>
+                <ul>
+                    <li>Soluté + solvant = solution</li>
+                    <li>Solubilité = masse max dans 100 g solvant</li>
+                    <li>Solution saturée = limite atteinte</li>
+                    <li>↑T → ↑solubilité (pour les solides)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SVG récapitulatif -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="220" fill="#E8F5E9" rx="10"/>
+                <text x="280" y="20" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">Récapitulatif — Techniques de séparation CE1D</text>
+
+                <!-- En-têtes colonnes -->
+                <rect x="10" y="30" width="160" height="30" rx="6" fill="#1B5E20"/>
+                <text x="90" y="50" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">Technique</text>
+                <rect x="180" y="30" width="170" height="30" rx="6" fill="#1B5E20"/>
+                <text x="265" y="50" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">Sépare</text>
+                <rect x="360" y="30" width="190" height="30" rx="6" fill="#1B5E20"/>
+                <text x="455" y="50" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">Exemple</text>
+
+                <!-- Ligne 1 : Filtration -->
+                <rect x="10" y="68" width="160" height="32" rx="6" fill="#388E3C"/>
+                <text x="90" y="88" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">Filtration</text>
+                <rect x="180" y="68" width="170" height="32" rx="6" fill="white" stroke="#A5D6A7" stroke-width="1.5"/>
+                <text x="265" y="88" text-anchor="middle" font-size="10" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Solide / liquide</text>
+                <rect x="360" y="68" width="190" height="32" rx="6" fill="white" stroke="#A5D6A7" stroke-width="1.5"/>
+                <text x="455" y="88" text-anchor="middle" font-size="10" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Sable + eau</text>
+
+                <!-- Ligne 2 : Décantation -->
+                <rect x="10" y="108" width="160" height="32" rx="6" fill="#388E3C"/>
+                <text x="90" y="128" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">Décantation</text>
+                <rect x="180" y="108" width="170" height="32" rx="6" fill="white" stroke="#A5D6A7" stroke-width="1.5"/>
+                <text x="265" y="128" text-anchor="middle" font-size="10" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Non miscibles / dépôt</text>
+                <rect x="360" y="108" width="190" height="32" rx="6" fill="white" stroke="#A5D6A7" stroke-width="1.5"/>
+                <text x="455" y="128" text-anchor="middle" font-size="10" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Huile + eau</text>
+
+                <!-- Ligne 3 : Distillation -->
+                <rect x="10" y="148" width="160" height="32" rx="6" fill="#388E3C"/>
+                <text x="90" y="168" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">Distillation</text>
+                <rect x="180" y="148" width="170" height="32" rx="6" fill="white" stroke="#A5D6A7" stroke-width="1.5"/>
+                <text x="265" y="168" text-anchor="middle" font-size="10" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Liquides miscibles, T° diff.</text>
+                <rect x="360" y="148" width="190" height="32" rx="6" fill="white" stroke="#A5D6A7" stroke-width="1.5"/>
+                <text x="455" y="168" text-anchor="middle" font-size="10" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Eau + alcool</text>
+
+                <!-- Ligne 4 : Chromatographie -->
+                <rect x="10" y="188" width="160" height="28" rx="6" fill="#388E3C"/>
+                <text x="90" y="206" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Nunito, sans-serif">Chromatographie</text>
+                <rect x="180" y="188" width="170" height="28" rx="6" fill="white" stroke="#A5D6A7" stroke-width="1.5"/>
+                <text x="265" y="206" text-anchor="middle" font-size="10" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Substances colorées dissoutes</text>
+                <rect x="360" y="188" width="190" height="28" rx="6" fill="white" stroke="#A5D6A7" stroke-width="1.5"/>
+                <text x="455" y="206" text-anchor="middle" font-size="10" font-weight="700" fill="#333" font-family="Nunito, sans-serif">Encres, colorants</text>
+            </svg>
+        </div>
+
+        <!-- 5 pièges CE1D -->
+        <div class="pieges-list">
+            <div class="piege-item">
+                <div class="piege-num">Piège 1</div>
+                <div class="piege-title">L'air n'est PAS un corps pur !</div>
+                <div class="piege-text">L'air est un <strong>MÉLANGE</strong> (N₂ + O₂ + ...), pas un corps pur — même s'il semble uniforme (homogène).</div>
+            </div>
+            <div class="piege-item">
+                <div class="piege-num">Piège 2</div>
+                <div class="piege-title">On ne peut pas filtrer du sel dissous !</div>
+                <div class="piege-text">On ne peut <strong>PAS filtrer</strong> du sel dissous dans l'eau — il passe à travers le filtre. Il faut <strong>distiller</strong> (ou évaporer).</div>
+            </div>
+            <div class="piege-item">
+                <div class="piege-num">Piège 3</div>
+                <div class="piege-title">Homogène ≠ Corps pur !</div>
+                <div class="piege-text">Un mélange <strong>homogène</strong> n'est <strong>PAS</strong> un corps pur ! L'eau salée est homogène mais reste un mélange.</div>
+            </div>
+            <div class="piege-item">
+                <div class="piege-num">Piège 4</div>
+                <div class="piege-title">Dissoudre ≠ Fondre !</div>
+                <div class="piege-text">Le sel se <strong>DISSOUT</strong> dans l'eau (reste du sel chimiquement). La glace <strong>FOND</strong> (changement d'état, H₂O reste H₂O).</div>
+            </div>
+            <div class="piege-item">
+                <div class="piege-num">Piège 5</div>
+                <div class="piege-title">Dépasser la solubilité → dépôt solide !</div>
+                <div class="piege-text">Quand on dépasse la solubilité, l'excès de soluté <strong>reste solide au fond</strong> — solution saturée + dépôt.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM STYLE CE1D -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">🏆</div>
+        <div>
+            <div class="card-title">QCM style CE1D — Mélange des 4 niveaux</div>
+            <div class="card-sub">5 questions · Niveau CE1D belge · Corps purs, mélanges, séparation, dissolution</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Parmi les substances suivantes, laquelle est un corps pur ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">Eau du robinet</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">Lait</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">Eau distillée</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">Air</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> La vinaigrette (huile + vinaigre) est un mélange…</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">Homogène</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">Hétérogène</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">Corps pur</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">Saturé</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Quelle technique utilise-t-on pour séparer l'eau et l'alcool (deux liquides miscibles) ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">Filtration</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">Décantation</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">Distillation</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">Chromatographie</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> La solubilité du sucre dans l'eau est 200 g pour 100 g d'eau à 20°C. Si j'ajoute 250 g de sucre dans 100 g d'eau à 20°C, que se passe-t-il ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">Tout se dissout</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">200 g se dissout, 50 g reste solide</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">Rien ne se dissout</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">La solution explose</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Un élève veut séparer du sable de l'eau. Quelle est la meilleure technique ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Distillation</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Décantation ou filtration</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Chromatographie</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Dissolution</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS RÉCAP -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous — Récapitulatif CE1D</div>
+            <div class="card-sub">3 exercices · Mélange des 4 niveaux</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                L'eau distillée est un corps
+                <input class="blank" id="f1a" placeholder="?" style="width:90px">
+                car elle ne contient qu'une seule espèce chimique. L'eau du robinet est un
+                <input class="blank" id="f1b" placeholder="?" style="width:110px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Pour séparer l'eau et l'huile (non miscibles), on utilise la
+                <input class="blank" id="f2a" placeholder="?" style="width:130px">.
+                Pour séparer de l'eau et du sel dissous, on utilise la
+                <input class="blank" id="f2b" placeholder="?" style="width:130px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Dans une solution, le soluté est la substance qui se
+                <input class="blank" id="f3a" placeholder="?" style="width:100px">.
+                L'eau est souvent le
+                <input class="blank" id="f3b" placeholder="?" style="width:100px">.
+                Quand on ne peut plus rien dissoudre, la solution est
+                <input class="blank" id="f3c" placeholder="?" style="width:110px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES STYLE CE1D -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices style CE1D</div>
+            <div class="card-sub">3 exercices intégrateurs + 1 bonus · Questions type examen CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Corps pur, mélange et séparation (style CE1D)</div>
+                <div class="ex-stmt">
+                    Un élève mélange de l'eau et du sel de cuisine.<br>
+                    a) Obtient-il un corps pur ou un mélange ?<br>
+                    b) Ce mélange est-il homogène ou hétérogène ?<br>
+                    c) Comment pourrait-il récupérer le sel ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> C'est un <strong>mélange</strong> (deux espèces : H₂O + NaCl).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Ce mélange est <strong>homogène</strong> : on ne voit qu'une seule phase — le sel est dissous, invisible à l'œil nu.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> Évaporation ou distillation : faire bouillir l'eau → elle s'évapore → le sel reste dans le récipient.</div></div>
+                <div class="final-ans">✅ a) Mélange &nbsp;|&nbsp; b) Homogène &nbsp;|&nbsp; c) Évaporation / distillation</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Séparation en 2 étapes (style CE1D)</div>
+                <div class="ex-stmt">
+                    On doit séparer un mélange contenant : sable + eau + alcool.<br>
+                    Propose une méthode en 2 étapes.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Étape 1 — Filtration :</strong> sépare le sable (reste sur le filtre) de l'eau + alcool (passent à travers).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Étape 2 — Distillation :</strong> sépare l'eau de l'alcool (T ébullition alcool ≈ 78°C &lt; T eau = 100°C). L'alcool s'évapore en premier.</div></div>
+                <div class="final-ans">✅ Étape 1 : filtration (sable) &nbsp;|&nbsp; Étape 2 : distillation (eau + alcool)</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Solubilité et calcul (style CE1D)</div>
+                <div class="ex-stmt">
+                    La solubilité du NaCl dans l'eau est de 36 g pour 100 g d'eau à 20°C.<br>
+                    a) Si on dissout 30 g de NaCl dans 100 g d'eau, la solution est-elle saturée ?<br>
+                    b) Quelle masse maximale de NaCl peut-on dissoudre dans 250 g d'eau à 20°C ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Non, la solution n'est <strong>pas saturée</strong> : 30 g &lt; 36 g (limite de solubilité). Il reste encore de la "place".</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Règle de trois :</strong> 36 g pour 100 g d'eau → pour 250 g : 36 × 250 ÷ 100 = <strong>90 g de NaCl max</strong>.</div></div>
+                <div class="final-ans">✅ a) Non, pas saturée (30 g &lt; 36 g) &nbsp;|&nbsp; b) 90 g de NaCl max dans 250 g d'eau</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus CE1D — Cristallisation par refroidissement</div>
+                <div class="bonus-stmt">
+                    Un artisan fabrique une solution sucrée très concentrée en chauffant l'eau à 80°C (solubilité sucre ≈ 362 g/100 g eau à 80°C). Il la refroidit à 20°C (solubilité ≈ 200 g/100 g eau). Il avait dissous 300 g de sucre dans 100 g d'eau.<br>
+                    Que se passe-t-il au refroidissement ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text">À 20°C, la solubilité max est <strong>200 g</strong> pour 100 g d'eau.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text">Il avait dissous <strong>300 g</strong> de sucre. Excès = 300 − 200 = <strong>100 g</strong>.</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text">Ces 100 g en excès <strong>cristallisent</strong> (se déposent sous forme solide) au fond du récipient.</div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text">C'est le principe de la <strong>fabrication du sucre en cristaux</strong> !</div></div>
+                <div class="bonus-ans">
+                    300 g dissous à 80°C → refroidissement à 20°C → max 200 g dissous<br>
+                    → 100 g cristallisent = sucre en cristaux ! Principe de la cristallisation.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>🏆 Défi Mélanges &amp; Corps purs réussi !</h2>
+    <p>Bravo ! Tu maîtrises corps pur/mélange, homo/hétérogène, les techniques de séparation et la dissolution.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Chimie · Mélanges &amp; Corps purs</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="chimie_melanges_niveau1.html" class="nav-btn">N1 Corps pur/mélange</a>
+        <a href="chimie_melanges_niveau2.html" class="nav-btn">N2 Homo/Hétérogène</a>
+        <a href="chimie_melanges_niveau3.html" class="nav-btn">N3 Séparation</a>
+        <a href="chimie_melanges_niveau4.html" class="nav-btn">N4 Dissolution</a>
+        <a href="chimie_melanges_niveau5.html" class="nav-btn current">▶ N5 Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:2, 2:1, 3:2, 4:1, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! L'eau distillée (H₂O pur) est un corps pur : une seule espèce, T ébullition fixe à 100°C.",
+    2:"✅ Correct ! La vinaigrette est hétérogène : on voit les deux phases (huile + vinaigre) séparées.",
+    3:"✅ Exact ! La distillation sépare les liquides miscibles grâce à leurs différentes températures d'ébullition.",
+    4:"✅ Parfait ! On ne peut dissoudre que 200 g (solubilité max). Les 50 g excédentaires restent sous forme solide → solution saturée.",
+    5:"✅ Exact ! Le sable est un solide dans un liquide → filtration (passage sur filtre) ou décantation (laisser reposer, le sable tombe)."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. L'eau du robinet, le lait et l'air sont des mélanges. Seule l'eau distillée est un corps pur.",
+    2:"❌ Non. La vinaigrette est HÉTÉROGÈNE — on voit les deux phases distinctes. Homogène = une seule phase visible.",
+    3:"❌ Non. Filtration = solide/liquide. Décantation = non miscibles. Distillation = liquides miscibles (températures d'ébullition différentes).",
+    4:"❌ Non. La solubilité est la limite : 200 g se dissout, mais les 50 g en excès restent solides au fond.",
+    5:"❌ Non. Sable + eau = solide dans liquide → filtration ou décantation. Pas besoin de distillation (pour liquides miscibles)."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['pur','pure'],['melange','mélange']],
+        msgOk:"✅ Corps pur = une espèce. Mélange = plusieurs espèces.",
+        msgErr:"❌ Attendus : 'pur' et 'mélange'."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['decantation','décantation'],['distillation']],
+        msgOk:"✅ Décantation pour non-miscibles. Distillation pour liquides miscibles.",
+        msgErr:"❌ Attendus : 'décantation' et 'distillation'."
+    },
+    3:{
+        fields:['f3a','f3b','f3c'],
+        accepted:[['dissout','dissous','dissolve'],['solvant'],['saturee','saturée']],
+        msgOk:"✅ Soluté : substance qui se dissout. Solvant : milieu de dissolution. Saturée : limite atteinte.",
+        msgErr:"❌ Attendus : 'dissout', 'solvant', 'saturée'."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_melanges_5', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

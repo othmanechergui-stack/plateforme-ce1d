@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chimie — Mélanges & Corps purs · Niveau 1 — Corps pur ou mélange ?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#388E3C; --primary-dark:#1B5E20; --primary-mid:#66BB6A; --primary-bg:#E8F5E9;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#0A2E0C 0%,#388E3C 55%,#A5D6A7 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(10,46,12,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#388E3C; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#1B5E20; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#0A2E0C,#388E3C,#A5D6A7); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#0A2E0C,#1B5E20); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#A5D6A7; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #A5D6A7; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #A5D6A7; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#0A2E0C,#388E3C,#A5D6A7); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #0A2E0C; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🧪 Mélanges &amp; Corps purs · Corps pur ou mélange ?</h1>
+            <p>Niveau 1 · Une seule espèce · Plusieurs espèces · Température fixe</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 1 — Débutant</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Corps pur ou mélange ?</div>
+            <div class="card-sub">Une seule espèce chimique · Plusieurs espèces · Température d'ébullition fixe</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            En chimie, toute la matière peut être classée en deux grandes catégories : les <strong>corps purs</strong> et les <strong>mélanges</strong>.
+            Un <strong>corps pur</strong> est composé d'une seule sorte de molécules ou d'atomes (ex : eau distillée H₂O, or pur Au, oxygène O₂).
+            Un <strong>mélange</strong> contient plusieurs espèces chimiques différentes (ex : eau du robinet, air, lait, eau salée).
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Corps pur — Définition</h3>
+            <p>
+                Un <strong>corps pur</strong> est une substance composée d'une <strong>seule espèce chimique</strong>
+                (une seule sorte de molécules ou d'atomes).<br>
+                Exemples : eau distillée (H₂O), or pur (Au), oxygène pur (O₂), fer pur (Fe), cuivre pur (Cu).<br>
+                Propriété clé : ses <strong>températures de fusion et d'ébullition sont fixes et précises</strong>.
+                L'eau pure bout exactement à <strong>100,0 °C</strong> à pression normale.
+            </p>
+        </div>
+
+        <!-- SVG : corps pur vs mélange -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="220" fill="#E8F5E9" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">Corps pur vs Mélange — Vue microscopique</text>
+
+                <!-- Bécher gauche : corps pur -->
+                <rect x="40" y="35" width="180" height="140" rx="8" fill="white" stroke="#388E3C" stroke-width="2.5"/>
+                <text x="130" y="55" text-anchor="middle" font-size="11" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">CORPS PUR (eau H₂O)</text>
+                <!-- Particules identiques (bleues) -->
+                <circle cx="80" cy="90" r="10" fill="#1CB0F6" opacity=".85"/>
+                <circle cx="110" cy="80" r="10" fill="#1CB0F6" opacity=".85"/>
+                <circle cx="140" cy="95" r="10" fill="#1CB0F6" opacity=".85"/>
+                <circle cx="170" cy="82" r="10" fill="#1CB0F6" opacity=".85"/>
+                <circle cx="95" cy="115" r="10" fill="#1CB0F6" opacity=".85"/>
+                <circle cx="125" cy="120" r="10" fill="#1CB0F6" opacity=".85"/>
+                <circle cx="155" cy="110" r="10" fill="#1CB0F6" opacity=".85"/>
+                <circle cx="80" cy="140" r="10" fill="#1CB0F6" opacity=".85"/>
+                <circle cx="112" cy="145" r="10" fill="#1CB0F6" opacity=".85"/>
+                <circle cx="145" cy="138" r="10" fill="#1CB0F6" opacity=".85"/>
+                <text x="130" y="190" text-anchor="middle" font-size="10" font-weight="700" fill="#388E3C" font-family="Nunito, sans-serif">Une seule espèce (●)</text>
+                <text x="130" y="205" text-anchor="middle" font-size="10" font-weight="700" fill="#388E3C" font-family="Nunito, sans-serif">T ébu = 100,0°C exactement</text>
+
+                <!-- Bécher droit : mélange -->
+                <rect x="340" y="35" width="180" height="140" rx="8" fill="white" stroke="#E53935" stroke-width="2.5"/>
+                <text x="430" y="55" text-anchor="middle" font-size="11" font-weight="900" fill="#B71C1C" font-family="Nunito, sans-serif">MÉLANGE (eau du robinet)</text>
+                <!-- Particules variées -->
+                <circle cx="375" cy="90" r="10" fill="#1CB0F6" opacity=".85"/>
+                <circle cx="405" cy="80" r="9" fill="#FF9600" opacity=".85"/>
+                <circle cx="438" cy="95" r="8" fill="#388E3C" opacity=".85"/>
+                <circle cx="468" cy="82" r="10" fill="#1CB0F6" opacity=".85"/>
+                <circle cx="390" cy="115" r="9" fill="#FF9600" opacity=".85"/>
+                <circle cx="422" cy="120" r="10" fill="#1CB0F6" opacity=".85"/>
+                <circle cx="452" cy="110" r="8" fill="#E53935" opacity=".85"/>
+                <circle cx="378" cy="142" r="8" fill="#388E3C" opacity=".85"/>
+                <circle cx="412" cy="145" r="10" fill="#1CB0F6" opacity=".85"/>
+                <circle cx="445" cy="138" r="9" fill="#FF9600" opacity=".85"/>
+                <text x="430" y="190" text-anchor="middle" font-size="10" font-weight="700" fill="#B71C1C" font-family="Nunito, sans-serif">Plusieurs espèces (● ● ● ●)</text>
+                <text x="430" y="205" text-anchor="middle" font-size="10" font-weight="700" fill="#B71C1C" font-family="Nunito, sans-serif">T ébu variable, pas fixe</text>
+
+                <!-- Flèche séparation -->
+                <text x="280" y="115" text-anchor="middle" font-size="18" font-weight="900" fill="#555" font-family="Nunito, sans-serif">≠</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>📏 La règle pour distinguer corps pur et mélange</h3>
+            <p>
+                • <strong>Corps pur</strong> : une seule espèce chimique. Température d'ébullition <strong>fixe et précise</strong>.<br>
+                &nbsp;&nbsp;→ L'eau pure bout toujours à exactement <strong>100,0 °C</strong> (à pression normale).<br><br>
+                • <strong>Mélange</strong> : plusieurs espèces chimiques différentes. Pas de température fixe.<br>
+                &nbsp;&nbsp;→ L'eau du robinet (mélange) bout à une température légèrement différente de 100,0 °C.<br><br>
+                Le <strong>test pratique</strong> : corps pur = T ébullition fixe et précise. Mélange = T ébullition variable.
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">H₂O</div>
+                <div class="cas-eq">Eau distillée</div>
+                <div class="cas-desc">Corps pur — une seule molécule, T ébu = 100,0 °C</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Au</div>
+                <div class="cas-eq">Or pur</div>
+                <div class="cas-desc">Corps pur — un seul atome, T fusion = 1064 °C</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Air</div>
+                <div class="cas-eq">N₂ + O₂ + …</div>
+                <div class="cas-desc">Mélange — plusieurs gaz, pas de T fixe</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Pièges classiques !</h3>
+            <p>
+                <strong>L'air est un MÉLANGE</strong> (78 % N₂, 21 % O₂, 1 % Ar, …), pas un corps pur !<br>
+                <strong>L'eau distillée est un corps pur</strong>, mais l'eau du robinet est un mélange (minéraux dissous).<br>
+                Le lait, le sang, le jus de fruit → tous des <strong>mélanges</strong>, même s'ils semblent homogènes.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Corps pur, mélange, propriétés</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Laquelle de ces substances est un corps pur ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">Eau du robinet</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">Eau distillée (H₂O)</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">Air</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">Lait</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> L'air est-il un corps pur ou un mélange ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">Corps pur, car transparent</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">Corps pur, car incolore</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">Mélange, car il contient N₂, O₂ et d'autres gaz</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">Mélange, car il est liquide</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Quelle propriété caractérise un corps pur ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">Il ne peut pas être solide</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">Sa température d'ébullition est fixe et précise</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">Il est toujours incolore</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">Il est toujours liquide à 20 °C</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> De l'eau bout à 99,7 °C au lieu de 100,0 °C. Que peut-on conclure ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">C'est de l'eau pure, les instruments sont imprécis</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">C'est de l'eau pure, elle bout toujours à cette température</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">C'est un mélange, car la T d'ébullition n'est pas exactement 100,0 °C</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">On ne peut pas conclure sans plus d'information</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Parmi ces substances, laquelle est un mélange ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Or pur (Au)</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Oxygène pur (O₂)</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Fer pur (Fe)</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Eau salée</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Corps pur, mélange, espèce chimique</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Un corps pur est composé d'une seule <input class="blank" id="f1a" placeholder="?" style="width:110px"> chimique.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                L'air est un <input class="blank" id="f2a" placeholder="?" style="width:110px"> car il contient plusieurs gaz différents (N₂, O₂, Ar…).
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                L'eau distillée est un corps <input class="blank" id="f3a" placeholder="?" style="width:80px"> ; elle bout à exactement <input class="blank" id="f3b" placeholder="?" style="width:70px"> °C.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Identifier corps pur ou mélange</div>
+                <div class="ex-stmt">
+                    Classe chacune des substances suivantes en « corps pur » ou « mélange » et justifie :<br>
+                    a) Eau distillée (H₂O) &nbsp; b) Limonade &nbsp; c) Cuivre pur (Cu) &nbsp; d) Lait
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Critère :</strong> Corps pur = une seule espèce chimique. Mélange = plusieurs espèces.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>a) Eau distillée :</strong> une seule molécule H₂O → <strong>Corps pur</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>b) Limonade :</strong> eau + sucre + CO₂ + arômes → <strong>Mélange</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>c) Cuivre pur :</strong> un seul atome Cu → <strong>Corps pur</strong></div></div>
+                <div class="sol-step"><div class="sol-num">5</div><div class="sol-text"><strong>d) Lait :</strong> eau + graisses + protéines + lactose → <strong>Mélange</strong></div></div>
+                <div class="final-ans">✅ Corps purs : eau distillée, cuivre pur &nbsp;|&nbsp; Mélanges : limonade, lait</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Le test de la température d'ébullition</div>
+                <div class="ex-stmt">
+                    Un chimiste mesure la température d'ébullition d'un liquide incolore.<br>
+                    Il obtient : 100,0 °C exactement, stable tout au long de l'ébullition.<br>
+                    a) Ce liquide est-il un corps pur ou un mélange ?<br>
+                    b) De quelle substance s'agit-il probablement ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> La T d'ébullition est <strong>fixe à 100,0 °C</strong> → c'est un <strong>corps pur</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Un corps pur incolore qui bout à 100,0 °C → c'est de l'<strong>eau distillée (H₂O)</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Si c'était un mélange (eau du robinet), la T d'ébullition ne serait pas exactement 100,0 °C.</div></div>
+                <div class="final-ans">✅ Corps pur — Eau distillée (H₂O) · T ébu = 100,0 °C exactement</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Analyse d'une situation (style CE1D)</div>
+                <div class="ex-stmt">
+                    Un élève ajoute du sel dans de l'eau distillée et mélange jusqu'à dissolution complète.
+                    Il observe que le liquide bout maintenant à 100,8 °C au lieu de 100,0 °C.<br>
+                    a) La solution obtenue est-elle un corps pur ou un mélange ?<br>
+                    b) Pourquoi la température d'ébullition a-t-elle changé ?<br>
+                    c) Cite les deux espèces chimiques présentes dans cette solution.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> La T d'ébullition n'est plus fixe à 100,0 °C → c'est un <strong>mélange</strong> (eau salée).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> En ajoutant du sel (NaCl), on a introduit une <strong>deuxième espèce chimique</strong> → la substance n'est plus un corps pur → sa T d'ébullition change.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> Les deux espèces : <strong>H₂O</strong> (eau) et <strong>NaCl</strong> (chlorure de sodium / sel de cuisine).</div></div>
+                <div class="final-ans">✅ Mélange · T change car 2 espèces (H₂O + NaCl)</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Corps pur composé ou simple ?</div>
+                <div class="bonus-stmt">
+                    Parmi les corps purs, on distingue les « corps purs simples » (un seul type d'atome) et les « corps purs composés » (plusieurs types d'atomes liés).<br>
+                    Classe : H₂O, O₂, NaCl, Fe, CO₂ en corps pur simple ou corps pur composé.
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Corps purs simples</strong> (un seul type d'atome) : <strong>O₂</strong> (oxygène), <strong>Fe</strong> (fer)</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Corps purs composés</strong> (plusieurs types d'atomes) : <strong>H₂O</strong> (H et O), <strong>NaCl</strong> (Na et Cl), <strong>CO₂</strong> (C et O)</div></div>
+                <div class="bonus-ans">
+                    Corps purs simples : O₂, Fe<br>
+                    Corps purs composés : H₂O, NaCl, CO₂<br>
+                    Dans les deux cas, c'est toujours UN corps pur (une seule espèce chimique) !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>🏆 Niveau 1 terminé !</h2>
+    <p>Tu sais distinguer corps pur et mélange !<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 2 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Mélanges &amp; Corps purs</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="chimie_melanges_niveau1.html" class="nav-btn current">▶ Niveau 1 — Corps pur/mélange</a>
+        <a href="chimie_melanges_niveau2.html" class="nav-btn">Niveau 2 — Homo/Hétérogène</a>
+        <a href="chimie_melanges_niveau3.html" class="nav-btn">Niveau 3 — Séparation</a>
+        <a href="chimie_melanges_niveau4.html" class="nav-btn">Niveau 4 — Dissolution</a>
+        <a href="chimie_melanges_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:2, 3:1, 4:2, 5:3};
+
+const QCM_OK = {
+    1:"✅ Exact ! L'eau distillée (H₂O) est un corps pur : une seule espèce chimique, T ébullition = 100,0 °C.",
+    2:"✅ Bravo ! L'air est un mélange : il contient N₂ (78%), O₂ (21%), Ar et d'autres gaz — plusieurs espèces !",
+    3:"✅ Correct ! La température d'ébullition fixe et précise est LA propriété clé d'un corps pur.",
+    4:"✅ Parfait ! T ≠ 100,0 °C → ce n'est pas de l'eau pure, c'est un mélange (eau du robinet par exemple).",
+    5:"✅ Exact ! L'eau salée est un mélange : elle contient deux espèces chimiques (H₂O + NaCl)."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. L'eau du robinet, l'air et le lait sont des mélanges. Seule l'eau distillée (H₂O) est un corps pur.",
+    2:"❌ Non. La transparence ou la couleur ne définissent pas un corps pur ! L'air est un mélange car il contient N₂, O₂, Ar et d'autres gaz.",
+    3:"❌ Non. Un corps pur peut être solide, liquide ou gazeux, et de n'importe quelle couleur. Sa propriété clé : T d'ébullition fixe et précise.",
+    4:"❌ Non. Si T ≠ 100,0 °C exact, c'est un mélange. Un corps pur a toujours une T d'ébullition fixe.",
+    5:"❌ Non. L'or, l'oxygène et le fer sont des corps purs (une seule espèce). L'eau salée est un mélange (H₂O + NaCl)."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['espece','espèce']],
+        msgOk:"✅ Un corps pur = une seule espèce chimique. C'est la définition fondamentale !",
+        msgErr:"❌ Attendu : 'espèce' (chimique). Un corps pur est composé d'une seule espèce chimique."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['melange','mélange']],
+        msgOk:"✅ L'air est bien un mélange ! Il contient N₂, O₂, Ar et d'autres gaz → plusieurs espèces chimiques.",
+        msgErr:"❌ Attendu : 'mélange'. L'air contient plusieurs gaz différents → c'est un mélange, pas un corps pur."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['pur'],['100']],
+        msgOk:"✅ L'eau distillée est un corps pur : elle bout à exactement 100,0 °C — température fixe et précise.",
+        msgErr:"❌ Attendus : 'pur' et '100'. L'eau distillée est un corps pur, T ébu = 100 °C."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_melanges_1', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

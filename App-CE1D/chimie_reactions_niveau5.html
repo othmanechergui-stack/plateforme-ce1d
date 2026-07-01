@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chimie — Transformations chimiques · Niveau 5 — Défi CE1D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#512DA8; --primary-dark:#311B92; --primary-mid:#7E57C2; --primary-bg:#EDE7F6;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#1A0A40 0%,#512DA8 55%,#B39DDB 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(26,10,64,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#512DA8; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#311B92; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#1A0A40,#512DA8,#B39DDB); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#1A0A40,#311B92); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#B39DDB; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        /* Fiches récap */
+        .recap-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin:18px 0; }
+        .recap-card { background:var(--primary-bg); border:2px solid #B39DDB; border-radius:14px; padding:16px; }
+        .recap-card h4 { font-size:.88rem; font-weight:900; color:var(--primary-dark); margin-bottom:10px; padding-bottom:6px; border-bottom:2px solid #B39DDB; }
+        .recap-card ul { list-style:none; padding:0; }
+        .recap-card li { font-size:.83rem; line-height:1.7; color:#444; padding-left:14px; position:relative; }
+        .recap-card li::before { content:'•'; position:absolute; left:0; color:var(--primary); font-weight:900; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #B39DDB; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        /* Pièges CE1D */
+        .pieges-list { display:flex; flex-direction:column; gap:12px; margin:18px 0; }
+        .piege-item { background:#FFF3E0; border:2px solid #FFB300; border-radius:12px; padding:14px 18px; }
+        .piege-num { display:inline-block; background:#FF9600; color:white; border-radius:5px; padding:1px 8px; font-size:.75rem; font-weight:900; margin-bottom:6px; }
+        .piege-title { font-size:.9rem; font-weight:900; color:#E65100; margin-bottom:4px; }
+        .piege-text { font-size:.85rem; line-height:1.6; color:#444; }
+        .piege-text strong { color:#BF360C; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #B39DDB; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:90px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#1A0A40,#512DA8,#B39DDB); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #1A0A40; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🔬 Transformations chimiques · Défi CE1D 🏆</h1>
+            <p>Niveau 5 · Récapitulatif complet · CE1D</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <span class="diff-label">Niveau 5 — Défi CE1D 🏆</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. FICHE DE RÉVISION -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📋</div>
+        <div>
+            <div class="card-title">Fiche de révision — Les 4 niveaux en un coup d'œil</div>
+            <div class="card-sub">N1 : notion · N2 : équation · N3 : conservation masse · N4 : combustion</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="recap-grid">
+            <div class="recap-card">
+                <h4>🔬 N1 — Notion</h4>
+                <ul>
+                    <li>Réactifs → Produits</li>
+                    <li>Indice : changement couleur, gaz, précipité</li>
+                    <li>Indice : chaleur/lumière, odeur</li>
+                    <li>Transformation chimique ≠ physique</li>
+                    <li>Changement d'état = physique</li>
+                </ul>
+            </div>
+            <div class="recap-card">
+                <h4>⚖️ N2 — Équation de réaction</h4>
+                <ul>
+                    <li>Notation : Réactifs → Produits</li>
+                    <li>Équilibrage par coefficients</li>
+                    <li>Ne jamais modifier les indices !</li>
+                    <li>Exemple : 2H₂ + O₂ → 2H₂O</li>
+                    <li>Compter les atomes des deux côtés</li>
+                </ul>
+            </div>
+            <div class="recap-card">
+                <h4>⚗️ N3 — Loi de Lavoisier</h4>
+                <ul>
+                    <li>"Rien ne se perd, rien ne se crée"</li>
+                    <li>m(réactifs) = m(produits)</li>
+                    <li>Si balance perd masse → gaz échappé</li>
+                    <li>Tout se transforme</li>
+                </ul>
+            </div>
+            <div class="recap-card">
+                <h4>🔥 N4 — Combustion</h4>
+                <ul>
+                    <li>Combustible + O₂ → CO₂ + H₂O + énergie</li>
+                    <li>Test CO₂ : eau de chaux se trouble</li>
+                    <li>Test H₂O : CuSO₄ blanc → bleu</li>
+                    <li>Oxydation lente = rouille (pas de flamme)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SVG récapitulatif -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" style="max-width:600px;width:100%">
+                <rect x="0" y="0" width="600" height="220" fill="#EDE7F6" rx="10"/>
+                <text x="300" y="22" text-anchor="middle" font-size="12" font-weight="900" fill="#311B92" font-family="Nunito, sans-serif">Récapitulatif — Réactions importantes CE1D</text>
+
+                <!-- En-têtes colonnes -->
+                <rect x="10" y="32" width="580" height="28" rx="6" fill="#512DA8"/>
+                <text x="160" y="51" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">Réaction</text>
+                <text x="360" y="51" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">Réactifs</text>
+                <text x="520" y="51" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">Produits</text>
+
+                <!-- Ligne 1 : Combustion carbone -->
+                <rect x="10" y="62" width="580" height="36" rx="4" fill="white" stroke="#B39DDB" stroke-width="1"/>
+                <text x="160" y="85" text-anchor="middle" font-size="11" font-weight="700" fill="#311B92" font-family="Nunito, sans-serif">Combustion du carbone</text>
+                <text x="360" y="85" text-anchor="middle" font-size="11" font-weight="700" fill="#555" font-family="Nunito, sans-serif">C + O₂</text>
+                <text x="520" y="85" text-anchor="middle" font-size="11" font-weight="700" fill="#555" font-family="Nunito, sans-serif">CO₂</text>
+
+                <!-- Ligne 2 : Combustion méthane -->
+                <rect x="10" y="100" width="580" height="36" rx="4" fill="#EDE7F6" stroke="#B39DDB" stroke-width="1"/>
+                <text x="160" y="123" text-anchor="middle" font-size="11" font-weight="700" fill="#311B92" font-family="Nunito, sans-serif">Combustion méthane</text>
+                <text x="360" y="123" text-anchor="middle" font-size="11" font-weight="700" fill="#555" font-family="Nunito, sans-serif">CH₄ + 2O₂</text>
+                <text x="520" y="123" text-anchor="middle" font-size="11" font-weight="700" fill="#555" font-family="Nunito, sans-serif">CO₂ + 2H₂O</text>
+
+                <!-- Ligne 3 : Formation eau -->
+                <rect x="10" y="138" width="580" height="36" rx="4" fill="white" stroke="#B39DDB" stroke-width="1"/>
+                <text x="160" y="161" text-anchor="middle" font-size="11" font-weight="700" fill="#311B92" font-family="Nunito, sans-serif">Formation de l'eau</text>
+                <text x="360" y="161" text-anchor="middle" font-size="11" font-weight="700" fill="#555" font-family="Nunito, sans-serif">2H₂ + O₂</text>
+                <text x="520" y="161" text-anchor="middle" font-size="11" font-weight="700" fill="#555" font-family="Nunito, sans-serif">2H₂O</text>
+
+                <!-- Ligne 4 : Rouille -->
+                <rect x="10" y="176" width="580" height="36" rx="4" fill="#EDE7F6" stroke="#B39DDB" stroke-width="1"/>
+                <text x="160" y="199" text-anchor="middle" font-size="11" font-weight="700" fill="#311B92" font-family="Nunito, sans-serif">Rouille (oxydation fer)</text>
+                <text x="360" y="199" text-anchor="middle" font-size="11" font-weight="700" fill="#555" font-family="Nunito, sans-serif">4Fe + 3O₂</text>
+                <text x="520" y="199" text-anchor="middle" font-size="11" font-weight="700" fill="#555" font-family="Nunito, sans-serif">2Fe₂O₃</text>
+            </svg>
+        </div>
+
+        <!-- 5 pièges CE1D -->
+        <div class="pieges-list">
+            <div class="piege-item">
+                <div class="piege-num">Piège 1</div>
+                <div class="piege-title">Transformation chimique ≠ physique !</div>
+                <div class="piege-text">La glace qui fond est <strong>PHYSIQUE</strong> (toujours H₂O). Le bois qui brûle est <strong>CHIMIQUE</strong> (CO₂ + H₂O formés).</div>
+            </div>
+            <div class="piege-item">
+                <div class="piege-num">Piège 2</div>
+                <div class="piege-title">Ne jamais modifier les indices !</div>
+                <div class="piege-text">On ne modifie <strong>JAMAIS</strong> les indices dans une équation pour l'équilibrer ! On ajoute des <strong>COEFFICIENTS</strong> devant les formules.</div>
+            </div>
+            <div class="piege-item">
+                <div class="piege-num">Piège 3</div>
+                <div class="piege-title">La rouille fait augmenter la masse !</div>
+                <div class="piege-text">Quand un métal rouille, sa masse <strong>AUGMENTE</strong> (il capte l'O₂ de l'air). C'est normal selon Lavoisier.</div>
+            </div>
+            <div class="piege-item">
+                <div class="piege-num">Piège 4</div>
+                <div class="piege-title">Le CO₂ est invisible !</div>
+                <div class="piege-text">Le CO₂ est <strong>INVISIBLE</strong>. L'eau de chaux (Ca(OH)₂) se trouble en présence de CO₂ → test de présence.</div>
+            </div>
+            <div class="piege-item">
+                <div class="piege-num">Piège 5</div>
+                <div class="piege-title">Combustion complète vs incomplète</div>
+                <div class="piege-text">Combustion complète → CO₂ + H₂O. Combustion incomplète (manque O₂) → <strong>CO</strong> (monoxyde de carbone, toxique !) + suies.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM STYLE CE1D -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">🏆</div>
+        <div>
+            <div class="card-title">QCM style CE1D — Transformations chimiques</div>
+            <div class="card-sub">5 questions · Niveau CE1D belge · Mélange des 4 niveaux</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Laquelle de ces transformations est une transformation CHIMIQUE ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">La glace qui fond</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">Le sel qui se dissout dans l'eau</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">Le bois qui brûle</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">L'eau qui s'évapore</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Dans l'équation : __ H₂ + O₂ → 2 H₂O, quel est le coefficient manquant devant H₂ ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">1</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">2</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">3</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">4</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Lors d'une réaction, 12 g de carbone C brûlent avec 32 g d'oxygène O₂. Quelle est la masse de CO₂ produit ? (Loi de Lavoisier)</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">12 g</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">32 g</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">44 g</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">20 g</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Pour tester la présence de CO₂ dans un gaz, on utilise :</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">Du CuSO₄ anhydre blanc</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">De l'eau distillée</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">De l'eau de chaux</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">Du papier pH</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Un morceau de fer de 28 g rouille complètement en absorbant de l'oxygène. La rouille formée (Fe₂O₃) pèse 40 g. Quelle masse d'oxygène a été absorbée ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">12 g</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">28 g</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">40 g</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">68 g</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS RÉCAP -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous — Récapitulatif CE1D</div>
+            <div class="card-sub">3 exercices · Mélange des 4 niveaux</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Dans une réaction chimique, les substances qui disparaissent sont les
+                <input class="blank" id="f1a" placeholder="?" style="width:100px">
+                et les substances formées sont les
+                <input class="blank" id="f1b" placeholder="?" style="width:100px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                La loi de Lavoisier dit que la masse des réactifs est
+                <input class="blank" id="f2a" placeholder="?" style="width:80px">
+                à la masse des produits. Si 10 g de réactifs réagissent, les produits ont une masse de
+                <input class="blank" id="f2b" placeholder="?" style="width:60px">
+                g.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Dans la combustion complète du méthane : CH₄ + 2O₂ →
+                <input class="blank" id="f3a" placeholder="?" style="width:70px">
+                + 2H₂O. Le test pour détecter le CO₂ consiste à troubler l'eau de
+                <input class="blank" id="f3b" placeholder="?" style="width:80px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES STYLE CE1D -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices style CE1D</div>
+            <div class="card-sub">3 exercices intégrateurs + 1 bonus · Questions type examen CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Équilibrer et vérifier</div>
+                <div class="ex-stmt">
+                    Équilibre les équations suivantes et vérifie en comptant les atomes :<br>
+                    a) H₂ + O₂ → H₂O<br>
+                    b) Fe + O₂ → Fe₂O₃
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) 2H₂ + O₂ → 2H₂O</strong><br>Vérif : gauche = 4H, 2O ; droite = 4H, 2O ✓</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) 4Fe + 3O₂ → 2Fe₂O₃</strong><br>Vérif : gauche = 4Fe, 6O ; droite = 4Fe, 6O ✓</div></div>
+                <div class="final-ans">✅ a) 2H₂ + O₂ → 2H₂O &nbsp;|&nbsp; b) 4Fe + 3O₂ → 2Fe₂O₃</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Loi de Lavoisier</div>
+                <div class="ex-stmt">
+                    On brûle 16 g de méthane CH₄ avec 64 g de dioxygène O₂. Les produits sont CO₂ et H₂O.<br>
+                    a) Quelle est la masse totale des produits ?<br>
+                    b) Si on obtient 44 g de CO₂, quelle masse d'eau H₂O a-t-on produite ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> m(produits) = m(réactifs) = 16 + 64 = <strong>80 g</strong> (loi de Lavoisier).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> m(H₂O) = 80 − 44 = <strong>36 g</strong> d'eau produite.</div></div>
+                <div class="final-ans">✅ a) 80 g de produits &nbsp;|&nbsp; b) 36 g de H₂O</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Style CE1D</div>
+                <div class="ex-stmt">
+                    Un élève mélange du bicarbonate de sodium (NaHCO₃) avec du vinaigre (CH₃COOH). Il observe : bulles, refroidissement, mousse blanche.<br>
+                    a) Ces observations indiquent-elles une réaction chimique ?<br>
+                    b) Nomme 2 indices observés.<br>
+                    c) Le gaz formé trouble l'eau de chaux. Quel est ce gaz ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Oui, réaction chimique (nouveaux corps formés).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Bulles (gaz formé) + refroidissement (énergie absorbée) — ou mousse (précipité).</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> CO₂ (dioxyde de carbone) — il trouble l'eau de chaux.</div></div>
+                <div class="final-ans">✅ a) Oui, chimique &nbsp;|&nbsp; b) Bulles + refroidissement &nbsp;|&nbsp; c) CO₂</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Combustion incomplète</div>
+                <div class="bonus-stmt">
+                    Dans un garage mal ventilé, un moteur brûle de l'essence (hydrocarbure) en manque d'oxygène.<br>
+                    a) Que forme-t-on plutôt que CO₂ ?<br>
+                    b) Pourquoi est-ce dangereux ?<br>
+                    c) Quelle est la différence entre combustion complète et incomplète ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> CO (monoxyde de carbone) + suies.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b)</strong> Le CO est un gaz toxique <strong>inodore et incolore</strong> → intoxication mortelle possible.</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>c)</strong> Complète (assez O₂) : → CO₂ + H₂O. Incomplète (pas assez O₂) : → CO + suies + H₂O.</div></div>
+                <div class="bonus-ans">
+                    Combustion complète → CO₂ + H₂O (inoffensif).<br>
+                    Combustion incomplète → CO + suies (CO = toxique, danger mortel !)
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>🏆 Défi Transformations chimiques réussi !</h2>
+    <p>Bravo ! Tu maîtrises les réactions chimiques, l'équilibrage, la loi de Lavoisier et la combustion.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Chimie · Transformations chimiques</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="chimie_reactions_niveau1.html" class="nav-btn">N1 Notion</a>
+        <a href="chimie_reactions_niveau2.html" class="nav-btn">N2 Équation</a>
+        <a href="chimie_reactions_niveau3.html" class="nav-btn">N3 Conservation masse</a>
+        <a href="chimie_reactions_niveau4.html" class="nav-btn">N4 Combustion</a>
+        <a href="chimie_reactions_niveau5.html" class="nav-btn current">▶ N5 Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:2, 2:1, 3:2, 4:2, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! La combustion est chimique : de nouveaux corps sont formés (CO₂, H₂O). Les autres sont des transformations physiques.",
+    2:"✅ Exact ! 2H₂ + O₂ → 2H₂O. Vérif : gauche = 4H + 2O ; droite = 4H + 2O ✓",
+    3:"✅ Bravo ! Loi de Lavoisier : m(produits) = m(réactifs). 12 + 32 = 44 g de CO₂.",
+    4:"✅ Correct ! L'eau de chaux (Ca(OH)₂) se trouble en présence de CO₂. C'est le test classique du dioxyde de carbone.",
+    5:"✅ Parfait ! Loi de Lavoisier : m(O₂) = m(rouille) − m(fer) = 40 − 28 = 12 g."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Fondre, se dissoudre et s'évaporer sont des changements physiques (même espèce chimique). Brûler crée de nouvelles espèces → chimique.",
+    2:"❌ Non. Il faut 2H₂ : gauche = 4H + 2O. Droite = 2H₂O = 4H + 2O ✓. Le coefficient est 2.",
+    3:"❌ Non. Loi de Lavoisier : m(réactifs) = m(produits). 12 g C + 32 g O₂ = 44 g CO₂.",
+    4:"❌ Non. Le test du CO₂ = eau de chaux qui se trouble. CuSO₄ anhydre blanc → bleu teste la présence d'EAU.",
+    5:"❌ Non. Lavoisier : m(réactifs) = m(produits). m(Fe) + m(O₂) = m(Fe₂O₃). 28 + m(O₂) = 40 → m(O₂) = 12 g."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['reactifs','réactifs'],['produits']],
+        msgOk:"✅ Réactifs → disparaissent. Produits → apparaissent. Notation : Réactifs → Produits.",
+        msgErr:"❌ Attendus : 'réactifs' et 'produits'."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['egale','égale','egal','égal'],['10']],
+        msgOk:"✅ Lavoisier : m(réactifs) = m(produits). Rien ne se perd, rien ne se crée !",
+        msgErr:"❌ Attendus : 'égale' et '10'. Lavoisier : m(réactifs) = m(produits)."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['CO2','CO₂'],['chaux']],
+        msgOk:"✅ CH₄ + 2O₂ → CO₂ + 2H₂O. Test CO₂ = eau de chaux qui se trouble.",
+        msgErr:"❌ Attendus : 'CO₂' et 'chaux'. Combustion méthane → CO₂ + H₂O. Test CO₂ = eau de chaux."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_reactions_5', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

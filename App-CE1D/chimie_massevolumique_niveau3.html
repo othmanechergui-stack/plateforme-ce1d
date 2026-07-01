@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chimie — Masse volumique · Niveau 3 — Conversions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#F57C00; --primary-dark:#E65100; --primary-mid:#FFA726; --primary-bg:#FFF3E0;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#7A2B00 0%,#F57C00 55%,#FFCC80 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(122,43,0,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#F57C00; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#E65100; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#7A2B00,#F57C00,#FFCC80); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#7A2B00,#E65100); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#FFCC80; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #FFCC80; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #FFCC80; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#7A2B00,#F57C00,#FFCC80); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #7A2B00; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>⚖️ Masse volumique · Conversions</h1>
+            <p>Niveau 3 · kg/m³ ↔ g/cm³ · m³ ↔ L ↔ cm³ · Facteurs</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 3 — Intermédiaire</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Unités et conversions</div>
+            <div class="card-sub">kg/m³ ↔ g/cm³ · m³ ↔ L ↔ cm³ · Facteurs de conversion</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            En masse volumique, on utilise deux systèmes d'unités : <strong>kg/m³</strong> (système international)
+            et <strong>g/cm³</strong> (plus pratique en chimie). Il faut savoir passer de l'un à l'autre,
+            et aussi convertir les volumes entre <strong>m³</strong>, <strong>L</strong> et <strong>cm³</strong>.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Les équivalences à retenir</h3>
+            <p>
+                <strong>1 g/cm³ = 1 000 kg/m³</strong><br>
+                <strong>1 m³ = 10⁶ cm³ = 1 000 000 cm³</strong><br>
+                <strong>1 L = 1 dm³ = 1 000 cm³</strong><br>
+                <strong>1 mL = 1 cm³</strong><br>
+                <strong>1 L = 0,001 m³</strong>
+            </p>
+        </div>
+
+        <!-- SVG : tableau de conversions -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 250" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="250" fill="#FFF3E0" rx="10"/>
+                <text x="280" y="20" text-anchor="middle" font-size="12" font-weight="900" fill="#7A2B00" font-family="Nunito, sans-serif">Conversions des unités de masse volumique et volume</text>
+
+                <!-- Masse volumique -->
+                <rect x="30" y="32" width="220" height="85" rx="8" fill="#E65100"/>
+                <text x="140" y="52" text-anchor="middle" font-size="11" font-weight="900" fill="#FFCC80" font-family="Nunito, sans-serif">MASSE VOLUMIQUE</text>
+                <text x="140" y="72" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Nunito, sans-serif">g/cm³</text>
+                <text x="140" y="92" text-anchor="middle" font-size="10" font-weight="700" fill="#FFCC80" font-family="Nunito, sans-serif">× 1 000</text>
+                <text x="140" y="108" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Nunito, sans-serif">kg/m³</text>
+
+                <!-- Flèches masse vol -->
+                <text x="270" y="70" text-anchor="middle" font-size="18" font-weight="900" fill="#F57C00" font-family="Nunito, sans-serif">⇄</text>
+                <text x="270" y="85" text-anchor="middle" font-size="9" font-weight="700" fill="#7A2B00" font-family="Nunito, sans-serif">×1000</text>
+                <text x="270" y="98" text-anchor="middle" font-size="9" font-weight="700" fill="#7A2B00" font-family="Nunito, sans-serif">÷1000</text>
+
+                <!-- Volume -->
+                <rect x="310" y="32" width="220" height="85" rx="8" fill="#F57C00"/>
+                <text x="420" y="52" text-anchor="middle" font-size="11" font-weight="900" fill="#FFCC80" font-family="Nunito, sans-serif">VOLUME</text>
+                <text x="420" y="68" text-anchor="middle" font-size="11" font-weight="700" fill="white" font-family="Nunito, sans-serif">1 m³ = 1 000 000 cm³</text>
+                <text x="420" y="85" text-anchor="middle" font-size="11" font-weight="700" fill="white" font-family="Nunito, sans-serif">1 L = 1 000 cm³</text>
+                <text x="420" y="102" text-anchor="middle" font-size="11" font-weight="700" fill="white" font-family="Nunito, sans-serif">1 mL = 1 cm³</text>
+                <text x="420" y="113" text-anchor="middle" font-size="10" font-weight="700" fill="#FFCC80" font-family="Nunito, sans-serif">1 L = 0,001 m³</text>
+
+                <!-- Schéma volumes -->
+                <rect x="30" y="135" width="500" height="100" rx="8" fill="white" stroke="#FFCC80" stroke-width="2"/>
+                <text x="280" y="155" text-anchor="middle" font-size="11" font-weight="900" fill="#7A2B00" font-family="Nunito, sans-serif">Chaîne de conversion des volumes</text>
+
+                <rect x="50" y="165" width="80" height="30" rx="5" fill="#7A2B00"/>
+                <text x="90" y="184" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">m³</text>
+
+                <text x="148" y="184" text-anchor="middle" font-size="10" font-weight="700" fill="#E65100" font-family="Nunito, sans-serif">× 1 000</text>
+                <line x1="130" y1="180" x2="170" y2="180" stroke="#E65100" stroke-width="2" marker-end="url(#arr)"/>
+
+                <rect x="175" y="165" width="80" height="30" rx="5" fill="#E65100"/>
+                <text x="215" y="184" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">dm³ = L</text>
+
+                <text x="273" y="184" text-anchor="middle" font-size="10" font-weight="700" fill="#F57C00" font-family="Nunito, sans-serif">× 1 000</text>
+                <line x1="255" y1="180" x2="295" y2="180" stroke="#F57C00" stroke-width="2"/>
+
+                <rect x="300" y="165" width="80" height="30" rx="5" fill="#F57C00"/>
+                <text x="340" y="184" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">cm³ = mL</text>
+
+                <text x="430" y="175" text-anchor="middle" font-size="9" font-weight="700" fill="#888" font-family="Nunito, sans-serif">÷ pour revenir</text>
+                <text x="430" y="190" text-anchor="middle" font-size="9" font-weight="700" fill="#888" font-family="Nunito, sans-serif">en arrière</text>
+
+                <text x="280" y="228" text-anchor="middle" font-size="10" font-weight="700" fill="#555" font-family="Nunito, sans-serif">Exemple : 2,5 L = 2 500 cm³ = 2 500 mL = 0,0025 m³</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔢 Règle de conversion des masses volumiques</h3>
+            <p>
+                • Pour convertir <strong>g/cm³ → kg/m³</strong> : multiplier par <strong>1 000</strong><br>
+                Exemple : 7,9 g/cm³ × 1 000 = <strong>7 900 kg/m³</strong><br><br>
+                • Pour convertir <strong>kg/m³ → g/cm³</strong> : diviser par <strong>1 000</strong><br>
+                Exemple : 1 000 kg/m³ ÷ 1 000 = <strong>1 g/cm³</strong>
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">1 g/cm³</div>
+                <div class="cas-eq">= 1 000 kg/m³</div>
+                <div class="cas-desc">L'eau : référence universelle</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">1 m³</div>
+                <div class="cas-eq">= 1 000 000 cm³</div>
+                <div class="cas-desc">= 10⁶ cm³ = 1 000 L</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">1 L</div>
+                <div class="cas-eq">= 1 000 cm³</div>
+                <div class="cas-desc">= 1 dm³ = 0,001 m³</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège classique : 1 m³ ≠ 100 cm³ !</h3>
+            <p>
+                1 m = 100 cm, MAIS 1 m³ = 100³ cm³ = <strong>1 000 000 cm³</strong> !<br>
+                C'est le cube qui multiplie les conversions. 100 × 100 × 100 = 1 000 000.<br>
+                Même erreur pour 1 m² = 10 000 cm² (pas 100 cm²).
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Conversions d'unités</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Convertis 2,7 g/cm³ en kg/m³.</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">2,7 kg/m³</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">270 kg/m³</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">2 700 kg/m³</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">27 000 kg/m³</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Convertis 8 900 kg/m³ en g/cm³.</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">8 900 g/cm³</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">89 g/cm³</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">8,9 g/cm³</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">0,89 g/cm³</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Combien de cm³ y a-t-il dans 1 m³ ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">100 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">10 000 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">1 000 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">1 000 000 cm³</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Convertis 3,5 L en cm³.</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">3,5 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">35 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">350 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">3 500 cm³</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Convertis 500 cm³ en litres.</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">5 000 L</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">50 L</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">0,5 L</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">5 L</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Facteurs de conversion essentiels</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                1 g/cm³ = <input class="blank" id="f1a" placeholder="?" style="width:80px"> kg/m³.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                1 m³ = <input class="blank" id="f2a" placeholder="?" style="width:110px"> cm³.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                1 L = <input class="blank" id="f3a" placeholder="?" style="width:70px"> cm³.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices de conversion · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Conversion g/cm³ ↔ kg/m³</div>
+                <div class="ex-stmt">
+                    Convertis les masses volumiques suivantes :<br>
+                    a) 19,3 g/cm³ (or) en kg/m³<br>
+                    b) 13 600 kg/m³ (mercure) en g/cm³<br>
+                    c) 0,9 g/cm³ (huile) en kg/m³
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Règle :</strong> g/cm³ × 1 000 = kg/m³ | kg/m³ ÷ 1 000 = g/cm³</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>a)</strong> 19,3 × 1 000 = <strong>19 300 kg/m³</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>b)</strong> 13 600 ÷ 1 000 = <strong>13,6 g/cm³</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>c)</strong> 0,9 × 1 000 = <strong>900 kg/m³</strong></div></div>
+                <div class="final-ans">✅ a) 19 300 kg/m³ &nbsp;|&nbsp; b) 13,6 g/cm³ &nbsp;|&nbsp; c) 900 kg/m³</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Conversion de volumes</div>
+                <div class="ex-stmt">
+                    Convertis les volumes suivants :<br>
+                    a) 2,5 L en cm³<br>
+                    b) 4 500 cm³ en L<br>
+                    c) 0,003 m³ en L
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Règles :</strong> 1 L = 1 000 cm³ | 1 m³ = 1 000 L</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>a)</strong> 2,5 L × 1 000 = <strong>2 500 cm³</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>b)</strong> 4 500 cm³ ÷ 1 000 = <strong>4,5 L</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>c)</strong> 0,003 m³ × 1 000 = <strong>3 L</strong></div></div>
+                <div class="final-ans">✅ a) 2 500 cm³ &nbsp;|&nbsp; b) 4,5 L &nbsp;|&nbsp; c) 3 L</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Calcul avec conversion d'unités (style CE1D)</div>
+                <div class="ex-stmt">
+                    Un cube de cuivre (ρ = 8,9 g/cm³) a un volume de 0,5 L.<br>
+                    a) Convertis 0,5 L en cm³.<br>
+                    b) Calcule la masse du cube de cuivre en grammes, puis en kilogrammes.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> 0,5 L × 1 000 = <strong>500 cm³</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Formule :</strong> m = ρ × V = 8,9 × 500 = <strong>4 450 g</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Conversion :</strong> 4 450 g ÷ 1 000 = <strong>4,45 kg</strong></div></div>
+                <div class="final-ans">✅ V = 500 cm³ | m = 4 450 g = 4,45 kg</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Cohérence des unités</div>
+                <div class="bonus-stmt">
+                    Un élève calcule : ρ = m / V = 500 kg / 50 cm³ = 10 kg/cm³.<br>
+                    a) Quelle erreur a-t-il commise ?<br>
+                    b) Convertis 50 cm³ en m³, puis recalcule correctement ρ en kg/m³.
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> L'élève a mélangé les unités : kg avec cm³. Si on utilise kg/m³, le volume doit être en m³.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b)</strong> 50 cm³ ÷ 1 000 000 = <strong>0,000 05 m³</strong> (= 5 × 10⁻⁵ m³)</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text">ρ = 500 / 0,00005 = <strong>10 000 000 kg/m³</strong> (= 10 000 g/cm³ — très dense, pas réaliste pour un matériau courant !)</div></div>
+                <div class="bonus-ans">
+                    Erreur : unités mélangées. Toujours s'assurer que kg va avec m³, et g avec cm³ !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 3 terminé !</h2>
+    <p>🏆 Niveau 3 terminé ! Tu maîtrises les conversions d'unités.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 4 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Chimie · Masse volumique</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="chimie_massevolumique_niveau1.html" class="nav-btn">Niveau 1 — Définition</a>
+        <a href="chimie_massevolumique_niveau2.html" class="nav-btn">Niveau 2 — Calculs</a>
+        <a href="chimie_massevolumique_niveau3.html" class="nav-btn current">▶ Niveau 3 — Conversions</a>
+        <a href="chimie_massevolumique_niveau4.html" class="nav-btn">Niveau 4 — Flottaison</a>
+        <a href="chimie_massevolumique_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:2, 2:2, 3:3, 4:3, 5:2};
+
+const QCM_OK = {
+    1:"✅ Exact ! 2,7 g/cm³ × 1 000 = 2 700 kg/m³. Pour passer de g/cm³ à kg/m³, on multiplie par 1 000.",
+    2:"✅ Bravo ! 8 900 kg/m³ ÷ 1 000 = 8,9 g/cm³. Pour passer de kg/m³ à g/cm³, on divise par 1 000. C'est du cuivre !",
+    3:"✅ Correct ! 1 m³ = 1 000 000 cm³ = 10⁶ cm³. Attention : 1 m = 100 cm, donc 1 m³ = 100³ cm³ !",
+    4:"✅ Parfait ! 3,5 L × 1 000 = 3 500 cm³. 1 litre = 1 000 cm³.",
+    5:"✅ Exact ! 500 cm³ ÷ 1 000 = 0,5 L. On divise par 1 000 pour passer de cm³ à litres."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Pour convertir g/cm³ → kg/m³, on multiplie par 1 000. 2,7 × 1 000 = 2 700 kg/m³.",
+    2:"❌ Non. Pour convertir kg/m³ → g/cm³, on divise par 1 000. 8 900 ÷ 1 000 = 8,9 g/cm³.",
+    3:"❌ Non. 1 m³ = 1 000 000 cm³ (pas 100 ni 1 000 !). Car 1 m = 100 cm → 1 m³ = 100³ = 1 000 000 cm³.",
+    4:"❌ Non. 1 L = 1 000 cm³. Donc 3,5 L = 3,5 × 1 000 = 3 500 cm³.",
+    5:"❌ Non. 500 cm³ ÷ 1 000 = 0,5 L. Pour passer de cm³ à L, on divise par 1 000."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['1000']],
+        msgOk:"✅ 1 g/cm³ = 1 000 kg/m³. C'est le facteur de conversion fondamental !",
+        msgErr:"❌ Attendu : 1000. 1 g/cm³ × 1 000 = 1 000 kg/m³."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['1000000','1 000 000']],
+        msgOk:"✅ 1 m³ = 1 000 000 cm³ = 10⁶ cm³. Car 1 m = 100 cm → (100)³ = 1 000 000.",
+        msgErr:"❌ Attendu : 1000000. 1 m³ = 1 000 000 cm³. Attention au cube !"
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['1000']],
+        msgOk:"✅ 1 L = 1 000 cm³. Et aussi : 1 L = 1 dm³ = 1 000 mL.",
+        msgErr:"❌ Attendu : 1000. 1 L = 1 000 cm³ = 1 000 mL."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_massevolumique_3', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

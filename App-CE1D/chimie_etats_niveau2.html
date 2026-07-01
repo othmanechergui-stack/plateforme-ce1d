@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chimie — États de la matière · Niveau 2 — Changements d'état</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#1565C0; --primary-dark:#0D47A1; --primary-mid:#42A5F5; --primary-bg:#E3F2FD;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#061E46 0%,#1565C0 55%,#90CAF9 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(6,30,70,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#1565C0; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#0D47A1; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#061E46,#1565C0,#90CAF9); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#061E46,#0D47A1); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1rem; font-weight:900; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:110px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#061E46,#1565C0,#90CAF9); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #061E46; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🧊 États de la matière · Changements d'état</h1>
+            <p>Niveau 2 · Fusion · Solidification · Vaporisation · Condensation · Sublimation</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 2 — Élémentaire</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Les changements d'état</div>
+            <div class="card-sub">6 changements · Températures de l'eau · Fusion · Vaporisation · Sublimation</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Un <strong>changement d'état</strong> se produit quand la matière passe d'un état à un autre (solide, liquide, gaz).
+            Il existe <strong>6 changements d'état</strong>, chacun avec un nom précis à connaître pour le CE1D.
+            Ces changements se produisent à des <strong>températures précises</strong> pour chaque corps pur.
+        </p>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">🧊 → 💧</div>
+                <div class="cas-eq">FUSION</div>
+                <div class="cas-desc">Solide → Liquide<br>Pour l'eau : 0 °C</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">💧 → 🧊</div>
+                <div class="cas-eq">SOLIDIFICATION</div>
+                <div class="cas-desc">Liquide → Solide<br>Pour l'eau : 0 °C (congélation)</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">💧 → 💨</div>
+                <div class="cas-eq">VAPORISATION</div>
+                <div class="cas-desc">Liquide → Gaz<br>Pour l'eau : 100 °C (ébullition)</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">💨 → 💧</div>
+                <div class="cas-eq">CONDENSATION</div>
+                <div class="cas-desc">Gaz → Liquide<br>Pour l'eau : 100 °C (liquéfaction)</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🧊 → 💨</div>
+                <div class="cas-eq">SUBLIMATION</div>
+                <div class="cas-desc">Solide → Gaz<br>Directement, sans passer par liquide</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">💨 → 🧊</div>
+                <div class="cas-eq">DÉPOSITION</div>
+                <div class="cas-desc">Gaz → Solide<br>Inverse de la sublimation</div>
+            </div>
+        </div>
+
+        <!-- SVG : schéma triangulaire des changements d'état -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 280" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="280" fill="#E3F2FD" rx="10"/>
+                <text x="280" y="20" text-anchor="middle" font-size="13" font-weight="900" fill="#0D47A1" font-family="Nunito, sans-serif">Les 6 changements d'état</text>
+
+                <!-- Sommets du triangle -->
+                <!-- Solide : bas gauche -->
+                <rect x="30" y="200" width="110" height="50" rx="12" fill="#1565C0"/>
+                <text x="85" y="221" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Nunito, sans-serif">🧊 SOLIDE</text>
+                <text x="85" y="238" text-anchor="middle" font-size="10" font-weight="700" fill="#90CAF9" font-family="Nunito, sans-serif">forme ✓ vol ✓</text>
+
+                <!-- Liquide : bas droit -->
+                <rect x="415" y="200" width="115" height="50" rx="12" fill="#1565C0"/>
+                <text x="472" y="221" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Nunito, sans-serif">💧 LIQUIDE</text>
+                <text x="472" y="238" text-anchor="middle" font-size="10" font-weight="700" fill="#90CAF9" font-family="Nunito, sans-serif">forme ✗ vol ✓</text>
+
+                <!-- Gaz : haut centre -->
+                <rect x="215" y="28" width="130" height="50" rx="12" fill="#1565C0"/>
+                <text x="280" y="49" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Nunito, sans-serif">💨 GAZ</text>
+                <text x="280" y="66" text-anchor="middle" font-size="10" font-weight="700" fill="#90CAF9" font-family="Nunito, sans-serif">forme ✗ vol ✗</text>
+
+                <!-- Flèche Fusion (solide → liquide) -->
+                <line x1="145" y1="220" x2="410" y2="220" stroke="#42A5F5" stroke-width="2.5" marker-end="url(#arr)"/>
+                <text x="278" y="213" text-anchor="middle" font-size="11" font-weight="900" fill="#0D47A1" font-family="Nunito, sans-serif">FUSION (0 °C)</text>
+
+                <!-- Flèche Solidification (liquide → solide) -->
+                <line x1="410" y1="235" x2="145" y2="235" stroke="#90CAF9" stroke-width="2.5" marker-end="url(#arr2)"/>
+                <text x="278" y="248" text-anchor="middle" font-size="11" font-weight="900" fill="#555" font-family="Nunito, sans-serif">SOLIDIFICATION (0 °C)</text>
+
+                <!-- Flèche Vaporisation (liquide → gaz) -->
+                <line x1="450" y1="196" x2="330" y2="82" stroke="#42A5F5" stroke-width="2.5" marker-end="url(#arr)"/>
+                <text x="415" y="130" text-anchor="middle" font-size="10" font-weight="900" fill="#0D47A1" font-family="Nunito, sans-serif">VAPORISATION</text>
+                <text x="415" y="143" text-anchor="middle" font-size="10" font-weight="700" fill="#0D47A1" font-family="Nunito, sans-serif">(100 °C)</text>
+
+                <!-- Flèche Condensation (gaz → liquide) -->
+                <line x1="310" y1="82" x2="430" y2="196" stroke="#90CAF9" stroke-width="2.5" marker-end="url(#arr2)"/>
+                <text x="348" y="155" text-anchor="middle" font-size="10" font-weight="900" fill="#555" font-family="Nunito, sans-serif">CONDENSATION</text>
+                <text x="348" y="168" text-anchor="middle" font-size="10" font-weight="700" fill="#555" font-family="Nunito, sans-serif">(100 °C)</text>
+
+                <!-- Flèche Sublimation (solide → gaz) -->
+                <line x1="110" y1="196" x2="232" y2="82" stroke="#42A5F5" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#arr)"/>
+                <text x="148" y="130" text-anchor="middle" font-size="10" font-weight="900" fill="#0D47A1" font-family="Nunito, sans-serif">SUBLIMATION</text>
+
+                <!-- Flèche Déposition (gaz → solide) -->
+                <line x1="228" y1="82" x2="90" y2="196" stroke="#90CAF9" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#arr2)"/>
+                <text x="148" y="160" text-anchor="middle" font-size="10" font-weight="900" fill="#555" font-family="Nunito, sans-serif">DÉPOSITION</text>
+
+                <defs>
+                    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                        <path d="M0,0 L0,6 L8,3 z" fill="#42A5F5"/>
+                    </marker>
+                    <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                        <path d="M0,0 L0,6 L8,3 z" fill="#90CAF9"/>
+                    </marker>
+                </defs>
+            </svg>
+        </div>
+
+        <div class="def-box">
+            <h3>📌 La fusion — Définition</h3>
+            <p>
+                La <strong>fusion</strong> est le passage de l'état <strong>solide à l'état liquide</strong>.<br>
+                Elle se produit à une température précise appelée <strong>point de fusion</strong>.<br>
+                Pour l'eau pure : point de fusion = <strong>0 °C</strong> (à pression normale).<br>
+                Pendant la fusion, la température reste <strong>constante</strong> jusqu'à ce que tout le solide soit fondu.
+            </p>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔢 Températures de changement d'état de l'eau</h3>
+            <p>
+                • <strong>Fusion et solidification</strong> : à <strong>0 °C</strong> pour l'eau (à pression normale).<br>
+                • <strong>Vaporisation (ébullition) et condensation</strong> : à <strong>100 °C</strong> pour l'eau à pression normale.<br><br>
+                Attention : chaque substance a ses propres températures de changement d'état !<br>
+                Le fer fond à 1 538 °C, l'azote à −196 °C, etc.
+            </p>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège : Vaporisation ≠ Évaporation !</h3>
+            <p>
+                • <strong>Évaporation</strong> : se produit à <strong>toute température</strong> (linge qui sèche à 20 °C, flaque qui disparaît...).<br>
+                • <strong>Vaporisation (ébullition)</strong> : se produit à <strong>100 °C</strong> pour l'eau — bulles visibles dans tout le liquide.<br>
+                <strong>L'évaporation est lente et se passe à la surface. L'ébullition est rapide et se passe dans tout le volume.</strong>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Changements d'état et températures</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Comment s'appelle le changement d'état solide → liquide ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">Vaporisation</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">Condensation</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">Fusion</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">Sublimation</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> À quelle température l'eau liquide se transforme-t-elle en vapeur (à pression normale) ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">0 °C</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">37 °C</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">100 °C</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">273 °C</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> De la vapeur d'eau qui se refroidit et redevient liquide : quel est ce changement d'état ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">Fusion</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">Solidification</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">Sublimation</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">Condensation</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> La neige carbonique (CO₂ solide) passe directement à l'état gazeux sans fondre. Comment appelle-t-on ce phénomène ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">Déposition</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">Sublimation</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">Vaporisation</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">Évaporation</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Du linge mouillé sèche à 20 °C. Ce phénomène est-il une vaporisation (ébullition) ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Oui, c'est une vaporisation</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">Non, c'est une évaporation (à toute température)</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">Non, c'est une sublimation</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Non, c'est une condensation</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Noms des changements d'état</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Solide → Liquide s'appelle la <input class="blank" id="f1a" placeholder="?" style="width:120px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Liquide → Gaz s'appelle la <input class="blank" id="f2a" placeholder="?" style="width:130px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Gaz → Liquide s'appelle la <input class="blank" id="f3a" placeholder="?" style="width:130px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Nommer les changements d'état</div>
+                <div class="ex-stmt">
+                    Donne le nom de chaque changement d'état :<br>
+                    a) La glace fond dans un verre &nbsp; b) L'eau bout dans une casserole &nbsp; c) La rosée se forme sur les feuilles le matin
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> La glace (solide) fond → liquide = <strong>Fusion</strong> (à 0 °C)</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> L'eau (liquide) bout → vapeur (gaz) = <strong>Vaporisation / Ébullition</strong> (à 100 °C)</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> La vapeur d'eau (gaz) se refroidit → gouttelettes d'eau (liquide) = <strong>Condensation</strong></div></div>
+                <div class="final-ans">✅ a) Fusion &nbsp;|&nbsp; b) Vaporisation &nbsp;|&nbsp; c) Condensation</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Températures et changements d'état</div>
+                <div class="ex-stmt">
+                    On chauffe un glaçon depuis −10 °C jusqu'à 120 °C.<br>
+                    a) À quelle température le glaçon commence-t-il à fondre ?<br>
+                    b) À quelle température l'eau commence-t-elle à bouillir ?<br>
+                    c) Nomme les deux changements d'état qui se produisent.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Le glaçon commence à fondre à <strong>0 °C</strong> (point de fusion de l'eau).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> L'eau commence à bouillir à <strong>100 °C</strong> (point d'ébullition de l'eau à pression normale).</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> Les deux changements : <strong>Fusion</strong> à 0 °C (solide → liquide) et <strong>Vaporisation</strong> à 100 °C (liquide → gaz).</div></div>
+                <div class="final-ans">✅ a) 0 °C &nbsp;|&nbsp; b) 100 °C &nbsp;|&nbsp; c) Fusion puis Vaporisation</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Sens inverse (style CE1D)</div>
+                <div class="ex-stmt">
+                    Pour chaque changement d'état, donne le phénomène inverse :<br>
+                    a) Inverse de la fusion &nbsp; b) Inverse de la vaporisation &nbsp; c) Inverse de la sublimation
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Inverse de la fusion (S→L) = <strong>Solidification / Congélation</strong> (L→S). Pour l'eau : à 0 °C.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Inverse de la vaporisation (L→G) = <strong>Condensation / Liquéfaction</strong> (G→L). Pour l'eau : à 100 °C.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> Inverse de la sublimation (S→G) = <strong>Déposition</strong> (G→S). Exemple : givre qui se forme directement.</div></div>
+                <div class="final-ans">✅ a) Solidification &nbsp;|&nbsp; b) Condensation &nbsp;|&nbsp; c) Déposition</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Situations de la vie quotidienne</div>
+                <div class="bonus-stmt">
+                    Identifie le changement d'état dans chaque situation :<br>
+                    a) Le givre qui se forme sur le pare-brise (vapeur → solide directement)<br>
+                    b) Les nuages qui se forment dans le ciel<br>
+                    c) Un glaçon qui "fume" dans un verre (glace carbonique en réalité, mais aussi : brume autour d'un verre froid)
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> Vapeur d'eau → givre (solide) directement = <strong>Déposition</strong>. La vapeur passe de gaz à solide sans passer par l'état liquide.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b)</strong> Vapeur d'eau (gaz) → gouttelettes d'eau (liquide) = <strong>Condensation</strong>. C'est la vapeur qui se condense en altitude (refroidissement).</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>c)</strong> La "brume" autour d'un verre froid = <strong>Condensation</strong> : la vapeur d'eau de l'air se condense sur la surface froide du verre.</div></div>
+                <div class="bonus-ans">
+                    Givre : Déposition (G→S) · Nuages : Condensation (G→L) · Brume sur verre : Condensation (G→L)
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 2 terminé !</h2>
+    <p>🏆 Tu connais les 6 changements d'état !<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 3 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Chimie · États de la matière</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="chimie_etats_niveau1.html" class="nav-btn">Niveau 1 — Les 3 états</a>
+        <a href="chimie_etats_niveau2.html" class="nav-btn current">▶ Niveau 2 — Changements d'état</a>
+        <a href="chimie_etats_niveau3.html" class="nav-btn">Niveau 3 — Courbe de chauffe</a>
+        <a href="chimie_etats_niveau4.html" class="nav-btn">Niveau 4 — Eau dans la nature</a>
+        <a href="chimie_etats_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:2, 2:2, 3:3, 4:1, 5:1};
+
+const QCM_OK = {
+    1:"✅ Exact ! La fusion = solide → liquide. Pour l'eau, cela se produit à 0 °C.",
+    2:"✅ Bravo ! L'eau bout (vaporisation) à 100 °C à pression normale.",
+    3:"✅ Correct ! Gaz → Liquide = Condensation (aussi appelée liquéfaction). Pour l'eau : à 100 °C.",
+    4:"✅ Parfait ! Solide → Gaz directement = Sublimation. La neige carbonique (CO₂) en est l'exemple classique.",
+    5:"✅ Exact ! Le linge qui sèche à 20 °C = évaporation (à toute température). La vaporisation (ébullition) se produit à 100 °C pour l'eau."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Solide → Liquide = FUSION. La vaporisation (liquide→gaz), la condensation (gaz→liquide), la sublimation (solide→gaz).",
+    2:"❌ Non. L'eau bout à 100 °C (à pression normale). 0 °C = point de fusion (glace → eau).",
+    3:"❌ Non. Gaz → Liquide = CONDENSATION. La fusion (solide→liquide), la solidification (liquide→solide), la sublimation (solide→gaz).",
+    4:"❌ Non. Solide → Gaz directement = SUBLIMATION. La déposition est l'inverse (gaz→solide).",
+    5:"❌ Non. À 20 °C, c'est de l'évaporation (phénomène lent, à la surface, à toute température). La vaporisation (ébullition) est à 100 °C."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['fusion']],
+        msgOk:"✅ Fusion = solide → liquide. Pour l'eau : à 0 °C.",
+        msgErr:"❌ Attendu : 'fusion'. Solide → Liquide = FUSION."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['vaporisation','ebullition','ébullition']],
+        msgOk:"✅ Vaporisation (ou ébullition) = liquide → gaz. Pour l'eau : à 100 °C.",
+        msgErr:"❌ Attendu : 'vaporisation' (ou ébullition). Liquide → Gaz = VAPORISATION."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['condensation','liquefaction','liquéfaction']],
+        msgOk:"✅ Condensation (ou liquéfaction) = gaz → liquide. Pour l'eau : à 100 °C.",
+        msgErr:"❌ Attendu : 'condensation'. Gaz → Liquide = CONDENSATION."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_etats_2', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

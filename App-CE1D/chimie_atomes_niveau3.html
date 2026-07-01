@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chimie — Atomes &amp; Molécules · Niveau 3 — Molécules &amp; formules</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#00897B; --primary-dark:#004D40; --primary-mid:#26A69A; --primary-bg:#E0F2F1;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#00251A 0%,#00897B 55%,#80CBC4 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(0,37,26,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#00897B; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#004D40; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#00251A,#00897B,#80CBC4); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#00251A,#004D40); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#80CBC4; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#00251A,#00897B,#80CBC4); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #00251A; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>⚗️ Atomes &amp; Molécules · Molécules</h1>
+            <p>Niveau 3 · Formule brute · Indices · H₂O · CO₂ · CH₄</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 3 — Intermédiaire</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Molécules &amp; formules chimiques</div>
+            <div class="card-sub">Formule brute · Indices · H₂O · CO₂ · NaCl · CH₄ · O₂ · N₂</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Une <strong>molécule</strong> est un assemblage d'atomes liés entre eux. On la représente par une <strong>formule brute</strong> qui indique quels atomes sont présents et en quelle quantité. L'indice (petit chiffre en bas) indique le nombre d'atomes de l'élément qui précède.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Molécule — Définition</h3>
+            <p>
+                Une <strong>molécule</strong> est un groupe d'atomes liés chimiquement formant une entité stable et neutre.<br>
+                La <strong>formule brute</strong> indique la nature et le nombre de chaque atome dans la molécule.<br>
+                Exemple : <strong>H₂O</strong> = 2 atomes d'hydrogène + 1 atome d'oxygène (l'eau)<br>
+                Exemple : <strong>CO₂</strong> = 1 atome de carbone + 2 atomes d'oxygène (dioxyde de carbone)
+            </p>
+        </div>
+
+        <!-- SVG : représentation de molécules -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="200" fill="#E0F2F1" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Représentation de quelques molécules</text>
+
+                <!-- H2O -->
+                <text x="90" y="40" text-anchor="middle" font-size="13" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">H₂O — Eau</text>
+                <!-- O -->
+                <circle cx="90" cy="95" r="22" fill="#E53935" stroke="#B71C1C" stroke-width="2"/>
+                <text x="90" y="100" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Nunito, sans-serif">O</text>
+                <!-- H gauche -->
+                <circle cx="52" cy="128" r="16" fill="#90CAF9" stroke="#0D47A1" stroke-width="2"/>
+                <text x="52" y="133" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="Nunito, sans-serif">H</text>
+                <line x1="70" y1="110" x2="60" y2="118" stroke="#555" stroke-width="2.5"/>
+                <!-- H droite -->
+                <circle cx="128" cy="128" r="16" fill="#90CAF9" stroke="#0D47A1" stroke-width="2"/>
+                <text x="128" y="133" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="Nunito, sans-serif">H</text>
+                <line x1="110" y1="110" x2="120" y2="118" stroke="#555" stroke-width="2.5"/>
+                <text x="90" y="170" text-anchor="middle" font-size="10" font-weight="700" fill="#555" font-family="Nunito, sans-serif">2H + 1O = 3 atomes</text>
+
+                <!-- CO2 -->
+                <text x="280" y="40" text-anchor="middle" font-size="13" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">CO₂ — Dioxyde de carbone</text>
+                <circle cx="230" cy="100" r="18" fill="#E53935" stroke="#B71C1C" stroke-width="2"/>
+                <text x="230" y="105" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="Nunito, sans-serif">O</text>
+                <line x1="248" y1="100" x2="258" y2="100" stroke="#555" stroke-width="2.5"/>
+                <circle cx="280" cy="100" r="22" fill="#37474F" stroke="#263238" stroke-width="2"/>
+                <text x="280" y="105" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Nunito, sans-serif">C</text>
+                <line x1="302" y1="100" x2="312" y2="100" stroke="#555" stroke-width="2.5"/>
+                <circle cx="330" cy="100" r="18" fill="#E53935" stroke="#B71C1C" stroke-width="2"/>
+                <text x="330" y="105" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="Nunito, sans-serif">O</text>
+                <text x="280" y="145" text-anchor="middle" font-size="10" font-weight="700" fill="#555" font-family="Nunito, sans-serif">1C + 2O = 3 atomes</text>
+
+                <!-- CH4 -->
+                <text x="460" y="40" text-anchor="middle" font-size="13" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">CH₄ — Méthane</text>
+                <circle cx="460" cy="95" r="22" fill="#37474F" stroke="#263238" stroke-width="2"/>
+                <text x="460" y="100" text-anchor="middle" font-size="13" font-weight="900" fill="white" font-family="Nunito, sans-serif">C</text>
+                <circle cx="460" cy="55" r="14" fill="#90CAF9" stroke="#0D47A1" stroke-width="2"/>
+                <text x="460" y="60" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">H</text>
+                <line x1="460" y1="69" x2="460" y2="73" stroke="#555" stroke-width="2.5"/>
+                <circle cx="460" cy="136" r="14" fill="#90CAF9" stroke="#0D47A1" stroke-width="2"/>
+                <text x="460" y="141" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">H</text>
+                <line x1="460" y1="117" x2="460" y2="122" stroke="#555" stroke-width="2.5"/>
+                <circle cx="420" cy="95" r="14" fill="#90CAF9" stroke="#0D47A1" stroke-width="2"/>
+                <text x="420" y="100" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">H</text>
+                <line x1="434" y1="95" x2="438" y2="95" stroke="#555" stroke-width="2.5"/>
+                <circle cx="500" cy="95" r="14" fill="#90CAF9" stroke="#0D47A1" stroke-width="2"/>
+                <text x="500" y="100" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">H</text>
+                <line x1="482" y1="95" x2="486" y2="95" stroke="#555" stroke-width="2.5"/>
+                <text x="460" y="170" text-anchor="middle" font-size="10" font-weight="700" fill="#555" font-family="Nunito, sans-serif">1C + 4H = 5 atomes</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔢 Lire une formule brute — La règle de l'indice</h3>
+            <p>
+                Dans une formule brute, l'<strong>indice</strong> (petit chiffre en bas à droite) indique le nombre d'atomes de l'élément qui le précède.<br>
+                • <strong>H₂O</strong> : 2 atomes d'H + 1 atome d'O (total = 3 atomes)<br>
+                • <strong>CO₂</strong> : 1 atome de C + 2 atomes d'O (total = 3 atomes)<br>
+                • <strong>CH₄</strong> : 1 atome de C + 4 atomes d'H (total = 5 atomes)<br>
+                • <strong>NaCl</strong> : 1 atome de Na + 1 atome de Cl (pas d'indice = 1 seul atome)<br>
+                S'il n'y a pas d'indice, c'est qu'il y a <strong>1 seul atome</strong> de cet élément.
+            </p>
+        </div>
+
+        <!-- Tableau des molécules courantes -->
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">H₂O</div>
+                <div class="cas-eq">Eau</div>
+                <div class="cas-desc">2 H + 1 O = 3 atomes au total</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">CO₂</div>
+                <div class="cas-eq">Dioxyde de carbone</div>
+                <div class="cas-desc">1 C + 2 O = 3 atomes au total</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">CH₄</div>
+                <div class="cas-eq">Méthane (gaz naturel)</div>
+                <div class="cas-desc">1 C + 4 H = 5 atomes au total</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">NaCl</div>
+                <div class="cas-eq">Chlorure de sodium (sel)</div>
+                <div class="cas-desc">1 Na + 1 Cl = 2 atomes au total</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">O₂ / N₂</div>
+                <div class="cas-eq">Dioxygène / Diazote</div>
+                <div class="cas-desc">2 O / 2 N — molécules diatomiques</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">HCl</div>
+                <div class="cas-eq">Acide chlorhydrique</div>
+                <div class="cas-desc">1 H + 1 Cl = 2 atomes au total</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège classique : CO₂ ≠ 2CO !</h3>
+            <p>
+                • <strong>CO₂</strong> : une molécule avec <strong>1 C + 2 O</strong> = 3 atomes en tout.<br>
+                • <strong>2 CO</strong> : deux molécules de monoxyde de carbone, chacune avec <strong>1 C + 1 O</strong> → au total : <strong>2 C + 2 O</strong> = 4 atomes.<br>
+                L'indice 2 en bas ne s'applique <strong>qu'à l'atome qui précède directement</strong>, pas à toute la formule.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Formules, indices, comptage d'atomes</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Combien d'atomes d'hydrogène contient la molécule H₂O ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">1 atome de H</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">2 atomes de H</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">3 atomes de H</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">4 atomes de H</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Combien d'atomes au total contient la molécule CO₂ ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">1 atome</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">2 atomes</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">3 atomes</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">4 atomes</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> La formule CH₄ représente le méthane. Combien d'atomes d'hydrogène contient-il ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">1 H</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">2 H</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">3 H</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">4 H</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Quelle est la différence entre CO₂ et 2 CO ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">Aucune différence, ce sont les mêmes atomes</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">CO₂ a 1C+2O ; 2CO a 2C+2O — ce sont des molécules différentes</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">CO₂ a 2C+1O ; 2CO a 1C+2O</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">CO₂ et 2CO sont tous les deux du dioxyde de carbone</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> La molécule de diazote s'écrit N₂. Que signifie l'indice 2 ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">Il y a 2 types d'atomes différents dans la molécule</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">L'azote a un numéro atomique de 2</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">La molécule contient 2 atomes d'azote liés ensemble</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">Il y a 2 molécules de N dans la formule</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · H₂O, CO₂, CH₄</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                H₂O contient
+                <input class="blank" id="f1a" placeholder="?" style="width:50px">
+                atomes d'hydrogène et
+                <input class="blank" id="f1b" placeholder="?" style="width:50px">
+                atome(s) d'oxygène.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                CO₂ contient
+                <input class="blank" id="f2a" placeholder="?" style="width:50px">
+                atomes au total (1 carbone +
+                <input class="blank" id="f2b" placeholder="?" style="width:50px">
+                oxygènes).
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                CH₄ contient
+                <input class="blank" id="f3a" placeholder="?" style="width:50px">
+                atome(s) de carbone et
+                <input class="blank" id="f3b" placeholder="?" style="width:50px">
+                atomes d'hydrogène.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Compter les atomes dans une formule</div>
+                <div class="ex-stmt">
+                    Pour chaque formule, indique le nombre d'atomes de chaque élément et le nombre total d'atomes :<br>
+                    a) H₂O &nbsp; b) CO₂ &nbsp; c) NaCl &nbsp; d) O₂
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) H₂O :</strong> 2 H + 1 O = <strong>3 atomes</strong> au total</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) CO₂ :</strong> 1 C + 2 O = <strong>3 atomes</strong> au total</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) NaCl :</strong> 1 Na + 1 Cl = <strong>2 atomes</strong> au total (pas d'indice = 1 seul atome)</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>d) O₂ :</strong> 2 O = <strong>2 atomes</strong> au total (molécule diatomique)</div></div>
+                <div class="final-ans">✅ a) 3 at. &nbsp;|&nbsp; b) 3 at. &nbsp;|&nbsp; c) 2 at. &nbsp;|&nbsp; d) 2 at.</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Distinguer CO₂ et 2 CO</div>
+                <div class="ex-stmt">
+                    Compare les deux expressions suivantes : CO₂ et 2 CO.<br>
+                    a) Combien d'atomes de C et d'O contient CO₂ ?<br>
+                    b) Combien d'atomes de C et d'O contient "2 CO" ?<br>
+                    c) Ces deux expressions représentent-elles la même chose ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) CO₂ :</strong> 1 C + 2 O → 3 atomes au total. C'est le dioxyde de carbone (gaz à effet de serre).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) 2 CO :</strong> 2 × (1 C + 1 O) = 2 C + 2 O → 4 atomes au total. C'est 2 molécules de monoxyde de carbone (gaz toxique !).</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) NON</strong> : CO₂ ≠ 2 CO. Compositions différentes (1C+2O ≠ 2C+2O) et propriétés très différentes !</div></div>
+                <div class="final-ans">✅ CO₂ = 1C+2O &nbsp;|&nbsp; 2CO = 2C+2O &nbsp;|&nbsp; Ce sont des substances différentes !</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Écrire une formule brute (style CE1D)</div>
+                <div class="ex-stmt">
+                    L'acide sulfurique est formé de 2 atomes d'hydrogène, 1 atome de soufre et 4 atomes d'oxygène.<br>
+                    a) Écris la formule brute de l'acide sulfurique.<br>
+                    b) Combien d'atomes au total contient une molécule d'acide sulfurique ?<br>
+                    c) Quel est le symbole du soufre ? (S)
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> 2 H + 1 S + 4 O → formule : <strong>H₂SO₄</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> 2 + 1 + 4 = <strong>7 atomes</strong> au total dans une molécule de H₂SO₄</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> Le soufre a pour symbole <strong>S</strong> (attention : Sulfur en latin)</div></div>
+                <div class="final-ans">✅ a) H₂SO₄ &nbsp;|&nbsp; b) 7 atomes &nbsp;|&nbsp; c) S</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Glucose C₆H₁₂O₆</div>
+                <div class="bonus-stmt">
+                    Le glucose (sucre) a pour formule brute C₆H₁₂O₆.<br>
+                    a) Combien d'atomes de chaque élément contient une molécule de glucose ?<br>
+                    b) Combien d'atomes au total ?<br>
+                    c) Un élève dit : "C₆H₁₂O₆ contient 3 fois plus d'hydrogène que d'oxygène." A-t-il raison ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> C₆H₁₂O₆ : <strong>6 atomes de C</strong>, <strong>12 atomes de H</strong>, <strong>6 atomes de O</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b)</strong> Total = 6 + 12 + 6 = <strong>24 atomes</strong> par molécule de glucose</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>c)</strong> H₁₂ / O₆ = 12/6 = 2. L'élève a <strong>tort</strong> : il y a 2 fois plus d'H que d'O, pas 3 fois plus.</div></div>
+                <div class="bonus-ans">
+                    C₆H₁₂O₆ : 6C + 12H + 6O = 24 atomes au total.<br>
+                    H/O = 12/6 = 2 (deux fois plus, pas trois fois) !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 3 terminé !</h2>
+    <p>🏆 Bravo ! Tu sais lire une formule chimique.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 4 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Chimie · Atomes &amp; Molécules</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="chimie_atomes_niveau1.html" class="nav-btn">N1 — L'atome</a>
+        <a href="chimie_atomes_niveau2.html" class="nav-btn">N2 — Tableau périodique</a>
+        <a href="chimie_atomes_niveau3.html" class="nav-btn current">▶ N3 — Molécules &amp; formules</a>
+        <a href="chimie_atomes_niveau4.html" class="nav-btn">N4 — Liaisons chimiques</a>
+        <a href="chimie_atomes_niveau5.html" class="nav-btn">N5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:1, 2:2, 3:3, 4:1, 5:2};
+
+const QCM_OK = {
+    1:"✅ Exact ! Dans H₂O, l'indice 2 après H signifie 2 atomes d'hydrogène. Il y a aussi 1 oxygène (pas d'indice = 1 atome).",
+    2:"✅ Bravo ! CO₂ = 1 C + 2 O = 3 atomes au total. L'indice 2 s'applique uniquement à l'O qui précède.",
+    3:"✅ Correct ! CH₄ = 1 C + 4 H. L'indice 4 après H signifie 4 atomes d'hydrogène.",
+    4:"✅ Parfait ! CO₂ (1C+2O) ≠ 2CO (2C+2O). L'indice 2 devant une formule = 2 molécules entières, pas le même atome.",
+    5:"✅ Exact ! L'indice 2 dans N₂ signifie que la molécule contient 2 atomes d'azote liés ensemble. C'est une molécule diatomique."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Dans H₂O, l'indice 2 après H signifie 2 atomes d'hydrogène (pas 1, pas 3, pas 4).",
+    2:"❌ Non. CO₂ = 1C + 2O = 3 atomes en tout. L'indice 2 ne concerne que l'O, pas la molécule entière.",
+    3:"❌ Non. Dans CH₄, l'indice 4 après H signifie 4 atomes d'hydrogène (et 1 atome de carbone).",
+    4:"❌ Non. CO₂ contient 1C+2O et 2CO contient 2C+2O. Ce sont des molécules très différentes avec des compositions différentes !",
+    5:"❌ Non. L'indice 2 dans N₂ indique le nombre d'atomes d'azote dans la molécule (2 atomes de N liés). Ce n'est pas le numéro atomique (N a Z=7)."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a','f1b'],
+        accepted:[['2'],['1']],
+        msgOk:"✅ H₂O : l'indice 2 → 2 atomes de H, et pas d'indice sur O → 1 atome d'O. Total : 3 atomes.",
+        msgErr:"❌ Attendus : 2 (atomes de H) et 1 (atome de O). H₂O = 2H + 1O."
+    },
+    2:{
+        fields:['f2a','f2b'],
+        accepted:[['3'],['2']],
+        msgOk:"✅ CO₂ = 1C + 2O = 3 atomes au total. L'indice 2 s'applique à l'oxygène.",
+        msgErr:"❌ Attendus : 3 (total) et 2 (oxygènes). CO₂ = 1C + 2O = 3 atomes."
+    },
+    3:{
+        fields:['f3a','f3b'],
+        accepted:[['1'],['4']],
+        msgOk:"✅ CH₄ = 1 atome de carbone + 4 atomes d'hydrogène = 5 atomes au total. C'est le méthane !",
+        msgErr:"❌ Attendus : 1 (carbone) et 4 (hydrogènes). CH₄ = 1C + 4H."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_atomes_3', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

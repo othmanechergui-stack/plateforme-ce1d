@@ -702,12 +702,48 @@ const MODULES = [
     },
     {
         id: 'chimie', section: 'sciences',
-        title: 'Chimie — Atomes', icon: '⚗️',
-        subtitle: 'Atomes · Molécules · Liaisons',
-        mc: '#00C9A7', mcDark: '#009B80', mcBg: '#E0F7F3',
-        files: [null, null, null, null, null],
-        labels: ['Base', 'Atomes', 'Molé.', 'Liais.', 'Défi'],
-        available: false
+        title: 'Chimie — Atomes & Molécules', icon: '⚗️',
+        subtitle: 'Atome · Tableau périodique · Molécules · Liaisons · Défi CE1D',
+        mc: '#00897B', mcDark: '#004D40', mcBg: '#E0F2F1',
+        files: ['chimie_atomes_niveau1.html', 'chimie_atomes_niveau2.html', 'chimie_atomes_niveau3.html', 'chimie_atomes_niveau4.html', 'chimie_atomes_niveau5.html'],
+        labels: ['Atome', 'Tableau', 'Molécules', 'Liaisons', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'etats', section: 'sciences',
+        title: 'Chimie — États de la matière', icon: '🧊',
+        subtitle: 'Solide · Liquide · Gaz · Changements d\'état · Courbe de chauffe · Défi CE1D',
+        mc: '#1565C0', mcDark: '#0D47A1', mcBg: '#E3F2FD',
+        files: ['chimie_etats_niveau1.html', 'chimie_etats_niveau2.html', 'chimie_etats_niveau3.html', 'chimie_etats_niveau4.html', 'chimie_etats_niveau5.html'],
+        labels: ['3 états', 'Changements', 'Courbe', 'Eau/nature', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'melanges', section: 'sciences',
+        title: 'Chimie — Mélanges & Corps purs', icon: '🧪',
+        subtitle: 'Corps pur · Homo/Hétérogène · Séparation · Dissolution · Défi CE1D',
+        mc: '#388E3C', mcDark: '#1B5E20', mcBg: '#E8F5E9',
+        files: ['chimie_melanges_niveau1.html', 'chimie_melanges_niveau2.html', 'chimie_melanges_niveau3.html', 'chimie_melanges_niveau4.html', 'chimie_melanges_niveau5.html'],
+        labels: ['Corps pur', 'Homo/Hét.', 'Séparation', 'Dissolution', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'massevolumique', section: 'sciences',
+        title: 'Chimie — Masse volumique', icon: '⚖️',
+        subtitle: 'ρ = m/V · Calculs · Conversions · Flottaison · Défi CE1D',
+        mc: '#F57C00', mcDark: '#E65100', mcBg: '#FFF3E0',
+        files: ['chimie_massevolumique_niveau1.html', 'chimie_massevolumique_niveau2.html', 'chimie_massevolumique_niveau3.html', 'chimie_massevolumique_niveau4.html', 'chimie_massevolumique_niveau5.html'],
+        labels: ['Définition', 'Calculs', 'Conversions', 'Flottaison', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'reactions', section: 'sciences',
+        title: 'Chimie — Transformations', icon: '🔬',
+        subtitle: 'Réactifs/Produits · Équation · Lavoisier · Combustion · Défi CE1D',
+        mc: '#512DA8', mcDark: '#311B92', mcBg: '#EDE7F6',
+        files: ['chimie_reactions_niveau1.html', 'chimie_reactions_niveau2.html', 'chimie_reactions_niveau3.html', 'chimie_reactions_niveau4.html', 'chimie_reactions_niveau5.html'],
+        labels: ['Notion', 'Équation', 'Lavoisier', 'Combustion', 'Défi 🏆'],
+        available: true
     }
 ];
 
