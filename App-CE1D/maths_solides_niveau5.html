@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Solides &amp; Volumes · Niveau 5 — Défi CE1D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#8D6E63; --primary-dark:#6D4C41; --primary-mid:#A1887F; --primary-bg:#EFEBE9;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#3E2723 0%,#8D6E63 55%,#D7CCC8 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(62,39,35,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#8D6E63; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#6D4C41; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#3E2723,#8D6E63,#D7CCC8); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-icon.gold   { background:#FFFDE7; }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#3E2723,#6D4C41); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#D7CCC8; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .recap-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin:18px 0; }
+        .recap-card { background:var(--primary-bg); border:2px solid #D7CCC8; border-radius:12px; padding:14px 16px; }
+        .recap-title { font-size:.82rem; font-weight:900; color:var(--primary-dark); text-transform:uppercase; letter-spacing:.6px; margin-bottom:8px; border-bottom:1px solid #D7CCC8; padding-bottom:5px; }
+        .recap-line { font-size:.88rem; color:#444; line-height:1.7; }
+        .recap-line strong { color:var(--primary-dark); }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #D7CCC8; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #D7CCC8; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#3E2723,#8D6E63,#D7CCC8); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #3E2723; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🏆 Solides &amp; Volumes · Défi CE1D</h1>
+            <p>Niveau 5 · Récapitulatif complet · Questions style examen belge</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <span class="diff-label">Niveau 5 — Défi 🏆</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. RÉCAPITULATIF -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon gold">🏆</div>
+        <div>
+            <div class="card-title">Récapitulatif — Toutes les formules CE1D</div>
+            <div class="card-sub">Cube · Pavé · Prisme · Cylindre · Pyramide · Cône · Sphère · Euler</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Ce niveau récapitule <strong>toutes les formules de volumes et d'aires</strong> vues depuis le début.
+            Les questions sont de style examen CE1D belge : calculs, conversions, raisonnement géométrique.
+        </p>
+
+        <div class="recap-grid">
+            <div class="recap-card">
+                <div class="recap-title">Cube (arête a)</div>
+                <div class="recap-line"><strong>V = a³</strong><br>A<sub>tot</sub> = 6a²</div>
+            </div>
+            <div class="recap-card">
+                <div class="recap-title">Pavé droit (L, l, h)</div>
+                <div class="recap-line"><strong>V = L × l × h</strong><br>A<sub>tot</sub> = 2(Ll + Lh + lh)</div>
+            </div>
+            <div class="recap-card">
+                <div class="recap-title">Prisme (A<sub>base</sub>, H)</div>
+                <div class="recap-line"><strong>V = A<sub>base</sub> × H</strong><br>Arêtes = 3n · Faces = n+2</div>
+            </div>
+            <div class="recap-card">
+                <div class="recap-title">Cylindre (r, h)</div>
+                <div class="recap-line"><strong>V = πr²h</strong><br>A<sub>lat</sub> = 2πrh<br>A<sub>tot</sub> = 2πr(r+h)</div>
+            </div>
+            <div class="recap-card">
+                <div class="recap-title">Pyramide (A<sub>base</sub>, h)</div>
+                <div class="recap-line"><strong>V = ⅓ × A<sub>base</sub> × h</strong><br>Faces = n+1</div>
+            </div>
+            <div class="recap-card">
+                <div class="recap-title">Cône (r, h)</div>
+                <div class="recap-line"><strong>V = ⅓ πr²h</strong><br>A<sub>lat</sub> = πrl (l = apothème)</div>
+            </div>
+            <div class="recap-card">
+                <div class="recap-title">Sphère (r)</div>
+                <div class="recap-line"><strong>V = (4/3)πr³</strong><br>A = 4πr²</div>
+            </div>
+            <div class="recap-card">
+                <div class="recap-title">Formule d'Euler</div>
+                <div class="recap-line"><strong>S − A + F = 2</strong><br>Valide pour tout polyèdre convexe</div>
+            </div>
+        </div>
+
+        <!-- SVG : sphère + formule d'Euler -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="max-width:600px;width:100%">
+                <rect x="0" y="0" width="600" height="200" fill="#EFEBE9" rx="10"/>
+                <text x="300" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">Sphère et formule d'Euler (cube)</text>
+
+                <!-- Sphère -->
+                <circle cx="110" cy="105" r="70" fill="#D7CCC8" stroke="#3E2723" stroke-width="2"/>
+                <ellipse cx="110" cy="105" rx="70" ry="20" fill="none" stroke="#6D4C41" stroke-width="1.5" stroke-dasharray="5,3"/>
+                <line x1="110" y1="105" x2="180" y2="105" stroke="#3E2723" stroke-width="1.5"/>
+                <text x="145" y="100" font-size="11" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">r</text>
+                <text x="110" y="185" text-anchor="middle" font-size="10" font-weight="700" fill="#6D4C41" font-family="Nunito,sans-serif">V = (4/3)πr³  ·  A = 4πr²</text>
+
+                <!-- Euler tableau -->
+                <rect x="240" y="30" width="330" height="150" fill="white" stroke="#D7CCC8" stroke-width="2" rx="8"/>
+                <text x="405" y="52" text-anchor="middle" font-size="11" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">Euler : S − A + F = 2</text>
+                <line x1="240" y1="60" x2="570" y2="60" stroke="#D7CCC8" stroke-width="1.5"/>
+                <text x="270" y="80" font-size="10" font-weight="900" fill="#555" font-family="Nunito,sans-serif">Solide</text>
+                <text x="380" y="80" font-size="10" font-weight="900" fill="#555" font-family="Nunito,sans-serif">S</text>
+                <text x="430" y="80" font-size="10" font-weight="900" fill="#555" font-family="Nunito,sans-serif">A</text>
+                <text x="480" y="80" font-size="10" font-weight="900" fill="#555" font-family="Nunito,sans-serif">F</text>
+                <text x="530" y="80" font-size="10" font-weight="900" fill="#555" font-family="Nunito,sans-serif">S-A+F</text>
+                <line x1="240" y1="85" x2="570" y2="85" stroke="#D7CCC8" stroke-width="1"/>
+                <text x="270" y="103" font-size="10" font-weight="700" fill="#444" font-family="Nunito,sans-serif">Cube</text>
+                <text x="380" y="103" font-size="10" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">8</text>
+                <text x="430" y="103" font-size="10" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">12</text>
+                <text x="480" y="103" font-size="10" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">6</text>
+                <text x="530" y="103" font-size="10" font-weight="900" fill="#46A302" font-family="Nunito,sans-serif">2 ✓</text>
+                <text x="270" y="123" font-size="10" font-weight="700" fill="#444" font-family="Nunito,sans-serif">Prisme △</text>
+                <text x="380" y="123" font-size="10" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">6</text>
+                <text x="430" y="123" font-size="10" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">9</text>
+                <text x="480" y="123" font-size="10" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">5</text>
+                <text x="530" y="123" font-size="10" font-weight="900" fill="#46A302" font-family="Nunito,sans-serif">2 ✓</text>
+                <text x="270" y="143" font-size="10" font-weight="700" fill="#444" font-family="Nunito,sans-serif">Pyramide □</text>
+                <text x="380" y="143" font-size="10" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">5</text>
+                <text x="430" y="143" font-size="10" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">8</text>
+                <text x="480" y="143" font-size="10" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">5</text>
+                <text x="530" y="143" font-size="10" font-weight="900" fill="#46A302" font-family="Nunito,sans-serif">2 ✓</text>
+                <text x="270" y="163" font-size="10" font-weight="700" fill="#6D4C41" font-family="Nunito,sans-serif">Toujours = 2 !</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔢 Conversions de volumes à connaître</h3>
+            <p>
+                • <strong>1 dm³ = 1 L</strong> (litre) &nbsp;|&nbsp; <strong>1 cm³ = 1 mL</strong><br>
+                • <strong>1 m³ = 1 000 L = 1 000 000 cm³</strong><br>
+                • <strong>1 L = 1 000 cm³</strong><br><br>
+                Technique : pour convertir cm³ en litres, divise par <strong>1 000</strong>.
+            </p>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Pièges fréquents à l'examen CE1D</h3>
+            <p>
+                1. <strong>Diamètre ≠ rayon</strong> — toujours diviser d par 2 avant de calculer.<br>
+                2. <strong>Oublier le 1/3</strong> pour la pyramide et le cône.<br>
+                3. <strong>Confusion cm³ et L</strong> — 1 L = 1 000 cm³, pas 100 cm³.<br>
+                4. <strong>Hauteur ≠ arête latérale</strong> pour une pyramide.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple — Défi CE1D</div>
+            <div class="card-sub">5 questions · Style examen belge · Tous les solides</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Un aquarium en forme de prisme rectangulaire mesure 60 × 30 × 40 cm. Volume en litres ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">a) 72 L</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">b) 7 200 L</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">c) 720 L</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">d) 7,2 L</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> On coupe un cône par un plan parallèle à la base. La section obtenue est...</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">a) Un cercle</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">b) Une ellipse</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">c) Un triangle</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">d) Un rectangle</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Formule d'Euler pour les polyèdres : S − A + F = ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">a) 2</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">b) 0</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">c) 1</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">d) 4</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Un cylindre de rayon r est inscrit dans un prisme carré de côté 2r. Rapport des volumes V<sub>cylindre</sub> / V<sub>prisme</sub> = ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">a) π/4</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">b) π/2</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">c) π/3</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">d) 2/π</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Une sphère de rayon 3 cm. Son volume = ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">a) 36π cm³</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">b) 12π cm³</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">c) 108π cm³</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">d) 9π cm³</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous — Défi CE1D</div>
+            <div class="card-sub">3 exercices · Volumes, Euler et sphère</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Pour un prisme rectangulaire 5 × 4 × 3 cm, le volume est <input class="blank" id="f1a" placeholder="?" style="width:60px"> cm³.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                S − A + F = 2. Pour un cube : S = 8, F = 6, donc A = <input class="blank" id="f2a" placeholder="?" style="width:60px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                V sphère = (4/3)πr³. Pour r = 3 : V = <input class="blank" id="f3a" placeholder="?" style="width:60px"> π cm³.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés — Style CE1D</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Niveau examen</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Problème de remplissage (CE1D type)</div>
+                <div class="ex-stmt">
+                    Un château d'eau a la forme d'un cylindre de rayon 5 m et hauteur 8 m.<br>
+                    a) Calcule son volume exact.<br>
+                    b) Combien de litres peut-il contenir ? (1 m³ = 1 000 L)
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">V = π × r² × h = π × 25 × 8 = <strong>200π m³</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">V ≈ 200 × 3,14159 ≈ 628,3 m³</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">628,3 m³ × 1 000 = <strong>628 300 L</strong></div></div>
+                <div class="final-ans">✅ V = 200π m³ ≈ 628 300 L</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Comparaison de solides (CE1D type)</div>
+                <div class="ex-stmt">
+                    Une pyramide à base carrée de côté 6 cm et hauteur 8 cm est fondue pour fabriquer des petits cônes de rayon 1 cm et hauteur 2 cm.<br>
+                    Combien de cônes peut-on fabriquer ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">V<sub>pyramide</sub> = (1/3) × 6² × 8 = (1/3) × 288 = <strong>96 cm³</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">V<sub>cône</sub> = (1/3) × π × 1² × 2 = (2π/3) cm³ ≈ 2,094 cm³</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Nombre = 96 ÷ 2,094 ≈ <strong>45 cônes</strong></div></div>
+                <div class="final-ans">✅ On peut fabriquer environ 45 cônes.</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Sphère et cylindre (CE1D type)</div>
+                <div class="ex-stmt">
+                    Une boule de pétanque a un diamètre de 7,5 cm.<br>
+                    a) Calcule son volume (V = (4/3)πr³).<br>
+                    b) Cette boule est plongée dans un cylindre d'eau de rayon 5 cm. De combien l'eau monte-t-elle ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">r = 7,5 ÷ 2 = 3,75 cm · V = (4/3) × π × 3,75³ = (4/3) × π × 52,734 ≈ <strong>220,9 cm³</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Le volume déplacé = V<sub>boule</sub> = 220,9 cm³</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">V = π × r² × Δh → 220,9 = π × 25 × Δh → Δh = 220,9 ÷ (25π) ≈ <strong>2,81 cm</strong></div></div>
+                <div class="final-ans">✅ V ≈ 220,9 cm³ · L'eau monte de ≈ 2,81 cm</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Optimisation de volume</div>
+                <div class="bonus-stmt">
+                    On dispose de 150 cm² de carton pour fabriquer une boîte cubique sans couvercle (5 faces).<br>
+                    a) Quelle doit être l'arête a de ce cube ?<br>
+                    b) Quel volume cette boîte contiendra-t-elle ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text">5 faces carrées → A = 5 × a² = 150 cm²</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text">a² = 150 ÷ 5 = 30 → a = √30 ≈ <strong>5,48 cm</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text">V = a³ = 30√30 ≈ <strong>164,3 cm³</strong></div></div>
+                <div class="bonus-ans">
+                    a ≈ 5,48 cm · V ≈ 164,3 cm³<br>
+                    Avec 150 cm² de carton, on obtient une boîte d'environ 164 cm³ !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🏆 🌟</div>
+    <h2>🎉 Félicitations — Défi CE1D réussi !</h2>
+    <p>Tu maîtrises tous les solides et volumes du programme CE1D belge.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP — Tu es prêt(e) pour l'examen !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Solides &amp; Volumes</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_solides_niveau1.html" class="nav-btn">N1 — Cube &amp; Pavé</a>
+        <a href="maths_solides_niveau2.html" class="nav-btn">N2 — Prisme</a>
+        <a href="maths_solides_niveau3.html" class="nav-btn">N3 — Cylindre</a>
+        <a href="maths_solides_niveau4.html" class="nav-btn">N4 — Pyramide/Cône</a>
+        <a href="maths_solides_niveau5.html" class="nav-btn current">▶ N5 — Défi 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! V = 60 × 30 × 40 = 72 000 cm³ = 72 000 ÷ 1 000 = 72 L.",
+    2:"✅ Bravo ! Une section parallèle à la base d'un cône est toujours un cercle (plus petit que la base).",
+    3:"✅ Correct ! La formule d'Euler S − A + F = 2 est valide pour tout polyèdre convexe.",
+    4:"✅ Parfait ! V<sub>cyl</sub> = πr²h · V<sub>prisme</sub> = (2r)²h = 4r²h · Rapport = πr²h ÷ 4r²h = π/4.",
+    5:"✅ Exact ! V = (4/3) × π × 3³ = (4/3) × 27π = 36π cm³."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. V = 60 × 30 × 40 = 72 000 cm³. En litres : 72 000 ÷ 1 000 = 72 L. (1 L = 1 000 cm³, pas 100 cm³ !)",
+    2:"❌ Non. Si le plan est parallèle à la base circulaire, la section est un cercle. Une ellipse apparaît si le plan est incliné.",
+    3:"❌ Non. La formule d'Euler donne S − A + F = 2, pas 0, 1 ou 4. Vérifie avec un cube : 8 − 12 + 6 = 2.",
+    4:"❌ Non. V<sub>cyl</sub>/V<sub>prisme</sub> = πr²h / (2r)²h = π/4. C'est le même résultat que pour les aires des bases.",
+    5:"❌ Non. V = (4/3) × π × r³ = (4/3) × π × 27 = 36π cm³. Attention à r³ = 27."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['60']],
+        msgOk:"✅ V = 5 × 4 × 3 = 60 cm³. Bien joué !",
+        msgErr:"❌ Attendu : 60. V = L × l × h = 5 × 4 × 3 = 60 cm³."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['12']],
+        msgOk:"✅ S − A + F = 2 → 8 − A + 6 = 2 → A = 12. Un cube a bien 12 arêtes.",
+        msgErr:"❌ Attendu : 12. 8 − A + 6 = 2 → 14 − A = 2 → A = 12."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['36']],
+        msgOk:"✅ V = (4/3) × π × 3³ = (4/3) × 27π = 36π cm³.",
+        msgErr:"❌ Attendu : 36. V = (4/3) × r³ = (4/3) × 27 = 36. Donc V = 36π cm³."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_solides_5', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.innerHTML   = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.innerHTML = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Solides &amp; Volumes · Niveau 3 — Cylindre</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#8D6E63; --primary-dark:#6D4C41; --primary-mid:#A1887F; --primary-bg:#EFEBE9;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#3E2723 0%,#8D6E63 55%,#D7CCC8 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(62,39,35,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#8D6E63; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#6D4C41; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#3E2723,#8D6E63,#D7CCC8); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#3E2723,#6D4C41); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#D7CCC8; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #D7CCC8; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #D7CCC8; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#3E2723,#8D6E63,#D7CCC8); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #3E2723; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>📦 Solides &amp; Volumes · Cylindre</h1>
+            <p>Niveau 3 · V = πr²h · Aire latérale · Développement</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 3 — Cylindre</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Cylindre droit</div>
+            <div class="card-sub">V = πr²h · A<sub>lat</sub> = 2πrh · A<sub>tot</sub> = 2πr(r+h)</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Un <strong>cylindre droit</strong> est un solide limité par deux cercles identiques et parallèles (les bases)
+            et une surface latérale courbe. Pour calculer son volume, on utilise la même idée que le prisme :
+            <strong>Aire de la base × hauteur</strong>.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Formules — Cylindre droit (rayon r, hauteur h)</h3>
+            <p>
+                <strong>Volume :</strong> V = π × r² × h<br><br>
+                <strong>Aire latérale :</strong> A<sub>lat</sub> = 2π × r × h &nbsp;(rectangle déroulé)<br><br>
+                <strong>Aire totale :</strong> A<sub>tot</sub> = 2πr² + 2πrh = <strong>2πr(r + h)</strong>
+            </p>
+        </div>
+
+        <!-- SVG : cylindre + développement -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 600 230" xmlns="http://www.w3.org/2000/svg" style="max-width:600px;width:100%">
+                <rect x="0" y="0" width="600" height="230" fill="#EFEBE9" rx="10"/>
+                <text x="300" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">Cylindre droit et son développement</text>
+
+                <!-- Cylindre -->
+                <ellipse cx="120" cy="55" rx="55" ry="18" fill="#EFEBE9" stroke="#3E2723" stroke-width="2"/>
+                <rect x="65" y="55" width="110" height="130" fill="#D7CCC8" stroke="#3E2723" stroke-width="2"/>
+                <ellipse cx="120" cy="185" rx="55" ry="18" fill="#BCAAA4" stroke="#3E2723" stroke-width="2"/>
+                <!-- Ligne centrale -->
+                <line x1="120" y1="55" x2="120" y2="185" stroke="#6D4C41" stroke-width="1.5" stroke-dasharray="4,3"/>
+                <!-- Labels -->
+                <text x="148" y="125" font-size="10" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">h</text>
+                <text x="120" y="48" text-anchor="middle" font-size="10" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">r</text>
+                <line x1="120" y1="55" x2="175" y2="55" stroke="#3E2723" stroke-width="1.5"/>
+                <text x="120" y="210" text-anchor="middle" font-size="10" font-weight="700" fill="#6D4C41" font-family="Nunito,sans-serif">V = πr²h</text>
+
+                <!-- Développement -->
+                <text x="390" y="38" text-anchor="middle" font-size="11" font-weight="900" fill="#6D4C41" font-family="Nunito,sans-serif">Développement du cylindre</text>
+                <!-- cercle haut -->
+                <ellipse cx="295" cy="70" rx="30" ry="30" fill="#EFEBE9" stroke="#3E2723" stroke-width="1.5"/>
+                <text x="295" y="74" text-anchor="middle" font-size="9" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">πr²</text>
+                <!-- rectangle latéral -->
+                <rect x="335" y="45" width="130" height="55" fill="#D7CCC8" stroke="#3E2723" stroke-width="1.5"/>
+                <text x="400" y="76" text-anchor="middle" font-size="9" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">2πr × h</text>
+                <text x="400" y="89" text-anchor="middle" font-size="8" font-weight="700" fill="#6D4C41" font-family="Nunito,sans-serif">(surface latérale)</text>
+                <!-- cercle bas -->
+                <ellipse cx="500" cy="70" rx="30" ry="30" fill="#BCAAA4" stroke="#3E2723" stroke-width="1.5"/>
+                <text x="500" y="74" text-anchor="middle" font-size="9" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">πr²</text>
+                <!-- formules -->
+                <text x="390" y="130" text-anchor="middle" font-size="10" font-weight="700" fill="#3E2723" font-family="Nunito,sans-serif">A<tspan font-size="8">lat</tspan> = 2πrh</text>
+                <text x="390" y="148" text-anchor="middle" font-size="10" font-weight="700" fill="#3E2723" font-family="Nunito,sans-serif">A<tspan font-size="8">tot</tspan> = 2πr(r + h)</text>
+                <text x="390" y="170" text-anchor="middle" font-size="10" font-weight="700" fill="#6D4C41" font-family="Nunito,sans-serif">La surface latérale déroulée = rectangle</text>
+                <text x="390" y="186" text-anchor="middle" font-size="10" font-weight="700" fill="#6D4C41" font-family="Nunito,sans-serif">de largeur 2πr et de hauteur h</text>
+            </svg>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">V = πr²h</div>
+                <div class="cas-eq">Volume du cylindre</div>
+                <div class="cas-desc">Ex : r=3, h=5 → V = 45π cm³</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">A<sub>lat</sub> = 2πrh</div>
+                <div class="cas-eq">Surface latérale</div>
+                <div class="cas-desc">Rectangle de largeur 2πr et hauteur h</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">A<sub>tot</sub> = 2πr(r+h)</div>
+                <div class="cas-eq">Surface totale</div>
+                <div class="cas-desc">2 bases + surface latérale</div>
+            </div>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔢 Rayon et diamètre : attention !</h3>
+            <p>
+                Le <strong>rayon r</strong> est la moitié du <strong>diamètre d</strong> : r = d ÷ 2<br>
+                Si on te donne le diamètre, pense à diviser par 2 avant d'utiliser les formules !<br><br>
+                Exemple : diamètre 8 cm → rayon r = 4 cm<br>
+                V = π × 4² × h = 16π × h
+            </p>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège classique : r² ≠ (2r)²</h3>
+            <p>
+                Si d = 8 cm, alors r = 4 cm et r² = 16.
+                <strong>Ne pas confondre</strong> r² = 16 avec d² = 64.
+                La formule utilise toujours le <strong>rayon</strong>, jamais le diamètre directement.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Volume, aires et calculs du cylindre</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Le volume d'un cylindre de rayon r et hauteur h = ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">a) π × r² × h</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">b) 2π × r × h</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">c) π × r × h</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">d) π × d × h</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> L'aire latérale d'un cylindre = ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">a) 2π × r × h</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">b) π × r²</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">c) π × d × h</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">d) 2 × π × r²</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Un cylindre de rayon 3 cm et hauteur 5 cm a un volume de...</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">a) 45π cm³</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">b) 30π cm³</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">c) 15π cm³</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">d) 90π cm³</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> L'aire totale d'un cylindre (deux bases + surface latérale) = ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">a) 2πr(r + h)</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">b) πr² + 2πrh</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">c) πr(r + 2h)</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">d) 4πr²</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Un cylindre de diamètre 8 cm et hauteur 10 cm. Son volume ≈ ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">a) 502,7 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">b) 251,3 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">c) 1005,3 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">d) 200,5 cm³</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Volume, développement et rayon</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Le volume d'un cylindre de rayon 5 cm et hauteur 4 cm est <input class="blank" id="f1a" placeholder="?" style="width:60px"> π cm³.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Le développement de la surface latérale d'un cylindre est un <input class="blank" id="f2a" placeholder="?" style="width:110px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Si V = 50π cm³ et h = 2 cm, alors r = <input class="blank" id="f3a" placeholder="?" style="width:60px"> cm.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Volume d'un cylindre</div>
+                <div class="ex-stmt">
+                    Une boîte de conserve cylindrique a un rayon de 4 cm et une hauteur de 12 cm.<br>
+                    a) Calcule son volume exact (en π).<br>
+                    b) Donne une valeur approchée (π ≈ 3,14).
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Formule :</strong> V = π × r² × h = π × 4² × 12</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">V = π × 16 × 12 = <strong>192π cm³</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">V ≈ 192 × 3,14 ≈ <strong>602,9 cm³</strong></div></div>
+                <div class="final-ans">✅ V = 192π cm³ ≈ 602,9 cm³</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Aire totale d'un cylindre</div>
+                <div class="ex-stmt">
+                    Un rouleau de peinture cylindrique a un diamètre de 6 cm et une longueur de 20 cm.<br>
+                    Calcule l'aire totale de sa surface.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Diamètre = 6 cm → r = 3 cm</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">A<sub>tot</sub> = 2πr(r + h) = 2π × 3 × (3 + 20) = 6π × 23 = <strong>138π cm²</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">A<sub>tot</sub> ≈ 138 × 3,14 ≈ <strong>433,3 cm²</strong></div></div>
+                <div class="final-ans">✅ A<sub>tot</sub> = 138π cm² ≈ 433,3 cm²</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Trouver r à partir du volume (style CE1D)</div>
+                <div class="ex-stmt">
+                    Un silo cylindrique a une hauteur de 8 m et un volume de 200π m³.<br>
+                    Calcule le rayon de la base de ce silo.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">V = π × r² × h → 200π = π × r² × 8</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">200 = r² × 8 → r² = 200 ÷ 8 = 25</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">r = √25 = <strong>5 m</strong></div></div>
+                <div class="final-ans">✅ r = 5 m</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Comparaison cylindre/prisme</div>
+                <div class="bonus-stmt">
+                    Un cylindre de rayon 5 cm et hauteur 10 cm est inscrit dans un prisme carré de côté 10 cm et même hauteur.<br>
+                    a) Calcule le volume du cylindre et celui du prisme.<br>
+                    b) Quel est le rapport V<sub>cylindre</sub> / V<sub>prisme</sub> ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text">V<sub>cylindre</sub> = π × 5² × 10 = <strong>250π cm³</strong> ≈ 785,4 cm³</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text">V<sub>prisme</sub> = 10 × 10 × 10 = <strong>1 000 cm³</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text">Rapport = 250π ÷ 1 000 = <strong>π/4</strong> ≈ 0,785</div></div>
+                <div class="bonus-ans">
+                    V<sub>cyl</sub> = 250π cm³ · V<sub>prisme</sub> = 1 000 cm³<br>
+                    Rapport = π/4 — le cylindre occupe ≈ 78,5 % du prisme !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>🏆 Niveau 3 terminé !</h2>
+    <p>Tu maîtrises le cylindre : volume et aires.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 4 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Solides &amp; Volumes</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_solides_niveau1.html" class="nav-btn">N1 — Cube &amp; Pavé</a>
+        <a href="maths_solides_niveau2.html" class="nav-btn">N2 — Prisme</a>
+        <a href="maths_solides_niveau3.html" class="nav-btn current">▶ N3 — Cylindre</a>
+        <a href="maths_solides_niveau4.html" class="nav-btn">N4 — Pyramide/Cône</a>
+        <a href="maths_solides_niveau5.html" class="nav-btn">N5 — Défi 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! V = π × r² × h. La base du cylindre est un cercle d'aire πr².",
+    2:"✅ Bravo ! A<sub>lat</sub> = 2πrh. En déroulant le cylindre on obtient un rectangle de largeur 2πr et de hauteur h.",
+    3:"✅ Correct ! V = π × 3² × 5 = π × 9 × 5 = 45π cm³.",
+    4:"✅ Parfait ! A<sub>tot</sub> = 2πr² + 2πrh = 2πr(r + h).",
+    5:"✅ Exact ! r = 4 cm (d=8 cm → r=4 cm). V = π × 4² × 10 = 160π ≈ 502,7 cm³."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. V = π × r² × h. La formule 2πrh correspond à l'aire latérale, pas au volume.",
+    2:"❌ Non. A<sub>lat</sub> = 2πrh. πr² est l'aire d'un cercle (une base), pas la surface latérale.",
+    3:"❌ Non. V = π × 3² × 5 = 9π × 5 = 45π cm³. Attention à r² = 9.",
+    4:"❌ Non. A<sub>tot</sub> = 2πr(r + h). La formule πr² + 2πrh est équivalente mais pas sous forme factorisée.",
+    5:"❌ Non. d=8 cm → r=4 cm. V = π × 4² × 10 = 160π ≈ 502,7 cm³. Ne pas confondre diamètre et rayon !"
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['100']],
+        msgOk:"✅ V = π × 5² × 4 = π × 25 × 4 = 100π cm³. Parfait !",
+        msgErr:"❌ Attendu : 100. V = π × 5² × 4 = 25π × 4 = 100π cm³."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['rectangle']],
+        msgOk:"✅ La surface latérale déroulée est un rectangle de largeur 2πr et de hauteur h.",
+        msgErr:"❌ Attendu : rectangle. En déroulant la surface latérale du cylindre, on obtient un rectangle."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['5']],
+        msgOk:"✅ V = πr²h → 50π = πr² × 2 → r² = 25 → r = 5 cm.",
+        msgErr:"❌ Attendu : 5. 50π = πr² × 2 → r² = 25 → r = √25 = 5 cm."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_solides_3', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.innerHTML   = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.innerHTML = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

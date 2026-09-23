@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Divisibilité · Niveau 2 — Critères</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#546E7A; --primary-dark:#37474F; --primary-mid:#78909C; --primary-bg:#ECEFF1;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#1C313A 0%,#546E7A 55%,#B0BEC5 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(28,49,58,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#546E7A; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#37474F; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#1C313A,#546E7A,#B0BEC5); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#1C313A,#37474F); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#B0BEC5; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #B0BEC5; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #B0BEC5; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#1C313A,#546E7A,#B0BEC5); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #1C313A; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>÷ Divisibilité · Critères de divisibilité</h1>
+            <p>Niveau 2 · Par 2, 3, 5, 9, 10 · Reconnaître sans diviser</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 2 — Critères</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Critères de divisibilité</div>
+            <div class="card-sub">Par 2 · Par 3 · Par 5 · Par 9 · Par 10</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Les <strong>critères de divisibilité</strong> permettent de savoir si un nombre est divisible par un autre
+            <strong>sans faire la division</strong>. On regarde le dernier chiffre ou la somme des chiffres.
+            C'est un outil très pratique pour aller vite en calcul !
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Les 5 critères essentiels</h3>
+            <p>
+                <strong>Par 2 :</strong> le dernier chiffre est pair (0, 2, 4, 6, 8).<br>
+                <strong>Par 3 :</strong> la somme des chiffres est divisible par 3.<br>
+                <strong>Par 5 :</strong> le dernier chiffre est 0 ou 5.<br>
+                <strong>Par 9 :</strong> la somme des chiffres est divisible par 9.<br>
+                <strong>Par 10 :</strong> le dernier chiffre est 0.
+            </p>
+        </div>
+
+        <!-- SVG : tableau des critères -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="220" fill="#ECEFF1" rx="10"/>
+                <text x="280" y="22" text-anchor="middle" font-size="13" font-weight="900" fill="#1C313A" font-family="Nunito, sans-serif">Critères de divisibilité — exemples avec 720</text>
+                <!-- Par 2 -->
+                <rect x="18" y="35" width="155" height="60" rx="8" fill="white" stroke="#546E7A" stroke-width="2"/>
+                <text x="95" y="57" text-anchor="middle" font-size="13" font-weight="900" fill="#1C313A" font-family="Nunito, sans-serif">÷ 2 ✓</text>
+                <text x="95" y="74" text-anchor="middle" font-size="10" fill="#546E7A" font-family="Nunito, sans-serif">dernier chiffre : 0 (pair)</text>
+                <!-- Par 3 -->
+                <rect x="185" y="35" width="185" height="60" rx="8" fill="white" stroke="#546E7A" stroke-width="2"/>
+                <text x="277" y="57" text-anchor="middle" font-size="13" font-weight="900" fill="#1C313A" font-family="Nunito, sans-serif">÷ 3 ✓</text>
+                <text x="277" y="74" text-anchor="middle" font-size="10" fill="#546E7A" font-family="Nunito, sans-serif">7+2+0=9, divisible par 3</text>
+                <!-- Par 5 -->
+                <rect x="382" y="35" width="160" height="60" rx="8" fill="white" stroke="#546E7A" stroke-width="2"/>
+                <text x="462" y="57" text-anchor="middle" font-size="13" font-weight="900" fill="#1C313A" font-family="Nunito, sans-serif">÷ 5 ✓</text>
+                <text x="462" y="74" text-anchor="middle" font-size="10" fill="#546E7A" font-family="Nunito, sans-serif">dernier chiffre : 0</text>
+                <!-- Par 9 -->
+                <rect x="18" y="108" width="250" height="60" rx="8" fill="white" stroke="#546E7A" stroke-width="2"/>
+                <text x="143" y="130" text-anchor="middle" font-size="13" font-weight="900" fill="#1C313A" font-family="Nunito, sans-serif">÷ 9 ✓</text>
+                <text x="143" y="147" text-anchor="middle" font-size="10" fill="#546E7A" font-family="Nunito, sans-serif">7+2+0=9, divisible par 9</text>
+                <!-- Par 10 -->
+                <rect x="282" y="108" width="260" height="60" rx="8" fill="white" stroke="#546E7A" stroke-width="2"/>
+                <text x="412" y="130" text-anchor="middle" font-size="13" font-weight="900" fill="#1C313A" font-family="Nunito, sans-serif">÷ 10 ✓</text>
+                <text x="412" y="147" text-anchor="middle" font-size="10" fill="#546E7A" font-family="Nunito, sans-serif">dernier chiffre : 0</text>
+                <!-- Label -->
+                <rect x="100" y="182" width="360" height="30" rx="8" fill="white" stroke="#B0BEC5" stroke-width="2"/>
+                <text x="280" y="202" text-anchor="middle" font-size="13" font-weight="900" fill="#1C313A" font-family="Nunito, sans-serif">720 est divisible par 2, 3, 5, 9 et 10 !</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔢 Astuce — Combiner les critères</h3>
+            <p>
+                Si un nombre est divisible par <strong>2 et par 3</strong>, il est automatiquement divisible par <strong>6</strong>.<br>
+                Si un nombre est divisible par <strong>3 et par 3</strong> (c'est-à-dire par 9), il est aussi divisible par <strong>3</strong>.<br><br>
+                Exemple : 756 → 7+5+6 = 18 → divisible par 9 (et donc par 3) ; se termine par 6 → divisible par 2.<br>
+                Donc 756 est aussi divisible par <strong>6</strong> (car divisible par 2 et par 3).
+            </p>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Pièges classiques</h3>
+            <p>
+                <strong>Critère par 2 ≠ critère par 4 :</strong> 14 est divisible par 2 mais pas par 4.<br>
+                <strong>Divisible par 9 → divisible par 3</strong> (mais pas l'inverse).<br>
+                <strong>Critère par 3 :</strong> c'est la SOMME des chiffres, pas le dernier chiffre !
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Critères de divisibilité par 2, 3, 5, 9, 10</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Un nombre est divisible par 2 si...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">son dernier chiffre est pair</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">sa somme de chiffres est paire</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">il se termine par 0</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">il est dans la table de 2</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> 432 est divisible par 9 car...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(2,0)">4 + 3 + 2 = 9</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">il se termine par 2</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">il est pair</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">il se termine par 32</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Quel nombre est divisible par 5 ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">123</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">245</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">371</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">482</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> 756 est-il divisible par 3 ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">Oui, car 7 + 5 + 6 = 18, divisible par 3</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">Non, car il ne se termine pas par 3</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">Oui, car il est pair</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">Non</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Un nombre divisible par 2 et par 3 est divisible par...</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">6</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">5</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">9</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">12</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Critères de divisibilité</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Le critère de divisibilité par 3 : la <input class="blank" id="f1a" placeholder="?"> des chiffres est divisible par 3.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                840 est divisible par 10 car il se termine par <input class="blank" id="f2a" placeholder="?" style="width:60px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Un nombre est divisible par 9 si la somme de ses chiffres est divisible par <input class="blank" id="f3a" placeholder="?" style="width:60px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Critère par 3</div>
+                <div class="ex-stmt">Le nombre 5 472 est-il divisible par 3 ? Justifie.</div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">On additionne les chiffres de 5 472 : <strong>5 + 4 + 7 + 2 = 18</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">On vérifie si 18 est divisible par 3 : 18 ÷ 3 = 6 reste 0 → <strong>oui !</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">La somme des chiffres (18) est divisible par 3, donc 5 472 l'est aussi.</div></div>
+                <div class="final-ans">✅ 5 472 est divisible par 3 (somme des chiffres = 18, et 18 ÷ 3 = 6)</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Critère par 9</div>
+                <div class="ex-stmt">Le nombre 3 285 est-il divisible par 9 ?</div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Somme des chiffres : <strong>3 + 2 + 8 + 5 = 18</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">18 ÷ 9 = 2 reste 0 → la somme est divisible par 9.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Vérification : 3 285 ÷ 9 = 365 ✓</div></div>
+                <div class="final-ans">✅ 3 285 est divisible par 9 (somme des chiffres = 18)</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Combiner les critères (style CE1D)</div>
+                <div class="ex-stmt">
+                    Le nombre 4 230 est-il divisible par 2 ? Par 3 ? Par 5 ? Par 10 ?<br>
+                    Justifie chaque réponse avec le critère approprié.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Par 2 ?</strong> Dernier chiffre = 0 (pair) → <strong>Oui.</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Par 3 ?</strong> 4+2+3+0 = 9, divisible par 3 → <strong>Oui.</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Par 5 ?</strong> Dernier chiffre = 0 → <strong>Oui.</strong></div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Par 10 ?</strong> Dernier chiffre = 0 → <strong>Oui.</strong></div></div>
+                <div class="final-ans">✅ 4 230 est divisible par 2, 3, 5 et 10. (et aussi par 6, 9, 15, 30…)</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Divisible par 6 ?</div>
+                <div class="bonus-stmt">
+                    Montre que 8 514 est divisible par 6, sans faire la division 8 514 ÷ 6.
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Critère par 2 :</strong> dernier chiffre = 4 (pair) → divisible par 2. ✓</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Critère par 3 :</strong> 8+5+1+4 = 18, 18 ÷ 3 = 6 → divisible par 3. ✓</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text">Un nombre divisible par 2 ET par 3 est automatiquement divisible par 6.</div></div>
+                <div class="bonus-ans">8 514 est divisible par 6 (car divisible par 2 et par 3). On vérifie : 8 514 ÷ 6 = 1 419 ✓</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>🏆 Niveau 2 terminé !</h2>
+    <p>Tu maîtrises les critères de divisibilité !<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 3 — Nombres premiers !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Divisibilité</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_divisibilite_niveau1.html" class="nav-btn">N1 — Diviseurs &amp; Multiples</a>
+        <a href="maths_divisibilite_niveau2.html" class="nav-btn current">▶ N2 — Critères</a>
+        <a href="maths_divisibilite_niveau3.html" class="nav-btn">N3 — Nb premiers</a>
+        <a href="maths_divisibilite_niveau4.html" class="nav-btn">N4 — PGCD/PPCM</a>
+        <a href="maths_divisibilite_niveau5.html" class="nav-btn">N5 — Défi 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:1, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! Un nombre est divisible par 2 si et seulement si son dernier chiffre est pair (0, 2, 4, 6 ou 8).",
+    2:"✅ Bravo ! 4 + 3 + 2 = 9, et 9 est divisible par 9, donc 432 est bien divisible par 9.",
+    3:"✅ Correct ! 245 se termine par 5, donc il est divisible par 5. (123 → dernier chiffre 3 ✗ ; 371 → 1 ✗ ; 482 → 2 ✗)",
+    4:"✅ Parfait ! 7 + 5 + 6 = 18, et 18 ÷ 3 = 6 reste 0, donc 756 est divisible par 3. Le critère par 3 utilise la SOMME des chiffres.",
+    5:"✅ Exact ! Si un nombre est divisible par 2 ET par 3, il est automatiquement divisible par 6 (car 6 = 2 × 3)."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Le critère par 2 regarde uniquement le dernier chiffre : s'il est pair (0, 2, 4, 6, 8), le nombre est divisible par 2.",
+    2:"❌ Non. Pour le critère par 9, on additionne les chiffres : 4 + 3 + 2 = 9. Et 9 est divisible par 9 → donc 432 l'est aussi.",
+    3:"❌ Non. Pour être divisible par 5, le dernier chiffre doit être 0 ou 5. Parmi les propositions, seul 245 se termine par 5.",
+    4:"❌ Non. Le critère par 3 : on additionne les chiffres (7+5+6=18). 18 est divisible par 3, donc 756 l'est aussi.",
+    5:"❌ Non. La règle est : divisible par 2 ET par 3 → divisible par 6. (Pas 5, pas 9, pas nécessairement 12.)"
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['somme']],
+        msgOk:"✅ Exact ! Le critère par 3 utilise la SOMME des chiffres. Si cette somme est divisible par 3, le nombre l'est aussi.",
+        msgErr:"❌ Non. Le mot manquant est « somme ». On additionne les chiffres et on vérifie si ce total est divisible par 3."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['0']],
+        msgOk:"✅ Bravo ! 840 se termine par 0, c'est précisément le critère de divisibilité par 10 (et aussi par 2 et par 5).",
+        msgErr:"❌ Non. 840 se termine par le chiffre 0. Un nombre est divisible par 10 si et seulement si son dernier chiffre est 0."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['9']],
+        msgOk:"✅ Parfait ! Un nombre est divisible par 9 si la somme de ses chiffres est divisible par 9. Exemple : 432 → 4+3+2=9 ✓",
+        msgErr:"❌ Non. Le mot manquant est « 9 ». On calcule la somme des chiffres et on vérifie si elle est divisible par 9."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_divisibilite_2', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

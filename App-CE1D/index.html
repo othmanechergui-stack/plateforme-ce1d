@@ -222,6 +222,11 @@
             box-shadow: 0 4px 0 #004D40;
         }
 
+        .subject-header.biologie {
+            background: linear-gradient(135deg, #1B5E20, #388E3C, #81C784);
+            box-shadow: 0 4px 0 #1B5E20;
+        }
+
         .subject-icon {
             width: 44px; height: 44px;
             background: rgba(255,255,255,.22);
@@ -513,6 +518,18 @@
         <div class="modules-grid" id="grid-sciences"></div>
     </section>
 
+    <!-- ── BIOLOGIE ── -->
+    <section class="subject-section" id="section-biologie">
+        <div class="subject-header biologie">
+            <div class="subject-icon">🌿</div>
+            <div>
+                <h2>Biologie</h2>
+                <p>Écologie · Végétaux · Corps humain · Optique · Eau</p>
+            </div>
+        </div>
+        <div class="modules-grid" id="grid-biologie"></div>
+    </section>
+
 </main>
 
 <footer>
@@ -656,6 +673,33 @@ const MODULES = [
         available: true
     },
     {
+        id: 'divisibilite', section: 'maths',
+        title: 'Divisibilité', icon: '÷',
+        subtitle: 'Diviseurs · Multiples · Critères · Nombres premiers · PGCD · PPCM',
+        mc: '#546E7A', mcDark: '#37474F', mcBg: '#ECEFF1',
+        files: ['maths_divisibilite_niveau1.html','maths_divisibilite_niveau2.html','maths_divisibilite_niveau3.html','maths_divisibilite_niveau4.html','maths_divisibilite_niveau5.html'],
+        labels: ['Diviseurs', 'Critères', 'Nb premiers', 'PGCD/PPCM', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'solides', section: 'maths',
+        title: 'Solides & Volumes', icon: '📦',
+        subtitle: 'Cube · Parallélépipède · Prisme · Cylindre · Développements',
+        mc: '#8D6E63', mcDark: '#6D4C41', mcBg: '#EFEBE9',
+        files: ['maths_solides_niveau1.html','maths_solides_niveau2.html','maths_solides_niveau3.html','maths_solides_niveau4.html','maths_solides_niveau5.html'],
+        labels: ['Cube/Pavé', 'Prisme', 'Cylindre', 'Pyramide', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'transformations', section: 'maths',
+        title: 'Transformations du plan', icon: '🔄',
+        subtitle: 'Translation · Symétrie · Rotation · Isométries · Propriétés',
+        mc: '#00ACC1', mcDark: '#00838F', mcBg: '#E0F7FA',
+        files: ['maths_transformations_niveau1.html','maths_transformations_niveau2.html','maths_transformations_niveau3.html','maths_transformations_niveau4.html','maths_transformations_niveau5.html'],
+        labels: ['Translation', 'Symétrie', 'Rotation', 'Isométries', 'Défi 🏆'],
+        available: true
+    },
+    {
         id: 'physique', section: 'sciences',
         title: 'Physique — Pression', icon: '⚡',
         subtitle: 'Formule · Calculs · Situations réelles CE1D',
@@ -743,6 +787,69 @@ const MODULES = [
         mc: '#512DA8', mcDark: '#311B92', mcBg: '#EDE7F6',
         files: ['chimie_reactions_niveau1.html', 'chimie_reactions_niveau2.html', 'chimie_reactions_niveau3.html', 'chimie_reactions_niveau4.html', 'chimie_reactions_niveau5.html'],
         labels: ['Notion', 'Équation', 'Lavoisier', 'Combustion', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'ecologie', section: 'biologie',
+        title: 'Écologie & Milieu de vie', icon: '🌍',
+        subtitle: 'Biotope · Facteurs · Populations · Relations · Défi CE1D',
+        mc: '#558B2F', mcDark: '#33691E', mcBg: '#F1F8E9',
+        files: ['bio_ecologie_niveau1.html','bio_ecologie_niveau2.html','bio_ecologie_niveau3.html','bio_ecologie_niveau4.html','bio_ecologie_niveau5.html'],
+        labels: ['Milieu', 'Facteurs', 'Populations', 'Relations', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'vegetaux', section: 'biologie',
+        title: 'Les Végétaux', icon: '🌱',
+        subtitle: 'Structure · Photosynthèse · Nutrition · Reproduction · Défi CE1D',
+        mc: '#00838F', mcDark: '#006064', mcBg: '#E0F7FA',
+        files: ['bio_vegetaux_niveau1.html','bio_vegetaux_niveau2.html','bio_vegetaux_niveau3.html','bio_vegetaux_niveau4.html','bio_vegetaux_niveau5.html'],
+        labels: ['Structure', 'Photosynth.', 'Nutrition', 'Reprod.', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'chaines', section: 'biologie',
+        title: 'Chaînes alimentaires', icon: '🦁',
+        subtitle: 'Producteurs · Consommateurs · Réseaux trophiques · Flux · Défi CE1D',
+        mc: '#BF360C', mcDark: '#870000', mcBg: '#FBE9E7',
+        files: ['bio_chaines_niveau1.html','bio_chaines_niveau2.html','bio_chaines_niveau3.html','bio_chaines_niveau4.html','bio_chaines_niveau5.html'],
+        labels: ['Rôles', 'Chaîne', 'Réseau', 'Flux énergie', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'corpshumain', section: 'biologie',
+        title: 'Le Corps humain', icon: '🫀',
+        subtitle: 'Organisation · Digestion · Circulation · Respiration · Défi CE1D',
+        mc: '#C62828', mcDark: '#B71C1C', mcBg: '#FFEBEE',
+        files: ['bio_corpshumain_niveau1.html','bio_corpshumain_niveau2.html','bio_corpshumain_niveau3.html','bio_corpshumain_niveau4.html','bio_corpshumain_niveau5.html'],
+        labels: ['Organisation', 'Digestion', 'Circulation', 'Respiration', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'reproduction', section: 'biologie',
+        title: 'Reproduction', icon: '🧬',
+        subtitle: 'Asexuée · Sexuée animale · Sexuée humaine · Puberté · Défi CE1D',
+        mc: '#AD1457', mcDark: '#880E4F', mcBg: '#FCE4EC',
+        files: ['bio_reproduction_niveau1.html','bio_reproduction_niveau2.html','bio_reproduction_niveau3.html','bio_reproduction_niveau4.html','bio_reproduction_niveau5.html'],
+        labels: ['Asexuée', 'Sexuée', 'Humaine', 'Puberté', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'optique', section: 'biologie',
+        title: 'Optique & Lumière', icon: '💡',
+        subtitle: 'Propagation · Réflexion · Réfraction · Spectre · Défi CE1D',
+        mc: '#F9A825', mcDark: '#F57F17', mcBg: '#FFFDE7',
+        files: ['bio_optique_niveau1.html','bio_optique_niveau2.html','bio_optique_niveau3.html','bio_optique_niveau4.html','bio_optique_niveau5.html'],
+        labels: ['Sources', 'Réflexion', 'Réfraction', 'Spectre', 'Défi 🏆'],
+        available: true
+    },
+    {
+        id: 'eau', section: 'biologie',
+        title: "L'Eau", icon: '💧',
+        subtitle: "Propriétés · Cycle · Eau potable · Vivants · Défi CE1D",
+        mc: '#0277BD', mcDark: '#01579B', mcBg: '#E1F5FE',
+        files: ['bio_eau_niveau1.html','bio_eau_niveau2.html','bio_eau_niveau3.html','bio_eau_niveau4.html','bio_eau_niveau5.html'],
+        labels: ['Propriétés', 'Cycle', 'Potable', 'Vivants', 'Défi 🏆'],
         available: true
     }
 ];
@@ -878,13 +985,15 @@ function updateGlobalStats() {
 
 /* ─── Rendu de tous les modules ─── */
 function renderAll() {
-    const gridMaths    = document.getElementById('grid-maths');
-    const gridSciences = document.getElementById('grid-sciences');
+    const gridMaths     = document.getElementById('grid-maths');
+    const gridSciences  = document.getElementById('grid-sciences');
+    const gridBiologie  = document.getElementById('grid-biologie');
 
     MODULES.forEach(mod => {
         const html = renderCard(mod);
-        if (mod.section === 'maths')    gridMaths.insertAdjacentHTML('beforeend', html);
-        else                             gridSciences.insertAdjacentHTML('beforeend', html);
+        if (mod.section === 'maths')         gridMaths.insertAdjacentHTML('beforeend', html);
+        else if (mod.section === 'sciences') gridSciences.insertAdjacentHTML('beforeend', html);
+        else                                 gridBiologie.insertAdjacentHTML('beforeend', html);
     });
 
     updateGlobalStats();
@@ -895,8 +1004,9 @@ renderAll();
 
 /* ─── Rafraîchit si l'élève revient d'un niveau ─── */
 window.addEventListener('focus', () => {
-    document.getElementById('grid-maths').innerHTML    = '';
-    document.getElementById('grid-sciences').innerHTML = '';
+    document.getElementById('grid-maths').innerHTML     = '';
+    document.getElementById('grid-sciences').innerHTML  = '';
+    document.getElementById('grid-biologie').innerHTML  = '';
     renderAll();
 });
 </script>

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corps humain · Niveau 3 — Circulation sanguine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#C62828; --primary-dark:#B71C1C; --primary-mid:#E53935; --primary-bg:#FFEBEE;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#5D0000 0%,#C62828 55%,#EF9A9A 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(93,0,0,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#C62828; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#B71C1C; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#5D0000,#C62828,#EF9A9A); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#5D0000,#B71C1C); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#EF9A9A; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #EF9A9A; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #EF9A9A; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:140px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#5D0000,#C62828,#EF9A9A); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #5D0000; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🫀 Corps humain · Circulation</h1>
+            <p>Niveau 3 · Cœur · Artères · Veines · Sang</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 3 — Avancé</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — La circulation sanguine</div>
+            <div class="card-sub">Cœur · Artères · Veines · Capillaires · Sang</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Le <strong>système circulatoire</strong> transporte le sang dans tout le corps.
+            Le <strong>cœur</strong>, organe central, est une pompe qui envoie le sang via les <strong>artères</strong>
+            et le récupère via les <strong>veines</strong>. Il existe deux circulations : la <strong>petite</strong> (pulmonaire)
+            et la <strong>grande</strong> (systémique).
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Les deux circulations — Petite et Grande</h3>
+            <p>
+                • <strong>Petite circulation (pulmonaire)</strong> : cœur droit → poumons → cœur gauche.<br>
+                &nbsp;&nbsp;Le sang appauvri en O₂ va aux poumons pour se recharger.<br>
+                • <strong>Grande circulation (systémique)</strong> : cœur gauche → organes → cœur droit.<br>
+                &nbsp;&nbsp;Le sang riche en O₂ est distribué à tous les organes du corps.<br>
+                • <strong>Cœur</strong> : 4 cavités — 2 oreillettes (reçoivent le sang) + 2 ventricules (expulsent le sang).
+            </p>
+        </div>
+
+        <!-- SVG circulation -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 580 270" xmlns="http://www.w3.org/2000/svg" style="max-width:580px;width:100%">
+                <rect x="0" y="0" width="580" height="270" fill="#FFF5F5" rx="10"/>
+                <text x="290" y="22" text-anchor="middle" font-size="13" font-weight="900" fill="#5D0000" font-family="Nunito, sans-serif">Les deux circulations du système cardio-vasculaire</text>
+
+                <!-- Cœur -->
+                <rect x="230" y="100" width="120" height="70" rx="12" fill="#C62828"/>
+                <text x="290" y="128" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">❤️ CŒUR</text>
+                <text x="290" y="144" text-anchor="middle" font-size="10" font-weight="700" fill="#FFCDD2" font-family="Nunito, sans-serif">4 cavités</text>
+                <text x="290" y="160" text-anchor="middle" font-size="10" font-weight="700" fill="#FFCDD2" font-family="Nunito, sans-serif">2 oreil. + 2 ventr.</text>
+
+                <!-- Poumons -->
+                <rect x="50" y="110" width="130" height="50" rx="10" fill="#42A5F5"/>
+                <text x="115" y="140" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">🫁 POUMONS</text>
+
+                <!-- Organes -->
+                <rect x="400" y="110" width="130" height="50" rx="10" fill="#66BB6A"/>
+                <text x="465" y="140" text-anchor="middle" font-size="11" font-weight="900" fill="white" font-family="Nunito, sans-serif">🏃 ORGANES</text>
+
+                <!-- Flèches petite circulation -->
+                <line x1="230" y1="125" x2="180" y2="125" stroke="#1565C0" stroke-width="2.5" marker-end="url(#arrB)"/>
+                <line x1="180" y1="145" x2="230" y2="145" stroke="#E53935" stroke-width="2.5" marker-end="url(#arrR)"/>
+                <text x="200" y="118" text-anchor="middle" font-size="9" font-weight="700" fill="#1565C0" font-family="Nunito, sans-serif">sang pauvre O₂</text>
+                <text x="200" y="162" text-anchor="middle" font-size="9" font-weight="700" fill="#C62828" font-family="Nunito, sans-serif">sang riche O₂</text>
+
+                <!-- Flèches grande circulation -->
+                <line x1="350" y1="125" x2="400" y2="125" stroke="#E53935" stroke-width="2.5" marker-end="url(#arrR)"/>
+                <line x1="400" y1="145" x2="350" y2="145" stroke="#1565C0" stroke-width="2.5" marker-end="url(#arrB)"/>
+                <text x="375" y="118" text-anchor="middle" font-size="9" font-weight="700" fill="#C62828" font-family="Nunito, sans-serif">sang riche O₂</text>
+                <text x="375" y="162" text-anchor="middle" font-size="9" font-weight="700" fill="#1565C0" font-family="Nunito, sans-serif">sang pauvre O₂</text>
+
+                <!-- Légende -->
+                <rect x="30" y="230" width="14" height="14" fill="#E53935" rx="3"/>
+                <text x="50" y="242" font-size="11" font-weight="700" fill="#5D0000" font-family="Nunito, sans-serif">Sang riche en O₂ (artères)</text>
+                <rect x="250" y="230" width="14" height="14" fill="#1565C0" rx="3"/>
+                <text x="270" y="242" font-size="11" font-weight="700" fill="#5D0000" font-family="Nunito, sans-serif">Sang pauvre en O₂ (veines)</text>
+
+                <defs>
+                    <marker id="arrR" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E53935"/></marker>
+                    <marker id="arrB" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#1565C0"/></marker>
+                </defs>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔬 Le sang — Composition et rôles</h3>
+            <p>
+                • <strong>Globules rouges (érythrocytes)</strong> : transportent l'O₂ grâce à l'<strong>hémoglobine</strong>.<br>
+                • <strong>Globules blancs (leucocytes)</strong> : défense immunitaire contre les infections.<br>
+                • <strong>Plaquettes (thrombocytes)</strong> : coagulation du sang en cas de blessure.<br>
+                • <strong>Plasma</strong> : partie liquide qui transporte nutriments, hormones et déchets.
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">❤️ Cœur</div>
+                <div class="cas-eq">4 cavités</div>
+                <div class="cas-desc">2 oreillettes + 2 ventricules</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🔴 Artères</div>
+                <div class="cas-eq">Du cœur → organes</div>
+                <div class="cas-desc">Sang riche en O₂ (sauf art. pulm.)</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🔵 Veines</div>
+                <div class="cas-eq">Organes → cœur</div>
+                <div class="cas-desc">Sang pauvre en O₂ (sauf veine pulm.)</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">💉 Hémoglobine</div>
+                <div class="cas-eq">Transport O₂</div>
+                <div class="cas-desc">Protéine des globules rouges</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège classique : Artères ≠ toujours sang riche en O₂ !</h3>
+            <p>
+                En règle générale : <strong>artères = sang riche en O₂</strong>, <strong>veines = sang pauvre en O₂</strong>.<br>
+                <strong>EXCEPTION importante</strong> : l'artère pulmonaire transporte du sang <strong>pauvre</strong> en O₂
+                (du cœur droit vers les poumons), et la veine pulmonaire ramène du sang <strong>riche</strong> en O₂.<br>
+                La définition correcte : une artère conduit le sang <strong>du cœur vers les organes</strong>, pas selon la teneur en O₂.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · La circulation sanguine</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Le cœur est composé de...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">4 cavités : 2 oreillettes et 2 ventricules</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">2 cavités</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">3 cavités</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">1 seule cavité</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> La grande circulation (systémique) amène le sang...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(2,0)">du cœur gauche vers les organes et retour au cœur droit</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">du cœur droit vers les poumons</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">des poumons au cœur gauche</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">entre les deux ventricules</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Les globules rouges transportent l'oxygène grâce à...</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">l'hémoglobine</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">la fibrine</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">le plasma</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">les plaquettes</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> La pression artérielle mesure...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">la pression du sang sur les parois des artères</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">le débit cardiaque</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">la quantité d'oxygène dans le sang</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">le taux de glucose sanguin</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Les artères conduisent le sang...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">du cœur vers les organes</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">des organes vers le cœur</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">entre capillaires</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">du cœur vers les poumons uniquement</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · La circulation sanguine</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Le cœur est divisé en 4 cavités : 2 oreillettes et 2
+                <input class="blank" id="f1a" placeholder="?" style="width:140px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Le transporteur de l'oxygène dans les globules rouges est l'
+                <input class="blank" id="f2a" placeholder="?" style="width:160px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Les
+                <input class="blank" id="f3a" placeholder="?" style="width:100px">
+                conduisent le sang du cœur vers les organes.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Les cavités du cœur</div>
+                <div class="ex-stmt">
+                    Explique le trajet du sang à travers les 4 cavités du cœur, en précisant ce qui entre et ce qui sort de chaque cavité.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Oreillette droite</strong> → reçoit le sang pauvre en O₂ venant des organes (via les veines caves).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Ventricule droit</strong> → reçoit le sang de l'oreillette droite et l'expulse vers les poumons (petite circulation).</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Oreillette gauche</strong> → reçoit le sang riche en O₂ revenant des poumons (via les veines pulmonaires).</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Ventricule gauche</strong> → reçoit le sang de l'oreillette gauche et l'expulse vers tout le corps (grande circulation).</div></div>
+                <div class="final-ans">✅ Oreillette D → Ventricule D → Poumons → Oreillette G → Ventricule G → Corps</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Identifier vaisseaux et sang</div>
+                <div class="ex-stmt">
+                    Pour chacun de ces vaisseaux, indique s'il contient du sang riche ou pauvre en O₂ et sa direction :<br>
+                    a) Aorte &nbsp; b) Artère pulmonaire &nbsp; c) Veine cave &nbsp; d) Veine pulmonaire
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Aorte</strong> → Artère → sang <strong>riche en O₂</strong> → du ventricule gauche vers les organes.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Artère pulmonaire</strong> → Artère → sang <strong>pauvre en O₂</strong> → du ventricule droit vers les poumons. <em>(Exception !)</em></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Veine cave</strong> → Veine → sang <strong>pauvre en O₂</strong> → des organes vers l'oreillette droite.</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>d) Veine pulmonaire</strong> → Veine → sang <strong>riche en O₂</strong> → des poumons vers l'oreillette gauche. <em>(Exception !)</em></div></div>
+                <div class="final-ans">✅ Aorte : riche O₂ | Art. pulm. : pauvre O₂ (exception) | V. cave : pauvre O₂ | V. pulm. : riche O₂ (exception)</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Question style CE1D</div>
+                <div class="ex-stmt">
+                    Un patient a une pression artérielle de 160/100 mmHg (valeur normale : 120/80).<br>
+                    a) Que mesure la pression artérielle ?<br>
+                    b) Ce patient a-t-il une pression normale, trop haute ou trop basse ? Justifie.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> La pression artérielle mesure la <strong>pression exercée par le sang sur les parois des artères</strong>. Le chiffre supérieur (systolique) correspond à la contraction du cœur, l'inférieur (diastolique) au relâchement.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> 160/100 mmHg est <strong>trop élevé</strong> : les deux valeurs dépassent la normale (120/80). Ce patient souffre d'<strong>hypertension artérielle</strong>, ce qui augmente le risque d'AVC et d'infarctus.</div></div>
+                <div class="final-ans">✅ Pression trop haute (hypertension) : 160 &gt; 120 et 100 &gt; 80 mmHg.</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Les composants du sang</div>
+                <div class="bonus-stmt">
+                    Associe chaque composant du sang à son rôle :<br>
+                    Globules rouges · Globules blancs · Plaquettes · Plasma
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Globules rouges</strong> → <strong>Transport de l'O₂</strong> grâce à l'hémoglobine. Durée de vie ≈ 120 jours.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Globules blancs</strong> → <strong>Défense immunitaire</strong> : combattent les bactéries, virus et cellules étrangères.</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>Plaquettes</strong> → <strong>Coagulation</strong> : s'agrègent au niveau d'une blessure pour stopper le saignement.</div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text"><strong>Plasma</strong> → <strong>Transport</strong> des nutriments, hormones, déchets et protéines dans le sang (≈ 55% du sang).</div></div>
+                <div class="bonus-ans">
+                    GR → O₂ · GB → Immunité · Plaquettes → Coagulation · Plasma → Transport
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 3 terminé !</h2>
+    <p>Bravo ! Tu maîtrises la circulation sanguine du corps humain.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 4 — Respiration !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Corps humain CE1D</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="bio_corpshumain_niveau1.html" class="nav-btn">N1 — Organisation</a>
+        <a href="bio_corpshumain_niveau2.html" class="nav-btn">N2 — Digestion</a>
+        <a href="bio_corpshumain_niveau3.html" class="nav-btn current">▶ N3 — Circulation</a>
+        <a href="bio_corpshumain_niveau4.html" class="nav-btn">N4 — Respiration</a>
+        <a href="bio_corpshumain_niveau5.html" class="nav-btn">N5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! Le cœur possède 4 cavités : 2 oreillettes (reçoivent le sang) et 2 ventricules (expulsent le sang).",
+    2:"✅ Bravo ! La grande circulation part du cœur gauche, distribue l'O₂ aux organes, et revient au cœur droit.",
+    3:"✅ Correct ! L'hémoglobine est la protéine des globules rouges qui se lie à l'O₂ pour le transporter.",
+    4:"✅ Parfait ! La pression artérielle mesure la force exercée par le sang sur les parois des artères.",
+    5:"✅ Exact ! Les artères conduisent le sang DU cœur VERS les organes. (Attention aux exceptions pulmonaires !)"
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Le cœur humain possède bien 4 cavités : 2 oreillettes (droite et gauche) + 2 ventricules (droit et gauche).",
+    2:"❌ Non. La grande circulation va du cœur GAUCHE vers les organes et revient au cœur DROIT. C'est la petite circulation qui passe par les poumons.",
+    3:"❌ Non. C'est l'hémoglobine qui transporte l'O₂. La fibrine sert à la coagulation, le plasma transporte les nutriments.",
+    4:"❌ Non. La pression artérielle mesure la pression du sang sur les parois des artères, pas la quantité d'O₂ ni le glucose.",
+    5:"❌ Non. Les artères conduisent le sang DU cœur VERS les organes. Les veines font le trajet inverse."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['ventricules']],
+        msgOk:"✅ Exact ! Le cœur a 4 cavités : 2 oreillettes (reçoivent le sang) + 2 ventricules (expulsent le sang).",
+        msgErr:"❌ Attendu : ventricules. Le cœur comprend 2 oreillettes et 2 ventricules."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['hemoglobine','hémoglobine']],
+        msgOk:"✅ Bravo ! L'hémoglobine est la protéine des globules rouges qui capte l'O₂ dans les poumons pour le distribuer aux organes.",
+        msgErr:"❌ Attendu : hémoglobine. C'est la protéine des globules rouges qui transporte l'oxygène."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['arteres','artères']],
+        msgOk:"✅ Parfait ! Les artères conduisent le sang du cœur vers les organes. Les veines font le trajet inverse.",
+        msgErr:"❌ Attendu : artères. Les artères partent du cœur vers les organes (les veines reviennent au cœur)."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_corpshumain_3', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

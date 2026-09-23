@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chaînes alimentaires · Niveau 5 — Défi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#BF360C; --primary-dark:#870000; --primary-mid:#FF7043; --primary-bg:#FBE9E7;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#870000 0%,#BF360C 55%,#FF8A65 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(135,0,0,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#BF360C; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#870000; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#870000,#BF360C,#FF8A65); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#870000,#BF360C); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#FFCCBC; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #FFCCBC; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.05rem; font-weight:900; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #FFCCBC; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:160px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#870000,#BF360C,#FF8A65); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #5D0000; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🏆 Chaînes alimentaires · Défi CE1D</h1>
+            <p>Niveau 5 · Eutrophisation · Bioaccumulation · Cascade trophique · Efficacité écologique</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <span class="diff-label">Niveau 5 — Défi CE1D 🏆</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Perturbations des écosystèmes</div>
+            <div class="card-sub">Eutrophisation · Bioaccumulation · Cascade trophique · Efficacité écologique</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Ce niveau synthétise les notions avancées sur les chaînes alimentaires : impact humain sur les écosystèmes,
+            accumulation de polluants, et effets en cascade. Des concepts indispensables pour le CE1D belge.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Bioaccumulation et eutrophisation</h3>
+            <p>
+                <strong>Bioaccumulation :</strong> certains polluants (pesticides, métaux lourds) ne sont pas éliminés par l'organisme.
+                Ils s'accumulent et se <strong>concentrent à chaque niveau trophique</strong>. Les grands prédateurs accumulent les doses les plus élevées.<br><br>
+                <strong>Eutrophisation :</strong> apport excessif de nutriments (nitrates, phosphates des engrais) dans un lac → prolifération d'algues → mort des poissons par manque d'O₂.
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">☠️ Bioaccumulation</div>
+                <div class="cas-eq">Toxines × niveau</div>
+                <div class="cas-desc">Les toxines se concentrent à chaque maillon. Les prédateurs au sommet accumulent les doses les plus dangereuses.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🌿 Eutrophisation</div>
+                <div class="cas-eq">Nitrates + phosphates</div>
+                <div class="cas-desc">Excès d'engrais → explosion d'algues → manque d'O₂ → mort des poissons (zone morte).</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🐺 Cascade trophique</div>
+                <div class="cas-eq">Effet domino</div>
+                <div class="cas-desc">Disparition d'un prédateur → surpopulation de ses proies → destruction des plantes → déséquilibre complet.</div>
+            </div>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔑 Exemple réel : réintroduction du loup à Yellowstone</h3>
+            <p>
+                Sans loups (disparus en 1926), les cerfs surpâturaient les berges → rivières dégradées → moins de castors → moins de zones humides.<br><br>
+                Avec le retour des loups en 1995 : cerfs réduits et redistribués → végétation des berges restaurée → rivières stabilisées → biodiversité augmentée.<br>
+                C'est une <strong>cascade trophique positive</strong>, aussi appelée « effet du loup ».
+            </p>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège : les producteurs primaires sont la BASE de tout</h3>
+            <p>
+                Si les producteurs primaires (plantes, algues) disparaissent, <strong>TOUT l'écosystème s'effondre</strong>.
+                Les consommateurs primaires meurent → puis les secondaires → etc. Il n'y a pas d'écosystème sans base autotrophe.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Niveau Défi CE1D — perturbations des écosystèmes</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> L'eutrophisation d'un lac est causée par...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">a) un excès de nutriments (nitrates, phosphates) provoquant une prolifération d'algues</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">b) un manque d'eau</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">c) trop de poissons</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">d) la pollution sonore</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> La bioaccumulation désigne...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(2,0)">a) la concentration croissante de toxines le long de la chaîne alimentaire</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">b) la décomposition de la matière</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">c) la biomasse totale</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">d) l'accumulation de CO₂</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Si les producteurs primaires disparaissent, les conséquences sont...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">a) l'effondrement de tout l'écosystème</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">b) uniquement la disparition des herbivores</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">c) une augmentation des décomposeurs</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">d) aucun effet notable</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> L'efficacité écologique (10%) explique pourquoi un régime végétarien est...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">a) plus efficient énergétiquement qu'un régime carné</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">b) moins nutritif</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">c) identique en impact</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">d) plus gourmand en eau</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> La cascade trophique est le phénomène par lequel...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">a) la disparition d'un prédateur entraîne des effets en cascade sur tous les niveaux inférieurs</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">b) l'énergie monte dans la chaîne</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">c) les décomposeurs multiplient</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">d) les plantes croissent plus vite</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Bioaccumulation, eutrophisation, perturbation trophique</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                La concentration de toxines qui augmente à chaque niveau trophique est la
+                <input class="blank" id="f1a" placeholder="?" style="width:170px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                L'excès d'engrais dans un lac provoque l'
+                <input class="blank" id="f2a" placeholder="?" style="width:170px">, une prolifération d'algues.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                La disparition d'un prédateur entraîne une
+                <input class="blank" id="f3a" placeholder="?" style="width:150px"> trophique en cascade.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🏆</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices style CE1D avec corrigé · + 1 bonus · Synthèse complète</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Bioaccumulation du DDT</div>
+                <div class="ex-stmt">
+                    Le DDT est un insecticide interdit mais encore présent dans certains écosystèmes. Dans un lac :
+                    eau : 0,000003 ppm · plancton : 0,04 ppm · petits poissons : 0,5 ppm · grands poissons : 2 ppm · aigle pêcheur : 25 ppm.<br>
+                    a) Quel phénomène illustrent ces données ?<br>
+                    b) Calcule le facteur d'amplification entre l'eau et l'aigle.<br>
+                    c) Pourquoi les grands prédateurs sont-ils les plus touchés ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> C'est la <strong>bioaccumulation</strong> (ou bioamplification) : la concentration d'une substance toxique augmente à chaque niveau de la chaîne alimentaire.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Facteur = 25 ppm ÷ 0,000003 ppm = <strong>environ 8 300 000</strong> fois ! Le DDT est 8 millions de fois plus concentré chez l'aigle que dans l'eau.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> Les grands prédateurs mangent de nombreuses proies qui ont déjà accumulé la toxine. À chaque maillon, la concentration multiplie. Ils ne peuvent pas éliminer le DDT (il se stocke dans les graisses).</div></div>
+                <div class="final-ans">✅ Bioaccumulation : facteur ×8 000 000 entre eau et aigle. Prédateurs au sommet = plus exposés.</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Eutrophisation (question style CE1D)</div>
+                <div class="ex-stmt">
+                    Un agriculteur épand beaucoup d'engrais azotés sur ses champs près d'un lac. Quelques semaines plus tard, une couche verte recouvre le lac et les poissons commencent à mourir.<br>
+                    a) Explique en 3 étapes le mécanisme qui conduit à la mort des poissons.<br>
+                    b) Que devrait faire l'agriculteur pour limiter ce phénomène ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Étape 1 :</strong> Les nitrates des engrais ruissellent dans le lac → <strong>excès de nutriments</strong> → les algues prolifèrent massivement (bloom algal).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Étape 2 :</strong> La couche d'algues en surface <strong>bloque la lumière</strong> → les plantes aquatiques et les algues profondes meurent → les bactéries décomposent cette matière morte → consomment beaucoup d'O₂.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Étape 3 :</strong> L'eau devient <strong>anoxique</strong> (manque d'O₂) → les poissons et autres animaux aquatiques meurent par asphyxie.</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Solutions :</strong> réduire les doses d'engrais, utiliser des engrais à libération lente, créer des bandes enherbées entre les champs et le lac pour filtrer les ruissellements.</div></div>
+                <div class="final-ans">✅ Engrais → nitrates dans le lac → algues → mort des plantes aquatiques → bactéries décomposantes → manque d'O₂ → mort des poissons.</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Synthèse CE1D : l'affaire des loups</div>
+                <div class="ex-stmt">
+                    À Yellowstone (USA), les loups ont été chassés au début du 20e siècle. Résultat : explosion de la population de cerfs, surpâturage des berges, rivières déstabilisées. En 1995, on a réintroduit des loups.<br>
+                    a) Comment appelle-t-on ce type de phénomène ?<br>
+                    b) Explique pourquoi les rivières se sont améliorées après le retour des loups.<br>
+                    c) Quel rôle joue le loup dans cet écosystème ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> C'est une <strong>cascade trophique</strong> : la disparition (puis le retour) d'un prédateur entraîne des effets en chaîne sur tous les niveaux trophiques inférieurs et même sur l'environnement physique.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Le retour des loups a réduit et redistribué les cerfs → les berges ne sont plus surpâturées → la végétation repousse → les racines stabilisent les berges → les rivières retrouvent leur cours normal. Les castors reviennent → encore plus de zones humides.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> Le loup est une <strong>espèce clé de voûte</strong> (keystone species) : sa présence maintient l'équilibre de tout l'écosystème, bien au-delà de son simple rôle de prédateur.</div></div>
+                <div class="final-ans">✅ Cascade trophique : loups → contrôle des cerfs → végétation → rivières stables. Loup = espèce clé de voûte.</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Le cycle de l'azote et les chaînes alimentaires</div>
+                <div class="bonus-stmt">
+                    L'azote est un élément essentiel de la matière vivante (protéines, ADN).<br>
+                    a) Comment l'azote entre-t-il dans la chaîne alimentaire ?<br>
+                    b) Quel est le rôle des décomposeurs dans le cycle de l'azote ?<br>
+                    c) Pourquoi l'eutrophisation est-elle liée à une perturbation du cycle de l'azote ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> L'azote entre par les <strong>plantes</strong> qui absorbent des ions nitrates (NO₃⁻) via leurs racines → les plantes fabriquent des protéines → les herbivores mangent les plantes → transmission à chaque maillon.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b)</strong> Les décomposeurs (bactéries, champignons) décomposent la matière organique morte → libèrent des ions ammonium (NH₄⁺) → d'autres bactéries les transforment en nitrates → retour dans le sol pour les plantes. C'est la <strong>minéralisation</strong>.</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>c)</strong> L'eutrophisation est causée par un <strong>excès d'azote</strong> (nitrates des engrais) qui arrive dans un lac. Le cycle normal est déséquilibré car l'apport dépasse largement la capacité de recyclage naturelle de l'écosystème aquatique.</div></div>
+                <div class="bonus-ans">Azote : sol → plantes → consommateurs → décomposeurs → sol. Eutrophisation = rupture du cycle par excès d'engrais azotés.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🏆 🌟 🔥</div>
+    <h2>Défi Chaînes alimentaires terminé !</h2>
+    <p>Incroyable ! Tu maîtrises tous les concepts sur les chaînes alimentaires pour le CE1D.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Tu es prêt(e) pour l'examen !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Chaînes alimentaires</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="bio_chaines_niveau1.html" class="nav-btn">Niveau 1 — Bases</a>
+        <a href="bio_chaines_niveau2.html" class="nav-btn">Niveau 2 — Niveaux trophiques</a>
+        <a href="bio_chaines_niveau3.html" class="nav-btn">Niveau 3 — Réseaux</a>
+        <a href="bio_chaines_niveau4.html" class="nav-btn">Niveau 4 — Flux d'énergie</a>
+        <a href="bio_chaines_niveau5.html" class="nav-btn current">▶ Niveau 5 — Défi 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! L'eutrophisation est causée par un excès de nutriments (nitrates et phosphates des engrais) qui provoque une prolifération incontrôlée d'algues, menant à la mort des poissons par asphyxie.",
+    2:"✅ Bravo ! La bioaccumulation (ou bioamplification) est l'augmentation progressive de la concentration de substances toxiques à chaque niveau trophique. Les grands prédateurs accumulent les doses les plus élevées.",
+    3:"✅ Correct ! Les producteurs primaires (plantes, algues) sont la base de toute chaîne alimentaire. Sans eux, tous les consommateurs meurent en cascade : effondrement total de l'écosystème.",
+    4:"✅ Parfait ! Avec la règle des 10%, manger directement des végétaux (niveau 1) utilise 10× plus d'énergie qu'un régime carné (niveau 2). Le régime végétarien est donc bien plus efficient énergétiquement.",
+    5:"✅ Exact ! La cascade trophique est le phénomène par lequel la disparition (ou réintroduction) d'un prédateur entraîne des effets en chaîne sur tous les niveaux inférieurs et parfois même sur l'environnement physique."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. L'eutrophisation est causée par un EXCÈS de nutriments (nitrates, phosphates) des engrais agricoles qui ruissellent dans les eaux. Cela provoque une prolifération d'algues, puis un manque d'O₂ et la mort des poissons.",
+    2:"❌ Non. La bioaccumulation désigne l'augmentation de la concentration de toxines à chaque niveau trophique. Ce n'est pas la décomposition ni la biomasse totale.",
+    3:"❌ Non. Sans producteurs primaires, TOUT l'écosystème s'effondre en cascade. Les herbivores meurent → puis les carnivores → déséquilibre total. Ce n'est pas limité aux herbivores.",
+    4:"❌ Non. La règle des 10% explique qu'un régime végétarien est plus efficient : on économise un maillon de la chaîne, donc on utilise 10× moins de ressources. Ce n'est pas une question de valeur nutritive.",
+    5:"❌ Non. La cascade trophique est un effet de la disparition d'un prédateur sur les niveaux INFÉRIEURS (ses proies, puis les plantes…). L'énergie ne monte pas dans la chaîne."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['bioaccumulation']],
+        msgOk:"✅ Exact ! La bioaccumulation est l'augmentation progressive de la concentration de substances toxiques (pesticides, métaux lourds) à chaque maillon de la chaîne alimentaire.",
+        msgErr:"❌ Attendu : bioaccumulation. C'est l'accumulation et la concentration croissante de toxines à chaque niveau trophique."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['eutrophisation']],
+        msgOk:"✅ Bravo ! L'eutrophisation est la prolifération excessive d'algues due à un excès de nutriments (nitrates, phosphates) dans un plan d'eau, menant à l'asphyxie des êtres vivants aquatiques.",
+        msgErr:"❌ Attendu : eutrophisation. C'est la prolifération d'algues causée par un excès de nutriments (engrais) dans un lac ou une rivière."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['perturbation','cascade']],
+        msgOk:"✅ Parfait ! La disparition d'un prédateur entraîne une perturbation (ou cascade) trophique : ses proies prolifèrent, ce qui déséquilibre tous les niveaux inférieurs.",
+        msgErr:"❌ Attendu : perturbation (ou cascade). La disparition d'un prédateur entraîne une perturbation trophique en cascade sur tout l'écosystème."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_chaines_5', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

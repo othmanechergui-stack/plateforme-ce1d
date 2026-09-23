@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biologie — Chaînes Alimentaires · Niveau 1 — Rôles</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#BF360C; --primary-dark:#870000; --primary-mid:#E64A19; --primary-bg:#FBE9E7;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#4A0000 0%,#BF360C 55%,#FF8A65 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(74,0,0,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#BF360C; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#870000; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#4A0000,#BF360C,#FF8A65); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#4A0000,#870000); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#FF8A65; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #FF8A65; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.2rem; font-weight:900; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #FF8A65; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:130px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#4A0000,#BF360C,#FF8A65); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #2A0000; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🌿 Chaînes Alimentaires · Rôles</h1>
+            <p>Niveau 1 · Producteurs · Consommateurs · Décomposeurs</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 1 — Débutant</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Les rôles dans la chaîne alimentaire</div>
+            <div class="card-sub">Producteurs · Consommateurs primaires et secondaires · Décomposeurs</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Une <strong>chaîne alimentaire</strong> représente les relations "qui mange qui" dans un écosystème.
+            Chaque être vivant joue un <strong>rôle précis</strong> : producteur, consommateur ou décomposeur.
+            Comprendre ces rôles est la base pour analyser tout écosystème au CE1D.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Les producteurs — Définition</h3>
+            <p>
+                Les <strong>producteurs</strong> sont les <strong>végétaux (plantes, algues)</strong> qui fabriquent leur propre matière organique grâce à la <strong>photosynthèse</strong>.<br>
+                Ils captent l'énergie solaire et la transforment en glucides.<br>
+                Ils sont <strong>toujours au début</strong> d'une chaîne alimentaire.
+            </p>
+        </div>
+
+        <!-- SVG : chaîne alimentaire simple -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 580 160" xmlns="http://www.w3.org/2000/svg" style="max-width:580px;width:100%">
+                <rect x="0" y="0" width="580" height="160" fill="#FBE9E7" rx="10"/>
+                <text x="290" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#4A0000" font-family="Nunito,sans-serif">Exemple de chaîne alimentaire</text>
+                <!-- Producteur -->
+                <rect x="20" y="35" width="110" height="90" rx="10" fill="#C8E6C9" stroke="#388E3C" stroke-width="2"/>
+                <text x="75" y="60" text-anchor="middle" font-size="22">🌿</text>
+                <text x="75" y="82" text-anchor="middle" font-size="11" font-weight="900" fill="#1B5E20" font-family="Nunito,sans-serif">HERBE</text>
+                <text x="75" y="96" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="Nunito,sans-serif">Producteur</text>
+                <text x="75" y="112" text-anchor="middle" font-size="9" fill="#388E3C" font-family="Nunito,sans-serif">(végétal)</text>
+                <!-- Flèche 1 -->
+                <line x1="132" y1="80" x2="158" y2="80" stroke="#BF360C" stroke-width="3" marker-end="url(#arrow)"/>
+                <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#BF360C"/></marker></defs>
+                <!-- Consommateur primaire -->
+                <rect x="160" y="35" width="110" height="90" rx="10" fill="#FFF9C4" stroke="#F9A825" stroke-width="2"/>
+                <text x="215" y="60" text-anchor="middle" font-size="22">🐰</text>
+                <text x="215" y="82" text-anchor="middle" font-size="11" font-weight="900" fill="#E65100" font-family="Nunito,sans-serif">LAPIN</text>
+                <text x="215" y="96" text-anchor="middle" font-size="10" fill="#E65100" font-family="Nunito,sans-serif">Consommateur</text>
+                <text x="215" y="112" text-anchor="middle" font-size="9" fill="#E65100" font-family="Nunito,sans-serif">primaire (herbivore)</text>
+                <!-- Flèche 2 -->
+                <line x1="272" y1="80" x2="298" y2="80" stroke="#BF360C" stroke-width="3" marker-end="url(#arrow)"/>
+                <!-- Consommateur secondaire -->
+                <rect x="300" y="35" width="110" height="90" rx="10" fill="#FFCCBC" stroke="#BF360C" stroke-width="2"/>
+                <text x="355" y="60" text-anchor="middle" font-size="22">🦊</text>
+                <text x="355" y="82" text-anchor="middle" font-size="11" font-weight="900" fill="#4A0000" font-family="Nunito,sans-serif">RENARD</text>
+                <text x="355" y="96" text-anchor="middle" font-size="10" fill="#BF360C" font-family="Nunito,sans-serif">Consommateur</text>
+                <text x="355" y="112" text-anchor="middle" font-size="9" fill="#BF360C" font-family="Nunito,sans-serif">secondaire (carnivore)</text>
+                <!-- Flèche 3 -->
+                <line x1="412" y1="80" x2="438" y2="80" stroke="#BF360C" stroke-width="3" marker-end="url(#arrow)"/>
+                <!-- Décomposeur -->
+                <rect x="440" y="35" width="120" height="90" rx="10" fill="#E8EAF6" stroke="#5C6BC0" stroke-width="2"/>
+                <text x="500" y="60" text-anchor="middle" font-size="22">🍄</text>
+                <text x="500" y="82" text-anchor="middle" font-size="11" font-weight="900" fill="#1A237E" font-family="Nunito,sans-serif">CHAMPIGNON</text>
+                <text x="500" y="96" text-anchor="middle" font-size="10" fill="#283593" font-family="Nunito,sans-serif">Décomposeur</text>
+                <text x="500" y="112" text-anchor="middle" font-size="9" fill="#283593" font-family="Nunito,sans-serif">(recycle la matière)</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔢 Les trois grands rôles</h3>
+            <p>
+                • <strong>Producteurs</strong> : végétaux (herbe, arbres, algues) — fabriquent leur propre nourriture par photosynthèse.<br>
+                • <strong>Consommateurs primaires</strong> : herbivores (lapins, vaches, criquets) — mangent les végétaux.<br>
+                • <strong>Consommateurs secondaires</strong> : carnivores (renards, grenouilles) — mangent les herbivores.<br>
+                • <strong>Décomposeurs</strong> : bactéries et champignons — recyclent la matière morte en minéraux.
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">🌿 Producteur</div>
+                <div class="cas-eq">= Végétal</div>
+                <div class="cas-desc">Fabrique sa propre matière via la photosynthèse. Toujours au début de la chaîne.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🐰 Cons. primaire</div>
+                <div class="cas-eq">= Herbivore</div>
+                <div class="cas-desc">Mange directement les végétaux (producteurs). 1er niveau de consommation.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🦊 Cons. secondaire</div>
+                <div class="cas-eq">= Carnivore</div>
+                <div class="cas-desc">Mange les herbivores. 2ème niveau de consommation.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🍄 Décomposeur</div>
+                <div class="cas-eq">= Recycleur</div>
+                <div class="cas-desc">Dégrade la matière morte, libère des minéraux pour les plantes.</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège classique : les omnivores !</h3>
+            <p>
+                Les <strong>omnivores</strong> (humain, ours, porc) mangent à la fois des végétaux ET des animaux.<br>
+                Ils peuvent être à la fois consommateurs primaires (quand ils mangent des plantes) ET secondaires (quand ils mangent des animaux).<br>
+                <strong>Ce sont les seuls êtres à occuper plusieurs niveaux dans la chaîne !</strong>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Rôles dans la chaîne alimentaire</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Les producteurs dans une chaîne alimentaire sont...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">a) les végétaux qui fabriquent leur propre matière organique</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">b) les herbivores</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">c) les carnivores</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">d) les décomposeurs</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Les consommateurs primaires se nourrissent de...</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">a) végétaux</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">b) herbivores</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">c) carnivores</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">d) décomposeurs</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Les décomposeurs sont essentiels car ils...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">a) recyclent la matière organique en minéraux utilisables par les plantes</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">b) sont au sommet de la chaîne</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">c) produisent de l'oxygène</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">d) réalisent la photosynthèse</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Dans la chaîne : herbe → lapin → renard, le lapin est...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">a) un consommateur primaire</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">b) un producteur</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">c) un consommateur secondaire</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">d) un décomposeur</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Les omnivores sont des animaux qui...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">a) mangent à la fois des végétaux et des animaux</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">b) ne mangent que des végétaux</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">c) ne mangent que de la viande</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">d) se nourrissent de matière morte</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Producteurs, consommateurs, décomposeurs</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Les plantes sont les <input class="blank" id="f1a" placeholder="?"> de la chaîne alimentaire.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Le lapin qui mange de l'herbe est un consommateur <input class="blank" id="f2a" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Les bactéries et champignons qui décomposent la matière morte sont les <input class="blank" id="f3a" placeholder="?" style="width:160px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Identifier les rôles</div>
+                <div class="ex-stmt">
+                    Dans la chaîne : <strong>herbe → criquet → grenouille → héron</strong><br>
+                    a) Quel est le producteur ?<br>
+                    b) Quel est le consommateur primaire ?<br>
+                    c) Quel est le consommateur tertiaire (3ème niveau) ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Rappel :</strong> le producteur est toujours le végétal au début de la chaîne.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>a) Producteur :</strong> l'herbe (végétal qui réalise la photosynthèse).</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>b) Consommateur primaire :</strong> le criquet (mange l'herbe → herbivore).</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>c) Consommateur tertiaire :</strong> le héron (3ème consommateur, mange la grenouille).</div></div>
+                <div class="final-ans">✅ a) herbe · b) criquet · c) héron</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Construire une chaîne</div>
+                <div class="ex-stmt">
+                    Place ces êtres vivants dans l'ordre d'une chaîne alimentaire :<br>
+                    <strong>renard · blé · puceron · coccinelle</strong>
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Méthode :</strong> identifier d'abord le végétal (producteur), puis qui mange qui.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Producteur :</strong> le blé (végétal). Le puceron mange le blé → consommateur primaire.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>La coccinelle</strong> mange le puceron → consommateur secondaire.</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Le renard</strong> mange la coccinelle → consommateur tertiaire.</div></div>
+                <div class="final-ans">✅ blé → puceron → coccinelle → renard</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Rôle des décomposeurs (style CE1D)</div>
+                <div class="ex-stmt">
+                    Explique en 2 étapes pourquoi les décomposeurs sont indispensables à la vie.<br>
+                    Que se passerait-il si les décomposeurs disparaissaient ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Rôle :</strong> Les décomposeurs (bactéries, champignons) dégradent les cadavres et déchets organiques en minéraux simples (azote, phosphore…).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Utilité :</strong> Ces minéraux sont absorbés par les racines des plantes → les producteurs s'en nourrissent pour fabriquer leur matière organique.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Si disparition :</strong> La matière morte s'accumulerait. Les plantes n'auraient plus de minéraux → elles mourraient → toute la chaîne s'effondrerait.</div></div>
+                <div class="final-ans">✅ Les décomposeurs recyclent la matière → sans eux, l'écosystème s'effondre.</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — L'être humain dans la chaîne</div>
+                <div class="bonus-stmt">
+                    Un humain mange : du blé (pain), du poulet (qui mangeait du maïs) et du bœuf (qui mangeait de l'herbe).<br>
+                    a) À quel(s) niveau(x) de consommation se situe l'humain dans chaque cas ?<br>
+                    b) Est-il herbivore, carnivore ou omnivore ? Justifie.
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Pain (blé) :</strong> blé → humain. L'humain est consommateur <strong>primaire</strong>.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Poulet (maïs → poulet → humain) :</strong> L'humain est consommateur <strong>secondaire</strong>.</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>Bœuf (herbe → bœuf → humain) :</strong> L'humain est aussi consommateur <strong>secondaire</strong>.</div></div>
+                <div class="bonus-ans">
+                    L'humain est <strong>omnivore</strong> : il mange des végétaux (primaire) ET des animaux (secondaire).<br>
+                    Il occupe plusieurs niveaux trophiques selon ce qu'il mange !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 1 terminé !</h2>
+    <p>Bravo ! Tu maîtrises les rôles dans la chaîne alimentaire : producteurs, consommateurs et décomposeurs.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 2 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Chaînes Alimentaires</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="bio_chaines_niveau1.html" class="nav-btn current">▶ Niveau 1 — Rôles</a>
+        <a href="bio_chaines_niveau2.html" class="nav-btn">Niveau 2 — Structure d'une chaîne</a>
+        <a href="bio_chaines_niveau3.html" class="nav-btn">Niveau 3 — Réseau trophique</a>
+        <a href="bio_chaines_niveau4.html" class="nav-btn">Niveau 4 — Flux d'énergie</a>
+        <a href="bio_chaines_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! Les producteurs sont les végétaux qui fabriquent leur propre matière organique grâce à la photosynthèse.",
+    2:"✅ Bravo ! Les consommateurs primaires mangent directement les végétaux (ce sont les herbivores).",
+    3:"✅ Correct ! Les décomposeurs recyclent la matière organique morte en minéraux que les plantes peuvent réabsorber.",
+    4:"✅ Parfait ! Le lapin mange l'herbe (un producteur), donc il est consommateur primaire (herbivore).",
+    5:"✅ Exact ! Les omnivores mangent à la fois des végétaux et des animaux — comme l'humain, l'ours ou le porc."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Les producteurs sont les végétaux (plantes, algues) qui fabriquent leur propre matière organique par photosynthèse. Les herbivores, carnivores et décomposeurs ont d'autres rôles.",
+    2:"❌ Non. Les consommateurs primaires mangent les végétaux (ce sont les herbivores). Les herbivores ne mangent pas d'autres herbivores.",
+    3:"❌ Non. Les décomposeurs recyclent la matière organique morte en minéraux utilisables par les plantes. Ils ne sont pas au sommet, ne produisent pas d'O₂ et ne font pas de photosynthèse.",
+    4:"❌ Non. Le lapin mange l'herbe (un végétal = producteur). Un être qui mange un producteur est un consommateur primaire.",
+    5:"❌ Non. Les omnivores mangent à la fois des végétaux ET des animaux. Les animaux qui ne mangent que des végétaux sont des herbivores ; ceux qui ne mangent que de la viande sont des carnivores."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['producteurs','producteur']],
+        msgOk:"✅ Les plantes sont les PRODUCTEURS : elles fabriquent leur propre matière organique grâce à la photosynthèse.",
+        msgErr:"❌ Attendu : producteurs. Les plantes fabriquent leur propre nourriture → ce sont les producteurs."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['primaire']],
+        msgOk:"✅ Le lapin mange un végétal (herbe = producteur) → il est consommateur PRIMAIRE.",
+        msgErr:"❌ Attendu : primaire. Le lapin mange l'herbe (un producteur) → il est au 1er niveau de consommation = consommateur primaire."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['decomposeurs','décomposeurs','decomposeur','décomposeur']],
+        msgOk:"✅ Les bactéries et champignons sont les DÉCOMPOSEURS : ils dégradent la matière morte et recyclent les minéraux.",
+        msgErr:"❌ Attendu : décomposeurs. Les bactéries et champignons décomposent la matière morte → ce sont les décomposeurs."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_chaines_1', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

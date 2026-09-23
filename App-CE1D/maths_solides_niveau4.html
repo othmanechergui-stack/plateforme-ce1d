@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Solides &amp; Volumes · Niveau 4 — Pyramide &amp; Cône</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#8D6E63; --primary-dark:#6D4C41; --primary-mid:#A1887F; --primary-bg:#EFEBE9;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#3E2723 0%,#8D6E63 55%,#D7CCC8 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(62,39,35,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#8D6E63; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#6D4C41; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#3E2723,#8D6E63,#D7CCC8); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#3E2723,#6D4C41); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#D7CCC8; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #D7CCC8; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #D7CCC8; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#3E2723,#8D6E63,#D7CCC8); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #3E2723; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>📦 Solides &amp; Volumes · Pyramide &amp; Cône</h1>
+            <p>Niveau 4 · V = (1/3) × Aire base × h · Sections · Thalès</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 4 — Pyramide</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Pyramide &amp; Cône</div>
+            <div class="card-sub">V = (1/3) × Aire base × h · Sections · Théorème de Thalès</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Une <strong>pyramide</strong> est un solide dont la base est un polygone et dont toutes les faces latérales sont des triangles
+            qui se rejoignent en un point appelé <strong>sommet</strong> (ou apex).
+            Un <strong>cône</strong> est la version "ronde" de la pyramide : sa base est un cercle.
+            Dans les deux cas, le volume vaut <strong>un tiers</strong> de celui du prisme ou cylindre de même base et hauteur.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Formules — Pyramide &amp; Cône</h3>
+            <p>
+                <strong>Pyramide :</strong> V = (1/3) × Aire base × hauteur<br><br>
+                <strong>Cône :</strong> V = (1/3) × π × r² × h<br><br>
+                <strong>Règle d'or :</strong> V<sub>pyramide</sub> = V<sub>prisme</sub> ÷ 3 &nbsp;&nbsp;|&nbsp;&nbsp; V<sub>cône</sub> = V<sub>cylindre</sub> ÷ 3
+            </p>
+        </div>
+
+        <!-- SVG : pyramide + cône -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 600 230" xmlns="http://www.w3.org/2000/svg" style="max-width:600px;width:100%">
+                <rect x="0" y="0" width="600" height="230" fill="#EFEBE9" rx="10"/>
+                <text x="300" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif">Pyramide à base carrée et cône droit</text>
+
+                <!-- Pyramide à base carrée -->
+                <text x="130" y="36" text-anchor="middle" font-size="11" font-weight="900" fill="#6D4C41" font-family="Nunito,sans-serif">Pyramide (base carrée)</text>
+                <!-- base (carré en perspective) -->
+                <polygon points="60,185 130,200 200,185 130,170" fill="#BCAAA4" stroke="#3E2723" stroke-width="1.5"/>
+                <!-- face avant gauche -->
+                <polygon points="60,185 130,170 130,55" fill="#D7CCC8" stroke="#3E2723" stroke-width="2"/>
+                <!-- face avant droite -->
+                <polygon points="200,185 130,170 130,55" fill="#EFEBE9" stroke="#3E2723" stroke-width="2"/>
+                <!-- face arrière gauche (cachée) -->
+                <line x1="60" y1="185" x2="130" y2="55" stroke="#3E2723" stroke-width="1" stroke-dasharray="4,3"/>
+                <line x1="130" y1="200" x2="130" y2="55" stroke="#3E2723" stroke-width="1" stroke-dasharray="4,3"/>
+                <!-- hauteur -->
+                <line x1="130" y1="55" x2="130" y2="183" stroke="#6D4C41" stroke-width="1.5" stroke-dasharray="4,3"/>
+                <text x="140" y="128" font-size="10" font-weight="900" fill="#6D4C41" font-family="Nunito,sans-serif">h</text>
+                <text x="130" y="215" text-anchor="middle" font-size="10" font-weight="700" fill="#6D4C41" font-family="Nunito,sans-serif">V = ⅓ × A<tspan font-size="8">base</tspan> × h</text>
+
+                <!-- Cône -->
+                <text x="430" y="36" text-anchor="middle" font-size="11" font-weight="900" fill="#6D4C41" font-family="Nunito,sans-serif">Cône droit</text>
+                <!-- base ellipse -->
+                <ellipse cx="430" cy="185" rx="70" ry="22" fill="#BCAAA4" stroke="#3E2723" stroke-width="1.5"/>
+                <!-- surface latérale gauche -->
+                <line x1="360" y1="185" x2="430" y2="55" stroke="#3E2723" stroke-width="2"/>
+                <!-- surface latérale droite -->
+                <line x1="500" y1="185" x2="430" y2="55" stroke="#3E2723" stroke-width="2"/>
+                <!-- arc avant -->
+                <path d="M 360,185 A 70,22 0 0,0 500,185" fill="#D7CCC8" stroke="#3E2723" stroke-width="2"/>
+                <!-- hauteur -->
+                <line x1="430" y1="55" x2="430" y2="185" stroke="#6D4C41" stroke-width="1.5" stroke-dasharray="4,3"/>
+                <text x="442" y="128" font-size="10" font-weight="900" fill="#6D4C41" font-family="Nunito,sans-serif">h</text>
+                <text x="468" y="185" font-size="10" font-weight="900" fill="#3E2723" font-family="Nunito,sans-serif"> r</text>
+                <text x="430" y="215" text-anchor="middle" font-size="10" font-weight="700" fill="#6D4C41" font-family="Nunito,sans-serif">V = ⅓ × πr² × h</text>
+            </svg>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">V = ⅓ A<sub>b</sub> × h</div>
+                <div class="cas-eq">Pyramide quelconque</div>
+                <div class="cas-desc">A<sub>b</sub> = aire de la base (carré, triangle…)</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">V = ⅓ πr²h</div>
+                <div class="cas-eq">Cône droit</div>
+                <div class="cas-desc">Ex : r=3, h=4 → V = 12π cm³</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">F = n + 1</div>
+                <div class="cas-eq">Faces d'une pyramide (base n)</div>
+                <div class="cas-desc">Carrée : 4+1=5 faces</div>
+            </div>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔢 Sections parallèles et théorème de Thalès</h3>
+            <p>
+                Si on coupe une pyramide (ou un cône) par un <strong>plan parallèle à la base</strong>,
+                on obtient une section semblable à la base.<br><br>
+                Si la section est à une distance k × h du sommet, son aire vaut <strong>k² × Aire base</strong>.<br><br>
+                C'est une application directe du <strong>théorème de Thalès</strong> dans l'espace.
+            </p>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège classique : ne pas oublier le facteur 1/3</h3>
+            <p>
+                La pyramide et le cône ont un volume <strong>trois fois plus petit</strong> que le prisme ou cylindre de même base et hauteur.
+                Oublier de diviser par 3 est l'erreur la plus fréquente !
+                <strong>V<sub>pyramide</sub> = V<sub>prisme</sub> ÷ 3</strong>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Pyramide, cône et sections parallèles</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Volume d'une pyramide = ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">a) (1/3) × Aire base × hauteur</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">b) Aire base × hauteur</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">c) (1/2) × Aire base × hauteur</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">d) (2/3) × Aire base × hauteur</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Une pyramide à base carrée de côté 6 cm et hauteur 4 cm. Volume = ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">a) 144 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">b) 48 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">c) 72 cm³</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">d) 24 cm³</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Une pyramide à base carrée a combien de faces triangulaires ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">a) 2</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">b) 3</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">c) 4</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">d) 5</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Le théorème de Thalès s'applique aussi aux...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">a) Sections parallèles de pyramides</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">b) Développements de cylindres</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">c) Volumes de prismes</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">d) Périmètres de bases</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Un cône de rayon 3 cm et hauteur 4 cm. Son volume = ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">a) 12π cm³</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">b) 36π cm³</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">c) 48π cm³</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">d) 4π cm³</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Rapport pyramide/prisme et faces</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Le volume d'un cône est <input class="blank" id="f1a" placeholder="?" style="width:80px"> fois celui du cylindre de même base et hauteur.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Une pyramide à base hexagonale a <input class="blank" id="f2a" placeholder="?" style="width:60px"> faces.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Si une pyramide et un prisme ont la même base et la même hauteur, V<sub>pyramide</sub> = V<sub>prisme</sub> ÷ <input class="blank" id="f3a" placeholder="?" style="width:60px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Volume d'une pyramide triangulaire</div>
+                <div class="ex-stmt">
+                    Une pyramide a une base triangulaire de base 8 cm et hauteur 6 cm.<br>
+                    Sa hauteur est de 9 cm.<br>
+                    Calcule son volume.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Aire de la base triangulaire : A = (8 × 6) ÷ 2 = 24 cm²</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">V = (1/3) × 24 × 9 = (1/3) × 216</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">V = <strong>72 cm³</strong></div></div>
+                <div class="final-ans">✅ V = 72 cm³</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Volume d'un cône</div>
+                <div class="ex-stmt">
+                    Un entonnoir a la forme d'un cône de diamètre 12 cm et hauteur 15 cm.<br>
+                    a) Calcule son volume exact (en π).<br>
+                    b) Donne une valeur approchée.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Diamètre = 12 cm → r = 6 cm</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">V = (1/3) × π × 6² × 15 = (1/3) × π × 36 × 15 = (1/3) × 540π</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">V = <strong>180π cm³</strong> ≈ 565,5 cm³</div></div>
+                <div class="final-ans">✅ V = 180π cm³ ≈ 565,5 cm³</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Section parallèle (style CE1D)</div>
+                <div class="ex-stmt">
+                    Une pyramide à base carrée de côté 9 cm et hauteur 12 cm est coupée à mi-hauteur (à 6 cm du sommet).<br>
+                    Quel est le côté du carré obtenu par cette coupe ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">La coupe est à 6 cm du sommet sur une hauteur totale de 12 cm → rapport k = 6/12 = 1/2</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Par Thalès, le côté de la section = k × côté base = (1/2) × 9</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Côté = <strong>4,5 cm</strong></div></div>
+                <div class="final-ans">✅ Côté de la section = 4,5 cm</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Pyramide vs prisme</div>
+                <div class="bonus-stmt">
+                    Un prisme à base carrée de côté 6 cm et hauteur 10 cm.<br>
+                    Une pyramide à base carrée de côté 6 cm et hauteur 10 cm.<br>
+                    a) Calcule les deux volumes.<br>
+                    b) Combien de pyramides faut-il pour remplir le prisme ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text">V<sub>prisme</sub> = 6² × 10 = 36 × 10 = <strong>360 cm³</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text">V<sub>pyramide</sub> = (1/3) × 36 × 10 = <strong>120 cm³</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text">360 ÷ 120 = <strong>3 pyramides</strong> pour remplir le prisme !</div></div>
+                <div class="bonus-ans">
+                    V<sub>prisme</sub> = 360 cm³ · V<sub>pyramide</sub> = 120 cm³<br>
+                    Il faut exactement 3 pyramides pour remplir le prisme.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>🏆 Niveau 4 terminé !</h2>
+    <p>Tu maîtrises la pyramide et le cône.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 5 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Solides &amp; Volumes</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_solides_niveau1.html" class="nav-btn">N1 — Cube &amp; Pavé</a>
+        <a href="maths_solides_niveau2.html" class="nav-btn">N2 — Prisme</a>
+        <a href="maths_solides_niveau3.html" class="nav-btn">N3 — Cylindre</a>
+        <a href="maths_solides_niveau4.html" class="nav-btn current">▶ N4 — Pyramide/Cône</a>
+        <a href="maths_solides_niveau5.html" class="nav-btn">N5 — Défi 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:1, 3:2, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! V = (1/3) × Aire base × hauteur. Ne pas oublier le facteur 1/3 !",
+    2:"✅ Bravo ! A<sub>base</sub> = 6² = 36 cm². V = (1/3) × 36 × 4 = 48 cm³.",
+    3:"✅ Correct ! Une pyramide à base carrée a 4 faces triangulaires (une par côté de la base).",
+    4:"✅ Parfait ! Le théorème de Thalès s'applique aux sections parallèles : la section est semblable à la base.",
+    5:"✅ Exact ! V = (1/3) × π × 3² × 4 = (1/3) × 36π = 12π cm³."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. V = (1/3) × Aire base × hauteur. La pyramide a un volume 3 fois plus petit que le prisme de même base.",
+    2:"❌ Non. A<sub>base</sub> = 6² = 36 cm². V = (1/3) × 36 × 4 = 48 cm³. N'oublie pas le facteur 1/3 !",
+    3:"❌ Non. Une pyramide à base carrée (4 côtés) a 4 faces triangulaires latérales + 1 base = 5 faces en tout.",
+    4:"❌ Non. Thalès s'applique aux sections parallèles de pyramides et cônes : la section est proportionnelle à la base.",
+    5:"❌ Non. V = (1/3) × π × r² × h = (1/3) × π × 9 × 4 = 12π cm³. Attention à r² = 9."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['tiers','1/3','un tiers']],
+        msgOk:"✅ Le cône vaut exactement 1/3 (un tiers) du cylindre de même base et hauteur.",
+        msgErr:"❌ Attendu : tiers (ou 1/3). V<sub>cône</sub> = (1/3) × V<sub>cylindre</sub>."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['7']],
+        msgOk:"✅ F = n + 1 = 6 + 1 = 7 faces (6 triangles + 1 hexagone).",
+        msgErr:"❌ Attendu : 7. F = n + 1 = 6 + 1 = 7 pour une pyramide hexagonale."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['3']],
+        msgOk:"✅ V<sub>pyramide</sub> = V<sub>prisme</sub> ÷ 3. C'est la règle fondamentale !",
+        msgErr:"❌ Attendu : 3. V<sub>pyramide</sub> = V<sub>prisme</sub> ÷ 3."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_solides_4', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.innerHTML   = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.innerHTML = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

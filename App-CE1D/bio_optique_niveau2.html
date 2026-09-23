@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optique &amp; Lumière · Niveau 2 — Réflexion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#F9A825; --primary-dark:#F57F17; --primary-mid:#FFD54F; --primary-bg:#FFFDE7;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+        header { background:linear-gradient(135deg,#7F5700 0%,#F9A825 55%,#FFE082 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(127,87,0,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#F9A825; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#F57F17; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#7F5700,#F9A825,#FFE082); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+        .def-box { background:linear-gradient(135deg,#7F5700,#F57F17); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#FFE082; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #FFD54F; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+        .fill-item { background:var(--primary-bg); border:2px solid #FFD54F; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+        .completion { display:none; background:linear-gradient(135deg,#7F5700,#F9A825,#FFE082); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #5D3A00; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🪞 Optique &amp; Lumière</h1>
+            <p>Niveau 2 · Réflexion · Loi de Snell-Descartes · Miroir plan</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 2 — Intermédiaire</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — La réflexion de la lumière</div>
+            <div class="card-sub">Loi de réflexion · Normale · Angle d'incidence · Miroir plan · Réflexion diffuse</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            La <strong>réflexion</strong> est le phénomène par lequel un rayon lumineux rebondit sur une surface.
+            Elle obéit à une loi simple : l'angle d'incidence est toujours égal à l'angle de réflexion,
+            tous deux mesurés par rapport à la <strong>normale</strong> à la surface.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Loi de réflexion (loi de Snell-Descartes)</h3>
+            <p>
+                Le rayon incident, la normale et le rayon réfléchi sont dans le même plan.<br>
+                <strong>L'angle d'incidence (i) = l'angle de réflexion (r)</strong><br><br>
+                La <strong>normale</strong> est la droite perpendiculaire à la surface au point d'incidence.<br>
+                Les angles se mesurent <strong>toujours par rapport à la normale</strong>, jamais par rapport à la surface.
+            </p>
+        </div>
+
+        <!-- SVG : réflexion sur un miroir plan -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="220" fill="#FFFDE7" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#7F5700" font-family="Nunito, sans-serif">Réflexion sur un miroir plan — i = r</text>
+
+                <!-- Miroir -->
+                <rect x="100" y="130" width="360" height="12" rx="3" fill="#90CAF9" stroke="#1CB0F6" stroke-width="2"/>
+                <text x="280" y="158" text-anchor="middle" font-size="10" font-weight="700" fill="#0892D0" font-family="Nunito, sans-serif">Surface réfléchissante (miroir plan)</text>
+
+                <!-- Normale -->
+                <line x1="280" y1="50" x2="280" y2="130" stroke="#999" stroke-width="1.5" stroke-dasharray="6,4"/>
+                <text x="295" y="75" font-size="10" font-weight="700" fill="#777" font-family="Nunito, sans-serif">Normale</text>
+
+                <!-- Rayon incident -->
+                <line x1="160" y1="55" x2="280" y2="130" stroke="#F9A825" stroke-width="3" marker-end="url(#a1)"/>
+                <text x="185" y="80" font-size="11" font-weight="900" fill="#E65100" font-family="Nunito, sans-serif">i</text>
+                <text x="145" y="60" font-size="10" font-weight="700" fill="#7F5700" font-family="Nunito, sans-serif">Rayon incident</text>
+
+                <!-- Rayon réfléchi -->
+                <line x1="280" y1="130" x2="400" y2="55" stroke="#FFB300" stroke-width="3" marker-end="url(#a2)"/>
+                <text x="360" y="80" font-size="11" font-weight="900" fill="#E65100" font-family="Nunito, sans-serif">r</text>
+                <text x="360" y="60" font-size="10" font-weight="700" fill="#7F5700" font-family="Nunito, sans-serif">Rayon réfléchi</text>
+
+                <!-- Arc angles -->
+                <path d="M260,130 A20,20 0 0,1 280,110" fill="none" stroke="#E65100" stroke-width="1.5"/>
+                <path d="M280,110 A20,20 0 0,1 300,130" fill="none" stroke="#E65100" stroke-width="1.5"/>
+
+                <text x="280" y="210" text-anchor="middle" font-size="11" font-weight="900" fill="#7F5700" font-family="Nunito, sans-serif">i = r — Loi de réflexion</text>
+
+                <defs>
+                    <marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#F9A825"/></marker>
+                    <marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#FFB300"/></marker>
+                </defs>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🪞 Image dans un miroir plan</h3>
+            <p>
+                L'image formée par un miroir plan est :<br>
+                • <strong>Virtuelle</strong> : elle ne peut pas être projetée sur un écran (elle est "derrière" le miroir).<br>
+                • <strong>Droite</strong> : non renversée de haut en bas.<br>
+                • <strong>De même taille</strong> que l'objet.<br>
+                • <strong>Symétrique</strong> par rapport au miroir (à égale distance).<br><br>
+                Pour voir son image entière dans un miroir plan, le miroir doit avoir au moins <strong>h/2</strong> de hauteur (h = taille de l'observateur).
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">Réflexion spéculaire</div>
+                <div class="cas-eq">Surface lisse et polie</div>
+                <div class="cas-desc">Miroir, surface d'eau calme : image nette</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Réflexion diffuse</div>
+                <div class="cas-eq">Surface rugueuse (mat)</div>
+                <div class="cas-desc">Papier, mur blanc : lumière dispersée dans toutes les directions</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">i = r</div>
+                <div class="cas-eq">Toujours vrai</div>
+                <div class="cas-desc">Angles mesurés par rapport à la normale, dans tous les cas</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège : les angles se mesurent par rapport à la NORMALE, pas à la surface !</h3>
+            <p>
+                L'angle d'incidence est l'angle entre le <strong>rayon incident et la normale</strong>.<br>
+                Si tu mesures l'angle par rapport à la surface, tu obtiens le <strong>complémentaire</strong> (90° − i).<br>
+                <strong>Toujours tracer la normale d'abord !</strong>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Loi de réflexion, miroir plan, réflexion diffuse</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> La loi de réflexion stipule que l'angle d'incidence...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">a) est égal à l'angle de réflexion</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">b) est toujours 90°</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">c) est le double de l'angle de réflexion</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">d) dépend de la couleur de la lumière</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> L'angle d'incidence est mesuré par rapport à...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(2,0)">a) la normale à la surface au point d'incidence</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">b) la surface réfléchissante</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">c) le rayon incident lui-même</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">d) l'horizontale</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Un miroir plan produit une image...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">a) virtuelle, droite et de même taille que l'objet</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">b) réelle et inversée de haut en bas</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">c) plus grande que l'objet</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">d) plus petite que l'objet</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> La réflexion diffuse se produit sur une surface...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">a) rugueuse (mat) qui diffuse la lumière dans toutes les directions</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">b) lisse et polie comme un miroir</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">c) transparente comme le verre</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">d) colorée en noir</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Pour qu'un miroir plan donne une image complète d'un objet de hauteur h, placé à une distance d...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">a) le miroir doit avoir au moins h/2 de hauteur</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">b) le miroir doit avoir exactement la même taille que l'objet</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">c) la distance d importe beaucoup pour la taille du miroir</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">d) le miroir doit être courbe (concave)</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Loi de réflexion, image virtuelle, normale</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                L'angle d'incidence est <input class="blank" id="f1a" placeholder="?" style="width:80px"> à l'angle de réflexion.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                L'image dans un miroir plan est <input class="blank" id="f2a" placeholder="?" style="width:100px"> : elle ne peut pas être projetée sur un écran.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Les angles de réflexion sont mesurés par rapport à la <input class="blank" id="f3a" placeholder="?" style="width:100px"> à la surface.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Angle de réflexion</div>
+                <div class="ex-stmt">
+                    Un rayon lumineux frappe un miroir plan avec un angle d'incidence de 35°.<br>
+                    a) Quel est l'angle de réflexion ?<br>
+                    b) Quel est l'angle entre le rayon incident et le rayon réfléchi ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Loi de réflexion :</strong> angle de réflexion r = angle d'incidence i</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>a)</strong> r = i = <strong>35°</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>b)</strong> L'angle entre les deux rayons = i + r = 35° + 35° = <strong>70°</strong></div></div>
+                <div class="final-ans">✅ a) r = 35° &nbsp;|&nbsp; b) Angle entre les deux rayons = 70°</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Image dans un miroir plan</div>
+                <div class="ex-stmt">
+                    Un objet est placé à 20 cm devant un miroir plan.<br>
+                    a) À quelle distance l'image se trouve-t-elle derrière le miroir ?<br>
+                    b) L'image est-elle réelle ou virtuelle ?<br>
+                    c) Si l'objet mesure 10 cm, quelle est la taille de l'image ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> L'image se forme à la même distance derrière le miroir = <strong>20 cm</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> L'image est <strong>virtuelle</strong> : elle ne peut pas être projetée sur un écran.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> Le miroir plan conserve la taille → image = <strong>10 cm</strong></div></div>
+                <div class="final-ans">✅ a) 20 cm derrière le miroir &nbsp;|&nbsp; b) Virtuelle &nbsp;|&nbsp; c) 10 cm</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Taille minimale du miroir (style CE1D)</div>
+                <div class="ex-stmt">
+                    Une personne de 1,70 m veut voir son image entière dans un miroir plan.<br>
+                    a) Quelle est la taille minimale du miroir ?<br>
+                    b) La distance entre la personne et le miroir change-t-elle la réponse ? Explique.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Taille minimale = h/2 = 1,70/2 = <strong>0,85 m</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Non ! La distance n'a aucune importance. Par construction géométrique (rayons parallèles), la taille minimale du miroir est toujours h/2, quelle que soit la distance.</div></div>
+                <div class="final-ans">✅ a) 0,85 m &nbsp;|&nbsp; b) La distance n'influe pas sur la taille minimale du miroir</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Deux miroirs perpendiculaires</div>
+                <div class="bonus-stmt">
+                    Deux miroirs plans sont placés perpendiculairement l'un à l'autre (formant un angle de 90°).<br>
+                    Un rayon frappe le premier miroir avec un angle d'incidence de 40°.<br>
+                    a) Quel est l'angle de réflexion sur le premier miroir ?<br>
+                    b) Avec quel angle d'incidence le rayon frappe-t-il le second miroir ?<br>
+                    c) Avec quel angle ressort-il finalement ? Dans quelle direction ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> 1er miroir : r₁ = i₁ = <strong>40°</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b)</strong> Angle sur le 2e miroir = 90° − 40° = <strong>50°</strong> (les miroirs sont perpendiculaires)</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>c)</strong> r₂ = 50°. Le rayon ressort <strong>parallèle</strong> au rayon incident (propriété remarquable des miroirs à 90°) !</div></div>
+                <div class="bonus-ans">
+                    Résultat frappant : deux miroirs perpendiculaires renvoient TOUJOURS la lumière dans la direction d'origine.<br>
+                    Application : rétro-réflecteurs sur les vélos, coins de cube des radars.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 2 terminé !</h2>
+    <p>Bravo ! Tu maîtrises la réflexion, la loi i = r et les propriétés du miroir plan.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 3 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Optique &amp; Lumière</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="bio_optique_niveau1.html" class="nav-btn">Niveau 1 — Sources lumineuses</a>
+        <a href="bio_optique_niveau2.html" class="nav-btn current">▶ Niveau 2 — Réflexion</a>
+        <a href="bio_optique_niveau3.html" class="nav-btn">Niveau 3 — Réfraction</a>
+        <a href="bio_optique_niveau4.html" class="nav-btn">Niveau 4 — Spectre &amp; couleurs</a>
+        <a href="bio_optique_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! Loi de réflexion : i = r. L'angle d'incidence est TOUJOURS égal à l'angle de réflexion.",
+    2:"✅ Bravo ! Les angles se mesurent par rapport à la NORMALE à la surface, jamais par rapport à la surface elle-même.",
+    3:"✅ Correct ! L'image dans un miroir plan est virtuelle (derrière le miroir), droite et de même taille que l'objet.",
+    4:"✅ Parfait ! La réflexion diffuse se produit sur une surface rugueuse : la lumière est réfléchie dans toutes les directions → pas d'image nette.",
+    5:"✅ Exact ! Pour voir son image entière, le miroir doit avoir au moins h/2 de hauteur, et la distance n'a aucune importance !"
+};
+
+const QCM_ERR = {
+    1:"❌ Non. La loi de réflexion dit que i = r (angle d'incidence = angle de réflexion). Ces angles sont mesurés par rapport à la normale.",
+    2:"❌ Non. Les angles se mesurent par rapport à la NORMALE à la surface (perpendiculaire à la surface), pas par rapport à la surface elle-même.",
+    3:"❌ Non. L'image dans un miroir plan est VIRTUELLE (ne peut pas être projetée), DROITE et de MÊME TAILLE que l'objet.",
+    4:"❌ Non. La réflexion diffuse se produit sur une surface RUGUEUSE (mat). Une surface lisse et polie produit une réflexion spéculaire (image nette).",
+    5:"❌ Non. La taille minimale du miroir est h/2 (moitié de la taille de l'observateur). La distance entre la personne et le miroir ne change rien !"
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['egal']],
+        msgOk:"✅ Exact ! i = r : l'angle d'incidence est ÉGAL à l'angle de réflexion. C'est la loi fondamentale de la réflexion.",
+        msgErr:"❌ Attendu : 'égal'. Loi de réflexion : angle d'incidence ÉGAL à l'angle de réflexion."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['virtuelle']],
+        msgOk:"✅ Bravo ! L'image dans un miroir plan est VIRTUELLE : elle se forme 'derrière' le miroir et ne peut pas être projetée sur un écran.",
+        msgErr:"❌ Attendu : 'virtuelle'. L'image dans un miroir plan est virtuelle (elle ne peut pas être projetée)."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['normale']],
+        msgOk:"✅ Correct ! Les angles d'incidence et de réflexion se mesurent par rapport à la NORMALE à la surface (droite perpendiculaire).",
+        msgErr:"❌ Attendu : 'normale'. Les angles se mesurent par rapport à la normale (perpendiculaire à la surface)."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_optique_2', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

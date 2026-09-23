@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Eau · Niveau 4 — Eau &amp; Vivants</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#0277BD; --primary-dark:#01579B; --primary-mid:#29B6F6; --primary-bg:#E1F5FE;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#01579B 0%,#0277BD 55%,#81D4FA 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(1,87,155,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#0277BD; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#01579B; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#01579B,#0277BD,#81D4FA); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#01579B,#0277BD); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#81D4FA; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #81D4FA; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #81D4FA; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#01579B,#0277BD,#81D4FA); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #013A6B; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>💧 L'Eau · Eau &amp; Vivants</h1>
+            <p>Niveau 4 · Corps humain · Déshydratation · Adaptations · Accès à l'eau</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 4 — Eau &amp; Vivants</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — L'eau dans le vivant</div>
+            <div class="card-sub">Corps humain · Déshydratation · Adaptations des organismes · Accès à l'eau dans le monde</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            L'<strong>eau</strong> est indispensable à toute forme de vie. Elle constitue entre <strong>60 et 70 %</strong> du corps humain
+            et joue un rôle central dans les réactions chimiques, le transport des nutriments et la régulation de la température corporelle.
+            Sa disponibilité dans le monde est un enjeu majeur pour la santé et la survie de milliards d'êtres humains.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 L'eau dans le corps humain</h3>
+            <p>
+                Le corps humain est composé d'environ <strong>60–70 % d'eau</strong>.<br>
+                Cette eau est présente dans le sang, les cellules, les muscles et les organes.<br>
+                Elle permet les <strong>réactions chimiques</strong> du métabolisme, le <strong>transport</strong> des nutriments et des déchets,
+                ainsi que la <strong>régulation de la température</strong> (transpiration).
+            </p>
+        </div>
+
+        <!-- SVG : proportions eau dans le corps -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="220" fill="#E1F5FE" rx="10"/>
+                <text x="280" y="20" text-anchor="middle" font-size="12" font-weight="900" fill="#01579B" font-family="Nunito, sans-serif">Proportion d'eau dans différents organes humains</text>
+
+                <!-- Barre sang -->
+                <rect x="40" y="40" width="90" height="130" rx="8" fill="#BBDEFB" stroke="#0277BD" stroke-width="2"/>
+                <rect x="40" y="113" width="90" height="57" rx="8" fill="#0277BD"/>
+                <text x="85" y="107" text-anchor="middle" font-size="11" font-weight="900" fill="#0277BD" font-family="Nunito, sans-serif">~55%</text>
+                <text x="85" y="190" text-anchor="middle" font-size="11" font-weight="700" fill="#01579B" font-family="Nunito, sans-serif">Sang</text>
+                <text x="85" y="203" text-anchor="middle" font-size="10" font-weight="700" fill="#01579B" font-family="Nunito, sans-serif">~92% eau</text>
+
+                <!-- Barre muscles -->
+                <rect x="160" y="40" width="90" height="130" rx="8" fill="#BBDEFB" stroke="#0277BD" stroke-width="2"/>
+                <rect x="160" y="53" width="90" height="117" rx="8" fill="#0277BD"/>
+                <text x="205" y="47" text-anchor="middle" font-size="11" font-weight="900" fill="#0277BD" font-family="Nunito, sans-serif">~90%</text>
+                <text x="205" y="190" text-anchor="middle" font-size="11" font-weight="700" fill="#01579B" font-family="Nunito, sans-serif">Muscles</text>
+                <text x="205" y="203" text-anchor="middle" font-size="10" font-weight="700" fill="#01579B" font-family="Nunito, sans-serif">~75% eau</text>
+
+                <!-- Barre cerveau -->
+                <rect x="280" y="40" width="90" height="130" rx="8" fill="#BBDEFB" stroke="#0277BD" stroke-width="2"/>
+                <rect x="280" y="57" width="90" height="113" rx="8" fill="#29B6F6"/>
+                <text x="325" y="51" text-anchor="middle" font-size="11" font-weight="900" fill="#0277BD" font-family="Nunito, sans-serif">~87%</text>
+                <text x="325" y="190" text-anchor="middle" font-size="11" font-weight="700" fill="#01579B" font-family="Nunito, sans-serif">Cerveau</text>
+                <text x="325" y="203" text-anchor="middle" font-size="10" font-weight="700" fill="#01579B" font-family="Nunito, sans-serif">~73% eau</text>
+
+                <!-- Barre os -->
+                <rect x="400" y="40" width="90" height="130" rx="8" fill="#BBDEFB" stroke="#0277BD" stroke-width="2"/>
+                <rect x="400" y="137" width="90" height="33" rx="8" fill="#81D4FA"/>
+                <text x="445" y="131" text-anchor="middle" font-size="11" font-weight="900" fill="#0277BD" font-family="Nunito, sans-serif">~25%</text>
+                <text x="445" y="190" text-anchor="middle" font-size="11" font-weight="700" fill="#01579B" font-family="Nunito, sans-serif">Os</text>
+                <text x="445" y="203" text-anchor="middle" font-size="10" font-weight="700" fill="#01579B" font-family="Nunito, sans-serif">~22% eau</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>⚠️ Déshydratation — effets sur l'organisme</h3>
+            <p>
+                Perdre seulement <strong>1–2 % de son eau corporelle</strong> provoque déjà des effets notables :<br>
+                • <strong>Maux de tête</strong>, fatigue, difficultés de concentration.<br>
+                • Diminution des <strong>performances physiques et cognitives</strong>.<br><br>
+                Une perte de <strong>10 %</strong> peut entraîner des troubles graves.<br>
+                Sans eau, un être humain ne survit que quelques <strong>jours</strong> (2 à 7 selon les conditions).
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">🌵 Cactus</div>
+                <div class="cas-eq">Tiges épaisses</div>
+                <div class="cas-desc">Stocke l'eau dans ses tissus charnus pour survivre aux longues sécheresses</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🐫 Chameau</div>
+                <div class="cas-eq">Bosse = réserve</div>
+                <div class="cas-desc">Stocke la graisse (réserves corporelles) qui libère de l'eau par métabolisme</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🦎 Reptiles</div>
+                <div class="cas-eq">Peau imperméable</div>
+                <div class="cas-desc">Limite l'évaporation de l'eau grâce à leur peau écailleuse</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>🌍 Accès à l'eau dans le monde — un enjeu majeur</h3>
+            <p>
+                Plus d'<strong>un milliard de personnes</strong> n'ont pas accès à l'eau potable dans le monde.<br>
+                Les nappes phréatiques se vident plus vite qu'elles ne se remplissent dans de nombreuses régions.<br>
+                <strong>La désalinisation</strong> de l'eau de mer est possible mais reste coûteuse et énergivore.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Corps humain, déshydratation, adaptations, accès à l'eau</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> L'eau représente environ quelle proportion du corps humain ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">60–70%</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">20–30%</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">80–90%</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">10–20%</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> La déshydratation légère provoque...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(2,0)">des maux de tête, de la fatigue et une diminution des performances</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">une croissance accélérée</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">une meilleure concentration</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">une augmentation de l'énergie</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> L'eau joue un rôle essentiel dans les cellules pour...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">les réactions chimiques, le transport des nutriments et la régulation de la température</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">la photosynthèse uniquement</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">la respiration uniquement</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">la reproduction uniquement</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Les organismes vivant dans les déserts ont développé des adaptations pour...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">stocker et économiser l'eau</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">produire de l'eau par photosynthèse</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">boire plus fréquemment</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">éviter la chaleur par la migration</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Le manque d'eau potable dans le monde est un problème car...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">plus d'un milliard de personnes n'y ont pas accès</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">l'eau est abondante partout</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">les nappes se remplissent rapidement</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">la désalinisation est gratuite</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Composition du corps, survie, adaptations</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Le corps humain est composé d'environ
+                <input class="blank" id="f1a" placeholder="?" style="width:55px">% d'eau.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Sans eau, un être humain ne survit que quelques
+                <input class="blank" id="f2a" placeholder="?" style="width:80px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Les animaux du désert stockent l'eau dans des réserves
+                <input class="blank" id="f3a" placeholder="?" style="width:130px"> (graisse).
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Calcul de la quantité d'eau dans le corps</div>
+                <div class="ex-stmt">
+                    Un adulte pèse 70 kg. Son corps est composé à 65 % d'eau.<br>
+                    a) Calcule la masse d'eau présente dans son corps.<br>
+                    b) S'il perd 2 % de cette eau, combien de kg a-t-il perdus ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Masse d'eau = 70 × 0,65 = <strong>45,5 kg</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> 2 % de 45,5 kg = 45,5 × 0,02 = <strong>0,91 kg ≈ 0,9 kg</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">Avec seulement <strong>0,9 kg de perte</strong> (moins d'un litre !), des maux de tête et de la fatigue apparaissent.</div></div>
+                <div class="final-ans">✅ a) 45,5 kg d'eau &nbsp;|&nbsp; b) ≈ 0,9 kg perdu → déjà des symptômes !</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Comparaison d'adaptations au désert</div>
+                <div class="ex-stmt">
+                    Deux animaux vivent dans le désert :<br>
+                    • Le <strong>chameau</strong> peut rester jusqu'à 2 semaines sans boire.<br>
+                    • Le <strong>rat-kangourou</strong> ne boit presque jamais : il produit de l'eau par digestion des graines.<br>
+                    a) Quelle adaptation principale utilise le chameau ?<br>
+                    b) Quelle adaptation originale possède le rat-kangourou ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Chameau :</strong> il stocke de la graisse dans sa bosse. Lors de la dégradation de cette graisse, de l'eau est libérée (eau métabolique). Il économise aussi l'eau en produisant peu d'urine et de sueur.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Rat-kangourou :</strong> il produit de l'eau en oxydant (brûlant) les glucides des graines. La réaction chimique de la respiration cellulaire libère de l'eau — il n'a presque pas besoin de boire !</div></div>
+                <div class="final-ans">✅ Chameau : stockage de graisse + économie d'eau &nbsp;|&nbsp; Rat-kangourou : eau métabolique issue des graines</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Accès à l'eau potable (style CE1D)</div>
+                <div class="ex-stmt">
+                    En 2023, environ 2,2 milliards de personnes n'ont pas accès à l'eau potable.<br>
+                    La population mondiale est d'environ 8 milliards.<br>
+                    a) Calcule le pourcentage de la population sans accès à l'eau potable.<br>
+                    b) Cite deux conséquences du manque d'eau potable sur la santé.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Pourcentage = (2,2 / 8) × 100 = <strong>27,5 %</strong> de la population mondiale.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Conséquences sur la santé : maladies infectieuses (choléra, typhoïde), déshydratation et malnutrition, mortalité infantile élevée.</div></div>
+                <div class="final-ans">✅ ≈ 27,5 % sans eau potable &nbsp;|&nbsp; Risques : maladies, déshydratation, mortalité infantile</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — La transpiration et la régulation thermique</div>
+                <div class="bonus-stmt">
+                    Lors d'un effort intense, le corps humain peut perdre jusqu'à 2 litres de sueur par heure.<br>
+                    a) Pourquoi transpire-t-on ?<br>
+                    b) Si on ne boit pas pendant 2 heures d'effort, combien de litres a-t-on perdus ? Est-ce dangereux ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> La transpiration permet de <strong>refroidir le corps</strong> : quand la sueur s'évapore sur la peau, elle absorbe de la chaleur, abaissant ainsi la température corporelle.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b)</strong> 2 L/h × 2 h = <strong>4 litres perdus</strong>. Pour une personne de 70 kg avec 45,5 L d'eau dans le corps, c'est environ 9 % de perte → très dangereux ! Des crampes, vertiges et risque d'insolation apparaissent.</div></div>
+                <div class="bonus-ans">
+                    Transpiration = refroidissement par évaporation<br>
+                    4 L perdus en 2 h = ~9 % de l'eau corporelle → danger réel !
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 4 terminé !</h2>
+    <p>Bravo ! Tu maîtrises le rôle de l'eau dans le vivant, la déshydratation et les adaptations au désert.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 5 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — L'Eau</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="bio_eau_niveau1.html" class="nav-btn">Niveau 1 — L'eau, une molécule</a>
+        <a href="bio_eau_niveau2.html" class="nav-btn">Niveau 2 — États &amp; changements</a>
+        <a href="bio_eau_niveau3.html" class="nav-btn">Niveau 3 — Le cycle de l'eau</a>
+        <a href="bio_eau_niveau4.html" class="nav-btn current">▶ Niveau 4 — Eau &amp; Vivants</a>
+        <a href="bio_eau_niveau5.html" class="nav-btn">Niveau 5 — Défi 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! Le corps humain contient environ 60 à 70 % d'eau selon l'âge et la composition corporelle.",
+    2:"✅ Bravo ! Une déshydratation légère provoque déjà des maux de tête, de la fatigue et une baisse des performances.",
+    3:"✅ Correct ! L'eau participe aux réactions chimiques, transporte les nutriments et régule la température corporelle.",
+    4:"✅ Parfait ! Les organismes du désert ont développé des adaptations pour stocker et économiser l'eau (bosse, peau imperméable, activité nocturne...).",
+    5:"✅ Exact ! Plus d'un milliard de personnes — souvent en Afrique subsaharienne et en Asie — n'ont pas accès à l'eau potable."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Le corps humain contient environ 60 à 70 % d'eau. Ce pourcentage varie selon l'âge (les nourrissons en ont plus).",
+    2:"❌ Non. La déshydratation légère provoque des maux de tête, de la fatigue et une diminution des performances — pas une amélioration.",
+    3:"❌ Non. L'eau joue de nombreux rôles dans les cellules : réactions chimiques, transport, régulation thermique — pas un seul.",
+    4:"❌ Non. Les adaptations au désert consistent principalement à stocker et économiser l'eau, pas à en trouver plus.",
+    5:"❌ Non. Le manque d'eau potable est un problème grave : plus d'un milliard de personnes n'y ont pas accès dans le monde."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['65','60','70','63','64','66','67','68']],
+        msgOk:"✅ Le corps humain est composé d'environ 60–70 % d'eau (souvent estimé à 65 %).",
+        msgErr:"❌ Attendu : environ 65 % (ou une valeur entre 60 et 70 %). Le corps humain est composé à 60–70 % d'eau."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['jours','jour']],
+        msgOk:"✅ Sans eau, un être humain ne survit que quelques jours (2 à 7 selon les conditions).",
+        msgErr:"❌ Attendu : jours. Sans eau, la survie n'est que de quelques jours (2 à 7 jours selon les conditions)."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['corporelles','graisseuses']],
+        msgOk:"✅ Les réserves corporelles (graisse) sont dégradées pour libérer de l'eau métabolique — c'est l'adaptation du chameau.",
+        msgErr:"❌ Attendu : corporelles (ou graisseuses). Les animaux du désert stockent l'eau dans des réserves corporelles (la graisse)."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_eau_4', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

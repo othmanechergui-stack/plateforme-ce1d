@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reproduction · Niveau 3 — Reproduction humaine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#AD1457; --primary-dark:#880E4F; --primary-mid:#C2185B; --primary-bg:#FCE4EC;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#4A0030 0%,#AD1457 55%,#F48FB1 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(74,0,48,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#AD1457; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#880E4F; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#4A0030,#AD1457,#F48FB1); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#4A0030,#880E4F); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#F48FB1; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#880E4F,#AD1457); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FCE4EC; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #F48FB1; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #F48FB1; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:140px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#4A0030,#AD1457,#F48FB1); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #4A0030; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🌸 Reproduction · Humaine</h1>
+            <p>Niveau 3 · Gamètes · Fécondation · Grossesse · Placenta</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div>
+            <div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 3 — Avancé</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — La reproduction humaine</div>
+            <div class="card-sub">Gamètes · Fécondation · Nidation · Grossesse · Placenta</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            La <strong>reproduction sexuée</strong> chez l'humain implique la fusion de deux <strong>gamètes</strong>
+            (cellules reproductrices) : le <strong>spermatozoïde</strong> (mâle) et l'<strong>ovule</strong> (femelle).
+            Cette fusion forme un <strong>zygote</strong> qui se développe en embryon, puis en fœtus.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Les organes reproducteurs et les gamètes</h3>
+            <p>
+                • <strong>Chez l'homme</strong> : les <strong>testicules</strong> produisent des spermatozoïdes (en continu dès la puberté).<br>
+                • <strong>Chez la femme</strong> : les <strong>ovaires</strong> produisent des ovules (1 par cycle, environ tous les 28 jours).<br>
+                • Les spermatozoïdes sont très petits et mobiles. L'ovule est beaucoup plus grand et immobile.<br>
+                • Les gamètes contiennent <strong>23 chromosomes</strong> (moitié du nombre normal : haploïdes).
+            </p>
+        </div>
+
+        <!-- SVG fécondation -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 580 200" xmlns="http://www.w3.org/2000/svg" style="max-width:580px;width:100%">
+                <rect x="0" y="0" width="580" height="200" fill="#FFF0F5" rx="10"/>
+                <text x="290" y="22" text-anchor="middle" font-size="13" font-weight="900" fill="#4A0030" font-family="Nunito, sans-serif">Trajet vers la fécondation</text>
+
+                <!-- Testicule -->
+                <ellipse cx="70" cy="110" rx="45" ry="35" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+                <text x="70" y="105" text-anchor="middle" font-size="10" font-weight="900" fill="#1565C0" font-family="Nunito, sans-serif">🔵 Testicule</text>
+                <text x="70" y="120" text-anchor="middle" font-size="9" font-weight="700" fill="#1565C0" font-family="Nunito, sans-serif">Spermatozoïdes</text>
+
+                <!-- Ovaire -->
+                <ellipse cx="510" cy="110" rx="45" ry="35" fill="#FCE4EC" stroke="#AD1457" stroke-width="2"/>
+                <text x="510" y="105" text-anchor="middle" font-size="10" font-weight="900" fill="#AD1457" font-family="Nunito, sans-serif">🌸 Ovaire</text>
+                <text x="510" y="120" text-anchor="middle" font-size="9" font-weight="700" fill="#AD1457" font-family="Nunito, sans-serif">Ovule (ovulation)</text>
+
+                <!-- Trompe / fécondation -->
+                <rect x="215" y="85" width="150" height="50" rx="10" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="2"/>
+                <text x="290" y="108" text-anchor="middle" font-size="11" font-weight="900" fill="#7B1FA2" font-family="Nunito, sans-serif">🔬 Trompe</text>
+                <text x="290" y="124" text-anchor="middle" font-size="10" font-weight="700" fill="#7B1FA2" font-family="Nunito, sans-serif">FÉCONDATION</text>
+
+                <!-- Flèches -->
+                <line x1="116" y1="110" x2="213" y2="110" stroke="#1565C0" stroke-width="2" marker-end="url(#arrBl)"/>
+                <line x1="463" y1="110" x2="367" y2="110" stroke="#AD1457" stroke-width="2" marker-end="url(#arrPk)"/>
+
+                <!-- Utérus -->
+                <rect x="215" y="155" width="150" height="35" rx="8" fill="#E8F5E9" stroke="#388E3C" stroke-width="2"/>
+                <text x="290" y="177" text-anchor="middle" font-size="10" font-weight="900" fill="#388E3C" font-family="Nunito, sans-serif">🤰 Utérus — Nidation</text>
+                <line x1="290" y1="137" x2="290" y2="153" stroke="#7B1FA2" stroke-width="2" marker-end="url(#arrPu)"/>
+
+                <defs>
+                    <marker id="arrBl" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#1565C0"/></marker>
+                    <marker id="arrPk" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#AD1457"/></marker>
+                    <marker id="arrPu" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#7B1FA2"/></marker>
+                </defs>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔬 La grossesse — De la fécondation à la naissance</h3>
+            <p>
+                • <strong>Fécondation</strong> : fusion ovule + spermatozoïde → zygote (dans les trompes de Fallope).<br>
+                • <strong>Segmentation</strong> : le zygote se divise en se déplaçant vers l'utérus.<br>
+                • <strong>Nidation</strong> : l'embryon s'implante dans la paroi de l'utérus (≈ J7 après fécondation).<br>
+                • <strong>Placenta</strong> : organe qui assure les échanges nutritifs et gazeux entre mère et embryon.<br>
+                • <strong>Durée</strong> : ≈ 9 mois (40 semaines d'aménorrhée).
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">🔵 Spermatozoïde</div>
+                <div class="cas-eq">23 chromosomes</div>
+                <div class="cas-desc">Produit par les testicules · mobile</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🌸 Ovule</div>
+                <div class="cas-eq">23 chromosomes</div>
+                <div class="cas-desc">Libéré par l'ovaire · 1/cycle</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🔬 Zygote</div>
+                <div class="cas-eq">46 chromosomes</div>
+                <div class="cas-desc">Résultat de la fécondation</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🤰 Placenta</div>
+                <div class="cas-eq">Échanges O₂/nutriments</div>
+                <div class="cas-desc">Mère ↔ embryon/fœtus</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège classique : Fécondation ≠ dans l'utérus !</h3>
+            <p>
+                La <strong>fécondation</strong> a lieu dans les <strong>trompes de Fallope</strong>, pas dans l'utérus.<br>
+                C'est la <strong>nidation</strong> (implantation de l'embryon) qui se passe dans l'utérus.<br>
+                Si un embryon s'implante dans la trompe → <strong>grossesse extra-utérine</strong> (urgence médicale).
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · La reproduction humaine</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Chez l'homme, les spermatozoïdes sont produits dans...</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(1,0)">les testicules</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">les ovaires</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">l'épididyme</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">la prostate</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> L'ovule est libéré lors de...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(2,0)">l'ovulation, vers le 14e jour du cycle</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">la menstruation</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">la fécondation</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">l'implantation</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> La fécondation a lieu dans...</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">les trompes de Fallope</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">l'utérus</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">les ovaires</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">le vagin</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> La durée normale d'une grossesse est d'environ...</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">9 mois (40 semaines)</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">6 mois</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">12 mois</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">3 mois</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Le placenta permet...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">les échanges nutritifs et gazeux entre la mère et l'embryon</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">la fécondation</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">la production d'hormones exclusivement</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">la protection mécanique uniquement</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · La reproduction humaine</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                L'ovule libéré au moment de l'
+                <input class="blank" id="f1a" placeholder="?" style="width:140px">
+                peut être fécondé par un spermatozoïde.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                La fécondation se déroule dans les
+                <input class="blank" id="f2a" placeholder="?" style="width:120px">
+                de Fallope.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                L'œuf fécondé (zygote) s'implante dans la paroi de l'
+                <input class="blank" id="f3a" placeholder="?" style="width:120px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Trajet de l'ovule et du spermatozoïde</div>
+                <div class="ex-stmt">
+                    Décris le trajet complet de l'ovule depuis sa libération jusqu'à la nidation éventuelle.
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Ovulation</strong> (≈ J14) : l'ovule est libéré par l'ovaire et capté par le pavillon de la trompe de Fallope.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Progression</strong> : l'ovule progresse dans la trompe. C'est là que peut avoir lieu la fécondation si un spermatozoïde est présent.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Fécondation</strong> (si elle a lieu) : un spermatozoïde fusionne avec l'ovule → zygote (46 chromosomes).</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Nidation</strong> (≈ J21) : le zygote (devenu blastocyste après divisions) s'implante dans la paroi de l'utérus (endomètre).</div></div>
+                <div class="final-ans">✅ Ovaire → trompe (fécondation) → utérus (nidation)</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Le rôle du placenta</div>
+                <div class="ex-stmt">
+                    Explique les échanges qui se font au niveau du placenta entre la mère et l'embryon. Quelles substances passent dans chaque sens ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>De la mère vers l'embryon</strong> : O₂, glucose, acides aminés, vitamines, minéraux, anticorps → nourrissent et protègent l'embryon.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>De l'embryon vers la mère</strong> : CO₂ et déchets métaboliques (urée) → éliminés par la mère via ses poumons et ses reins.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Important</strong> : les sangs maternel et fœtal ne se mélangent pas directement — les échanges se font par diffusion à travers les villosités placentaires.</div></div>
+                <div class="final-ans">✅ Mère → O₂, nutriments, Ac | Embryon → CO₂, déchets | Sangs séparés !</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Question style CE1D</div>
+                <div class="ex-stmt">
+                    Un zygote contient 46 chromosomes.<br>
+                    a) Combien de chromosomes contenait l'ovule ? Le spermatozoïde ?<br>
+                    b) Pourquoi ce nombre est-il important pour l'espèce ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> L'ovule contenait <strong>23 chromosomes</strong> et le spermatozoïde aussi <strong>23 chromosomes</strong>. Ils sont haploïdes (n = 23).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">La fécondation réunit 23 + 23 = <strong>46 chromosomes</strong> dans le zygote. Le zygote est diploïde (2n = 46), comme toutes les cellules du corps humain.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>b)</strong> Ce mécanisme (méiose → gamètes haploïdes + fécondation) maintient le nombre chromosomique constant d'une génération à l'autre. Sans cela, le nombre doublerait à chaque génération.</div></div>
+                <div class="final-ans">✅ Ovule : 23 · Spermatozoïde : 23 · Zygote : 46 — maintien de l'espèce</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Vocabulaire de la reproduction</div>
+                <div class="bonus-stmt">
+                    Définis ces termes : zygote, embryon, fœtus, nidation, gamète.
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Zygote</strong> : cellule résultant de la fusion d'un ovule et d'un spermatozoïde (46 chromosomes). Durée : les premiers jours.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Embryon</strong> : stade de développement de la fécondation jusqu'à la 8e semaine. Les organes se forment (organogenèse).</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>Fœtus</strong> : stade à partir de la 9e semaine jusqu'à la naissance. Les organes sont formés et continuent à grandir.</div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text"><strong>Nidation</strong> : implantation de l'embryon dans la paroi de l'utérus, environ 7 jours après la fécondation.</div></div>
+                <div class="bonus-step"><div class="bonus-num">5</div><div class="sol-text"><strong>Gamète</strong> : cellule reproductrice haploïde (23 chromosomes). Ovule chez la femme, spermatozoïde chez l'homme.</div></div>
+                <div class="bonus-ans">
+                    Zygote → embryon → fœtus · Nidation = implantation · Gamètes haploïdes (23 chr)
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 3 terminé !</h2>
+    <p>Bravo ! Tu maîtrises la reproduction humaine.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 4 — Puberté !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Reproduction CE1D</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="bio_reproduction_niveau1.html" class="nav-btn">N1 — Introduction</a>
+        <a href="bio_reproduction_niveau2.html" class="nav-btn">N2 — Cycle menstruel</a>
+        <a href="bio_reproduction_niveau3.html" class="nav-btn current">▶ N3 — Reprod. humaine</a>
+        <a href="bio_reproduction_niveau4.html" class="nav-btn">N4 — Puberté</a>
+        <a href="bio_reproduction_niveau5.html" class="nav-btn">N5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! Les spermatozoïdes sont produits dans les testicules (spermatogenèse). L'épididyme les stocke et les fait mûrir.",
+    2:"✅ Bravo ! L'ovulation a lieu vers le 14e jour d'un cycle de 28 jours. L'ovule est libéré par l'ovaire.",
+    3:"✅ Correct ! La fécondation a lieu dans les trompes de Fallope, pas dans l'utérus. C'est la nidation qui se passe dans l'utérus.",
+    4:"✅ Parfait ! La grossesse dure environ 9 mois, soit 40 semaines d'aménorrhée (comptées depuis les dernières règles).",
+    5:"✅ Exact ! Le placenta assure les échanges nutritifs et gazeux (O₂, nutriments, CO₂, déchets) entre la mère et l'embryon."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Les spermatozoïdes sont produits dans les testicules. L'épididyme les stocke, la prostate produit un liquide séminal.",
+    2:"❌ Non. L'ovule est libéré lors de l'ovulation (≈ J14). La menstruation correspond à l'élimination de l'endomètre (absence de grossesse).",
+    3:"❌ Non. La fécondation a lieu dans les trompes de Fallope. L'utérus est le lieu de la nidation (implantation de l'embryon).",
+    4:"❌ Non. La grossesse dure environ 9 mois (40 semaines). Une naissance avant 37 semaines est considérée comme prématurée.",
+    5:"❌ Non. Le placenta assure PRINCIPALEMENT les échanges nutritifs et gazeux. Il produit aussi des hormones, mais ce n'est pas son rôle PRINCIPAL."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['ovulation']],
+        msgOk:"✅ Exact ! L'ovulation est la libération de l'ovule par l'ovaire, vers le 14e jour du cycle menstruel.",
+        msgErr:"❌ Attendu : ovulation. C'est le phénomène par lequel l'ovaire libère un ovule chaque cycle."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['trompes']],
+        msgOk:"✅ Bravo ! La fécondation se déroule dans les trompes de Fallope, qui relient les ovaires à l'utérus.",
+        msgErr:"❌ Attendu : trompes. La fécondation a lieu dans les trompes de Fallope, pas dans l'utérus."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['uterus','utérus']],
+        msgOk:"✅ Parfait ! La nidation est l'implantation de l'embryon (blastocyste) dans la paroi de l'utérus (endomètre).",
+        msgErr:"❌ Attendu : utérus. C'est dans l'utérus que l'embryon s'implante lors de la nidation."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_reproduction_3', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Écologie &amp; Milieu · Niveau 3 — Populations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#558B2F; --primary-dark:#33691E; --primary-mid:#7CB342; --primary-bg:#F1F8E9;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+        header { background:linear-gradient(135deg,#1B5E20 0%,#558B2F 55%,#AED581 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(27,94,32,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#558B2F; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#33691E; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#1B5E20,#558B2F,#AED581); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+        .def-box { background:linear-gradient(135deg,#1B5E20,#33691E); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#AED581; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #AED581; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1rem; font-weight:900; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.88rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+        .fill-item { background:var(--primary-bg); border:2px solid #AED581; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:140px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+        .completion { display:none; background:linear-gradient(135deg,#1B5E20,#558B2F,#AED581); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #1A4314; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🌿 Écologie &amp; Milieu · Populations</h1>
+            <p>Niveau 3 · Capacité de charge · Croissance logistique · Biodiversité · Espèces invasives</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 3 — Avancé</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Populations et dynamique</div>
+            <div class="card-sub">Capacité de charge · Croissance logistique · Biodiversité · Espèces invasives</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Une <strong>population</strong> est l'ensemble des individus d'une même espèce vivant dans un même milieu.
+            Sa taille n'est pas illimitée : les ressources (nourriture, espace, eau) la contraignent.
+            On étudie comment et pourquoi les populations augmentent, restent stables ou diminuent.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Capacité de charge (K) — Définition clé</h3>
+            <p>
+                La <strong>capacité de charge K</strong> d'un milieu = la taille maximale de population que ce milieu peut supporter de façon durable.<br><br>
+                Au-dessus de K → manque de ressources → mortalité augmente, natalité diminue → retour vers K.<br>
+                En dessous de K → ressources abondantes → la population croît jusqu'à K.
+            </p>
+        </div>
+
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="200" fill="#F1F8E9" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#1B5E20" font-family="Nunito, sans-serif">Croissance exponentielle vs Croissance logistique</text>
+                <!-- Axes -->
+                <line x1="50" y1="170" x2="530" y2="170" stroke="#555" stroke-width="1.5"/>
+                <line x1="50" y1="30" x2="50" y2="170" stroke="#555" stroke-width="1.5"/>
+                <text x="290" y="190" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif">Temps →</text>
+                <text x="20" y="105" text-anchor="middle" font-size="10" fill="#555" font-family="Nunito, sans-serif" transform="rotate(-90,20,105)">Taille</text>
+                <!-- Ligne K -->
+                <line x1="50" y1="70" x2="530" y2="70" stroke="#558B2F" stroke-width="1.5" stroke-dasharray="6,3"/>
+                <text x="535" y="73" font-size="11" font-weight="900" fill="#33691E" font-family="Nunito, sans-serif">K</text>
+                <!-- Courbe logistique (S) -->
+                <path d="M50,168 C80,165 110,155 150,135 C190,115 230,90 270,78 C310,70 360,69 530,69" fill="none" stroke="#558B2F" stroke-width="3"/>
+                <text x="200" y="85" font-size="10" font-weight="900" fill="#33691E" font-family="Nunito, sans-serif">Logistique (en S)</text>
+                <!-- Courbe exponentielle (J) -->
+                <path d="M50,168 C100,162 150,145 200,110 C250,75 280,40 300,30" fill="none" stroke="#E64A19" stroke-width="3"/>
+                <text x="255" y="35" font-size="10" font-weight="900" fill="#E64A19" font-family="Nunito, sans-serif">Exponentielle (en J)</text>
+                <text x="280" y="160" text-anchor="middle" font-size="9" fill="#555" font-family="Nunito, sans-serif">Logistique : croissance freinée à l'approche de K (ressources limitées)</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔢 Croissance exponentielle vs logistique</h3>
+            <p>
+                <strong>Croissance exponentielle (courbe en J)</strong> : la population croît sans limite, comme si les ressources étaient illimitées. Impossible à long terme.<br><br>
+                <strong>Croissance logistique (courbe en S)</strong> : la population croît rapidement au début, puis ralentit à mesure qu'elle approche K et se stabilise.<br><br>
+                Dans la réalité, la croissance logistique est la plus fréquente : les ressources sont <strong>limitées</strong>.
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">Biodiversité</div>
+                <div class="cas-eq">3 niveaux</div>
+                <div class="cas-desc">Génétique · Spécifique · Écosystémique — la variété du vivant à tous les niveaux</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Espèces invasives</div>
+                <div class="cas-eq">Danger !</div>
+                <div class="cas-desc">Éliminent les espèces locales par compétition ; perturbent l'écosystème</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Prédateur-proie</div>
+                <div class="cas-eq">Oscillation</div>
+                <div class="cas-desc">Trop de prédateurs → proies diminuent → prédateurs diminuent → proies remontent</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège : croissance exponentielle ≠ illimitée dans la nature !</h3>
+            <p>
+                La croissance exponentielle suppose des ressources illimitées — cela n'existe pas dans la nature.<br>
+                Dans la réalité, la nourriture, l'espace et l'eau finissent par manquer → la croissance ralentit → <strong>croissance logistique</strong>.<br>
+                <strong>La courbe en J est un modèle théorique, la courbe en S reflète la réalité.</strong>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Capacité de charge, croissance, biodiversité, espèces invasives, prédation</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> La capacité de charge (K) d'un milieu représente...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">a) la taille maximale de population que le milieu peut soutenir</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">b) le poids total des animaux</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">c) le nombre d'espèces différentes</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">d) la surface du territoire</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Une population en croissance logistique...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(2,0)">a) croît rapidement puis ralentit à mesure qu'elle approche K</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">b) croît exponentiellement sans limite</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">c) reste toujours stable</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">d) décroît régulièrement</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> La biodiversité désigne...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">a) la variété des espèces et des écosystèmes</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">b) le nombre d'individus d'une espèce</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">c) les facteurs abiotiques uniquement</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">d) la biomasse totale</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Les espèces invasives sont dangereuses car...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">a) elles peuvent éliminer les espèces locales par compétition</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">b) elles sont toujours toxiques</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">c) elles appauvrissent le sol</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">d) elles réchauffent le climat</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Un prédateur qui mange trop de proies risque...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">a) d'épuiser sa source de nourriture et de voir sa propre population diminuer</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">b) de grossir</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">c) de se reproduire davantage</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">d) d'améliorer la biodiversité</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Ressources, capacité de charge, biodiversité</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                La croissance exponentielle se produit quand les ressources sont <input class="blank" id="f1a" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                La taille maximale d'une population est appelée capacité de <input class="blank" id="f2a" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                La variété du vivant à tous les niveaux s'appelle la <input class="blank" id="f3a" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Lire une courbe de population</div>
+                <div class="ex-stmt">
+                    Une population de lapins croît de 10 à 500 individus en 5 ans, puis se stabilise autour de 500.<br>
+                    a) Quel type de croissance observe-t-on ?<br>
+                    b) Quelle est la valeur approximative de K ?<br>
+                    c) Que se passerait-il si un chasseur introduisait 200 lapins supplémentaires ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Croissance logistique</strong> : rapide au départ, puis ralentit et se stabilise → courbe en S.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) K ≈ 500 individus</strong> : c'est la taille à laquelle la population se stabilise (capacité de charge).</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> La population passerait à 700, au-dessus de K → manque de nourriture → mortalité accrue → retour progressif vers K ≈ 500.</div></div>
+                <div class="final-ans">✅ a) Logistique &nbsp;|&nbsp; b) K = 500 &nbsp;|&nbsp; c) Retour vers K par régulation</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Espèces invasives</div>
+                <div class="ex-stmt">
+                    La Jussie (plante aquatique) a été introduite accidentellement en Europe. Elle envahit rapidement les rivières belges et élimine les plantes indigènes.<br>
+                    a) Pourquoi la Jussie se développe-t-elle si vite dans les rivières européennes ?<br>
+                    b) Quel type de relation a-t-elle avec les plantes locales ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> La Jussie n'a pas de prédateurs naturels en Europe → sa population croît de façon quasi exponentielle, sans régulation.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Compétition interspécifique</strong> : la Jussie se dispute la lumière, l'espace et les nutriments avec les plantes locales, qu'elle finit par étouffer.</div></div>
+                <div class="final-ans">✅ a) Absence de prédateurs → croissance non régulée &nbsp;|&nbsp; b) Compétition interspécifique</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Style CE1D belge</div>
+                <div class="ex-stmt">
+                    Dans un parc naturel, la population de cerfs double chaque année. Après 6 ans, on observe une forte mortalité et une diminution de la végétation.<br>
+                    a) Quel type de croissance a eu lieu les 6 premières années ?<br>
+                    b) Que s'est-il probablement passé pour provoquer la mortalité ?<br>
+                    c) Ce milieu avait-il une capacité de charge suffisante ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Croissance exponentielle</strong> : la population double chaque année → courbe en J.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> La population a dépassé la capacité de charge K → manque de végétation (nourriture épuisée) → famine → mortalité accrue.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Non</strong>, la capacité de charge n'était pas suffisante pour une population qui doubla 6 fois. L'effondrement indique un dépassement de K.</div></div>
+                <div class="final-ans">✅ a) Exponentielle &nbsp;|&nbsp; b) Dépassement de K → famine &nbsp;|&nbsp; c) Non, K dépassé</div>
+            </div>
+        </div>
+
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Dynamique prédateur-proie</div>
+                <div class="bonus-stmt">
+                    Dans une réserve naturelle, on observe que quand la population de lièvres augmente, celle des renards augmente ensuite, puis les lièvres diminuent, puis les renards diminuent…<br>
+                    a) Comment appelle-t-on ce phénomène cyclique ?<br>
+                    b) Pourquoi les populations oscillent-elles au lieu de s'effondrer complètement ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> C'est la <strong>dynamique prédateur-proie</strong> (ou cycle proie-prédateur). Les deux populations s'autorégulent.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b)</strong> Quand les proies diminuent trop, les prédateurs manquent de nourriture et diminuent aussi → pression réduite sur les proies → les proies se reconstituent → les prédateurs augmentent à nouveau. L'oscillation maintient l'équilibre.</div></div>
+                <div class="bonus-ans">Dynamique prédateur-proie : oscillations cycliques — les deux populations s'autorégulent et maintiennent l'équilibre</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="completion" id="completionBanner">
+    <div class="stars">🌿 🌟 🌿</div>
+    <h2>Niveau 3 terminé !</h2>
+    <p>Super ! Tu maîtrises la capacité de charge, la croissance logistique, la biodiversité et les espèces invasives.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 4 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Écologie &amp; Milieu</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="bio_ecologie_niveau1.html" class="nav-btn">Niveau 1 — Milieu de vie</a>
+        <a href="bio_ecologie_niveau2.html" class="nav-btn">Niveau 2 — Facteurs écologiques</a>
+        <a href="bio_ecologie_niveau3.html" class="nav-btn current">▶ Niveau 3 — Populations</a>
+        <a href="bio_ecologie_niveau4.html" class="nav-btn">Niveau 4 — Relations</a>
+        <a href="bio_ecologie_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! La capacité de charge K = la taille maximale de population que le milieu peut soutenir durablement grâce à ses ressources (nourriture, eau, espace).",
+    2:"✅ Bravo ! La croissance logistique produit une courbe en S : rapide au début, puis freinée à l'approche de K. C'est la croissance réaliste dans la nature.",
+    3:"✅ Correct ! La biodiversité = la variété du vivant à tous les niveaux : diversité génétique, diversité des espèces, diversité des écosystèmes.",
+    4:"✅ Parfait ! Les espèces invasives n'ont pas de prédateurs naturels dans leur nouveau milieu → elles se multiplient et éliminent les espèces locales par compétition.",
+    5:"✅ Exact ! C'est la dynamique prédateur-proie : trop de prédateurs → proies diminuent → nourriture insuffisante → prédateurs diminuent aussi."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. K = capacité de charge = taille MAXIMALE de population supportée par le milieu. Ce n'est ni un poids, ni un nombre d'espèces, ni une surface.",
+    2:"❌ Non. La croissance logistique n'est pas illimitée, ne reste pas stable et ne décroît pas régulièrement. Elle croît vite puis ralentit à l'approche de K (courbe en S).",
+    3:"❌ Non. La biodiversité n'est pas simplement le nombre d'individus d'une espèce. Elle englobe la variété des gènes, des espèces ET des écosystèmes.",
+    4:"❌ Non. Les espèces invasives ne sont pas forcément toxiques et ne réchauffent pas directement le climat. Leur danger principal est la compétition avec les espèces locales.",
+    5:"❌ Non. Trop de prédateurs → proies diminuent → nourriture insuffisante pour les prédateurs → les prédateurs diminuent à leur tour. C'est l'autorégulation prédateur-proie."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['illimitees','illimitées','illimitee','illimitée']],
+        msgOk:"✅ La croissance exponentielle suppose des ressources illimitées — un modèle théorique qui ne dure pas dans la réalité.",
+        msgErr:"❌ Attendu : 'illimitées'. La croissance exponentielle suppose que les ressources sont illimitées (impossible à long terme)."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['charge']],
+        msgOk:"✅ La capacité de charge (K) = taille maximale de population que le milieu peut soutenir durablement.",
+        msgErr:"❌ Attendu : 'charge'. La taille maximale supportable = capacité de charge, notée K."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['biodiversite','biodiversité']],
+        msgOk:"✅ La biodiversité = la variété du vivant à tous les niveaux : gènes, espèces, écosystèmes.",
+        msgErr:"❌ Attendu : 'biodiversité'. La variété du vivant à tous les niveaux s'appelle la biodiversité."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_ecologie_3', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

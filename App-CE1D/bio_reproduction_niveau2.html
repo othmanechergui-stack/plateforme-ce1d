@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biologie — Reproduction · Niveau 2 — Sexuée</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#AD1457; --primary-dark:#880E4F; --primary-mid:#E91E63; --primary-bg:#FCE4EC;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#4A0025 0%,#AD1457 55%,#F48FB1 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(74,0,37,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#AD1457; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#880E4F; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#4A0025,#AD1457,#F48FB1); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#4A0025,#880E4F); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#F48FB1; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #F48FB1; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #F48FB1; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:120px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#4A0025,#AD1457,#F48FB1); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #3A0020; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🧬 Reproduction · Sexuée</h1>
+            <p>Niveau 2 · Méiose · Gamètes · Fécondation · Zygote · Diversité</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 2 — Intermédiaire</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Reproduction sexuée</div>
+            <div class="card-sub">Deux parents · Méiose · Gamètes haploïdes · Fécondation · Zygote diploïde</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            La <strong>reproduction sexuée</strong> nécessite <strong>deux parents</strong> et implique la formation de cellules reproductrices appelées <strong>gamètes</strong>.
+            La fusion de ces gamètes lors de la <strong>fécondation</strong> produit un <strong>zygote</strong> qui se développera en nouvel individu.
+            Contrairement à la reproduction asexuée, les descendants sont <strong>génétiquement uniques</strong> grâce au brassage génétique.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Reproduction sexuée — Définition</h3>
+            <p>
+                La <strong>reproduction sexuée</strong> implique deux parents et la fusion de deux <strong>gamètes</strong> (cellules sexuelles).<br>
+                Les gamètes sont produits par la <strong>méiose</strong> : ils sont <strong>haploïdes</strong> (n chromosomes).<br>
+                La <strong>fécondation</strong> réunit un gamète mâle et un gamète femelle pour former un <strong>zygote diploïde</strong> (2n chromosomes).<br>
+                Chaque descendant est <strong>génétiquement unique</strong> grâce au brassage génétique.
+            </p>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔢 Méiose vs Mitose — La distinction essentielle</h3>
+            <p>
+                <strong>Mitose</strong> (reproduction asexuée) :<br>
+                &nbsp;&nbsp;→ 1 cellule mère → <strong>2 cellules filles identiques</strong> (même nombre de chromosomes)<br>
+                &nbsp;&nbsp;→ Utilisée pour la croissance et la réparation des tissus<br><br>
+                <strong>Méiose</strong> (reproduction sexuée) :<br>
+                &nbsp;&nbsp;→ 1 cellule mère (2n) → <strong>4 cellules filles haploïdes (n)</strong> génétiquement uniques<br>
+                &nbsp;&nbsp;→ Utilisée uniquement pour produire les gamètes (spermatozoïdes et ovules)
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">🥚 Ovule (n)</div>
+                <div class="cas-eq">Gamète femelle</div>
+                <div class="cas-desc">Cellule haploïde produite dans les ovaires par méiose</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🐟 Spermatozoïde (n)</div>
+                <div class="cas-eq">Gamète mâle</div>
+                <div class="cas-desc">Cellule haploïde produite dans les testicules par méiose</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">🔬 Zygote (2n)</div>
+                <div class="cas-eq">Œuf fécondé</div>
+                <div class="cas-desc">Cellule diploïde issue de la fusion des deux gamètes</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège classique : Méiose ≠ Mitose !</h3>
+            <p>
+                La <strong>méiose</strong> produit <strong>4 cellules haploïdes</strong> génétiquement différentes (gamètes).<br>
+                La <strong>mitose</strong> produit <strong>2 cellules diploïdes</strong> génétiquement identiques.<br>
+                <strong>Chez l'humain : 2n = 46 chromosomes → après méiose : n = 23 chromosomes dans chaque gamète.</strong><br>
+                Après fécondation : 23 + 23 = 46 chromosomes dans le zygote.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Méiose, gamètes, fécondation, diversité génétique</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> La reproduction sexuée nécessite...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">a) deux parents et la fécondation de gamètes</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">b) un seul parent</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">c) uniquement la mitose</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">d) des spores</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> La méiose produit...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(2,0)">a) 4 cellules haploïdes (gamètes) génétiquement uniques</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">b) 2 cellules diploïdes identiques</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">c) des cellules somatiques</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">d) des clones</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> La fécondation réunit...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">a) un gamète mâle et un gamète femelle pour former un zygote</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">b) deux cellules identiques</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">c) deux cellules somatiques</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">d) deux noyaux de cellules diploïdes</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Le nombre de chromosomes après la méiose est...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">a) moitié du nombre diploïde (haploïde)</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">b) le double du nombre d'origine</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">c) identique au nombre d'origine</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">d) quadruple du nombre d'origine</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> L'avantage évolutif de la reproduction sexuée est...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">a) la diversité génétique qui favorise l'adaptation</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">b) la rapidité de reproduction par rapport à la voie asexuée</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">c) l'absence de mutation génétique</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">d) la production de clones résistants</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Méiose, zygote, haploïdes</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                La division cellulaire qui produit les gamètes s'appelle la
+                <input class="blank" id="f1a" placeholder="?" style="width:100px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                La fusion d'un gamète mâle et d'un gamète femelle forme un
+                <input class="blank" id="f2a" placeholder="?" style="width:100px">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Les gamètes sont des cellules
+                <input class="blank" id="f3a" placeholder="?" style="width:120px"> (n chromosomes).
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Comparer mitose et méiose</div>
+                <div class="ex-stmt">
+                    Complète le tableau comparatif entre mitose et méiose :<br>
+                    a) Combien de cellules filles produit chaque division ?<br>
+                    b) Les cellules filles sont-elles haploïdes ou diploïdes ?<br>
+                    c) Quelle division sert à fabriquer les gamètes ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Mitose → <strong>2 cellules filles</strong>. Méiose → <strong>4 cellules filles</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Mitose → cellules <strong>diploïdes (2n)</strong> identiques à la cellule mère. Méiose → cellules <strong>haploïdes (n)</strong> génétiquement uniques.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> C'est la <strong>méiose</strong> qui produit les gamètes (spermatozoïdes et ovules).</div></div>
+                <div class="final-ans">✅ Mitose : 2 cellules diploïdes identiques | Méiose : 4 cellules haploïdes uniques (gamètes)</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Chromosomes et fécondation</div>
+                <div class="ex-stmt">
+                    Chez l'humain, une cellule somatique contient 46 chromosomes (2n = 46).<br>
+                    a) Combien de chromosomes contiennent les gamètes ?<br>
+                    b) Quelle division produit ces gamètes ?<br>
+                    c) Combien de chromosomes contient le zygote après fécondation ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Les gamètes contiennent <strong>23 chromosomes</strong> (n = 23 → haploïdes).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> La <strong>méiose</strong> divise le nombre de chromosomes par 2 pour produire les gamètes.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> Le zygote reçoit 23 chromosomes du père + 23 chromosomes de la mère = <strong>46 chromosomes</strong> (2n = 46).</div></div>
+                <div class="final-ans">✅ Gamètes : 23 chromosomes (n) | Méiose | Zygote : 46 chromosomes (2n)</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Diversité génétique (style CE1D)</div>
+                <div class="ex-stmt">
+                    Deux frères sont issus des mêmes parents mais ne sont pas identiques.<br>
+                    a) Pourquoi ne sont-ils pas des clones malgré leurs parents communs ?<br>
+                    b) Quel phénomène, lors de la méiose, garantit cette diversité ?<br>
+                    c) En quoi cette diversité est-elle un avantage pour l'espèce ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Lors de la méiose, les chromosomes sont mélangés de manière <strong>aléatoire</strong> dans chaque gamète → chaque spermatozoïde et chaque ovule est <strong>unique</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Le <strong>brassage génétique</strong> (ou crossing-over) lors de la méiose assure la diversité des gamètes.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> La diversité génétique permet à certains individus de mieux <strong>s'adapter</strong> aux changements (maladies, climat…) → l'espèce survit mieux.</div></div>
+                <div class="final-ans">✅ Brassage aléatoire lors de la méiose → gamètes uniques → individus génétiquement différents → meilleure adaptation</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Reproduction chez les fleurs</div>
+                <div class="bonus-stmt">
+                    Chez les plantes à fleurs, le pollen (gamète mâle) féconde l'ovule (gamète femelle) pour former une graine.<br>
+                    a) Ce mode de reproduction est-il sexué ou asexué ? Justifie.<br>
+                    b) La graine contient-elle le même nombre de chromosomes qu'un grain de pollen ?<br>
+                    c) Cite un avantage de la pollinisation croisée (entre deux plantes différentes).
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> Mode de reproduction <strong>sexué</strong> : deux gamètes (pollen + ovule) issus de deux individus fusionnent lors de la fécondation.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b)</strong> Non. Le grain de pollen est <strong>haploïde (n)</strong> ; la graine (zygote développé) est <strong>diploïde (2n)</strong> : elle contient deux fois plus de chromosomes.</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>c)</strong> La pollinisation croisée mélange les gènes de deux plantes différentes → <strong>plus grande diversité génétique</strong> → meilleure adaptation aux maladies et aux changements environnementaux.</div></div>
+                <div class="bonus-ans">Sexué · Graine diploïde (2n) vs pollen haploïde (n) · Pollinisation croisée = diversité génétique accrue</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 2 terminé !</h2>
+    <p>Bravo ! Tu maîtrises la méiose, les gamètes haploïdes, la fécondation et la diversité génétique.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 3 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Reproduction</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="bio_reproduction_niveau1.html" class="nav-btn">Niveau 1 — Asexuée</a>
+        <a href="bio_reproduction_niveau2.html" class="nav-btn current">▶ Niveau 2 — Sexuée</a>
+        <a href="bio_reproduction_niveau3.html" class="nav-btn">Niveau 3 — Reproduction humaine</a>
+        <a href="bio_reproduction_niveau4.html" class="nav-btn">Niveau 4 — Puberté</a>
+        <a href="bio_reproduction_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! La reproduction sexuée nécessite deux parents et la fusion de leurs gamètes lors de la fécondation.",
+    2:"✅ Bravo ! La méiose produit 4 cellules haploïdes (n) génétiquement uniques, ce sont les gamètes.",
+    3:"✅ Correct ! La fécondation réunit un spermatozoïde (n) et un ovule (n) pour former un zygote diploïde (2n).",
+    4:"✅ Parfait ! Après la méiose, le nombre de chromosomes est divisé par 2 → les cellules sont haploïdes (n).",
+    5:"✅ Exact ! La diversité génétique issue de la reproduction sexuée permet à l'espèce de mieux s'adapter à son environnement."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. La reproduction sexuée nécessite deux parents et la fécondation (fusion de deux gamètes). Un seul parent suffit dans la reproduction asexuée.",
+    2:"❌ Non. La méiose produit 4 cellules haploïdes génétiquement uniques. C'est la mitose qui produit 2 cellules diploïdes identiques.",
+    3:"❌ Non. La fécondation unit un gamète mâle (spermatozoïde) et un gamète femelle (ovule) pour former le zygote.",
+    4:"❌ Non. La méiose divise le nombre de chromosomes par 2 → les gamètes sont haploïdes (n), pas diploïdes.",
+    5:"❌ Non. La reproduction sexuée est plus lente que l'asexuée. Son avantage est la diversité génétique, qui favorise l'adaptation de l'espèce."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['meiose']],
+        msgOk:"✅ La méiose ! C'est la division cellulaire spéciale qui produit les gamètes haploïdes.",
+        msgErr:"❌ Attendu : méiose. La division cellulaire qui produit les gamètes s'appelle la méiose."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['zygote']],
+        msgOk:"✅ Un zygote ! C'est la cellule diploïde (2n) issue de la fusion des deux gamètes lors de la fécondation.",
+        msgErr:"❌ Attendu : zygote. La fusion d'un gamète mâle et d'un gamète femelle forme un zygote (2n)."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['haploides']],
+        msgOk:"✅ Haploïdes ! Les gamètes ne contiennent qu'un seul exemplaire de chaque chromosome (n chromosomes).",
+        msgErr:"❌ Attendu : haploïdes. Les gamètes sont des cellules haploïdes (n chromosomes, soit la moitié du nombre normal)."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_reproduction_2', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

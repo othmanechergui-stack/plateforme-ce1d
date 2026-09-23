@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optique &amp; Lumière · Niveau 5 — Défi CE1D 🏆</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#F9A825; --primary-dark:#F57F17; --primary-mid:#FFD54F; --primary-bg:#FFFDE7;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+        header { background:linear-gradient(135deg,#7F5700 0%,#F9A825 55%,#FFE082 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(127,87,0,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#F9A825; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#F57F17; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#7F5700,#F9A825,#FFE082); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+        .def-box { background:linear-gradient(135deg,#7F5700,#F57F17); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#FFE082; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #FFD54F; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.05rem; font-weight:900; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+        .fill-item { background:var(--primary-bg); border:2px solid #FFD54F; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:120px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+        .completion { display:none; background:linear-gradient(135deg,#7F5700,#F9A825,#FFE082); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #5D3A00; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🏆 Optique &amp; Lumière — Défi CE1D</h1>
+            <p>Niveau 5 · Fibre optique · Lentilles · Ondes EM · Synthèse soustractive</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <span class="diff-label">Niveau 5 — Défi CE1D 🏆</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Récapitulatif complet Optique</div>
+            <div class="card-sub">Réflexion totale interne · Fibre optique · Lentilles · Ondes électromagnétiques · Synthèse</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Ce niveau regroupe les concepts avancés d'optique vus au CE1D. Tu dois maîtriser la réflexion totale interne, les images par lentilles, le spectre électromagnétique et la synthèse soustractive.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Réflexion totale interne (RTI)</h3>
+            <p>
+                Quand la lumière passe d'un milieu <strong>plus dense vers moins dense</strong> (ex. verre → air), si l'angle d'incidence dépasse l'<strong>angle critique</strong> (ou angle limite), aucune lumière ne passe : <strong>tout est réfléchi</strong>.<br><br>
+                Application principale : la <strong>fibre optique</strong>. La lumière rebondit à l'intérieur de la fibre sur toute sa longueur grâce à la RTI. Utilisée pour internet, médecine (endoscope).
+            </p>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔭 Images par lentille convergente</h3>
+            <p>
+                • Objet <strong>au-delà du foyer</strong> : image <strong>réelle, renversée</strong> (projetable sur écran). Ex. projecteur.<br>
+                • Objet <strong>entre le foyer et la lentille</strong> : image <strong>virtuelle, agrandie, droite</strong> (non projetable). Ex. loupe.<br><br>
+                <strong>Lentille divergente</strong> : image toujours virtuelle, droite, plus petite. Utilisée pour corriger la myopie.
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">Infrarouge (IR)</div>
+                <div class="cas-eq">λ &gt; 780 nm</div>
+                <div class="cas-desc">Invisibles. Chaleur, télécommandes, vision nocturne.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Ultraviolet (UV)</div>
+                <div class="cas-eq">λ &lt; 380 nm</div>
+                <div class="cas-desc">Invisibles. Stérilisation, bronzage, détection de faux billets.</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Synthèse soustractive</div>
+                <div class="cas-eq">CMJ → pigments</div>
+                <div class="cas-desc">Cyan + Magenta + Jaune = noir théorique. Peinture, impression couleur.</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Pièges classiques CE1D</h3>
+            <p>
+                1. RTI : uniquement de <strong>dense → moins dense</strong>, jamais l'inverse.<br>
+                2. Image virtuelle = <strong>non projetable</strong> sur écran (ex. loupe, miroir plan).<br>
+                3. UV = <strong>plus énergétique</strong> que le visible. IR = <strong>moins énergétique</strong>.<br>
+                4. Synthèse <strong>additive</strong> (lumières) ≠ soustractive (pigments/peinture).
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple — Défi CE1D</div>
+            <div class="card-sub">5 questions · Fibre optique, lentilles, IR/UV, synthèse soustractive, angle critique</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> La fibre optique utilise le phénomène de...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">a) réflexion totale interne</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">b) réfraction simple</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">c) diffraction</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">d) interférence</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Un objet placé entre le foyer et une lentille convergente donne une image...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(2,0)">a) virtuelle, agrandie et droite (comme une loupe)</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">b) réelle et inversée</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">c) plus petite et inversée</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">d) directement au foyer</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Les infrarouges (IR) sont...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">a) des ondes électromagnétiques invisibles de longueur d'onde supérieure au rouge</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">b) des couleurs visibles très rouges</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">c) des UV de faible énergie</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">d) des rayons X</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> La synthèse soustractive des couleurs s'applique à...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">a) la peinture (cyan + magenta + jaune = noir théorique)</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">b) les écrans de télévision</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">c) les LED colorées</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">d) les lasers</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> La réflexion totale interne se produit quand l'angle d'incidence dépasse...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">a) l'angle critique (ou angle limite)</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">b) exactement 90°</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">c) l'angle de réfraction</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">d) toujours exactement 45°</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous — Défi CE1D</div>
+            <div class="card-sub">3 exercices · Angle critique, synthèse soustractive, UV</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                La réflexion totale interne se produit quand l'angle d'incidence dépasse l'angle <input class="blank" id="f1a" placeholder="?" style="width:100px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                La synthèse <input class="blank" id="f2a" placeholder="?" style="width:130px"> des couleurs s'applique à la peinture.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                L'ultraviolet a une longueur d'onde <input class="blank" id="f3a" placeholder="?" style="width:120px"> que le violet visible.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés — Style CE1D belge</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Niveau défi</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Fibre optique (réflexion totale interne)</div>
+                <div class="ex-stmt">
+                    Une fibre optique est faite d'un cœur en verre (n = 1,5) entouré d'une gaine (n = 1,2).<br>
+                    a) Dans quel sens doit aller la lumière pour que la RTI soit possible ?<br>
+                    b) Pourquoi la lumière ne sort-elle pas par les côtés de la fibre ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> La RTI se produit de <strong>dense → moins dense</strong> : ici du cœur (n=1,5) vers la gaine (n=1,2). La lumière doit voyager dans le cœur.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> L'angle d'incidence sur la paroi dépasse l'angle critique → <strong>réflexion totale interne</strong> à chaque rebond → la lumière reste piégée dans le cœur.</div></div>
+                <div class="final-ans">✅ a) Du cœur (plus dense) vers la gaine (moins dense) &nbsp;|&nbsp; b) RTI : tout est réfléchi, rien ne sort</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Image par lentille convergente</div>
+                <div class="ex-stmt">
+                    Une loupe est une lentille convergente de focale f = 5 cm. On place un objet à 3 cm de la lentille.<br>
+                    a) L'objet est-il avant ou après le foyer ?<br>
+                    b) L'image est-elle réelle ou virtuelle ? Agrandie ou réduite ? Droite ou renversée ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Le foyer est à 5 cm. L'objet est à 3 cm → il est <strong>entre la lentille et le foyer</strong> (avant le foyer).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Objet entre F et la lentille → image <strong>virtuelle, agrandie, droite</strong> : c'est le fonctionnement d'une loupe !</div></div>
+                <div class="final-ans">✅ a) Avant le foyer (3 cm &lt; 5 cm) &nbsp;|&nbsp; b) Image virtuelle, agrandie et droite</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Spectre électromagnétique (style CE1D)</div>
+                <div class="ex-stmt">
+                    Classe ces rayonnements du plus grand au plus petit indice de longueur d'onde :<br>
+                    Rayons X · Infrarouge · Lumière visible · Ultraviolet<br>
+                    b) Lequel est le plus énergétique ?
+                </div>
+            </div>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Ordre décroissant de λ : <strong>Infrarouge &gt; Visible &gt; Ultraviolet &gt; Rayons X</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Plus λ est petit, plus l'énergie est grande → les <strong>rayons X</strong> sont les plus énergétiques de la liste.</div></div>
+                <div class="final-ans">✅ a) IR &gt; Visible &gt; UV &gt; Rayons X (ordre décroissant de λ) &nbsp;|&nbsp; b) Rayons X (plus énergétiques)</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Synthèse soustractive en imprimerie</div>
+                <div class="bonus-stmt">
+                    Une imprimante utilise les encres Cyan (C), Magenta (M) et Jaune (J).<br>
+                    a) Que se passe-t-il si on superpose C + M ?<br>
+                    b) Que se passe-t-il si on superpose C + M + J ?<br>
+                    c) Pourquoi les imprimantes ajoutent-elles une encre noire (K) en plus ?
+                </div>
+            </div>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> C + M = <strong>Bleu</strong> (synthèse soustractive)</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b)</strong> C + M + J = <strong>Noir théorique</strong> (toutes les couleurs sont absorbées)</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>c)</strong> En pratique, C+M+J donne un noir brunâtre imparfait. On ajoute le K (noir pur) pour des noirs vraies et économiser les encres colorées.</div></div>
+                <div class="bonus-ans">
+                    C'est pourquoi les imprimantes utilisent le système CMJN (CMYK) : Cyan, Magenta, Jaune + Noir (Key).
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🏆 🌟 🏆</div>
+    <h2>Défi CE1D relevé !</h2>
+    <p>Félicitations ! Tu maîtrises tout le chapitre Optique &amp; Lumière — tu es prêt(e) pour l'examen !<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Excellent travail !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Optique &amp; Lumière</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="bio_optique_niveau1.html" class="nav-btn">Niveau 1 — Sources lumineuses</a>
+        <a href="bio_optique_niveau2.html" class="nav-btn">Niveau 2 — Réflexion</a>
+        <a href="bio_optique_niveau3.html" class="nav-btn">Niveau 3 — Réfraction</a>
+        <a href="bio_optique_niveau4.html" class="nav-btn">Niveau 4 — Spectre &amp; couleurs</a>
+        <a href="bio_optique_niveau5.html" class="nav-btn current">▶ Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! La fibre optique utilise la RÉFLEXION TOTALE INTERNE : la lumière rebondit indéfiniment à l'intérieur de la fibre sans en sortir.",
+    2:"✅ Bravo ! Objet entre F et la lentille → image virtuelle, agrandie et droite. C'est le principe de la LOUPE !",
+    3:"✅ Correct ! Les IR sont des ondes EM invisibles avec λ > 780 nm (supérieure au rouge visible). On les ressent comme chaleur.",
+    4:"✅ Parfait ! Synthèse SOUSTRACTIVE = pigments (peinture, encre) : C+M+J = noir théorique. ≠ additive (lumières = RVB).",
+    5:"✅ Exact ! La RTI se produit uniquement quand l'angle d'incidence dépasse l'ANGLE CRITIQUE (ou angle limite). En dessous, une partie de la lumière passe encore."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. La fibre optique utilise la RÉFLEXION TOTALE INTERNE (RTI) : quand l'angle dépasse le critique, tout est réfléchi → lumière piégée.",
+    2:"❌ Non. Objet ENTRE le foyer et la lentille → image VIRTUELLE, AGRANDIE et DROITE (loupe). Image réelle et inversée = objet au-delà du foyer.",
+    3:"❌ Non. Les IR sont des ondes EM INVISIBLES dont la longueur d'onde est SUPÉRIEURE au rouge (λ > 780 nm). Ils ne sont pas visibles.",
+    4:"❌ Non. La synthèse SOUSTRACTIVE s'applique aux PIGMENTS (peinture, encre d'imprimerie : CMJ). Les écrans TV utilisent la synthèse additive (RVB).",
+    5:"❌ Non. La RTI se produit quand l'angle dépasse l'ANGLE CRITIQUE (pas forcément 90° ou 45°). Cet angle dépend des indices des deux milieux."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['critique','limite']],
+        msgOk:"✅ Exact ! L'angle CRITIQUE (ou limite) est le seuil au-delà duquel la réflexion totale interne se produit.",
+        msgErr:"❌ Attendu : 'critique' (ou 'limite'). C'est l'angle au-delà duquel la RTI se produit."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['soustractive']],
+        msgOk:"✅ Bravo ! Synthèse SOUSTRACTIVE = pigments, peinture, impression. Synthèse additive = lumières (écrans).",
+        msgErr:"❌ Attendu : 'soustractive'. La peinture utilise la synthèse soustractive (CMJ), pas additive."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['inferieure','plus petite','plus courte']],
+        msgOk:"✅ Correct ! L'UV a une longueur d'onde INFÉRIEURE au violet visible (λ < 380 nm). UV = plus énergétique que le visible.",
+        msgErr:"❌ Attendu : 'inférieure' (ou 'plus petite'). L'UV a λ < 380 nm, plus court que le violet visible."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_optique_5', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>
