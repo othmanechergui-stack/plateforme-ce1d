@@ -158,7 +158,29 @@
         .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
         .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -454,6 +476,7 @@
                     a) Sucre dans l'eau &nbsp; b) Alcool dans l'eau &nbsp; c) CO₂ dans l'eau (eau gazeuse)
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Soluté : <strong>sucre</strong> · Solvant : <strong>eau</strong> · Solution : eau sucrée (sirop)</div></div>
@@ -473,6 +496,7 @@
                     c) Comment pourrait-on dissoudre ces 250 g ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Oui ! 150 g &lt; 200 g (solubilité max) → tout se dissout → solution non saturée.</div></div>
@@ -493,6 +517,7 @@
                     c) Le sucre a-t-il disparu ? Justifie.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Les glaçons ont <strong>fondu</strong> (changement d'état : solide H₂O → liquide H₂O). Ce n'est pas une dissolution car il n'y a qu'une espèce (H₂O).</div></div>
@@ -512,6 +537,7 @@
                     b) Quelle masse maximale de NaCl peut-on dissoudre dans 250 g d'eau à 20 °C ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> Solubilité max = 36 g / 100 g eau. On ajoute 40 g → seulement 36 g se dissolvent → <strong>solution saturée</strong> → 40 − 36 = <strong>4 g restent non dissous</strong> au fond.</div></div>

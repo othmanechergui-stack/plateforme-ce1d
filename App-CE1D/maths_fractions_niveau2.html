@@ -162,7 +162,29 @@
         .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.locked { cursor:default; opacity:.55; }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -444,6 +466,7 @@
                 <div class="ex-label">Exercice 1 — Addition avec PPCM</div>
                 <div class="ex-stmt">Calcule <strong>2/5 + 7/10</strong></div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Trouver le PPCM de 5 et 10 : <strong>PPCM(5,10) = 10</strong></div></div>
@@ -458,6 +481,7 @@
                 <div class="ex-label">Exercice 2 — Multiplication</div>
                 <div class="ex-stmt">Calcule <strong>4/5 × 15/8</strong></div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Multiplier : 4×15 = <strong>60</strong> et 5×8 = <strong>40</strong> → 60/40</div></div>
@@ -472,6 +496,7 @@
                 <div class="ex-label">Exercice 3 — Division</div>
                 <div class="ex-stmt">Calcule <strong>7/4 ÷ 7/8</strong></div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">L'inverse de 7/8 est <strong>8/7</strong> (on retourne la fraction)</div></div>

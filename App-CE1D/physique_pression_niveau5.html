@@ -131,7 +131,29 @@
         .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
         .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 

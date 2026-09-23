@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique — Son & Ondes · Niveau 3 — Intensité & dB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#1565C0; --primary-dark:#0D47A1; --primary-mid:#1E88E5; --primary-bg:#E3F2FD;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#0D47A1 0%,#1565C0 55%,#90CAF9 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(13,71,161,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#1565C0; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#0D47A1; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#0D47A1,#1565C0,#90CAF9); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#0D47A1,#1565C0); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#0D47A1,#1565C0,#90CAF9); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #082b6e; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🔊 Son &amp; Ondes · Intensité &amp; dB</h1>
+            <p>Niveau 3 · Décibels · Seuils auditifs · Isolation acoustique</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 3 — Intermédiaire+</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Intensité sonore et décibels</div>
+            <div class="card-sub">Décibels · Seuils auditifs · Dommages · Isolation acoustique</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            L'<strong>intensité sonore</strong> mesure la "force" ou le volume d'un son. Elle se mesure en
+            <strong>décibels (dB)</strong>. L'oreille humaine peut percevoir des sons de 0 dB (seuil d'audibilité)
+            jusqu'à environ 130–140 dB (seuil de douleur).
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Le décibel (dB) — Définition</h3>
+            <p>
+                Le <strong>décibel (dB)</strong> est l'unité de mesure du niveau sonore (intensité acoustique).<br>
+                • <strong>0 dB</strong> : seuil d'audibilité (son le plus faible perceptible)<br>
+                • <strong>85 dB</strong> : seuil à partir duquel l'oreille peut être endommagée (exposition prolongée)<br>
+                • <strong>120 dB</strong> : seuil de douleur<br>
+                • <strong>140 dB</strong> : seuil de danger immédiat
+            </p>
+        </div>
+
+        <!-- SVG : échelle des décibels -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="200" fill="#E3F2FD" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#0D47A1" font-family="Nunito, sans-serif">Échelle des décibels — repères importants</text>
+
+                <!-- Barre verticale dB -->
+                <rect x="40" y="28" width="18" height="155" rx="4" fill="#BBDEFB" stroke="#1565C0" stroke-width="1.5"/>
+                <!-- Remplissage gradué -->
+                <rect x="40" y="28" width="18" height="155" rx="4" fill="url(#dbGrad)"/>
+                <defs>
+                    <linearGradient id="dbGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#E53935"/>
+                        <stop offset="40%" stop-color="#FF9600"/>
+                        <stop offset="70%" stop-color="#58CC02"/>
+                        <stop offset="100%" stop-color="#1565C0"/>
+                    </linearGradient>
+                </defs>
+
+                <!-- Repères -->
+                <line x1="58" y1="35" x2="75" y2="35" stroke="#B71C1C" stroke-width="1.5"/>
+                <text x="80" y="39" font-size="10" font-weight="900" fill="#B71C1C" font-family="Nunito, sans-serif">140 dB — Seuil de danger (réacteur)</text>
+
+                <line x1="58" y1="55" x2="75" y2="55" stroke="#E53935" stroke-width="1.5"/>
+                <text x="80" y="59" font-size="10" font-weight="900" fill="#E53935" font-family="Nunito, sans-serif">120 dB — Seuil de douleur</text>
+
+                <line x1="58" y1="90" x2="75" y2="90" stroke="#FF9600" stroke-width="1.5"/>
+                <text x="80" y="94" font-size="10" font-weight="900" fill="#D07A00" font-family="Nunito, sans-serif">85 dB — Seuil de risque (exposition prolongée)</text>
+
+                <line x1="58" y1="120" x2="75" y2="120" stroke="#558B2F" stroke-width="1.5"/>
+                <text x="80" y="124" font-size="10" font-weight="900" fill="#33691E" font-family="Nunito, sans-serif">60–70 dB — Conversation normale</text>
+
+                <line x1="58" y1="152" x2="75" y2="152" stroke="#1565C0" stroke-width="1.5"/>
+                <text x="80" y="156" font-size="10" font-weight="900" fill="#0D47A1" font-family="Nunito, sans-serif">30 dB — Chuchotement</text>
+
+                <line x1="58" y1="180" x2="75" y2="180" stroke="#555" stroke-width="1.5"/>
+                <text x="80" y="184" font-size="10" font-weight="900" fill="#333" font-family="Nunito, sans-serif">0 dB — Seuil d'audibilité</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔢 Repères à retenir — Valeurs en dB</h3>
+            <p>
+                • <strong>0 dB</strong> — seuil d'audibilité (silence quasi-total)<br>
+                • <strong>30 dB</strong> — chuchotement, bibliothèque<br>
+                • <strong>60–70 dB</strong> — conversation normale<br>
+                • <strong>85 dB</strong> — risque auditif (marteau-piqueur, discothèque forte)<br>
+                • <strong>110 dB</strong> — concert de rock<br>
+                • <strong>120 dB</strong> — seuil de douleur<br>
+                • <strong>140 dB</strong> — moteur de réacteur (danger immédiat)
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">Isolation</div>
+                <div class="cas-eq">Absorption</div>
+                <div class="cas-desc">Matériaux poreux (mousse, tissu) absorbent les vibrations sonores</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Double vitrage</div>
+                <div class="cas-eq">Atténuation</div>
+                <div class="cas-desc">Réduit la transmission du bruit extérieur dans les bâtiments</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Casque anti-bruit</div>
+                <div class="cas-eq">Protection</div>
+                <div class="cas-desc">Obligatoire sur les chantiers (au-dessus de 85 dB en continu)</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège : l'échelle des dB est logarithmique !</h3>
+            <p>
+                +10 dB ne signifie pas "10 fois plus fort" en termes d'énergie, mais l'oreille le perçoit comme "2 fois plus fort".<br>
+                <strong>90 dB n'est pas "deux fois 45 dB" — les décibels ne s'additionnent pas simplement !</strong><br>
+                Retiens surtout les seuils : 85 dB (risque), 120 dB (douleur).
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Décibels · Seuils · Isolation acoustique</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Le décibel (dB) mesure...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">a) le niveau sonore (intensité acoustique)</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">b) la fréquence</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">c) la vitesse du son</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">d) la durée du son</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Le seuil d'audibilité humaine est à...</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">a) 0 dB</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">b) 20 dB</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">c) 60 dB</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">d) 100 dB</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Au-delà de quelle valeur le son peut-il causer des dommages auditifs (exposition prolongée) ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(3,0)">a) 85 dB</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">b) 60 dB</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">c) 40 dB</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">d) 120 dB uniquement</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Une conversation normale correspond à environ...</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">a) 60–70 dB</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">b) 20 dB</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">c) 100 dB</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">d) 140 dB</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> L'isolation acoustique vise à...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">a) réduire la transmission des vibrations sonores</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">b) augmenter la fréquence des sons</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">c) amplifier le son</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">d) accélérer la propagation du son</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Décibel · Concert · Seuil de douleur</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                L'unité de mesure du niveau sonore est le <input class="blank" id="f1a" placeholder="?" style="width:100px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Un concert de rock peut atteindre <input class="blank" id="f2a" placeholder="?" style="width:60px"> dB.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Le seuil de douleur auditive est à environ <input class="blank" id="f3a" placeholder="?" style="width:60px"> dB.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Risque auditif au travail</div>
+                <div class="ex-stmt">
+                    Un ouvrier travaille 8h/jour dans une usine où le bruit atteint 90 dB.<br>
+                    a) Ce niveau est-il dangereux pour l'ouïe ?<br>
+                    b) Quelle protection doit-il porter ? Justifie.
+                </div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> 90 dB &gt; 85 dB → <strong>oui, dangereux</strong> en exposition prolongée (8h/jour).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Il doit porter un <strong>casque anti-bruit</strong> (protège-oreilles). La loi belge oblige la protection au-dessus de 85 dB.</div></div>
+                <div class="final-ans">✅ 90 dB &gt; 85 dB → dangereux → casque anti-bruit obligatoire</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Classement de sons</div>
+                <div class="ex-stmt">
+                    Classe ces sons du plus faible au plus fort :<br>
+                    Chuchotement (30 dB) — Concert (110 dB) — Conversation (65 dB) — Réacteur d'avion (140 dB) — Bibliothèque (35 dB)
+                </div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">On classe par valeur de dB croissante :</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">30 dB (chuchotement) → 35 dB (bibliothèque) → 65 dB (conversation) → 110 dB (concert) → 140 dB (réacteur)</div></div>
+                <div class="final-ans">✅ Chuchotement → Bibliothèque → Conversation → Concert → Réacteur</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Isolation acoustique (style CE1D)</div>
+                <div class="ex-stmt">
+                    Un appartement situé près d'une route subit un bruit de 75 dB.<br>
+                    Avec un double vitrage, le bruit est réduit à 45 dB.<br>
+                    a) Cette réduction est-elle suffisante pour ne plus risquer de dommages ?<br>
+                    b) Quel matériau est utilisé dans les studios d'enregistrement pour absorber le son ? Pourquoi ?
+                </div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> 45 dB &lt; 85 dB → <strong>oui</strong>, pas de risque auditif à ce niveau.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Les studios utilisent de la <strong>mousse acoustique</strong> (matériau poreux). Les pores absorbent les vibrations et empêchent les réflexions (réverbération).</div></div>
+                <div class="final-ans">✅ a) 45 dB &lt; 85 dB → sans risque &nbsp;|&nbsp; b) Mousse acoustique (matériau poreux)</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Pollution sonore</div>
+                <div class="bonus-stmt">
+                    L'OMS recommande un bruit de fond inférieur à 55 dB le jour et 40 dB la nuit dans les zones résidentielles.<br>
+                    a) Un quartier où le bruit nocturne atteint 65 dB respecte-t-il ces normes ?<br>
+                    b) Cite deux conséquences sanitaires d'une exposition chronique à 65 dB la nuit.
+                </div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> 65 dB &gt; 40 dB (norme nocturne) → <strong>non</strong>, la norme n'est pas respectée.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b)</strong> Troubles du sommeil / fatigue chronique ; stress et maladies cardiovasculaires ; difficultés de concentration.</div></div>
+                <div class="bonus-ans">
+                    a) Non (65 &gt; 40 dB nocturnes) &nbsp;|&nbsp; b) Troubles du sommeil + stress cardiovasculaire
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 3 terminé !</h2>
+    <p>Bravo ! Tu maîtrises les décibels, les seuils auditifs et l'isolation acoustique.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 4 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Son &amp; Ondes</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="physique_son_niveau1.html" class="nav-btn">Niveau 1 — Nature du son</a>
+        <a href="physique_son_niveau2.html" class="nav-btn">Niveau 2 — Fréquence</a>
+        <a href="physique_son_niveau3.html" class="nav-btn current">▶ Niveau 3 — Intensité &amp; dB</a>
+        <a href="physique_son_niveau4.html" class="nav-btn">Niveau 4 — Réflexion du son</a>
+        <a href="physique_son_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! Le décibel (dB) mesure le niveau sonore (intensité acoustique). La fréquence se mesure en Hz.",
+    2:"✅ Bravo ! Le seuil d'audibilité est à 0 dB. En dessous, l'oreille humaine ne perçoit plus rien.",
+    3:"✅ Correct ! À partir de 85 dB en exposition prolongée, l'oreille peut être endommagée. Les travailleurs exposés doivent porter des protections.",
+    4:"✅ Parfait ! Une conversation normale correspond à 60–70 dB. C'est un niveau confortable sans risque.",
+    5:"✅ Exact ! L'isolation acoustique réduit la transmission des vibrations sonores grâce à des matériaux absorbants."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Le décibel (dB) mesure le niveau sonore (intensité). La fréquence se mesure en Hertz (Hz).",
+    2:"❌ Non. Le seuil d'audibilité est à 0 dB. C'est le son le plus faible que l'oreille humaine peut percevoir.",
+    3:"❌ Non. Le seuil de risque est 85 dB (exposition prolongée). À partir de 85 dB en continu, l'oreille peut être endommagée.",
+    4:"❌ Non. Une conversation normale correspond à 60–70 dB. 140 dB, c'est un réacteur d'avion !",
+    5:"❌ Non. L'isolation acoustique réduit la transmission des vibrations. Elle ne modifie ni la fréquence ni la vitesse du son."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['decibel','décibel','db','dB']],
+        msgOk:"✅ L'unité de mesure du niveau sonore est le décibel (dB). 0 dB = seuil d'audibilité, 120 dB = seuil de douleur.",
+        msgErr:"❌ Attendu : décibel (ou dB). Le niveau sonore se mesure en décibels."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['100','105','110','115','120']],
+        msgOk:"✅ Un concert de rock atteint environ 100–120 dB. C'est au-dessus du seuil de risque (85 dB) — les bouchons d'oreilles sont recommandés !",
+        msgErr:"❌ Attendu : entre 100 et 120 dB (valeur typique : 110 dB). Un concert de rock est très fort et dépasse le seuil de risque auditif."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['120','130']],
+        msgOk:"✅ Le seuil de douleur auditive est à environ 120 dB. Au-delà, c'est douloureux et dangereux !",
+        msgErr:"❌ Attendu : 120 (ou 130). Le seuil de douleur est à environ 120 dB."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_son_3', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

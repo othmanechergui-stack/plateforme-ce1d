@@ -189,7 +189,29 @@
             .opts.short { grid-template-columns:1fr 1fr; }
             .pow-grid { grid-template-columns:repeat(3,1fr); }
         }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -665,6 +687,7 @@
                 <div class="ex-label">Exercice 1 — Style CE1D 2023</div>
                 <div class="ex-stmt">Calcule, en détaillant chaque étape :<br><br><strong>2⁵ − 3² + 4⁰</strong></div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>2⁵</strong> = 2×2×2×2×2 = 4×2×2×2 = 8×2×2 = 16×2 = <strong>32</strong></div></div>
@@ -684,6 +707,7 @@
                     Combien y en a-t-il après <strong>6 heures</strong> ? Exprime le résultat comme une puissance de 2.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Après 1h : 1 × 2 = 2¹ = 2 virus</div></div>
@@ -706,6 +730,7 @@
                     <strong>c)</strong> 2³ + 3³ = 5³
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">a</div><div class="sol-text"><strong>VRAI</strong> — (−2)⁴ = (−2)×(−2)×(−2)×(−2). 4 facteurs négatifs (nombre pair) → résultat positif.<br>(−2)×(−2) = +4, puis 4×4 = <strong>+16</strong> ✓</div></div>
@@ -724,6 +749,7 @@
                     <code>3²</code> &nbsp;·&nbsp; <code>2³</code> &nbsp;·&nbsp; <code>(−4)²</code> &nbsp;·&nbsp; <code>5¹</code> &nbsp;·&nbsp; <code>1¹⁰</code>
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>1¹⁰</strong> = 1 (1 multiplié par lui-même autant de fois qu'on veut = toujours 1)</div></div>

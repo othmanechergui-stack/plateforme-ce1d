@@ -172,7 +172,29 @@
         .challenge-banner .trophy { font-size:2.5rem; margin-bottom:6px; }
         .challenge-banner h2 { font-size:1.3rem; font-weight:900; color:#FFD54F; margin-bottom:4px; }
         .challenge-banner p { font-size:.9rem; opacity:.9; }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -484,6 +506,7 @@
                     Quelle longueur de corde lui faut-il ? Montre toutes les étapes de calcul.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Identifier le triangle rectangle :</strong> la diagonale du terrain est l'hypoténuse d'un triangle rectangle dont les cathètes sont la longueur (40 m) et la largeur (30 m).</div></div>
@@ -503,6 +526,7 @@
                     La pièce a-t-elle un angle droit en B ? Justifie par un calcul complet.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Plus grand côté :</strong> AC = 13 m → c'est l'hypoténuse candidate.</div></div>
@@ -523,6 +547,7 @@
                     (Indication : dans un triangle rectangle, la médiane issue de l'angle droit vaut la moitié de l'hypoténuse.)
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Calcul de AB :</strong> AB² = AC² + BC² = 6² + 8² = 36 + 64 = 100<br>AB = √100 = <strong>10 cm</strong></div></div>
@@ -545,6 +570,7 @@
                     (Rappel : Aire = ½ × base × hauteur)
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a) Réciproque :</strong> c = AC = 25 (le plus grand).<br>AB² + BC² = 20² + 15² = 400 + 225 = 625 = 25² = AC² ✓<br>→ Triangle rectangle en B (angle droit entre AB et BC).</div></div>

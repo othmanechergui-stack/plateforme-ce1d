@@ -165,7 +165,29 @@
         .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
         .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.current{ background:var(--primary-bg); border-color:#43A047; color:#2E7D32; }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -478,6 +500,7 @@
                     Développer et simplifier : A = 3(2x + 4) − 2(x − 1).
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Distribuer le premier facteur :</strong> 3(2x + 4) = 3×2x + 3×4 = 6x + 12</div></div>
@@ -494,6 +517,7 @@
                     Développer et réduire : B = (2x + 3)(x − 4).
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>F (First) :</strong> 2x × x = 2x²</div></div>
@@ -513,6 +537,7 @@
                     Exprime son aire A en développant le produit, puis calcule A pour x = 3.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Aire = longueur × largeur :</strong><br>A = (x + 5)(x + 2)</div></div>
@@ -530,6 +555,7 @@
                     Développe (x + 1)(x + 6) et vérifie ton résultat en substituant x = 2 des deux côtés.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Développer :</strong> (x+1)(x+6) = x² + 6x + x + 6 = <strong>x² + 7x + 6</strong></div></div>

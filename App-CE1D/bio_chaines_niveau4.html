@@ -151,7 +151,29 @@
         .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
         .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -389,6 +411,7 @@
                     c) Et pour les carnivores de 2e ordre ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Herbivores :</strong> 500 000 × 10% = <strong>50 000 kJ</strong></div></div>
@@ -408,6 +431,7 @@
                     c) Quel impact cela a-t-il sur les ressources agricoles ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Oui, c'est cohérent. La règle des 10% prédit qu'il faut ~10 kg de végétaux pour produire 1 kg d'herbivore (bœuf). Les 7-10 kg observés confirment cette approximation.</div></div>
@@ -427,6 +451,7 @@
                     c) Que se passerait-il si les renards disparaissaient ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Oui, correcte. Chaque niveau représente 10% du précédent (500 → 50 → 5 t), conforme à la règle des 10%.</div></div>
@@ -447,6 +472,7 @@
                     c) La pyramide des biomasses peut-elle aussi être inversée ? Dans quel cas ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> Un chêne peut nourrir des milliers d'insectes. Pyramide : 1 chêne (base) → 10 000 insectes → quelques oiseaux. Les nombres s'inversent au premier niveau !</div></div>

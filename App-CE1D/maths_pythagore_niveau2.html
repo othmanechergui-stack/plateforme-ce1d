@@ -167,7 +167,29 @@
         .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
         .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -488,6 +510,7 @@
                     Un triangle rectangle a des cathètes a = 6 et b = 8. Calcule la longueur de l'hypoténuse c. Montre toutes les étapes.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Identifier l'hypoténuse :</strong> c est le côté en face de l'angle droit — c'est ce qu'on cherche.</div></div>
@@ -505,6 +528,7 @@
                     Un triangle rectangle a l'hypoténuse c = 13 et une cathète b = 12. Calcule la longueur de la cathète a.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Formule pour une cathète :</strong> a² = c² − b²</div></div>
@@ -522,6 +546,7 @@
                     Un triangle rectangle a la cathète a = 7 et l'hypoténuse c = 25. Calcule la longueur de la cathète b.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Formule :</strong> b² = c² − a²</div></div>
@@ -540,6 +565,7 @@
                     Un triangle isocèle a une base de 16 cm et des côtés égaux de 17 cm chacun. Calcule la hauteur h de ce triangle (la hauteur partage la base en deux moitiés égales).
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>La hauteur divise le triangle isocèle en 2 triangles rectangles.</strong><br>Chaque demi-base = 16 ÷ 2 = <strong>8 cm</strong>. Le côté oblique = 17 cm = hypoténuse.</div></div>

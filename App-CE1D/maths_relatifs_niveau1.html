@@ -152,7 +152,29 @@
             .header-center { order:-1; flex-basis:100%; }
             .opts.short { grid-template-columns:1fr 1fr; }
         }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -615,6 +637,7 @@
                     Nombres : <strong>−7 &nbsp;·&nbsp; +4 &nbsp;·&nbsp; −2 &nbsp;·&nbsp; +9</strong>
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">|−7| = <strong>7</strong> → à gauche du zéro (nombre négatif)</div></div>
@@ -634,6 +657,7 @@
                     <strong>−5 &nbsp;·&nbsp; 2 &nbsp;·&nbsp; −1 &nbsp;·&nbsp; −8 &nbsp;·&nbsp; 0</strong>
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Tous les négatifs sont inférieurs à 0, qui est inférieur à 2.</div></div>
@@ -655,6 +679,7 @@
                     <strong>c)</strong> Quelle est la distance entre le plongeur et la surface de la mer ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">a</div><div class="sol-text">L'<strong>hélicoptère</strong> à +850 m est le plus haut : c'est le seul nombre positif, donc le plus grand.</div></div>

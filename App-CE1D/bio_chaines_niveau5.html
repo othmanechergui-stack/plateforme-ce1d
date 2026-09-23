@@ -151,7 +151,29 @@
         .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
         .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -388,6 +410,7 @@
                     c) Pourquoi les grands prédateurs sont-ils les plus touchés ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> C'est la <strong>bioaccumulation</strong> (ou bioamplification) : la concentration d'une substance toxique augmente à chaque niveau de la chaîne alimentaire.</div></div>
@@ -406,6 +429,7 @@
                     b) Que devrait faire l'agriculteur pour limiter ce phénomène ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Étape 1 :</strong> Les nitrates des engrais ruissellent dans le lac → <strong>excès de nutriments</strong> → les algues prolifèrent massivement (bloom algal).</div></div>
@@ -426,6 +450,7 @@
                     c) Quel rôle joue le loup dans cet écosystème ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> C'est une <strong>cascade trophique</strong> : la disparition (puis le retour) d'un prédateur entraîne des effets en chaîne sur tous les niveaux trophiques inférieurs et même sur l'environnement physique.</div></div>
@@ -446,6 +471,7 @@
                     c) Pourquoi l'eutrophisation est-elle liée à une perturbation du cycle de l'azote ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> L'azote entre par les <strong>plantes</strong> qui absorbent des ions nitrates (NO₃⁻) via leurs racines → les plantes fabriquent des protéines → les herbivores mangent les plantes → transmission à chaque maillon.</div></div>

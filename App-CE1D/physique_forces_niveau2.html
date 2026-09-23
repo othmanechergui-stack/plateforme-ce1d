@@ -167,7 +167,29 @@
         .pmg-bot-r{ position:absolute; bottom:0; right:0; background:#AB47BC; color:white; border-radius:10px; padding:10px 14px; font-size:1rem; font-weight:900; font-family:'Courier New',monospace; text-align:center; }
         .pmg-line-v { position:absolute; top:56px; left:50%; width:2px; height:80px; background:#7B1FA2; transform:translateX(-50%); }
         .pmg-line-h { position:absolute; bottom:46px; left:28px; right:28px; height:2px; background:#7B1FA2; }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -512,6 +534,7 @@
                     c) Poids d'un enfant de 35 kg
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">a</div><div class="sol-text"><strong>P = m × g :</strong> P = 0,4 × 10 = <strong>4 N</strong></div></div>
@@ -531,6 +554,7 @@
                     c) Si on double l'allongement, que devient la force ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Conversion :</strong> 4 cm = 4 ÷ 100 = <strong>0,04 m</strong></div></div>
@@ -552,6 +576,7 @@
                     c) Sa masse change-t-elle entre la Terre et Mars ? Justifie.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Poids sur Terre :</strong> P = 900 × 10 = <strong>9 000 N</strong></div></div>
@@ -571,6 +596,7 @@
                     b) Cet objet est-il sur Terre ? Justifie avec ta valeur de g.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a) Calcul de g :</strong><br>P = m × g → g = P ÷ m<br>g = 24 ÷ 2,4 = <strong>10 N/kg</strong></div></div>

@@ -175,7 +175,29 @@
         .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.locked { cursor:default; opacity:.55; }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -645,6 +667,7 @@
                     </table>
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Effectif manquant de la pointure 40 :</strong> Total = 30 → 30 − 6 − 9 − 5 − 4 = <strong>6</strong></div></div>
@@ -666,6 +689,7 @@
                     </table>
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Calculer valeur × effectif pour chaque ligne :</strong><br>• 0 × 4 = 0<br>• 1 × 8 = 8<br>• 2 × 7 = 14<br>• 3 × 4 = 12<br>• 4 × 2 = 8</div></div>
@@ -690,6 +714,7 @@
                     a) Complète le tableau. &nbsp; b) Quelle proportion d'élèves vient en vélo ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Vélo classe A :</strong> Total ligne A = 35. Bus A = 15, Pied A = 8. Vélo A = 35 − 15 − 8 = <strong>12</strong></div></div>
@@ -710,6 +735,7 @@
                     Quel est l'effectif de la valeur 16 ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text">On sait que : Fréquence = (Effectif ÷ Total) × 100<br>Donc : 40 = (Effectif ÷ 35) × 100</div></div>

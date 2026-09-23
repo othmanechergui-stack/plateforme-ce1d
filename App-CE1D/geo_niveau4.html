@@ -167,7 +167,29 @@
         .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
         .nav-btn:hover   { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.current { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -585,6 +607,7 @@
                     Donne les coordonnées des sommets A', B', C' de l'image.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rbtn1" onclick="toggleSol(1)">Solution <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step">
@@ -618,6 +641,7 @@
                     c) Vérifie que O est bien le milieu de [AA'] et de [BB'].
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rbtn2" onclick="toggleSol(2)">Solution <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step">
@@ -651,6 +675,7 @@
                     c) Figure F et image F' : même orientation, chaque point a pivoté de 90° autour d'un point O → ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rbtn3" onclick="toggleSol(3)">Solution <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step">
@@ -693,6 +718,7 @@
                     Cas 2 : les deux axes se <strong>croisent</strong> en un point O.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" onclick="toggleBonus()">
                 Voir l'explication <span class="chevron" id="bonusChevron">▼</span>
             </button>

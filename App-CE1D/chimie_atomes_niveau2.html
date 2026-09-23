@@ -168,7 +168,29 @@
         .pt-cell.empty { background:transparent; border:none; }
         .pt-sym { font-size:.85rem; font-weight:900; }
         .pt-z { font-size:.6rem; opacity:.7; }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -490,6 +512,7 @@
                     a) Carbone &nbsp; b) Azote &nbsp; c) Aluminium &nbsp; d) Cuivre
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Carbone :</strong> C (Z=6)</div></div>
@@ -510,6 +533,7 @@
                     c) Donne un autre élément du groupe 1.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Non : Li est en période 2 (2 couches), Na est en période 3 (3 couches).</div></div>
@@ -529,6 +553,7 @@
                     c) Dans quelle famille chimique les halogènes se trouvent-ils ? (groupe 17 = halogènes : F, Cl, Br, I)
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Z = 17 → c'est le <strong>chlore (Cl)</strong>.</div></div>
@@ -549,6 +574,7 @@
                     c) Dans quel groupe du tableau périodique les gaz nobles se trouvent-ils ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> O, S et Se ont tous <strong>6 électrons sur leur couche externe</strong> → mêmes propriétés chimiques (forment souvent 2 liaisons).</div></div>

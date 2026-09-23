@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique — Son & Ondes · Niveau 5 — Défi CE1D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#1565C0; --primary-dark:#0D47A1; --primary-mid:#1E88E5; --primary-bg:#E3F2FD;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#0D47A1 0%,#1565C0 55%,#90CAF9 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(13,71,161,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#1565C0; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#0D47A1; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#0D47A1,#1565C0,#90CAF9); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#0D47A1,#1565C0); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #90CAF9; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:80px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#0D47A1,#1565C0,#90CAF9); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #082b6e; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🔊 Son &amp; Ondes · Défi CE1D 🏆</h1>
+            <p>Niveau 5 · Doppler · Supersonique · Acoustique · Synthèse</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <span class="diff-label">Niveau 5 — Défi CE1D 🏆</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — Récapitulatif Son &amp; Ondes</div>
+            <div class="card-sub">Effet Doppler · Supersonique · Vitesse selon le milieu · Acoustique des salles</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Ce niveau de défi regroupe les concepts avancés du chapitre Son &amp; Ondes au programme CE1D.
+            Tu vas mobiliser toutes tes connaissances : propagation, fréquence, intensité, réflexion,
+            et les phénomènes spectaculaires comme l'<strong>effet Doppler</strong> et le <strong>mur du son</strong>.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 Effet Doppler — Définition</h3>
+            <p>
+                Quand une source sonore se <strong>déplace vers toi</strong>, tu perçois une fréquence <strong>plus haute</strong> (son plus aigu).<br>
+                Quand elle s'<strong>éloigne de toi</strong>, tu perçois une fréquence <strong>plus basse</strong> (son plus grave).<br>
+                Exemple classique : l'ambulance dont la sirène change de ton quand elle passe devant toi.
+            </p>
+        </div>
+
+        <!-- SVG : effet Doppler -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 160" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="160" fill="#E3F2FD" rx="10"/>
+                <text x="280" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#0D47A1" font-family="Nunito, sans-serif">Effet Doppler — source en mouvement →</text>
+
+                <!-- Source (ambulance) -->
+                <rect x="240" y="55" width="60" height="30" rx="8" fill="#1565C0"/>
+                <text x="270" y="74" text-anchor="middle" font-size="14" font-family="Nunito, sans-serif">🚑</text>
+                <text x="270" y="98" text-anchor="middle" font-size="9" fill="#1565C0" font-weight="700" font-family="Nunito, sans-serif">→ Déplacement</text>
+
+                <!-- Ondes côté avant (comprimées = aigu) -->
+                <ellipse cx="320" cy="70" rx="15" ry="20" fill="none" stroke="#E53935" stroke-width="1.5"/>
+                <ellipse cx="340" cy="70" rx="28" ry="32" fill="none" stroke="#E53935" stroke-width="1.5" opacity=".7"/>
+                <ellipse cx="360" cy="70" rx="42" ry="44" fill="none" stroke="#E53935" stroke-width="1" opacity=".4"/>
+                <text x="420" y="74" font-size="10" fill="#E53935" font-weight="900" font-family="Nunito, sans-serif">DEVANT</text>
+                <text x="420" y="86" font-size="9" fill="#E53935" font-family="Nunito, sans-serif">Ondes comprimées</text>
+                <text x="420" y="98" font-size="9" fill="#E53935" font-weight="700" font-family="Nunito, sans-serif">→ Son plus AIGU</text>
+
+                <!-- Ondes côté arrière (étirées = grave) -->
+                <ellipse cx="215" cy="70" rx="18" ry="20" fill="none" stroke="#1565C0" stroke-width="1.5"/>
+                <ellipse cx="190" cy="70" rx="32" ry="34" fill="none" stroke="#1565C0" stroke-width="1.5" opacity=".7"/>
+                <ellipse cx="165" cy="70" rx="48" ry="48" fill="none" stroke="#1565C0" stroke-width="1" opacity=".4"/>
+                <text x="20" y="74" font-size="10" fill="#0D47A1" font-weight="900" font-family="Nunito, sans-serif">DERRIÈRE</text>
+                <text x="20" y="86" font-size="9" fill="#0D47A1" font-family="Nunito, sans-serif">Ondes étirées</text>
+                <text x="20" y="98" font-size="9" fill="#0D47A1" font-weight="700" font-family="Nunito, sans-serif">→ Son plus GRAVE</text>
+
+                <text x="280" y="148" text-anchor="middle" font-size="10" fill="#555" font-weight="700" font-family="Nunito, sans-serif">La fréquence perçue change — la fréquence émise reste constante</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔢 Récapitulatif — Formules et repères CE1D</h3>
+            <p>
+                • <strong>Vitesse du son :</strong> air ≈ 340 m/s · eau ≈ 1 500 m/s · acier ≈ 5 000 m/s<br>
+                • <strong>Longueur d'onde :</strong> λ = v / f<br>
+                • <strong>Sonar / écho :</strong> d = (v × t) / 2<br>
+                • <strong>Fréquence :</strong> f = v / λ<br>
+                • <strong>Supersonique :</strong> objet plus rapide que 340 m/s → bang supersonique (onde de choc)<br>
+                • <strong>Solides &gt; liquides &gt; gaz</strong> pour la vitesse du son
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">Mach 1</div>
+                <div class="cas-eq">≈ 340 m/s</div>
+                <div class="cas-desc">Vitesse du son dans l'air. Dépasser Mach 1 = bang supersonique</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Doppler</div>
+                <div class="cas-eq">Source → vous</div>
+                <div class="cas-desc">Fréquence perçue plus haute. Source s'éloigne → fréquence perçue plus basse</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Acoustique</div>
+                <div class="cas-eq">Salle de concert</div>
+                <div class="cas-desc">Matériaux absorbants = moins d'écho. Surfaces réfléchissantes = plus de réverbération</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège CE1D : vitesse du son selon le milieu</h3>
+            <p>
+                Beaucoup d'élèves croient que le son va plus vite dans les gaz que dans les solides.<br>
+                C'est l'<strong>inverse</strong> : <strong>solides &gt; liquides &gt; gaz</strong>.<br>
+                <strong>Le son se propage plus vite dans l'acier (5 000 m/s) que dans l'eau (1 500 m/s) que dans l'air (340 m/s) !</strong>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple — Défi</div>
+            <div class="card-sub">5 questions · Doppler · Supersonique · Vitesse · Acoustique</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> L'effet Doppler explique pourquoi...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">a) la fréquence perçue change quand la source sonore se déplace vers/loin de l'observateur</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">b) le son est plus fort la nuit</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">c) le son se propage plus vite en altitude</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">d) les ultrasons sont inaudibles</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Le mur du son (bang supersonique) se produit quand...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(2,0)">a) un objet dépasse la vitesse du son (≈ 340 m/s)</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">b) un son atteint 120 dB</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">c) les fréquences dépassent 20 000 Hz</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">d) le son se propage dans le vide</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> La vitesse du son est plus grande dans...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">a) les solides &gt; liquides &gt; gaz</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">b) les gaz &gt; liquides &gt; solides</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">c) les liquides uniquement</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">d) le vide</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Un instrument de musique produit un son de 440 Hz (La). Si on augmente la tension de la corde...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">a) la fréquence augmente (son plus aigu)</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">b) la fréquence diminue</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">c) la fréquence reste identique</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">d) l'intensité seule change</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Dans une salle de concert, un architecte veut éviter l'écho. Il doit...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">a) utiliser des matériaux absorbants (moquette, rideaux épais, revêtements acoustiques)</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">b) construire des murs très lisses</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">c) réduire la hauteur du plafond uniquement</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">d) utiliser des matériaux réfléchissants</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Doppler · Vitesse comparée · Supersonique</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Le phénomène par lequel la fréquence perçue change selon le mouvement de la source s'appelle l'effet <input class="blank" id="f1a" placeholder="?" style="width:100px">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                La vitesse du son dans l'acier est environ <input class="blank" id="f2a" placeholder="?" style="width:60px"> fois plus grande que dans l'air.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Un avion supersonique va plus vite que <input class="blank" id="f3a" placeholder="?" style="width:120px">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés — Défi CE1D</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · + 1 bonus · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Effet Doppler (ambulance)</div>
+                <div class="ex-stmt">
+                    Une ambulance émet une sirène à 500 Hz et roule vers toi à 30 m/s.<br>
+                    La vitesse du son dans l'air est 340 m/s.<br>
+                    a) La fréquence que tu entends est-elle supérieure ou inférieure à 500 Hz ? Justifie.<br>
+                    b) Quand elle s'éloigne, que se passe-t-il ?
+                </div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Source se rapproche → ondes comprimées → fréquence perçue <strong>supérieure</strong> à 500 Hz (son plus aigu).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Formule Doppler (info) : f_perçue = f × (v / (v − v_source)) = 500 × (340 / (340 − 30)) = 500 × 1,097 ≈ <strong>549 Hz</strong></div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>b)</strong> Quand elle s'éloigne : ondes étirées → fréquence perçue <strong>inférieure</strong> à 500 Hz (son plus grave).</div></div>
+                <div class="final-ans">✅ a) &gt; 500 Hz (≈ 549 Hz) — plus aigu &nbsp;|&nbsp; b) &lt; 500 Hz — plus grave</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Avion supersonique</div>
+                <div class="ex-stmt">
+                    Un chasseur militaire vole à Mach 1,5 (c'est-à-dire 1,5 fois la vitesse du son).<br>
+                    La vitesse du son dans l'air est 340 m/s.<br>
+                    a) Quelle est la vitesse de l'avion en m/s ?<br>
+                    b) Explique ce qu'est un "bang supersonique".
+                </div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> v = 1,5 × 340 = <strong>510 m/s</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> Quand l'avion dépasse la vitesse du son, les ondes sonores se superposent en formant une <strong>onde de choc</strong> (cône de Mach). Cette onde de choc produit un bang très fort entendu au sol.</div></div>
+                <div class="final-ans">✅ a) v = 510 m/s &nbsp;|&nbsp; b) Onde de choc = bang supersonique</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Problème intégré CE1D</div>
+                <div class="ex-stmt">
+                    Un haut-parleur émet un son de 680 Hz. La vitesse du son dans l'air est 340 m/s.<br>
+                    a) Calcule la longueur d'onde.<br>
+                    b) Ce son est-il audible ? Justifie.<br>
+                    c) Si on double la fréquence à 1 360 Hz, que se passe-t-il avec la longueur d'onde ?
+                </div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> λ = v / f = 340 / 680 = <strong>0,5 m = 50 cm</strong></div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b)</strong> 680 Hz est entre 20 Hz et 20 000 Hz → <strong>oui, audible</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c)</strong> λ = 340 / 1 360 = 0,25 m. En doublant la fréquence, la longueur d'onde est <strong>divisée par 2</strong>.</div></div>
+                <div class="final-ans">✅ a) λ = 0,5 m &nbsp;|&nbsp; b) Audible &nbsp;|&nbsp; c) λ divisée par 2 → 0,25 m</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Synthèse complète CE1D</div>
+                <div class="bonus-stmt">
+                    Un sous-marin (sonar, v_son = 1 500 m/s) envoie un signal et reçoit un écho après 0,4 s.<br>
+                    Simultanément, un ingénieur à bord entend la sirène d'un autre sous-marin qui s'approche à 15 m/s. Il perçoit une fréquence de 520 Hz.<br>
+                    a) Calcule la distance à l'obstacle (sonar).<br>
+                    b) La fréquence réelle de la sirène est-elle supérieure ou inférieure à 520 Hz ? Pourquoi ?<br>
+                    c) Quelle est la vitesse du son dans l'eau comparée à celle dans l'air ?
+                </div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> d = (1 500 × 0,4) / 2 = 600 / 2 = <strong>300 m</strong></div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>b)</strong> Le sous-marin s'approche → effet Doppler → fréquence perçue (520 Hz) est <strong>supérieure</strong> à la fréquence réelle. La fréquence réelle est donc inférieure à 520 Hz.</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>c)</strong> v_eau = 1 500 m/s, v_air = 340 m/s → l'eau est environ <strong>4,4 fois plus rapide</strong> que l'air. Solides &gt; liquides &gt; gaz.</div></div>
+                <div class="bonus-ans">
+                    a) 300 m &nbsp;|&nbsp; b) Fréquence réelle &lt; 520 Hz (Doppler) &nbsp;|&nbsp; c) ×4,4 plus vite dans l'eau
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🏆 🌟 🏆</div>
+    <h2>Module Son &amp; Ondes terminé !</h2>
+    <p>Félicitations ! Tu as maîtrisé tout le chapitre Son &amp; Ondes du CE1D belge.<br>
+       Vibrations, fréquences, décibels, réflexion, Doppler… Tu es prêt(e) pour l'examen !<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Son &amp; Ondes</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="physique_son_niveau1.html" class="nav-btn">Niveau 1 — Nature du son</a>
+        <a href="physique_son_niveau2.html" class="nav-btn">Niveau 2 — Fréquence</a>
+        <a href="physique_son_niveau3.html" class="nav-btn">Niveau 3 — Intensité &amp; dB</a>
+        <a href="physique_son_niveau4.html" class="nav-btn">Niveau 4 — Réflexion du son</a>
+        <a href="physique_son_niveau5.html" class="nav-btn current">▶ Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! L'effet Doppler : quand la source se rapproche, la fréquence perçue augmente (aigu) ; quand elle s'éloigne, elle diminue (grave).",
+    2:"✅ Bravo ! Le bang supersonique se produit quand un objet dépasse 340 m/s (Mach 1). Une onde de choc se forme et produit un boom.",
+    3:"✅ Correct ! Solides (acier ≈ 5 000 m/s) &gt; Liquides (eau ≈ 1 500 m/s) &gt; Gaz (air ≈ 340 m/s). C'est un piège classique !",
+    4:"✅ Parfait ! Plus la tension d'une corde est grande, plus elle vibre rapidement → fréquence plus élevée → son plus aigu.",
+    5:"✅ Exact ! Pour réduire l'écho et la réverbération, on utilise des matériaux absorbants : moquette, rideaux épais, panneaux de mousse acoustique."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. L'effet Doppler explique le changement de fréquence perçue quand la source se déplace. C'est pourquoi une ambulance change de ton quand elle passe.",
+    2:"❌ Non. Le bang supersonique se produit quand un objet dépasse la vitesse du son (≈ 340 m/s). Ce n'est pas lié aux dB ou aux Hz.",
+    3:"❌ Non. La vitesse du son est plus grande dans les SOLIDES que dans les liquides, et plus grande dans les liquides que dans les gaz. C'est l'inverse de ce qu'on pourrait croire !",
+    4:"❌ Non. Plus la tension est grande, plus la fréquence augmente (son plus aigu). Un musicien utilise ce principe pour accorder son instrument.",
+    5:"❌ Non. Les murs lisses et les matériaux réfléchissants AUGMENTENT l'écho. Pour l'éviter, on utilise des matériaux absorbants (moquette, tissus, mousse)."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['Doppler','doppler']],
+        msgOk:"✅ L'effet Doppler ! Ce phénomène explique pourquoi la sirène d'une ambulance paraît plus aiguë quand elle arrive et plus grave quand elle s'éloigne.",
+        msgErr:"❌ Attendu : Doppler. Le phénomène s'appelle l'effet Doppler (du nom du physicien Christian Doppler, 1803–1853)."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['15','14','15','16','10','11','12','13','17','18','19','20']],
+        msgOk:"✅ Dans l'acier (≈ 5 000 m/s) le son va environ 15 fois plus vite que dans l'air (340 m/s). 5 000 / 340 ≈ 14,7.",
+        msgErr:"❌ Attendu : environ 15 (entre 10 et 20). v_acier ≈ 5 000 m/s, v_air = 340 m/s → 5 000 / 340 ≈ 15 fois plus vite."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['le son','la vitesse du son','340','340 m/s']],
+        msgOk:"✅ Un avion supersonique va plus vite que le son (> 340 m/s dans l'air). On dit qu'il dépasse Mach 1.",
+        msgErr:"❌ Attendu : le son (ou 340 m/s, la vitesse du son). Supersonique signifie 'plus rapide que le son'."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_son_5', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

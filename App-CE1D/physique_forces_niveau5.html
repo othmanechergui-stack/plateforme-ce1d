@@ -173,7 +173,29 @@
         .recap-title { font-size:.98rem; font-weight:900; margin-bottom:8px; }
         .recap-formulas { font-size:.85rem; line-height:1.8; }
         .recap-formulas code { background:rgba(0,0,0,.1); }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -478,6 +500,7 @@
                     c) Quelle est sa masse sur la Lune ? Justifie.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Poids sur Terre :</strong><br>P = m × g = 4,5 × 10 = <strong>45 N</strong></div></div>
@@ -497,6 +520,7 @@
                     c) Le plongeur monte-t-il, descend-il ou reste-t-il immobile ? Justifie.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Poids :</strong><br>P = m × g = 80 × 10 = <strong>800 N</strong> (dirigé vers le bas)</div></div>
@@ -516,6 +540,7 @@
                     c) Quelle est la valeur de la réaction du support ? Justifie à partir de la condition d'équilibre.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Les deux forces :</strong><br>• Le <strong>poids P</strong> : exercé par la Terre sur le livre, dirigé verticalement <strong>vers le bas</strong>.<br>• La <strong>réaction du support R</strong> : exercée par la table sur le livre, dirigée verticalement <strong>vers le haut</strong>, perpendiculaire à la table.</div></div>
@@ -536,6 +561,7 @@
                     c) Sa masse change-t-elle ? Explique.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a) Masse :</strong><br>P = m × g → m = P ÷ g = 36 ÷ 10 = <strong>3,6 kg</strong></div></div>

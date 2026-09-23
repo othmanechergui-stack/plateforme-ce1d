@@ -132,7 +132,29 @@
         .nav-btn.locked { cursor:default; opacity:.55; }
 
         @media(max-width:580px){ .header-inner{flex-direction:column;gap:8px} .opts{grid-template-columns:1fr} .card-body{padding:16px} }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -329,7 +351,8 @@
                         5 × (2 + 4) − 2² = 5 × 6 − 4 = 5 × 2 = 10
                     </div>
                 </div>
-                <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">🔧 Voir la correction <span class="chevron">▼</span></button>
+                <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">🔧 Voir la correction <span class="chevron">▼</span></button>
                 <div class="solution" id="sol1">
                     <div class="sol-step">
                         <div class="sol-num">1</div>
@@ -364,7 +387,8 @@
                         3 + 2² × (6 − 1) = 5² × 5 = 25 × 5 = 125
                     </div>
                 </div>
-                <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">🔧 Voir la correction <span class="chevron">▼</span></button>
+                <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">🔧 Voir la correction <span class="chevron">▼</span></button>
                 <div class="solution" id="sol2">
                     <div class="sol-step">
                         <div class="sol-num">1</div>
@@ -399,7 +423,8 @@
                         100 ÷ 5 + 5 × 4 = 100 ÷ 10 × 4 = 100 ÷ 40 = 2,5
                     </div>
                 </div>
-                <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">🔧 Voir la correction <span class="chevron">▼</span></button>
+                <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">🔧 Voir la correction <span class="chevron">▼</span></button>
                 <div class="solution" id="sol3">
                     <div class="sol-step">
                         <div class="sol-err">!</div>
@@ -449,7 +474,8 @@
                         <strong>b)</strong> Donne le résultat correct.
                     </div>
                 </div>
-                <button class="reveal-btn" id="rbce1" onclick="toggleSolC('ce1')">🔧 Voir la correction <span class="chevron">▼</span></button>
+                <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rbce1" onclick="toggleSolC('ce1')">🔧 Voir la correction <span class="chevron">▼</span></button>
                 <div class="solution" id="solce1">
                     <div style="font-size:.82rem;font-weight:900;color:var(--orange-dark);text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px;">a) L'erreur</div>
                     <div class="sol-step">
@@ -475,7 +501,8 @@
                         <strong>a)</strong> 24 ÷ 6 × 2 &nbsp;&nbsp; <strong>b)</strong> (7 − 9)³ + 4 &nbsp;&nbsp; <strong>c)</strong> 5 − (2 + 3²) &nbsp;&nbsp; <strong>d)</strong> 14 ÷ 2 × 7 + 2
                     </div>
                 </div>
-                <button class="reveal-btn" id="rbce2" onclick="toggleSolC('ce2')">🔧 Voir la correction <span class="chevron">▼</span></button>
+                <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rbce2" onclick="toggleSolC('ce2')">🔧 Voir la correction <span class="chevron">▼</span></button>
                 <div class="solution" id="solce2">
                     <div class="sol-step"><div class="sol-num">a</div><div class="sol-text">24 ÷ 6 × 2 → de gauche à droite : 24 ÷ 6 = 4, puis 4 × 2 = <strong>8</strong></div></div>
                     <div class="sol-step"><div class="sol-num">b</div><div class="sol-text">(7 − 9)³ + 4 → parenthèses : (−2)³ = −8, puis −8 + 4 = <strong>−4</strong></div></div>
@@ -497,7 +524,8 @@
                         <strong>a)</strong> Résultat = 13 &nbsp;&nbsp; <strong>b)</strong> Résultat = −2 &nbsp;&nbsp; <strong>c)</strong> Résultat = 16
                     </div>
                 </div>
-                <button class="reveal-btn" id="rbce3" onclick="toggleSolC('ce3')">🔧 Voir la correction <span class="chevron">▼</span></button>
+                <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rbce3" onclick="toggleSolC('ce3')">🔧 Voir la correction <span class="chevron">▼</span></button>
                 <div class="solution" id="solce3">
                     <div class="sol-step"><div class="sol-num">a</div><div class="sol-text"><strong>(6 − 2) × 3 + 1</strong> = 4 × 3 + 1 = 12 + 1 = <strong>13</strong> ✅</div></div>
                     <div class="sol-step"><div class="sol-num">b</div><div class="sol-text"><strong>6 − 2 × (3 + 1)</strong> = 6 − 2 × 4 = 6 − 8 = <strong>−2</strong> ✅</div></div>

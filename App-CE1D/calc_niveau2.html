@@ -551,7 +551,29 @@
             .opts { grid-template-columns: 1fr; }
             .card-body { padding: 16px; }
         }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -770,7 +792,8 @@
                     <div class="ex-label">Exercice 1</div>
                     <div class="ex-expr">Calcule : 12 × (5 + 3) − 4² ÷ 2</div>
                 </div>
-                <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">
+                <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">
                     👁 Voir le corrigé <span class="chevron">▼</span>
                 </button>
                 <div class="solution" id="sol1">
@@ -812,7 +835,8 @@
                     <div class="ex-label">Exercice 2</div>
                     <div class="ex-expr">Calcule : (100 − 4²) × 3 + 25 ÷ 5</div>
                 </div>
-                <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">
+                <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">
                     👁 Voir le corrigé <span class="chevron">▼</span>
                 </button>
                 <div class="solution" id="sol2">
@@ -854,7 +878,8 @@
                     <div class="ex-label">Exercice 3</div>
                     <div class="ex-expr">Calcule : 3 × (2 + 7)² − 150 ÷ (5 × 6)</div>
                 </div>
-                <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">
+                <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">
                     👁 Voir le corrigé <span class="chevron">▼</span>
                 </button>
                 <div class="solution" id="sol3">

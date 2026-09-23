@@ -213,7 +213,29 @@
             .calc-section { flex-direction:column; }
             .calculator { width:100%; }
         }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -555,6 +577,7 @@
                 <div class="ex-label">Exercice 1 — Sculpture sur socle</div>
                 <div class="ex-stmt">Une sculpture de <strong>masse 15 kg</strong> est posée sur un socle carré de <strong>50 cm de côté</strong>. Calcule la pression sur le sol. <em>(g = 10)</em></div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">F = 15 × 10 = <strong>150 N</strong></div></div>
@@ -569,6 +592,7 @@
                 <div class="ex-label">Exercice 2 — Conception d'un pied de machine</div>
                 <div class="ex-stmt">Une machine industrielle de <strong>2 400 N</strong> repose sur <strong>4 pieds</strong>. La pression sur le sol ne doit pas dépasser <strong>P_max = 80 000 Pa</strong>. Quelle doit être la surface minimale de chaque pied (en cm²) ?</div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">F par pied = 2 400 ÷ 4 = <strong>600 N</strong></div></div>
@@ -583,6 +607,7 @@
                 <div class="ex-label">Exercice 3 — Problème complet à 5 étapes</div>
                 <div class="ex-stmt">Un réfrigérateur de <strong>masse 60 kg</strong> repose sur <strong>4 petits pieds ronds</strong> de diamètre <strong>4 cm</strong> chacun. Calcule la pression sous chaque pied. <em>(g = 10, S_disque = π × r² ≈ 3,14 × r²)</em></div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">F_total = 60 × 10 = <strong>600 N</strong></div></div>
@@ -644,6 +669,7 @@
                     <strong>c)</strong> Le Shantungosaurus est le plus lourd. Est-ce lui qui s'est le plus enfoncé ? Explique.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rbs1" onclick="toggleSol('s1')">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sols1">
                 <div style="font-size:.82rem;font-weight:900;color:var(--green-dark);text-transform:uppercase;letter-spacing:.7px;margin-bottom:12px;">a) Calcul des 3 pressions</div>
@@ -676,6 +702,7 @@
                     Utilise tes résultats pour expliquer <strong>deux effets différents des forces</strong> mis en jeu.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rbs2" onclick="toggleSol('s2')">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sols2">
                 <div style="font-size:.82rem;font-weight:900;color:var(--green-dark);text-transform:uppercase;letter-spacing:.7px;margin-bottom:12px;">a) Calcul des pressions</div>
@@ -716,6 +743,7 @@
                     <strong>c)</strong> Pour Diana, quelle surface minimale d'appui lui permettrait de danser sans dépasser P<sub>max</sub> ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rbs3" onclick="toggleSol('s3')">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sols3">
                 <div style="font-size:.82rem;font-weight:900;color:var(--green-dark);text-transform:uppercase;letter-spacing:.7px;margin-bottom:12px;">a) Calcul des pressions (S = 30 cm² = 0,003 m²)</div>

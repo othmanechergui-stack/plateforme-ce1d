@@ -153,7 +153,29 @@
         .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
         .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -403,6 +425,7 @@
                     Explique la différence entre la mitose et la méiose : but, résultat et où elles se produisent.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Mitose</strong> : but = croissance et réparation des tissus. Résultat : 2 cellules filles identiques, diploïdes (46 chromosomes). Se produit dans toutes les cellules somatiques du corps.</div></div>
@@ -420,6 +443,7 @@
                     b) Comment l'amniocentèse permet-elle de la détecter ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Lors de la méiose (dans un ovaire ou un testicule), une <strong>non-disjonction</strong> se produit : les deux chromosomes 21 ne se séparent pas correctement. Un gamète reçoit 2 chromosomes 21 au lieu d'un. Après fécondation : 2 + 1 = <strong>3 chromosomes 21</strong> dans le zygote (trisomie 21).</div></div>
@@ -437,6 +461,7 @@
                     b) Quelles sont les étapes de cette technique ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> La FIV (Fécondation In Vitro) consiste à réaliser la fécondation en dehors du corps humain, dans un laboratoire (in vitro = dans le verre), puis à transférer l'embryon dans l'utérus de la femme.</div></div>
@@ -456,6 +481,7 @@
                     Cite 4 IST et explique comment le préservatif protège contre leur transmission.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>VIH/SIDA</strong> : virus qui détruit les lymphocytes T4 → immunodéficience. Transmission par voie sexuelle, sanguine, mère-enfant.</div></div>

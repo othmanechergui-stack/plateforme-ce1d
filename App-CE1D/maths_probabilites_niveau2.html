@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Probabilités · Niveau 2 — Fréquences</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#EF6C00; --primary-dark:#E65100; --primary-mid:#F57C00; --primary-bg:#FFF3E0;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+        header { background:linear-gradient(135deg,#BF360C 0%,#EF6C00 55%,#FFCC80 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(191,54,12,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#EF6C00; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#E65100; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#BF360C,#EF6C00,#FFCC80); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.orange { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+        .formula-hero { background:linear-gradient(135deg,var(--primary-bg),#FFE0B2); border:2px solid #FFCC80; border-radius:14px; padding:18px 22px; margin-bottom:20px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+        .formula-big { font-size:1.5rem; font-weight:900; color:var(--primary-dark); font-family:'Courier New',monospace; }
+        .formula-details { font-size:.9rem; color:#555; line-height:2; }
+        .formula-details strong { color:var(--primary-dark); }
+        .def-box { background:linear-gradient(135deg,#BF360C,#E65100); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#FFCC80; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+        .examples-row { display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
+        .example-chip { background:var(--primary-bg); border:2px solid #FFCC80; border-radius:10px; padding:8px 16px; font-size:.95rem; font-weight:800; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .example-chip span { color:#888; font-size:.75rem; font-family:inherit; font-weight:700; display:block; text-align:center; }
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+        .fill-item { background:var(--primary-bg); border:2px solid #FFCC80; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:110px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+        .completion { display:none; background:linear-gradient(135deg,#BF360C,#EF6C00,#FFCC80); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #8D2600; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .user-answer { width:100%; min-height:80px; margin:10px 0 8px 0; padding:10px 12px; border:2px dashed var(--border); border-radius:10px; font-size:14px; font-family:inherit; resize:vertical; background:var(--primary-bg); color:inherit; box-sizing:border-box; transition:border-color .2s; }
+        .user-answer:focus { outline:none; border-color:var(--primary); border-style:solid; }
+        .user-answer::placeholder { color:#9E9E9E; font-style:italic; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🎲 Probabilités · Fréquences</h1>
+            <p>Niveau 2 · Fréquence relative et loi des grands nombres</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 2 — Fréquences</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">📖</div>
+        <div>
+            <div class="card-title">La leçon — Probabilités et fréquences</div>
+            <div class="card-sub">Fréquence relative · Loi des grands nombres · Prévisions</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Quand on répète une expérience aléatoire plusieurs fois, on peut calculer la <strong>fréquence relative</strong>
+            d'un événement. Plus on répète l'expérience, plus cette fréquence se rapproche de la <strong>probabilité théorique</strong> :
+            c'est la <strong>loi des grands nombres</strong>.
+        </p>
+
+        <div class="formula-hero">
+            <div class="formula-big">f = nombre d'occurrences / nombre total d'essais</div>
+            <div class="formula-details">
+                <strong>f</strong> = fréquence relative<br>
+                <strong>0 ≤ f ≤ 1</strong> toujours<br>
+                Quand n → ∞ : <strong>f → P(A)</strong>
+            </div>
+        </div>
+
+        <div class="def-box">
+            <h3>📌 Définition — Fréquence relative</h3>
+            <p>La <strong>fréquence relative</strong> d'un événement A, après n essais, est le rapport :<br>
+            <strong>f(A) = (nombre de fois que A s'est produit) ÷ n</strong><br>
+            Exemple : on lance une pièce 100 fois et on obtient pile 47 fois → f(pile) = 47/100 = <strong>0,47</strong>.</p>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔑 Loi des grands nombres</h3>
+            <p>Plus le nombre d'essais est <strong>grand</strong>, plus la fréquence se <strong>rapproche</strong> de la probabilité théorique.<br>
+            Exemple : P(pile) = 1/2 = 0,5 en théorie. Sur 10 lancers : f ≈ 0,4 à 0,6 (assez variable).
+            Sur 10 000 lancers : f ≈ 0,498 à 0,502 (très proche de 0,5).<br>
+            <strong>La fréquence converge vers la probabilité, mais jamais exactement sauf par hasard.</strong></p>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège — Confondre fréquence et probabilité</h3>
+            <p>La fréquence est une valeur <strong>observée</strong> après expérience réelle.
+            La probabilité est une valeur <strong>théorique</strong> calculée à l'avance.
+            <strong>La fréquence ne sera presque jamais exactement égale à la probabilité</strong>, surtout avec peu d'essais.
+            Ne pas dire « la fréquence sera exactement 0,5 » — dire « sera environ 0,5 ».</p>
+        </div>
+
+        <p style="font-size:.9rem;font-weight:800;color:var(--primary-dark);margin-bottom:10px;margin-top:8px;">📌 Prévision du nombre d'occurrences</p>
+        <div class="examples-row">
+            <div class="example-chip">P=1/6, n=60 → ~10 fois<span>60 × 1/6 = 10</span></div>
+            <div class="example-chip">P=1/4, n=200 → ~50 fois<span>200 × 1/4 = 50</span></div>
+            <div class="example-chip">P=0,3, n=1000 → ~300 fois<span>1000 × 0,3 = 300</span></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Fréquence et loi des grands nombres</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> La fréquence relative d'un événement est...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">le nombre de fois qu'il se produit divisé par le nombre total d'essais</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">le nombre de fois qu'il se produit</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">la probabilité théorique</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">le nombre de cas favorables</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> On lance une pièce 100 fois, on obtient pile 47 fois. Fréquence de pile = ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">0,47</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">47</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">0,53</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">1/2</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Plus on répète une expérience, la fréquence d'un événement tend vers...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">sa probabilité théorique (loi des grands nombres)</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">0</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">1</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">0,5</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Un événement a une probabilité de 1/4. Sur 200 essais, on s'attend à l'obtenir environ...</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(4,0)">50 fois</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">25 fois</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">100 fois</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">4 fois</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Si P(A) = 0,3 et on fait 1000 essais, la fréquence de A sera approximativement...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">proche de 0,3</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">exactement 0,3</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">300</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">impossible à prévoir</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Fréquence et loi des grands nombres</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                Plus le nombre d'essais est grand, plus la fréquence se rapproche de la <input class="blank" id="f1a" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Sur 60 lancers, P(6) = 1/6, donc on s'attend à environ <input class="blank" id="f2a" placeholder="?"> fois le chiffre 6.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                La loi des <input class="blank" id="f3a" placeholder="?"> nombres dit que la fréquence converge vers la probabilité.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Fréquence observée</div>
+                <div class="ex-stmt">On lance un dé 120 fois. On obtient le chiffre 1 exactement 24 fois. Calcule la fréquence relative de l'événement « obtenir 1 ». Est-ce conforme à la probabilité théorique ?</div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Fréquence relative : f = 24/120 = <strong>0,2</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Probabilité théorique : P(1) = 1/6 ≈ <strong>0,167</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">0,2 ≈ 0,167 : la fréquence est proche mais pas égale à la probabilité. C'est <strong>normal avec seulement 120 essais</strong>.</div></div>
+                <div class="final-ans">✅ f(1) = 0,2 ≈ P(1) = 1/6 ≈ 0,167 — résultat conforme à la loi des grands nombres.</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Prévision</div>
+                <div class="ex-stmt">Un sac contient 5 billes dont 2 rouges. On tire une bille (en la remettant) 200 fois. Combien de fois environ obtient-on une bille rouge ?</div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Probabilité théorique : P(rouge) = 2/5 = <strong>0,4</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Nombre attendu = P × n = 0,4 × 200 = <strong>80 fois</strong>.</div></div>
+                <div class="final-ans">✅ On s'attend à environ <strong>80 billes rouges</strong> sur 200 tirages.</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Interprétation</div>
+                <div class="ex-stmt">Un joueur lance une pièce équilibrée 10 fois et obtient face 8 fois. Il dit : « La pièce est truquée ! ». A-t-il raison ?</div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">Avec seulement <strong>10 lancers</strong>, les fluctuations sont très importantes.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Obtenir 8 faces sur 10 est <strong>peu fréquent mais possible</strong> avec une pièce équilibrée.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">La loi des grands nombres dit qu'il faut <strong>beaucoup</strong> de répétitions pour conclure.</div></div>
+                <div class="final-ans">✅ Non, il a tort ! 10 lancers ne suffisent pas pour conclure. Il faudrait au moins 1000 lancers pour être sûr.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 2 terminé !</h2>
+    <p>Bravo ! Tu comprends maintenant la loi des grands nombres.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue vers le niveau 3 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Probabilités</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_probabilites_niveau1.html" class="nav-btn">Niveau 1 — Introduction</a>
+        <a href="maths_probabilites_niveau2.html" class="nav-btn current">▶ Niveau 2 — Fréquences</a>
+        <a href="maths_probabilites_niveau3.html" class="nav-btn">Niveau 3 — Événements</a>
+        <a href="maths_probabilites_niveau4.html" class="nav-btn">Niveau 4 — Probabilités composées</a>
+        <a href="maths_probabilites_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! f = (nombre d'occurrences) ÷ (nombre total d'essais).",
+    2:"✅ Bravo ! f(pile) = 47/100 = 0,47. C'est une fréquence, pas un nombre absolu.",
+    3:"✅ Parfait ! C'est la loi des grands nombres : plus n est grand, plus f → P(A).",
+    4:"✅ Exact ! On s'attend à 200 × 1/4 = 50 occurrences environ.",
+    5:"✅ Oui ! La fréquence sera PROCHE de 0,3 mais pas forcément exactement 0,3 (et ce n'est pas 300, qui est le nombre attendu, pas la fréquence)."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. La fréquence relative est un RAPPORT : occurrences / nombre total d'essais. Elle est toujours entre 0 et 1.",
+    2:"❌ Non. La fréquence relative est 47 DIVISÉ par 100 = 0,47. 47 tout seul est le nombre d'occurrences, pas la fréquence.",
+    3:"❌ Non. La fréquence ne tend ni vers 0 ni vers 1 en général — elle tend vers la probabilité P(A) de l'événement (loi des grands nombres).",
+    4:"❌ Non. Nombre attendu = P × n = (1/4) × 200 = 50 fois. Pas 25 (= 200/8), pas 100 (= 200/2), ni 4.",
+    5:"❌ Non. La fréquence sera PROCHE de 0,3, ni exactement 0,3 ni 300 (qui est le nombre d'occurrences attendu, pas la fréquence)."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['probabilite','probability']],
+        msgOk:"✅ Correct ! C'est la loi des grands nombres : la fréquence converge vers la probabilité.",
+        msgErr:"❌ Attendu : « probabilité ». La fréquence converge vers la probabilité théorique."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['10']],
+        msgOk:"✅ Exact ! 60 × (1/6) = 10. On s'attend à obtenir 10 fois le 6 sur 60 lancers.",
+        msgErr:"❌ Attendu : 10. Calcul : n × P(A) = 60 × (1/6) = 10."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['grands']],
+        msgOk:"✅ Bravo ! La loi des GRANDS nombres : plus n est grand, plus f → P(A).",
+        msgErr:"❌ Attendu : « grands ». La loi des GRANDS nombres."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_probabilites_2', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m);
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

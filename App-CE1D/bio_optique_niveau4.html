@@ -141,7 +141,29 @@
         .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         /* Spectre SVG */
         .spectre-bar { height:32px; border-radius:8px; margin:16px 0; background:linear-gradient(to right,#8B00FF,#4B0082,#0000FF,#008000,#FFFF00,#FF7F00,#FF0000); }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -379,6 +401,7 @@
                     b) Explique pourquoi.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Principe :</strong> un objet rouge réfléchit le rouge et absorbe les autres couleurs.</div></div>
@@ -398,6 +421,7 @@
                     b) Que se passe-t-il si on ajoute le bleu ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Rouge + Vert = <strong>Jaune</strong> (synthèse additive).</div></div>
@@ -415,6 +439,7 @@
                     b) Quelle lumière sort ensuite du filtre bleu ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> Le filtre rouge laisse passer uniquement la lumière <strong>rouge</strong> et absorbe toutes les autres couleurs.</div></div>
@@ -433,6 +458,7 @@
                     b) Pourquoi le soleil paraît-il rouge/orange au coucher du soleil ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a)</strong> Le <strong>bleu</strong> (courte longueur d'onde ≈ 450 nm) est le plus diffusé → le ciel nous apparaît bleu.</div></div>

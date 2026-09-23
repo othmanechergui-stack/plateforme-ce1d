@@ -160,7 +160,29 @@
         .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
         .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -443,6 +465,7 @@
                     Calcule l'énergie totale nécessaire en listant chaque étape.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Étape 1 — Chauffer la glace de −10 à 0 °C :</strong><br>Q₁ = m × c<sub>glace</sub> × ΔT = 1 × 2 100 × 10 = <strong>21 000 J</strong></div></div>
@@ -466,6 +489,7 @@
                     Pour chaque voie, identifie le mode de transfert. Propose une solution d'isolation adaptée.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Murs :</strong> <strong>Conduction</strong> — le béton conduit la chaleur de l'intérieur vers l'extérieur. Solution : isoler les murs avec de la laine de roche ou du polystyrène (mauvais conducteurs).</div></div>
@@ -486,6 +510,7 @@
                     c) La boisson se réchauffe-t-elle ou se refroidit-elle ? Justifie avec le sens du transfert.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Données :</strong> m = 100 g = <strong>0,1 kg</strong> · ΔT = 0 − (−18) = <strong>18 °C</strong></div></div>
@@ -508,6 +533,7 @@
                     c) Expliquer pourquoi souffler sur une brûlure refroidit (même avec de l'air chaud).
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a) Vaporisation</strong> (liquide → gaz). Formule : Q = m × L<sub>vaporisation</sub>. L'eau absorbe l'énergie thermique de ta peau pour s'évaporer.</div></div>

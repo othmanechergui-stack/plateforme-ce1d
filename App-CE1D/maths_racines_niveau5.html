@@ -165,7 +165,29 @@
         .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
         .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -457,6 +479,7 @@
                 <div class="ex-label">Exercice 1 CE1D — Simplifier et calculer</div>
                 <div class="ex-stmt">Simplifie les expressions suivantes : a) √48 + √75 &nbsp;&nbsp; b) √200 ÷ √2</div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>√48 :</strong> diviseurs carrés parfaits de 48 → plus grand : 16. √48 = √(16×3) = 4√3</div></div>
@@ -472,6 +495,7 @@
                 <div class="ex-label">Exercice 2 CE1D — Encadrement et application géométrique</div>
                 <div class="ex-stmt">Un jardin carré a une aire de 75 m². a) Entre quels entiers se situe la longueur du côté ?  b) Exprime le côté sous forme simplifiée avec une racine.</div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Côté = √75.</strong> 8² = 64 et 9² = 81. Or 64 &lt; 75 &lt; 81, donc 8 &lt; √75 &lt; 9.</div></div>
@@ -486,6 +510,7 @@
                 <div class="ex-label">Exercice 3 CE1D — Expression à simplifier complète</div>
                 <div class="ex-stmt">Calcule et simplifie : √32 + √18 − √8.</div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>√32 :</strong> √32 = √(16×2) = 4√2</div></div>
@@ -504,6 +529,7 @@
                     Sachant que (√a + √b)² = a + b + 2√(ab), calcule (√3 + √5)² sans calculatrice.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>On utilise la formule :</strong> (√a + √b)² = a + b + 2√(ab) avec a=3, b=5</div></div>

@@ -158,7 +158,29 @@
         .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
         .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -491,6 +513,7 @@
                 <div class="ex-label">Exercice 1 — Simplifier des radicaux</div>
                 <div class="ex-stmt">Simplifie chacune de ces racines carrées : √50, √72, √98.</div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>√50 :</strong> Diviseurs carrés parfaits de 50 : 1, 25. Plus grand : 25.<br>√50 = √(25×2) = √25 × √2 = <strong>5√2</strong></div></div>
@@ -505,6 +528,7 @@
                 <div class="ex-label">Exercice 2 — Multiplication de radicaux</div>
                 <div class="ex-stmt">Calcule 3√5 × 4√5.</div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Séparer</strong> les coefficients des radicaux : (3 × 4) × (√5 × √5)</div></div>
@@ -520,6 +544,7 @@
                 <div class="ex-label">Exercice 3 — Addition de radicaux (CE1D style)</div>
                 <div class="ex-stmt">Calcule √48 + √75. (Commence par simplifier chaque racine.)</div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Simplifier √48 :</strong> Plus grand carré parfait diviseur de 48 → 16.<br>√48 = √(16×3) = 4√3</div></div>
@@ -535,6 +560,7 @@
                 <div class="bonus-label">⭐ Exercice bonus — Soustraction de radicaux</div>
                 <div class="bonus-stmt">Simplifie √200 − √8.</div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Simplifier √200 :</strong> 200 = 100 × 2 → √200 = 10√2</div></div>

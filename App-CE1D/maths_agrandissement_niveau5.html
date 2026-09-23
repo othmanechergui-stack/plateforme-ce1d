@@ -151,7 +151,29 @@
         .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
         .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -400,6 +422,7 @@
                     c) Un carrelage coûte 25 €/m². Quel sera le coût total pour carreler le jardin ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Dimensions réelles (Plan → Réel, ×100) :</strong><br>• Longueur : 8 × 100 = 800 cm = <strong>8 m</strong><br>• Largeur : 5 × 100 = 500 cm = <strong>5 m</strong></div></div>
@@ -420,6 +443,7 @@
                     c) L'angle d'inclinaison d'une aile est 15° sur la maquette. Quel est cet angle sur le vrai avion ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Envergure maquette (Réel → Plan, ÷72) :</strong><br>36 m = 3 600 cm → 3 600 ÷ 72 = <strong>50 cm</strong></div></div>
@@ -441,6 +465,7 @@
                     d) Si carrelage de la petite piscine (fond + parois) coûte 2 000 €, combien coûtera celui de la grande ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) k :</strong> k = grande longueur ÷ petite longueur = 25 ÷ 10 = <strong>2,5</strong></div></div>
@@ -463,6 +488,7 @@
                     d) Si la surface de la réplique à peindre est 180 cm², quelle est la surface à peindre sur l'originale ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a) k³ :</strong> k³ = masse originale ÷ masse réplique = 54 ÷ 2 = <strong>27</strong></div></div>

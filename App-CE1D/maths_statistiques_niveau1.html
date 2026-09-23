@@ -175,7 +175,29 @@
         .data-table td { padding:8px 14px; text-align:center; border-bottom:1px solid var(--border); }
         .data-table tr:nth-child(even) td { background:var(--primary-bg); }
         .data-table tr:last-child td { border-bottom:none; }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -696,6 +718,7 @@
                     a) Calcule la moyenne. &nbsp; b) Calcule l'étendue. &nbsp; c) Que signifie l'étendue ici ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Moyenne :</strong> Additionner toutes les valeurs : 12 + 15 + 8 + 18 + 14 + 11 = <strong>78</strong></div></div>
@@ -714,6 +737,7 @@
                     Trouve la médiane de ces âges. Montre toutes les étapes.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Trier dans l'ordre croissant :</strong> 3, 5, 6, 7, 9, 10, 12, 14</div></div>
@@ -733,6 +757,7 @@
                     a) Quel jour y a-t-il eu le plus de ventes ? &nbsp; b) Calcule la vente moyenne par jour. &nbsp; c) Calcule l'étendue.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Jour avec le plus de ventes :</strong> La barre la plus haute correspond à <strong>Mercredi</strong> avec 60 glaces.</div></div>
@@ -752,6 +777,7 @@
                     Quelle est la 5ᵉ note ? (Indice : utilise la définition de la moyenne à l'envers !)
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text">Si la moyenne de 5 notes est 14, alors la <strong>somme totale</strong> = Moyenne × Nombre de valeurs = 14 × 5 = <strong>70</strong></div></div>

@@ -139,7 +139,29 @@
         .trophy-banner .trophy-icon { font-size:2.8rem; margin-bottom:6px; }
         .trophy-banner h2 { font-size:1.4rem; font-weight:900; margin-bottom:4px; }
         .trophy-banner p { font-size:.92rem; font-weight:700; opacity:.85; }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -394,6 +416,7 @@
                     c) Calcule l'énergie perdue.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Chaîne d'énergie :</strong><br>Énergie chimique (batterie) → Énergie électrique (circuit) → Énergie cinétique (moteur → roues)<br>+ Énergie thermique perdue (chaleur du moteur)</div></div>
@@ -414,6 +437,7 @@
                     c) Propose deux sources d'énergie alternatives renouvelables pour chauffer l'école.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Non renouvelable</strong><br>Le gaz naturel est un combustible fossile formé pendant des millions d'années. Il s'épuise à l'usage et ne se reconstitue pas à l'échelle humaine.</div></div>
@@ -435,6 +459,7 @@
                     d) Ce panneau est-il plus ou moins efficace qu'une LED (η ≈ 80 %) ? Que peux-tu conclure ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Rendement du panneau :</strong><br>η = (Eu ÷ Ef) × 100 = (1 000 ÷ 5 000) × 100 = <strong>20 %</strong></div></div>
@@ -457,6 +482,7 @@
                     (Surface = Ef_total ÷ Ef_par_m²)
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>a) Conversion en Joules :</strong><br>3 500 kWh × 3 600 000 J/kWh = <strong>12 600 000 000 J = 12,6 GJ</strong></div></div>

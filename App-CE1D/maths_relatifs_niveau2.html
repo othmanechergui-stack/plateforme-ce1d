@@ -177,7 +177,29 @@
             .calc-btns { gap:5px; }
             .calc-btn { padding:10px 2px; font-size:.9rem; }
         }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -517,6 +539,7 @@
                     <strong>(−7) + (+3) + (−2)</strong>
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">On traite de gauche à droite. D'abord : (−7) + (+3).<br>Signes différents → soustrait : 7 − 3 = 4, signe de −7 (|−7|&gt;|3|) → <strong>−4</strong></div></div>
@@ -535,6 +558,7 @@
                     <em style="font-size:.85rem;color:#888;">Erreur fréquente : −3 − (−5) ≠ −8. Montre pourquoi.</em>
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Transformer la soustraction :</strong> soustraire (−5) = ajouter l'opposé de −5.<br>L'opposé de −5 est <strong>+5</strong>.</div></div>
@@ -557,6 +581,7 @@
                     <strong>c)</strong> Quelle est la différence de température entre le lendemain matin et le matin du premier jour ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">a</div><div class="sol-text">Température après-midi = −8 + 12.<br>Signes différents → 12 − 8 = 4, signe de +12 → <strong>+4°C</strong></div></div>

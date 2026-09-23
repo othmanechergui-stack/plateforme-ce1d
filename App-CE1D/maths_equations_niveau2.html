@@ -164,7 +164,29 @@
         .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
         .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -452,6 +474,7 @@
                     a) 4x + 7 = 23 &nbsp;&nbsp; b) 3x − 4 = 17 &nbsp;&nbsp; c) 2x + 9 = 1
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">a</div><div class="sol-text"><strong>4x + 7 = 23</strong><br>4x = 23 − 7 = 16<br>x = 16 ÷ 4 = <strong>4</strong><br>Vérif : 4×4+7 = 16+7 = 23 ✓</div></div>
@@ -468,6 +491,7 @@
                     Résous l'équation 5x − 8 = 22. Montre toutes les étapes et fais la vérification.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Étape 1 — Isoler le terme en x :</strong><br>5x − 8 = 22<br>5x = 22 + 8 = 30</div></div>
@@ -484,6 +508,7 @@
                     Résous : a) x/5 = 6 &nbsp;&nbsp; b) x/3 + 2 = 8 &nbsp;&nbsp; et vérifie tes réponses.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">a</div><div class="sol-text"><strong>x/5 = 6</strong><br>On multiplie les deux membres par 5 :<br>x = 6 × 5 = <strong>30</strong><br>Vérif : 30/5 = 6 ✓</div></div>
@@ -500,6 +525,7 @@
                     Résous l'équation 2,5x − 3 = 7. Montre les étapes et vérifie.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Isoler le terme en x :</strong><br>2,5x − 3 = 7<br>2,5x = 7 + 3 = 10</div></div>

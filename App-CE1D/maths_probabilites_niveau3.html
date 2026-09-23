@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths — Probabilités · Niveau 3 — Événements</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#EF6C00; --primary-dark:#E65100; --primary-mid:#F57C00; --primary-bg:#FFF3E0;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+        header { background:linear-gradient(135deg,#BF360C 0%,#EF6C00 55%,#FFCC80 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(191,54,12,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:#EF6C00; }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:#E65100; }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#BF360C,#EF6C00,#FFCC80); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.orange { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+        .formula-hero { background:linear-gradient(135deg,var(--primary-bg),#FFE0B2); border:2px solid #FFCC80; border-radius:14px; padding:18px 22px; margin-bottom:20px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+        .formula-big { font-size:1.5rem; font-weight:900; color:var(--primary-dark); font-family:'Courier New',monospace; }
+        .formula-details { font-size:.9rem; color:#555; line-height:2; }
+        .formula-details strong { color:var(--primary-dark); }
+        .def-box { background:linear-gradient(135deg,#BF360C,#E65100); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#FFCC80; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+        .examples-row { display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
+        .example-chip { background:var(--primary-bg); border:2px solid #FFCC80; border-radius:10px; padding:8px 16px; font-size:.95rem; font-weight:800; font-family:'Courier New',monospace; color:var(--primary-dark); }
+        .example-chip span { color:#888; font-size:.75rem; font-family:inherit; font-weight:700; display:block; text-align:center; }
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+        .fill-item { background:var(--primary-bg); border:2px solid #FFCC80; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:120px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+        .completion { display:none; background:linear-gradient(135deg,#BF360C,#EF6C00,#FFCC80); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #8D2600; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:10px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .user-answer { width:100%; min-height:80px; margin:10px 0 8px 0; padding:10px 12px; border:2px dashed var(--border); border-radius:10px; font-size:14px; font-family:inherit; resize:vertical; background:var(--primary-bg); color:inherit; box-sizing:border-box; transition:border-color .2s; }
+        .user-answer:focus { outline:none; border-color:var(--primary); border-style:solid; }
+        .user-answer::placeholder { color:#9E9E9E; font-style:italic; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🎲 Probabilités · Événements</h1>
+            <p>Niveau 3 · Complémentaires et incompatibles</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 3 — Événements</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">📖</div>
+        <div>
+            <div class="card-title">La leçon — Événements complémentaires et incompatibles</div>
+            <div class="card-sub">Complémentaire · Événements incompatibles · Addition des probabilités</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Deux types d'événements particuliers sont très utiles :
+            l'<strong>événement complémentaire</strong> (« tout sauf A ») et les
+            <strong>événements incompatibles</strong> (qui ne peuvent pas se produire en même temps).
+        </p>
+
+        <div class="formula-hero">
+            <div>
+                <div class="formula-big" style="font-size:1.3rem;">P(Ā) = 1 − P(A)</div>
+                <div class="formula-big" style="font-size:1.3rem;margin-top:8px;">P(A ou B) = P(A) + P(B) si incompatibles</div>
+            </div>
+            <div class="formula-details">
+                <strong>Ā</strong> = complémentaire de A (« non A »)<br>
+                <strong>P(A) + P(Ā) = 1</strong> toujours<br>
+                <strong>Incompatibles</strong> : A et B ne peuvent pas arriver ensemble
+            </div>
+        </div>
+
+        <div class="def-box">
+            <h3>📌 Événement complémentaire</h3>
+            <p>L'événement <strong>complémentaire de A</strong>, noté Ā (« A barre »), représente tous les cas où A ne se produit pas.<br>
+            <strong>P(Ā) = 1 − P(A)</strong><br>
+            Exemple : P(ne pas obtenir 6 sur un dé) = 1 − P(6) = 1 − 1/6 = <strong>5/6</strong>.</p>
+        </div>
+
+        <div class="def-box" style="background:linear-gradient(135deg,#1B5E20,#388E3C);">
+            <h3 style="color:#A5D6A7;">📌 Événements incompatibles (exclusifs)</h3>
+            <p>Deux événements A et B sont <strong>incompatibles</strong> s'ils ne peuvent <strong>pas se produire en même temps</strong>.<br>
+            Dans ce cas : <strong>P(A ou B) = P(A) + P(B)</strong><br>
+            Exemple sur un dé : A = « obtenir 1 » et B = « obtenir 6 » sont incompatibles.
+            P(1 ou 6) = 1/6 + 1/6 = <strong>2/6 = 1/3</strong>.</p>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔑 Formule générale (événements quelconques)</h3>
+            <p>Si A et B ne sont PAS forcément incompatibles :<br>
+            <strong>P(A ou B) = P(A) + P(B) − P(A et B)</strong><br>
+            On soustrait P(A et B) pour ne pas compter deux fois les cas communs.<br>
+            Si A et B incompatibles : P(A et B) = 0, donc P(A ou B) = P(A) + P(B).</p>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège — Ne pas oublier de soustraire P(A et B)</h3>
+            <p>Sur un dé : A = « pair » = {2,4,6} et B = « multiple de 3 » = {3,6}.<br>
+            A et B partagent {6}, donc P(A et B) = 1/6.<br>
+            P(A ou B) = 3/6 + 2/6 − 1/6 = <strong>4/6 = 2/3</strong> (et non 5/6 !).<br>
+            <strong>Ne jamais additionner sans vérifier si les événements ont des cas communs.</strong></p>
+        </div>
+
+        <div class="examples-row">
+            <div class="example-chip">P(A)=0,3 → P(Ā)=0,7<span>1 − 0,3 = 0,7</span></div>
+            <div class="example-chip">P(dé≠6)=5/6<span>1 − 1/6</span></div>
+            <div class="example-chip">P(1 ou 2)=2/6<span>incompatibles : 1/6+1/6</span></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Complémentaire et incompatibles</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> L'événement complémentaire de A noté Ā vérifie...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">P(Ā) = 1 − P(A)</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">P(Ā) = P(A)</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">P(Ā) = 1 + P(A)</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">P(Ā) = 0</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> P(A) = 0,3. Alors P(Ā) = ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(2,0)">0,7</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">0,3</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">1,3</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">−0,3</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Deux événements incompatibles (ou exclusifs) sont des événements qui...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">ne peuvent pas se produire en même temps</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">se produisent toujours ensemble</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">ont la même probabilité</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">sont complémentaires</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Si A et B sont incompatibles, P(A ou B) = ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">P(A) + P(B)</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">P(A) × P(B)</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">P(A) − P(B)</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">P(A) + P(B) − P(A et B)</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Dé à 6 faces. P(pair OU multiple de 3) = ?</div>
+            <div class="opts short">
+                <button class="opt-btn" onclick="checkQCM(5,0)">4/6 = 2/3</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">3/6</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">5/6</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">1/2</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Complémentaire et incompatibles</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                P(A) + P(Ā) = <input class="blank" id="f1a" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Si P(A) = 0,45, P(Ā) = <input class="blank" id="f2a" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Deux événements qui ne peuvent pas se produire en même temps sont <input class="blank" id="f3a" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Complémentaire</div>
+                <div class="ex-stmt">P(pleuvoir demain) = 0,35. Quelle est la probabilité qu'il ne pleuve PAS demain ?</div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">L'événement « ne pas pleuvoir » est le complémentaire de « pleuvoir ».</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">P(Ā) = 1 − P(A) = 1 − 0,35 = <strong>0,65</strong>.</div></div>
+                <div class="final-ans">✅ P(pas de pluie) = 1 − 0,35 = <strong>0,65</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Événements incompatibles</div>
+                <div class="ex-stmt">On lance un dé. A = « obtenir 1 ou 2 » et B = « obtenir 5 ». Ces événements sont-ils incompatibles ? Calculer P(A ou B).</div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">A = {1, 2} et B = {5}. Ces ensembles n'ont <strong>aucun élément commun</strong> → A et B sont <strong>incompatibles</strong>.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">P(A) = 2/6, P(B) = 1/6.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">P(A ou B) = P(A) + P(B) = 2/6 + 1/6 = <strong>3/6 = 1/2</strong>.</div></div>
+                <div class="final-ans">✅ A et B incompatibles. P(A ou B) = 3/6 = <strong>1/2</strong></div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Formule générale</div>
+                <div class="ex-stmt">P(A) = 0,5, P(B) = 0,4, P(A et B) = 0,2. Calculer P(A ou B).</div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">P(A et B) = 0,2 ≠ 0, donc A et B ne sont pas incompatibles.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">Formule générale : P(A ou B) = P(A) + P(B) − P(A et B).</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">P(A ou B) = 0,5 + 0,4 − 0,2 = <strong>0,7</strong>.</div></div>
+                <div class="final-ans">✅ P(A ou B) = 0,5 + 0,4 − 0,2 = <strong>0,7</strong></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🌟 🌟 🌟</div>
+    <h2>Niveau 3 terminé !</h2>
+    <p>Bravo ! Tu maîtrises les événements complémentaires et incompatibles.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue vers le niveau 4 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Probabilités</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="maths_probabilites_niveau1.html" class="nav-btn">Niveau 1 — Introduction</a>
+        <a href="maths_probabilites_niveau2.html" class="nav-btn">Niveau 2 — Fréquences</a>
+        <a href="maths_probabilites_niveau3.html" class="nav-btn current">▶ Niveau 3 — Événements</a>
+        <a href="maths_probabilites_niveau4.html" class="nav-btn">Niveau 4 — Probabilités composées</a>
+        <a href="maths_probabilites_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! P(A) + P(Ā) = 1, donc P(Ā) = 1 − P(A). C'est la propriété du complémentaire.",
+    2:"✅ Bravo ! P(Ā) = 1 − 0,3 = 0,7. Vérifie : 0,3 + 0,7 = 1 ✓",
+    3:"✅ Parfait ! Deux événements incompatibles ne peuvent JAMAIS se produire simultanément.",
+    4:"✅ Exact ! Si A et B incompatibles, P(A et B) = 0, donc P(A ou B) = P(A) + P(B).",
+    5:"✅ Oui ! Pairs = {2,4,6}, multiples de 3 = {3,6}. P(A ou B) = 3/6 + 2/6 − 1/6 = 4/6 = 2/3."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. Le complémentaire vérifie P(A) + P(Ā) = 1, donc P(Ā) = 1 − P(A).",
+    2:"❌ Non. P(Ā) = 1 − P(A) = 1 − 0,3 = 0,7. La somme P(A) + P(Ā) doit faire 1.",
+    3:"❌ Non. Incompatibles signifie qu'ils ne peuvent PAS se produire en même temps (pas qu'ils ont la même probabilité).",
+    4:"❌ Non. Pour des événements incompatibles, P(A et B) = 0, donc P(A ou B) = P(A) + P(B). La formule complète P(A)+P(B)−P(A et B) est la formule générale.",
+    5:"❌ Non. Pairs={2,4,6} (3 cas) et multiples de 3={3,6} (2 cas). Ils partagent {6}, donc P(A ou B) = 3/6 + 2/6 − 1/6 = 4/6 = 2/3."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['1']],
+        msgOk:"✅ Correct ! P(A) + P(Ā) = 1. Les deux événements couvrent tous les cas possibles.",
+        msgErr:"❌ Attendu : 1. Un événement et son complémentaire se partagent tous les cas, donc P(A) + P(Ā) = 1."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['0.55','0,55']],
+        msgOk:"✅ Exact ! P(Ā) = 1 − 0,45 = 0,55. Vérifie : 0,45 + 0,55 = 1 ✓",
+        msgErr:"❌ Attendu : 0,55. P(Ā) = 1 − P(A) = 1 − 0,45 = 0,55."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['incompatibles']],
+        msgOk:"✅ Bravo ! Des événements incompatibles ne peuvent pas se produire simultanément.",
+        msgErr:"❌ Attendu : « incompatibles ». Des événements qui ne peuvent pas arriver ensemble sont incompatibles."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= Math.ceil(TOTAL * 0.875)) {
+        localStorage.setItem('edu_completed_probabilites_3', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m);
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cellule &amp; Microscopie · Niveau 1 — La cellule</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#00695C; --primary-dark:#004D40; --primary-mid:#26A69A; --primary-bg:#E0F2F1;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+        header { background:linear-gradient(135deg,#004D40 0%,#00695C 55%,#80CBC4 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(0,77,64,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:var(--primary); }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:var(--primary-dark); }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#004D40,#00695C,#80CBC4); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-icon.blue   { background:var(--blue-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+
+        code { background:rgba(0,0,0,.08); padding:1px 6px; border-radius:5px; font-family:'Courier New',monospace; font-size:.92rem; font-weight:700; }
+
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+
+        .def-box { background:linear-gradient(135deg,#004D40,#00695C); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#80CBC4; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; font-family:'Courier New',monospace; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+
+        .svg-wrap { display:flex; justify-content:center; margin:20px 0; }
+        .svg-wrap svg { max-width:100%; height:auto; }
+
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opts.short { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+
+        .fill-item { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:120px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-step:last-child { margin-bottom:0; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+
+        .completion { display:none; background:linear-gradient(135deg,#004D40,#00695C,#80CBC4); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #003329; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🔬 Cellule &amp; Microscopie · La cellule</h1>
+            <p>Niveau 1 · Théorie cellulaire · Organites · Cellule végétale vs animale</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div>
+            <div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div><div class="diff-pip off"></div>
+            <span class="diff-label">Niveau 1 — Débutant</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- 1. LEÇON -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">📖</div>
+        <div>
+            <div class="card-title">La leçon — La cellule, unité du vivant</div>
+            <div class="card-sub">Théorie cellulaire · Membrane · Noyau · Mitochondrie · Végétale vs Animale</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <p class="lesson-intro">
+            Tous les êtres vivants sont constitués de <strong>cellules</strong>. C'est l'unité de base de la vie.
+            Une cellule est capable de se nourrir, de se reproduire et de répondre à son environnement.
+        </p>
+
+        <div class="def-box">
+            <h3>📌 La théorie cellulaire — Définition clé</h3>
+            <p>
+                La <strong>théorie cellulaire</strong> repose sur 3 principes :<br><br>
+                1. Tous les êtres vivants sont composés d'<strong>une ou plusieurs cellules</strong>.<br>
+                2. La cellule est l'<strong>unité fonctionnelle</strong> de base de la vie.<br>
+                3. Toute cellule provient d'une <strong>cellule préexistante</strong> (division cellulaire).<br><br>
+                La cellule contient du <strong>cytoplasme</strong>, un <strong>noyau</strong>, et est entourée d'une <strong>membrane plasmique</strong>.
+            </p>
+        </div>
+
+        <!-- SVG : schéma cellule animale -->
+        <div class="svg-wrap">
+            <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+                <rect x="0" y="0" width="560" height="220" fill="#E0F2F1" rx="10"/>
+                <text x="280" y="20" text-anchor="middle" font-size="13" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Schéma — Cellule animale</text>
+                <!-- Corps cellule -->
+                <ellipse cx="200" cy="120" rx="150" ry="85" fill="#B2DFDB" stroke="#00695C" stroke-width="2.5"/>
+                <!-- Noyau -->
+                <ellipse cx="200" cy="115" rx="55" ry="42" fill="#80CBC4" stroke="#004D40" stroke-width="2"/>
+                <text x="200" y="110" text-anchor="middle" font-size="11" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">NOYAU</text>
+                <text x="200" y="125" text-anchor="middle" font-size="10" fill="#004D40" font-family="Nunito, sans-serif">(ADN)</text>
+                <!-- Mitochondries -->
+                <ellipse cx="95" cy="110" rx="22" ry="12" fill="#FFB300" stroke="#E65100" stroke-width="1.5"/>
+                <text x="95" y="114" text-anchor="middle" font-size="9" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Mito.</text>
+                <ellipse cx="300" cy="150" rx="22" ry="12" fill="#FFB300" stroke="#E65100" stroke-width="1.5"/>
+                <text x="300" y="154" text-anchor="middle" font-size="9" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Mito.</text>
+                <!-- Labels -->
+                <text x="200" y="210" text-anchor="middle" font-size="10" font-style="italic" fill="#555" font-family="Nunito, sans-serif">Membrane plasmique (bordure de l'ellipse)</text>
+                <!-- Légende à droite -->
+                <rect x="390" y="40" width="155" height="150" rx="8" fill="white" stroke="#00695C" stroke-width="1.5"/>
+                <text x="467" y="58" text-anchor="middle" font-size="11" font-weight="900" fill="#004D40" font-family="Nunito, sans-serif">Légende</text>
+                <rect x="400" y="68" width="14" height="10" rx="3" fill="#B2DFDB" stroke="#00695C" stroke-width="1"/>
+                <text x="420" y="78" font-size="10" fill="#333" font-family="Nunito, sans-serif">Cytoplasme</text>
+                <ellipse cx="407" cy="96" rx="7" ry="5" fill="#80CBC4" stroke="#004D40" stroke-width="1"/>
+                <text x="420" y="100" font-size="10" fill="#333" font-family="Nunito, sans-serif">Noyau (ADN)</text>
+                <ellipse cx="407" cy="116" rx="7" ry="4" fill="#FFB300" stroke="#E65100" stroke-width="1"/>
+                <text x="420" y="120" font-size="10" fill="#333" font-family="Nunito, sans-serif">Mitochondrie</text>
+                <line x1="400" y1="133" x2="415" y2="133" stroke="#00695C" stroke-width="2.5"/>
+                <text x="420" y="137" font-size="10" fill="#333" font-family="Nunito, sans-serif">Membrane</text>
+            </svg>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔢 Les organites principaux à retenir</h3>
+            <p>
+                • <strong>Membrane plasmique</strong> : délimite la cellule, contrôle les échanges avec l'extérieur.<br>
+                • <strong>Noyau</strong> : contient l'ADN (le programme génétique de la cellule).<br>
+                • <strong>Cytoplasme</strong> : liquide interne dans lequel baignent les organites.<br>
+                • <strong>Mitochondries</strong> : produisent l'énergie (ATP) par la respiration cellulaire.<br>
+                • <strong>Ribosomes</strong> : fabriquent les protéines (synthèse des protéines).<br><br>
+                <strong>Astuce :</strong> mito = moteur de la cellule (énergie !).
+            </p>
+        </div>
+
+        <div class="cas-grid">
+            <div class="cas-card">
+                <div class="cas-frac">Cellule végétale</div>
+                <div class="cas-eq">= animale + extras</div>
+                <div class="cas-desc">Paroi cellulosique, chloroplastes, grande vacuole centrale</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">Cellule animale</div>
+                <div class="cas-eq">sans paroi</div>
+                <div class="cas-desc">Pas de paroi, pas de chloroplaste, vacuoles petites</div>
+            </div>
+            <div class="cas-card">
+                <div class="cas-frac">En commun</div>
+                <div class="cas-eq">noyau + mito</div>
+                <div class="cas-desc">Membrane, noyau, cytoplasme, mitochondries, ribosomes</div>
+            </div>
+        </div>
+
+        <div class="trap-box">
+            <h3>⚠️ Piège classique : chloroplaste ≠ mitochondrie !</h3>
+            <p>
+                Le <strong>chloroplaste</strong> réalise la photosynthèse (végétaux uniquement, capte l'énergie lumineuse).<br>
+                La <strong>mitochondrie</strong> réalise la respiration cellulaire (tous les êtres vivants, produit l'ATP).<br>
+                <strong>Les deux sont présents dans les cellules végétales !</strong>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">❓</div>
+        <div>
+            <div class="card-title">Questions à choix multiple</div>
+            <div class="card-sub">5 questions · Théorie cellulaire · Organites · Différences végétale/animale</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> La théorie cellulaire dit que...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">a) tous les êtres vivants sont composés d'une ou plusieurs cellules</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">b) seuls les animaux ont des cellules</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">c) les cellules viennent de la matière non vivante</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">d) une cellule peut fonctionner sans noyau</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> La membrane plasmique a pour rôle de...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(2,0)">a) délimiter la cellule et contrôler les échanges</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">b) produire de l'énergie</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">c) stocker l'ADN</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">d) synthétiser les protéines</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> Le noyau contient...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">a) l'ADN (information génétique)</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">b) les ribosomes</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">c) la chlorophylle</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">d) les mitochondries uniquement</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Les mitochondries sont les organites responsables de...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">a) la respiration cellulaire (production d'ATP)</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">b) la photosynthèse</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">c) la division cellulaire</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">d) la digestion intracellulaire</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> Quelle différence entre cellule végétale et animale ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">a) La cellule végétale a une paroi cellulosique, des chloroplastes et une grande vacuole</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">b) La cellule animale a des chloroplastes</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">c) Elles sont identiques</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">d) La cellule animale a une paroi rigide</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Cellule · Noyau · ATP</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                La plus petite unité de vie s'appelle la <input class="blank" id="f1a" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                L'ADN est stocké dans le <input class="blank" id="f2a" placeholder="?"> de la cellule.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                Les mitochondries produisent l'<input class="blank" id="f3a" placeholder="?"> (énergie cellulaire).
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · Style CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Légender un schéma de cellule animale</div>
+                <div class="ex-stmt">
+                    Associe chaque organite à sa fonction : membrane plasmique, noyau, mitochondrie, cytoplasme.
+                </div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Membrane plasmique</strong> : enveloppe la cellule, contrôle les entrées/sorties de substances.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Noyau</strong> : contient l'ADN, le programme génétique ; dirige l'activité de la cellule.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Mitochondrie</strong> : centrale énergétique ; produit l'ATP par respiration cellulaire.</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Cytoplasme</strong> : milieu liquide (cytosol) dans lequel baignent tous les organites.</div></div>
+                <div class="final-ans">✅ Membrane → échanges | Noyau → ADN | Mitochondrie → ATP | Cytoplasme → milieu interne</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Comparer cellule végétale et animale</div>
+                <div class="ex-stmt">
+                    Réalise un tableau comparatif des cellules végétale et animale : quels organites sont présents dans l'une, l'autre, ou les deux ?
+                </div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Végétale seulement :</strong> paroi cellulosique (rigide), chloroplastes (photosynthèse), grande vacuole centrale (stockage d'eau).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Animale seulement :</strong> pas d'organite exclusif, mais des petites vacuoles et des centrioles (division).</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Les deux :</strong> membrane plasmique, noyau, cytoplasme, mitochondries, ribosomes.</div></div>
+                <div class="final-ans">✅ Végétale = animale + paroi + chloroplastes + grande vacuole. Mitochondries et noyau : les DEUX.</div>
+            </div>
+        </div>
+
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Organite manquant dans le globule rouge</div>
+                <div class="ex-stmt">
+                    Quel organite est absent dans un globule rouge humain ? Explique pourquoi c'est un avantage.
+                </div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Organite absent :</strong> le noyau (et les mitochondries également). Le globule rouge mature est dit "anucléé".</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Avantage :</strong> l'absence du noyau libère de la place pour stocker davantage d'hémoglobine, la protéine qui transporte l'oxygène.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Conséquence :</strong> un globule rouge ne peut pas se diviser ; il a une durée de vie limitée (≈ 120 jours).</div></div>
+                <div class="final-ans">✅ Absent : le noyau → plus d'espace pour l'hémoglobine → meilleur transport d'O₂.</div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Réflexion sur la théorie cellulaire</div>
+                <div class="bonus-stmt">
+                    Un virus est-il une cellule ? Justifie en utilisant la théorie cellulaire.
+                </div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Non</strong>, un virus n'est pas une cellule.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Argument 1 :</strong> un virus n'a pas de membrane plasmique propre, pas de cytoplasme, pas de ribosomes.</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>Argument 2 :</strong> il ne peut pas se reproduire seul — il détourne la machinerie d'une cellule hôte. La théorie cellulaire dit que la cellule est l'unité vivante autonome de base.</div></div>
+                <div class="bonus-ans">Conclusion : le virus est un parasite moléculaire, pas un être vivant au sens de la théorie cellulaire.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- COMPLETION -->
+<div class="completion" id="completionBanner">
+    <div class="stars">🔬 🌟 🔬</div>
+    <h2>Niveau 1 terminé !</h2>
+    <p>Bravo ! Tu maîtrises les bases : théorie cellulaire, organites, différences végétale/animale.<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP ! Continue avec le Niveau 2 !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Cellule &amp; Microscopie</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="bio_cellule_niveau1.html" class="nav-btn current">▶ Niveau 1 — La cellule</a>
+        <a href="bio_cellule_niveau2.html" class="nav-btn">Niveau 2 — Microscopie</a>
+        <a href="bio_cellule_niveau3.html" class="nav-btn">Niveau 3 — Division cellulaire</a>
+        <a href="bio_cellule_niveau4.html" class="nav-btn">Niveau 4 — ADN &amp; Génétique</a>
+        <a href="bio_cellule_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+const QCM_OK = {
+    1:"✅ Exact ! La théorie cellulaire affirme que tous les êtres vivants — animaux, plantes, champignons, bactéries — sont constitués d'une ou plusieurs cellules.",
+    2:"✅ Bravo ! La membrane plasmique est la frontière de la cellule : elle délimite l'intérieur, sélectionne ce qui entre et sort (perméabilité sélective).",
+    3:"✅ Correct ! Le noyau est le « coffre-fort » de l'ADN. Il contient toute l'information génétique nécessaire au fonctionnement et à la reproduction de la cellule.",
+    4:"✅ Parfait ! Les mitochondries sont les centrales énergétiques : elles convertissent les nutriments en ATP, la molécule d'énergie utilisable par la cellule.",
+    5:"✅ Exact ! La cellule végétale possède 3 structures absentes dans la cellule animale : la paroi cellulosique (rigidité), les chloroplastes (photosynthèse) et la grande vacuole centrale (stockage d'eau)."
+};
+
+const QCM_ERR = {
+    1:"❌ Non. La théorie cellulaire s'applique à TOUS les êtres vivants, pas seulement aux animaux. Les plantes, champignons et bactéries sont aussi constitués de cellules.",
+    2:"❌ Non. La production d'énergie est le rôle des mitochondries. Le stockage de l'ADN est le rôle du noyau. La membrane plasmique délimite et contrôle les échanges.",
+    3:"❌ Non. L'ADN est dans le noyau. Les ribosomes sont dans le cytoplasme. La chlorophylle est dans les chloroplastes (cellules végétales uniquement).",
+    4:"❌ Non. La photosynthèse est réalisée par les chloroplastes (végétaux). Les mitochondries font la respiration cellulaire (production d'ATP) dans toutes les cellules.",
+    5:"❌ Non. Ce sont les cellules VÉGÉTALES qui ont la paroi cellulosique et les chloroplastes. La cellule animale n'a pas de paroi rigide."
+};
+
+const FILL_DATA = {
+    1:{
+        fields:['f1a'],
+        accepted:[['cellule']],
+        msgOk:"✅ La cellule est bien l'unité de base de la vie — la plus petite structure capable d'effectuer toutes les fonctions du vivant.",
+        msgErr:"❌ Attendu : 'cellule'. La plus petite unité de vie est la cellule, décrite par la théorie cellulaire."
+    },
+    2:{
+        fields:['f2a'],
+        accepted:[['noyau']],
+        msgOk:"✅ L'ADN est stocké dans le noyau, protégé par l'enveloppe nucléaire.",
+        msgErr:"❌ Attendu : 'noyau'. L'ADN (le programme génétique) est conservé dans le noyau de la cellule."
+    },
+    3:{
+        fields:['f3a'],
+        accepted:[['atp','ATP']],
+        msgOk:"✅ Les mitochondries produisent l'ATP (adénosine triphosphate), la molécule d'énergie utilisée par toutes les cellules.",
+        msgErr:"❌ Attendu : 'ATP'. Les mitochondries réalisent la respiration cellulaire pour produire l'ATP, source d'énergie de la cellule."
+    }
+};
+
+let score = 0;
+const TOTAL = 8;
+const qcmDone  = {};
+const fillDone = {};
+
+function norm(s) {
+    return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' ');
+}
+
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar  = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_cellule_1', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk    = clickedIdx === correct;
+    const btns    = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb      = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className   = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk  = true;
+    data.fields.forEach((id, i) => {
+        const input   = document.getElementById(id);
+        const val     = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok      = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb  = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className   = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) {
+        fillDone[num] = true;
+        btn.disabled  = true;
+        score++;
+        updateUI();
+    }
+}
+
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn   = document.getElementById('rb' + num);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn   = document.getElementById('rbb');
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+        ? '🙈 Masquer le corrigé <span class="chevron">▼</span>'
+        : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

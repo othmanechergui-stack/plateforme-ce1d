@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cellule &amp; Microscopie · Niveau 5 — Défi CE1D 🏆</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#00695C; --primary-dark:#004D40; --primary-mid:#26A69A; --primary-bg:#E0F2F1;
+            --green:#58CC02; --green-dark:#46A302; --green-bg:#F0FBE4;
+            --orange:#FF9600; --orange-dark:#D07A00; --orange-bg:#FFF3E0;
+            --blue:#1CB0F6; --blue-dark:#0892D0; --blue-bg:#E8F4FD;
+            --red:#E53935; --red-dark:#B71C1C; --red-bg:#FFEBEE;
+            --bg:#F2F2F2; --white:#FFFFFF; --text:#3C3C3C; --text-light:#888;
+            --border:#E0E0E0; --radius:16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito','Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+        header { background:linear-gradient(135deg,#004D40 0%,#00695C 55%,#80CBC4 100%); color:white; padding:14px 20px; position:sticky; top:0; z-index:100; box-shadow:0 4px 16px rgba(0,77,64,.4); }
+        .header-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .back-btn { display:flex; align-items:center; gap:6px; color:white; text-decoration:none; background:rgba(255,255,255,.2); border:1.5px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 14px; font-weight:800; font-size:.85rem; transition:background .15s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,.3); }
+        .header-center { flex:1; text-align:center; }
+        .header-center h1 { font-size:1.15rem; font-weight:900; }
+        .header-center p  { font-size:.75rem; opacity:.85; font-weight:600; }
+        .xp-badge { background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); border-radius:50px; padding:6px 15px; font-weight:900; font-size:.95rem; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .xp-badge.pop { animation:xpPop .45s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes xpPop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+        .progress-wrap { background:white; border-bottom:2px solid var(--border); padding:13px 20px; }
+        .progress-inner { max-width:860px; margin:0 auto; }
+        .diff-badge { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 0 0; }
+        .diff-pip { width:12px; height:12px; border-radius:50%; }
+        .diff-pip.on  { background:var(--primary); }
+        .diff-pip.off { background:#DDD; }
+        .diff-label { font-size:.78rem; font-weight:900; color:var(--primary-dark); }
+        .progress-labels { display:flex; justify-content:space-between; font-size:.78rem; font-weight:700; color:var(--text-light); margin-bottom:6px; }
+        .bar-bg { background:var(--border); border-radius:50px; height:16px; overflow:hidden; }
+        .bar-fill { height:100%; width:0%; border-radius:50px; background:linear-gradient(90deg,#004D40,#00695C,#80CBC4); transition:width .7s cubic-bezier(.34,1.56,.64,1); position:relative; }
+        .bar-fill::after { content:'⭐'; position:absolute; right:5px; top:50%; transform:translateY(-50%); font-size:10px; opacity:0; transition:opacity .4s; }
+        .bar-fill.has-progress::after { opacity:1; }
+        main { max-width:860px; margin:0 auto; padding:26px 16px 52px; display:flex; flex-direction:column; gap:26px; }
+        .card { background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .card-header { display:flex; align-items:center; gap:14px; padding:17px 22px 15px; border-bottom:2px solid var(--border); }
+        .card-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .card-icon.teal   { background:var(--primary-bg); }
+        .card-icon.green  { background:var(--green-bg); }
+        .card-icon.orange { background:var(--orange-bg); }
+        .card-title { font-size:1.1rem; font-weight:900; }
+        .card-sub   { font-size:.8rem; color:var(--text-light); font-weight:700; margin-top:1px; }
+        .card-body  { padding:22px; }
+        .lesson-intro { font-size:1rem; color:#444; line-height:1.8; margin-bottom:20px; }
+        .def-box { background:linear-gradient(135deg,#004D40,#00695C); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .def-box h3 { font-size:.95rem; font-weight:900; color:#80CBC4; margin-bottom:8px; }
+        .def-box p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .def-box strong { color:#FFD54F; }
+        .rule-box { background:linear-gradient(135deg,#1A237E,#283593); color:white; border-radius:14px; padding:16px 20px; margin:18px 0; }
+        .rule-box h3 { font-size:.95rem; font-weight:900; color:#90CAF9; margin-bottom:8px; }
+        .rule-box p  { font-size:.92rem; line-height:1.7; opacity:.92; }
+        .rule-box strong { color:#FFD54F; }
+        .trap-box { background:linear-gradient(135deg,#B71C1C,#D32F2F); color:white; border-radius:14px; padding:14px 20px; margin:16px 0; }
+        .trap-box h3 { font-size:.9rem; font-weight:900; color:#FFCDD2; margin-bottom:6px; }
+        .trap-box p  { font-size:.88rem; line-height:1.7; opacity:.93; }
+        .trap-box strong { color:#FFD54F; }
+        .cas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0; }
+        .cas-card { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:14px 16px; text-align:center; }
+        .cas-frac { font-size:1.1rem; font-weight:900; color:var(--primary-dark); margin-bottom:4px; }
+        .cas-eq   { font-size:.9rem; font-weight:900; color:var(--primary-dark); margin:4px 0; }
+        .cas-desc { font-size:.82rem; color:#555; line-height:1.5; }
+        .qcm-item { margin-bottom:24px; }
+        .qcm-item:last-child { margin-bottom:0; }
+        .q-text { font-size:.98rem; font-weight:700; padding:10px 14px; background:#F9F9F9; border-radius:10px; border-left:4px solid var(--primary); margin-bottom:11px; }
+        .q-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-right:7px; }
+        .opts   { display:grid; grid-template-columns:1fr; gap:9px; }
+        .opt-btn { padding:12px 14px; border-radius:12px; border:2px solid var(--border); background:white; cursor:pointer; font-family:inherit; font-size:.93rem; font-weight:700; color:var(--text); transition:all .15s ease; text-align:left; }
+        .opt-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-bg); transform:translateY(-1px); }
+        .opt-btn:disabled { cursor:not-allowed; }
+        .opt-btn.correct    { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); }
+        .opt-btn.wrong      { background:var(--red-bg); border-color:var(--red); color:var(--red-dark); }
+        .opt-btn.show-correct { background:var(--green-bg); border-color:var(--green); color:var(--green-dark); opacity:.7; }
+        .q-feedback { display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .q-feedback.correct { display:block; background:var(--green-bg); color:var(--green-dark); }
+        .q-feedback.wrong   { display:block; background:var(--red-bg); color:var(--red-dark); }
+        .q-divider { border:none; border-top:2px dashed var(--border); margin:20px 0; }
+        .fill-item { background:var(--primary-bg); border:2px solid #80CBC4; border-radius:12px; padding:17px 20px; margin-bottom:16px; }
+        .fill-item:last-child { margin-bottom:0; }
+        .fill-num  { display:inline-block; background:var(--primary); color:white; border-radius:5px; padding:1px 8px; font-size:.77rem; font-weight:900; margin-bottom:10px; }
+        .fill-sentence { font-size:.96rem; line-height:3; margin-bottom:12px; }
+        .blank { display:inline-block; border:none; border-bottom:3px solid var(--primary); background:transparent; font-family:inherit; font-size:.96rem; font-weight:700; color:var(--text); text-align:center; padding:1px 4px; width:120px; outline:none; }
+        .blank.correct { border-bottom-color:var(--green); background:#D8F5BB; border-radius:5px; color:var(--green-dark); }
+        .blank.wrong   { border-bottom-color:var(--red); background:var(--red-bg); border-radius:5px; color:var(--red-dark); }
+        .verify-btn { padding:8px 18px; border-radius:10px; border:none; background:var(--primary); color:white; font-family:inherit; font-size:.88rem; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--primary-dark); transition:all .12s ease; }
+        .verify-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .verify-btn:disabled { background:#ccc; box-shadow:0 4px 0 #aaa; cursor:not-allowed; }
+        .fill-feedback { display:none; margin-top:9px; padding:8px 12px; border-radius:8px; font-size:.86rem; font-weight:700; }
+        .fill-feedback.show    { display:block; }
+        .fill-feedback.correct { background:var(--green-bg); color:var(--green-dark); }
+        .fill-feedback.wrong   { background:var(--red-bg); color:var(--red-dark); }
+        .ex-card { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:15px; }
+        .ex-card:last-child { margin-bottom:0; }
+        .ex-top  { padding:14px 18px; background:var(--green-bg); border-bottom:2px solid var(--border); }
+        .ex-label { font-size:.73rem; font-weight:900; color:var(--green-dark); text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .ex-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .reveal-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:var(--green-dark); display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .reveal-btn:hover { background:var(--green-bg); }
+        .chevron { transition:transform .3s ease; font-size:.75rem; }
+        .reveal-btn.open .chevron { transform:rotate(180deg); }
+        .solution { display:none; padding:17px 20px; background:#FAFAFA; border-top:2px solid var(--border); animation:slideDown .3s ease; }
+        .solution.open { display:block; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .sol-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .sol-num  { width:26px; height:26px; border-radius:50%; background:var(--green); color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .sol-text { padding-top:3px; line-height:1.6; }
+        .final-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,var(--green-bg),#D0F5A0); border-left:4px solid var(--green); border-radius:10px; font-weight:900; font-size:1rem; color:var(--green-dark); }
+        .bonus-card { border:2px solid #FFD54F; border-radius:12px; overflow:hidden; }
+        .bonus-top  { padding:14px 18px; background:#FFFDE7; border-bottom:2px solid #FFD54F; }
+        .bonus-label { font-size:.73rem; font-weight:900; color:#F57F17; text-transform:uppercase; letter-spacing:.8px; margin-bottom:4px; }
+        .bonus-stmt  { font-size:.96rem; font-weight:700; line-height:1.6; }
+        .bonus-btn { width:100%; padding:11px 18px; background:white; border:none; cursor:pointer; font-family:inherit; font-size:.9rem; font-weight:800; color:#F57F17; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+        .bonus-btn:hover { background:#FFFDE7; }
+        .bonus-solution { display:none; padding:17px 20px; background:#FFFDE7; border-top:2px solid #FFD54F; animation:slideDown .3s ease; }
+        .bonus-solution.open { display:block; }
+        .bonus-step { display:flex; gap:11px; margin-bottom:10px; font-size:.92rem; align-items:flex-start; }
+        .bonus-num { width:26px; height:26px; border-radius:50%; background:#FFB300; color:white; display:flex; align-items:center; justify-content:center; font-size:.73rem; font-weight:900; flex-shrink:0; }
+        .bonus-ans { margin-top:12px; padding:11px 15px; background:linear-gradient(135deg,#FFFDE7,#FFF9C4); border-left:4px solid #FFD54F; border-radius:10px; font-weight:900; font-size:.95rem; color:#E65100; }
+        .completion { display:none; background:linear-gradient(135deg,#004D40,#00695C,#80CBC4); color:white; border-radius:var(--radius); padding:34px 24px; text-align:center; box-shadow:0 6px 0 #003329; }
+        .completion.show { display:block; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes bounceIn { 0%{transform:scale(.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .completion .stars { font-size:2.6rem; margin-bottom:10px; }
+        .completion h2 { font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+        .completion p  { font-size:.98rem; opacity:.92; }
+        .level-nav { background:white; border-radius:var(--radius); padding:17px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .level-nav h3 { font-size:.82rem; font-weight:900; color:var(--text-light); text-transform:uppercase; letter-spacing:.8px; margin-bottom:11px; }
+        .nav-levels { display:flex; flex-wrap:wrap; gap:9px; }
+        .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
+        .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
+        .user-answer { width:100%; min-height:80px; margin:10px 0 8px 0; padding:10px 12px; border:2px dashed var(--border); border-radius:10px; font-size:14px; font-family:inherit; resize:vertical; background:var(--primary-bg); color:inherit; box-sizing:border-box; transition:border-color .2s; }
+        .user-answer:focus { outline:none; border-color:var(--primary); border-style:solid; }
+        .user-answer::placeholder { color:#9E9E9E; font-style:italic; }
+        .defi-banner { background:linear-gradient(135deg,#B71C1C,#D32F2F,#FF7043); color:white; border-radius:14px; padding:18px 22px; margin-bottom:20px; }
+        .defi-banner h3 { font-size:1.05rem; font-weight:900; color:#FFCDD2; margin-bottom:8px; }
+        .defi-banner p  { font-size:.92rem; line-height:1.7; opacity:.93; }
+        .defi-banner strong { color:#FFD54F; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="back-btn">← Accueil</a>
+        <div class="header-center">
+            <h1>🏆 Cellule &amp; Microscopie · Défi CE1D</h1>
+            <p>Niveau 5 · Cancer · Cellules souches · Apoptose · Questions avancées</p>
+        </div>
+        <div class="xp-badge" id="xpBadge">⭐ <span id="xpVal">0</span> XP</div>
+    </div>
+</header>
+
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-labels">
+            <span id="progTxt">0 / 8 bonnes réponses</span>
+            <span></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+        <div class="diff-badge">
+            <div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div><div class="diff-pip on"></div>
+            <span class="diff-label">Niveau 5 — Défi CE1D 🏆</span>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- BANNER DÉFI -->
+<div class="card">
+    <div class="card-body">
+        <div class="defi-banner">
+            <h3>🏆 Défi CE1D — Questions de synthèse</h3>
+            <p>Ce niveau réunit les concepts avancés du programme : <strong>cancer, cellules souches, nombre de cellules du corps humain, virus, et apoptose</strong>.<br>
+            Ces thèmes apparaissent régulièrement dans les épreuves CE1D belges. Lis bien chaque question avant de répondre !</p>
+        </div>
+
+        <div class="def-box">
+            <h3>📌 Rappels clés pour le Défi</h3>
+            <p>
+                • <strong>Cancer</strong> = division cellulaire (mitose) incontrôlée due à des mutations dans les gènes régulateurs.<br>
+                • <strong>Cellules souches</strong> = cellules indifférenciées capables de se différencier en de nombreux types cellulaires.<br>
+                • <strong>Corps humain adulte</strong> ≈ 37 000 milliards de cellules (37 × 10¹²).<br>
+                • <strong>Virus</strong> = structure non cellulaire (pas de membrane, pas de métabolisme propre).<br>
+                • <strong>Apoptose</strong> = mort cellulaire programmée, indispensable au développement normal.
+            </p>
+        </div>
+        <div class="rule-box">
+            <h3>🔢 Synthèse des 4 niveaux précédents</h3>
+            <p>
+                N1 : Cellule = unité du vivant, organites (noyau, mitochondrie, membrane).<br>
+                N2 : Microscope : G = oculaire × objectif ; résolution limitée par λ de la lumière.<br>
+                N3 : Mitose (2 × 2n identiques) vs Méiose (4 × n uniques) ; 2n = 46 chez l'humain.<br>
+                N4 : ADN double hélice (A-T, C-G) ; gène → transcription (ARNm) → traduction (protéine).<br><br>
+                <strong>Tous ces concepts peuvent apparaître dans le Défi CE1D !</strong>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- 2. QCM -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon teal">🏆</div>
+        <div>
+            <div class="card-title">Questions à choix multiple — Défi</div>
+            <div class="card-sub">5 questions avancées · Cancer · Cellules souches · Virus · Apoptose</div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="qcm-item" id="q1">
+            <div class="q-text"><span class="q-num">Q1</span> Le cancer est dû à...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(1,0)">a) une division cellulaire incontrôlée suite à des mutations de l'ADN</button>
+                <button class="opt-btn" onclick="checkQCM(1,1)">b) un virus uniquement</button>
+                <button class="opt-btn" onclick="checkQCM(1,2)">c) un manque de mitochondries</button>
+                <button class="opt-btn" onclick="checkQCM(1,3)">d) une carence en vitamines</button>
+            </div>
+            <div class="q-feedback" id="qf1"></div>
+        </div>
+        <hr class="q-divider">
+        <div class="qcm-item" id="q2">
+            <div class="q-text"><span class="q-num">Q2</span> Les cellules souches sont des cellules qui...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(2,0)">a) peuvent se différencier en de nombreux types cellulaires</button>
+                <button class="opt-btn" onclick="checkQCM(2,1)">b) ne se divisent jamais</button>
+                <button class="opt-btn" onclick="checkQCM(2,2)">c) n'ont pas de noyau</button>
+                <button class="opt-btn" onclick="checkQCM(2,3)">d) sont uniquement dans le sang</button>
+            </div>
+            <div class="q-feedback" id="qf2"></div>
+        </div>
+        <hr class="q-divider">
+        <div class="qcm-item" id="q3">
+            <div class="q-text"><span class="q-num">Q3</span> L'organisme d'un adulte humain contient environ...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(3,0)">a) 37 000 milliards de cellules</button>
+                <button class="opt-btn" onclick="checkQCM(3,1)">b) 1 milliard de cellules</button>
+                <button class="opt-btn" onclick="checkQCM(3,2)">c) 100 millions de cellules</button>
+                <button class="opt-btn" onclick="checkQCM(3,3)">d) 1 000 cellules</button>
+            </div>
+            <div class="q-feedback" id="qf3"></div>
+        </div>
+        <hr class="q-divider">
+        <div class="qcm-item" id="q4">
+            <div class="q-text"><span class="q-num">Q4</span> Les virus sont-ils des cellules ?</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(4,0)">a) Non, ils n'ont pas de membrane, de cytoplasme ni de métabolisme propre</button>
+                <button class="opt-btn" onclick="checkQCM(4,1)">b) Oui, ce sont de très petites cellules</button>
+                <button class="opt-btn" onclick="checkQCM(4,2)">c) Oui, mais uniquement les bactériophages</button>
+                <button class="opt-btn" onclick="checkQCM(4,3)">d) Non, car ils n'ont pas d'ADN</button>
+            </div>
+            <div class="q-feedback" id="qf4"></div>
+        </div>
+        <hr class="q-divider">
+        <div class="qcm-item" id="q5">
+            <div class="q-text"><span class="q-num">Q5</span> L'apoptose est...</div>
+            <div class="opts">
+                <button class="opt-btn" onclick="checkQCM(5,0)">a) la mort cellulaire programmée, nécessaire au développement normal</button>
+                <button class="opt-btn" onclick="checkQCM(5,1)">b) une division cellulaire anormale</button>
+                <button class="opt-btn" onclick="checkQCM(5,2)">c) une infection bactérienne</button>
+                <button class="opt-btn" onclick="checkQCM(5,3)">d) la production d'ATP dans les mitochondries</button>
+            </div>
+            <div class="q-feedback" id="qf5"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 3. TEXTES À TROUS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon orange">✏️</div>
+        <div>
+            <div class="card-title">Textes à trous</div>
+            <div class="card-sub">3 exercices · Cancer · Cellules souches · Apoptose</div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="fill-item">
+            <div class="fill-num">Trou 1</div>
+            <div class="fill-sentence">
+                La division cellulaire incontrôlée peut mener à un <input class="blank" id="f1a" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn1" onclick="checkFill(1)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff1"></div>
+        </div>
+        <div class="fill-item">
+            <div class="fill-num">Trou 2</div>
+            <div class="fill-sentence">
+                Les cellules capables de se transformer en n'importe quel type cellulaire sont les cellules <input class="blank" id="f2a" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn2" onclick="checkFill(2)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff2"></div>
+        </div>
+        <div class="fill-item">
+            <div class="fill-num">Trou 3</div>
+            <div class="fill-sentence">
+                La mort cellulaire programmée s'appelle l'<input class="blank" id="f3a" placeholder="?">.
+            </div>
+            <button class="verify-btn" id="vbtn3" onclick="checkFill(3)">Vérifier ✓</button>
+            <div class="fill-feedback" id="ff3"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 4. EXERCICES GUIDÉS -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-icon green">🧮</div>
+        <div>
+            <div class="card-title">Exercices guidés — Style CE1D</div>
+            <div class="card-sub">3 exercices avec corrigé détaillé · Questions de synthèse CE1D belge</div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 1 — Cancer : causes et mécanismes</div>
+                <div class="ex-stmt">
+                    a) Explique ce qu'est un cancer du point de vue cellulaire.<br>
+                    b) Cite deux facteurs qui peuvent provoquer des mutations dans l'ADN.<br>
+                    c) Pourquoi le cancer peut-il être considéré comme un "dérèglement de la mitose" ?
+                </div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol1">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Cancer :</strong> prolifération incontrôlée de cellules suite à des mutations dans les gènes qui régulent le cycle cellulaire (gènes suppresseurs de tumeurs, proto-oncogènes).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Facteurs mutagènes :</strong> rayonnements UV/ionisants, produits chimiques (tabac, amiante), certains virus (HPV, EBV), erreurs lors de la réplication de l'ADN.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Mitose dérèglée :</strong> normalement des "points de contrôle" arrêtent la mitose si l'ADN est endommagé. Les mutations désactivent ces freins → la cellule se divise sans limite.</div></div>
+                <div class="final-ans">✅ Cancer = mitoses incontrôlées · Causes : UV, tabac, virus, erreurs ADN · Mécanisme : perte des points de contrôle</div>
+            </div>
+        </div>
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 2 — Cellules souches et médecine</div>
+                <div class="ex-stmt">
+                    a) Qu'est-ce qu'une cellule souche pluripotente ?<br>
+                    b) Cite deux applications médicales potentielles des cellules souches.<br>
+                    c) Pourquoi les cellules souches embryonnaires posent-elles un problème éthique ?
+                </div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol2">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a) Pluripotente :</strong> une cellule souche capable de se différencier en quasi tous les types de cellules de l'organisme (muscles, neurones, cellules cardiaques…).</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>b) Applications :</strong> greffe de moelle osseuse (leucémie), thérapie cellulaire pour les maladies de Parkinson, diabète, lésions de la moelle épinière…</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>c) Éthique :</strong> les cellules souches embryonnaires sont prélevées sur des embryons humains (stade blastocyste), ce qui détruit l'embryon — débat sur le statut moral de l'embryon.</div></div>
+                <div class="final-ans">✅ Pluripotente → tous types cellulaires | Applications : leucémie, Parkinson | Éthique : destruction de l'embryon</div>
+            </div>
+        </div>
+        <div class="ex-card">
+            <div class="ex-top">
+                <div class="ex-label">Exercice 3 — Style CE1D belge : intégration</div>
+                <div class="ex-stmt">
+                    Un médecin explique que l'apoptose est "le contraire du cancer". Es-tu d'accord ?<br>
+                    Justifie en comparant les deux processus du point de vue cellulaire.
+                </div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
+            <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="solution" id="sol3">
+                <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Oui, partiellement :</strong> l'apoptose et le cancer sont bien deux processus opposés dans leur résultat.</div></div>
+                <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>Apoptose :</strong> mort cellulaire PROGRAMMÉE et contrôlée. Nécessaire pour éliminer les cellules endommagées, façonner les organes (doigts du fœtus), maintenir l'équilibre tissulaire.</div></div>
+                <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>Cancer :</strong> prolifération incontrôlée de cellules qui NE meurent PAS quand elles le devraient — elles "échappent" à l'apoptose en plus de se diviser sans frein.</div></div>
+                <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>Lien :</strong> dans certains cancers, les mutations désactivent également les gènes de l'apoptose → les cellules cancéreuses sont "immortelles".</div></div>
+                <div class="final-ans">✅ Apoptose = mort programmée (équilibre) ↔ Cancer = prolifération + résistance à la mort. Les cellules cancéreuses échappent aussi à l'apoptose.</div>
+            </div>
+        </div>
+        <div class="bonus-card" style="margin-top:20px;">
+            <div class="bonus-top">
+                <div class="bonus-label">⭐ Exercice bonus — Question de synthèse intégrale CE1D</div>
+                <div class="bonus-stmt">
+                    Résume en 5 points clés tout ce que tu as appris sur la cellule (N1 à N5). Chaque point doit contenir un concept différent et un exemple concret.
+                </div>
+            </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
+            <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
+            <div class="bonus-solution" id="sol-bonus">
+                <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Théorie cellulaire :</strong> tous les êtres vivants = cellules. Ex : un globule rouge est une cellule anucléée.</div></div>
+                <div class="bonus-step"><div class="bonus-num">2</div><div class="sol-text"><strong>Microscope :</strong> G_total = oculaire × objectif. Ex : ×10 × ×40 = ×400 pour observer des cellules épithéliales.</div></div>
+                <div class="bonus-step"><div class="bonus-num">3</div><div class="sol-text"><strong>Division cellulaire :</strong> mitose → 2 cellules 2n identiques (croissance). Méiose → 4 cellules n (gamètes). Ex : la mitose permet la cicatrisation.</div></div>
+                <div class="bonus-step"><div class="bonus-num">4</div><div class="sol-text"><strong>ADN et gène :</strong> ADN = double hélice (A-T, C-G) ; un gène code pour une protéine via transcription + traduction. Ex : gène de l'hémoglobine.</div></div>
+                <div class="bonus-step"><div class="bonus-num">5</div><div class="sol-text"><strong>Cancer et apoptose :</strong> cancer = mitoses incontrôlées + résistance à l'apoptose. L'apoptose élimine les cellules endommagées normalement. Ex : formation des doigts chez le fœtus.</div></div>
+                <div class="bonus-ans">5 points : théorie cellulaire | microscope | division (mitose/méiose) | ADN/gène | cancer/apoptose</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="completion" id="completionBanner">
+    <div class="stars">🏆 🌟 🏆</div>
+    <h2>Défi CE1D relevé !</h2>
+    <p>Félicitations ! Tu as maîtrisé tous les niveaux de Cellule &amp; Microscopie !<br>
+       Tu as gagné <strong id="finalXP">0</strong> XP — tu es prêt(e) pour l'examen CE1D !</p>
+</div>
+
+<div class="level-nav">
+    <h3>📚 Navigation — Cellule &amp; Microscopie</h3>
+    <div class="nav-levels">
+        <a href="index.html" class="nav-btn">🏠 Accueil</a>
+        <a href="bio_cellule_niveau1.html" class="nav-btn">Niveau 1 — La cellule</a>
+        <a href="bio_cellule_niveau2.html" class="nav-btn">Niveau 2 — Microscopie</a>
+        <a href="bio_cellule_niveau3.html" class="nav-btn">Niveau 3 — Division cellulaire</a>
+        <a href="bio_cellule_niveau4.html" class="nav-btn">Niveau 4 — ADN &amp; Génétique</a>
+        <a href="bio_cellule_niveau5.html" class="nav-btn current">▶ Niveau 5 — Défi CE1D 🏆</a>
+    </div>
+</div>
+</main>
+
+<script>
+const QCM_CORRECT = {1:0, 2:0, 3:0, 4:0, 5:0};
+const QCM_OK = {
+    1:"✅ Exact ! Le cancer résulte d'une accumulation de mutations dans les gènes qui contrôlent la division et la mort cellulaires, entraînant une prolifération anarchique.",
+    2:"✅ Bravo ! Les cellules souches sont indifférenciées et pluripotentes : elles peuvent se spécialiser en différents types de cellules (neurones, muscles, cellules sanguines…).",
+    3:"✅ Correct ! L'humain adulte possède environ 37 000 milliards (37 × 10¹²) de cellules — un chiffre estimé par une étude publiée en 2013.",
+    4:"✅ Parfait ! Un virus n'est pas une cellule : pas de membrane plasmique propre, pas de cytoplasme, pas de ribosomes, pas de métabolisme autonome. Il ne vit qu'en parasitant une cellule hôte.",
+    5:"✅ Exact ! L'apoptose est la mort cellulaire programmée : la cellule reçoit un signal interne ou externe et s'autodétruit de façon ordonnée. Indispensable au développement et à l'immunité."
+};
+const QCM_ERR = {
+    1:"❌ Non. Le cancer n'est pas causé uniquement par les virus (certains virus peuvent déclencher des mutations, mais ce n'est pas la seule cause). Le cancer = division incontrôlée après mutations de l'ADN.",
+    2:"❌ Non. Les cellules souches se divisent activement et peuvent se différencier. Elles sont présentes dans la moelle osseuse, le sang de cordon, et dans de nombreux organes — pas uniquement le sang.",
+    3:"❌ Non. 37 000 milliards de cellules, soit 37 × 10¹². 1 milliard ou 100 millions sous-estiment considérablement la réalité du corps humain adulte.",
+    4:"❌ Non. Un virus possède bien de l'ADN ou de l'ARN, mais il n'est pas une cellule : il n'a pas de membrane propre, ni de cytoplasme, ni de métabolisme. Il dépend entièrement d'une cellule hôte.",
+    5:"❌ Non. L'apoptose n'est pas une division anormale ni une infection. C'est la mort cellulaire PROGRAMMÉE (suicide cellulaire ordonné), nécessaire au développement normal et à la défense immunitaire."
+};
+const FILL_DATA = {
+    1:{fields:['f1a'],accepted:[['cancer']],
+        msgOk:"✅ La division cellulaire incontrôlée mène au cancer, qui est caractérisé par la formation d'une tumeur.",
+        msgErr:"❌ Attendu : 'cancer'. Des mitoses incontrôlées = formation d'une tumeur cancéreuse."},
+    2:{fields:['f2a'],accepted:[['souches']],
+        msgOk:"✅ Les cellules souches sont indifférenciées et peuvent se transformer en différents types de cellules spécialisées.",
+        msgErr:"❌ Attendu : 'souches'. Les cellules capables de se différencier en différents types = cellules souches."},
+    3:{fields:['f3a'],accepted:[['apoptose']],
+        msgOk:"✅ L'apoptose est la mort cellulaire programmée — un processus essentiel pour éliminer les cellules endommagées et façonner les organes.",
+        msgErr:"❌ Attendu : 'apoptose'. La mort cellulaire programmée et contrôlée = l'apoptose (du grec 'chute des feuilles')."}
+};
+let score = 0;
+const TOTAL = 8;
+const qcmDone = {};
+const fillDone = {};
+function norm(s) { return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,'').trim().replace(/\s+/g,' '); }
+function updateUI() {
+    const pct = Math.round((score / TOTAL) * 100);
+    const bar = document.getElementById('barFill');
+    bar.style.width = pct + '%';
+    if (pct > 0) bar.classList.add('has-progress');
+    document.getElementById('progTxt').textContent = score + ' / ' + TOTAL + ' bonnes réponses';
+    const xp = score * 15;
+    document.getElementById('xpVal').textContent = xp;
+    const badge = document.getElementById('xpBadge');
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    if (score >= 7) {
+        localStorage.setItem('edu_completed_cellule_5', '1');
+        document.getElementById('finalXP').textContent = xp;
+        const b = document.getElementById('completionBanner');
+        b.classList.add('show');
+        setTimeout(() => b.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+    }
+}
+function checkQCM(qNum, clickedIdx) {
+    if (qcmDone[qNum]) return;
+    qcmDone[qNum] = true;
+    const correct = QCM_CORRECT[qNum];
+    const isOk = clickedIdx === correct;
+    const btns = document.querySelectorAll('#q' + qNum + ' .opt-btn');
+    const fb = document.getElementById('qf' + qNum);
+    btns.forEach(b => b.disabled = true);
+    btns[clickedIdx].classList.add(isOk ? 'correct' : 'wrong');
+    if (!isOk) btns[correct].classList.add('show-correct');
+    fb.textContent = isOk ? QCM_OK[qNum] : QCM_ERR[qNum];
+    fb.className = 'q-feedback ' + (isOk ? 'correct' : 'wrong');
+    if (isOk) { score++; updateUI(); }
+}
+function checkFill(num) {
+    if (fillDone[num]) return;
+    const data = FILL_DATA[num];
+    let allOk = true;
+    data.fields.forEach((id, i) => {
+        const input = document.getElementById(id);
+        const val = norm(input.value);
+        const matches = data.accepted[i].map(norm);
+        const ok = matches.some(m => val === m || val.includes(m) || m.includes(val));
+        input.classList.toggle('correct', ok);
+        input.classList.toggle('wrong', !ok);
+        if (!ok) allOk = false;
+    });
+    const fb = document.getElementById('ff' + num);
+    const btn = document.getElementById('vbtn' + num);
+    fb.textContent = allOk ? data.msgOk : data.msgErr;
+    fb.className = 'fill-feedback show ' + (allOk ? 'correct' : 'wrong');
+    if (allOk) { fillDone[num] = true; btn.disabled = true; score++; updateUI(); }
+}
+function toggleSol(num) {
+    const panel = document.getElementById('sol' + num);
+    const btn = document.getElementById('rb' + num);
+    const open = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open ? '🙈 Masquer le corrigé <span class="chevron">▼</span>' : '👁 Voir le corrigé <span class="chevron">▼</span>';
+}
+function toggleBonus() {
+    const panel = document.getElementById('sol-bonus');
+    const btn = document.getElementById('rbb');
+    const open = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open ? '🙈 Masquer le corrigé <span class="chevron">▼</span>' : '⭐ Voir le corrigé <span class="chevron">▼</span>';
+}
+</script>
+</body>
+</html>

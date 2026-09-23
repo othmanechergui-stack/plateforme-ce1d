@@ -144,7 +144,29 @@
         .defi-banner { background:linear-gradient(135deg,#3E2723,#6D4C41,#A1887F); color:white; border-radius:14px; padding:20px 24px; margin-bottom:4px; text-align:center; }
         .defi-banner h2 { font-size:1.35rem; font-weight:900; margin-bottom:6px; }
         .defi-banner p { font-size:.92rem; opacity:.92; line-height:1.6; }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -420,6 +442,7 @@
                     Chaque carreau couvre 0,25 m². Combien de carreaux faut-il ? (arrondir à l'entier supérieur)
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Aire du trapèze :</strong> A = (B + b) × h ÷ 2 = (8 + 5) × 4 ÷ 2 = 13 × 4 ÷ 2 = <strong>26 m²</strong></div></div>
@@ -437,6 +460,7 @@
                     a) Calcule son volume en m³. b) Exprime cette capacité en litres. c) Combien de cm³ cela représente-t-il ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Rayon :</strong> diamètre = 6 m → r = 3 m</div></div>
@@ -455,6 +479,7 @@
                     La base est un triangle isocèle dont la hauteur vaut 6 cm. Quelle est la base du triangle ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Formule prisme :</strong> V = A_base × hauteur du prisme → A_base = V ÷ h_prisme = 360 ÷ 15 = <strong>24 cm²</strong></div></div>
@@ -475,6 +500,7 @@
                     b) Quel volume d'eau (en litres) peut contenir la piscine ?
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Aire du terrain :</strong> 20 × 15 = 300 m²</div></div>

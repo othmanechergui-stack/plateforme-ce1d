@@ -153,7 +153,29 @@
         .nav-btn { padding:9px 16px; border-radius:50px; text-decoration:none; font-size:.85rem; font-weight:800; background:#F5F5F5; color:var(--text); border:2px solid var(--border); transition:all .15s; }
         .nav-btn:hover  { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
         .nav-btn.current{ background:var(--primary-bg); border-color:var(--primary); color:var(--primary-dark); }
-    </style>
+    
+        .user-answer {
+            width: 100%;
+            min-height: 80px;
+            margin: 10px 0 8px 0;
+            padding: 10px 12px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: var(--primary-bg);
+            color: inherit;
+            box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .user-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .user-answer::placeholder { color: #9E9E9E; font-style: italic; }
+        </style>
 </head>
 <body>
 
@@ -403,6 +425,7 @@
                     Décris les 4 phases du cycle menstruel en indiquant ce qui se passe dans l'ovaire et dans l'utérus à chaque phase.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb1" onclick="toggleSol(1)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol1">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Phase menstruelle (J1–J5)</strong> : Ovaire : début de maturation folliculaire. Utérus : élimination de l'endomètre (règles = saignements).</div></div>
@@ -420,6 +443,7 @@
                     Dresse un tableau comparatif des caractères sexuels secondaires chez la fille et chez le garçon à la puberté.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb2" onclick="toggleSol(2)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol2">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>Chez la fille</strong> : développement des seins, élargissement du bassin, pilosité pubienne et axillaire, apparition des règles (ménarche), croissance en taille. Hormone principale : œstrogènes.</div></div>
@@ -438,6 +462,7 @@
                     b) La pilule protège-t-elle contre les infections sexuellement transmissibles (IST) ? Justifie.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse ici avant de voir le corrigé…"></textarea>
             <button class="reveal-btn" id="rb3" onclick="toggleSol(3)">👁 Voir le corrigé <span class="chevron">▼</span></button>
             <div class="solution" id="sol3">
                 <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>a)</strong> La pilule contient des hormones de synthèse (œstrogènes et/ou progestérone) qui <strong>bloquent l'ovulation</strong> en mimant un état de grossesse pour l'organisme. Sans ovulation, pas de fécondation possible. Elle épaissit aussi la glaire cervicale, rendant difficile la progression des spermatozoïdes.</div></div>
@@ -454,6 +479,7 @@
                     Classe ces méthodes selon leur type et leur protection : préservatif, pilule, stérilet, abstinence, méthode des jours fertiles.
                 </div>
             </div>
+            <textarea class="user-answer" placeholder="✏️ Écris ta réponse bonus ici avant de voir le corrigé…"></textarea>
             <button class="bonus-btn" id="rbb" onclick="toggleBonus()">⭐ Voir le corrigé <span class="chevron">▼</span></button>
             <div class="bonus-solution" id="sol-bonus">
                 <div class="bonus-step"><div class="bonus-num">1</div><div class="sol-text"><strong>Préservatif</strong> → Barrière mécanique. Protège contre les grossesses ET les IST. Efficacité ≈ 98% si bien utilisé.</div></div>
