@@ -1,0 +1,45 @@
+/* ── Mot cliquable dans un texte ── */
+.lex {
+    border-bottom: 2px dashed #1565C0;
+    cursor: pointer;
+    color: #1565C0;
+    font-weight: 700;
+    border-radius: 3px;
+    padding: 0 2px;
+    transition: background .15s;
+}
+.lex:hover, .lex.lex-open { background: #E3F2FD; }
+.lex:focus { outline: 2px solid #1565C0; outline-offset: 2px; }
+
+/* ── Bulle de définition ── */
+.lex-tip {
+    display: none;
+    position: absolute;
+    background: #1A1A2E;
+    color: white;
+    padding: 9px 13px;
+    border-radius: 10px;
+    font-size: .85rem;
+    line-height: 1.45;
+    max-width: 240px;
+    z-index: 999;
+    box-shadow: 0 4px 20px rgba(0,0,0,.3);
+    pointer-events: none;
+}
+
+/* ── Glossaire en bas du texte ── */
+.lex-glossaire-titre {
+    font-size: .95rem;
+    font-weight: 800;
+    color: #1565C0;
+    margin-bottom: 10px;
+}
+.lex-glossaire-liste {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: .88rem;
+}
+.lex-glossaire-liste li { line-height: 1.4; }
