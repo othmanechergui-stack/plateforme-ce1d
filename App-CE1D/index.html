@@ -450,9 +450,112 @@
             .header-streak    { display: none; }
             .level-label      { font-size: .58rem; max-width: 44px; }
         }
+
+        /* ═══ AUTH BUTTON ═══ */
+        .btn-auth {
+            background: var(--green);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 7px 16px;
+            font-family: inherit;
+            font-size: .85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s, transform .1s;
+            white-space: nowrap;
+        }
+        .btn-auth:hover { background: var(--green-dark); transform: translateY(-1px); }
+        .btn-auth.logged-in { background: #E0E0E0; color: var(--text); }
+        .btn-auth.logged-in:hover { background: #C8C8C8; }
+
+        /* ═══ MODAL OVERLAY ═══ */
+        .auth-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,.45);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .auth-overlay.open { display: flex; }
+        .auth-modal {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 36px 32px 28px;
+            width: min(420px, 92vw);
+            box-shadow: 0 20px 60px rgba(0,0,0,.2);
+            position: relative;
+        }
+        .auth-modal h2 { margin: 0 0 6px; font-size: 1.4rem; color: var(--text); }
+        .auth-modal p.auth-sub { margin: 0 0 22px; color: var(--text-light); font-size: .9rem; }
+        .auth-tabs { display: flex; gap: 8px; margin-bottom: 22px; }
+        .auth-tab {
+            flex: 1; padding: 9px; border: 2px solid var(--border);
+            border-radius: 10px; background: none; font-family: inherit;
+            font-size: .9rem; font-weight: 700; cursor: pointer; color: var(--text-light);
+            transition: all .2s;
+        }
+        .auth-tab.active { border-color: var(--green); color: var(--green); background: var(--green-bg); }
+        .auth-field { margin-bottom: 14px; }
+        .auth-field label { display: block; font-size: .82rem; font-weight: 700; color: var(--text-light); margin-bottom: 5px; }
+        .auth-field input {
+            width: 100%; padding: 11px 14px; border: 2px solid var(--border);
+            border-radius: 10px; font-family: inherit; font-size: .95rem;
+            color: var(--text); background: var(--bg); box-sizing: border-box;
+            transition: border-color .2s;
+        }
+        .auth-field input:focus { outline: none; border-color: var(--green); background: #fff; }
+        .auth-error { color: var(--red); font-size: .82rem; font-weight: 700; min-height: 18px; margin-bottom: 10px; }
+        .auth-submit {
+            width: 100%; padding: 13px; background: var(--green); color: #fff;
+            border: none; border-radius: 12px; font-family: inherit; font-size: 1rem;
+            font-weight: 800; cursor: pointer; transition: background .2s, transform .1s;
+        }
+        .auth-submit:hover { background: var(--green-dark); transform: translateY(-1px); }
+        .auth-submit:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .auth-close {
+            position: absolute; top: 14px; right: 16px;
+            background: none; border: none; font-size: 1.4rem; cursor: pointer;
+            color: var(--text-light); line-height: 1;
+        }
+        .auth-user-info { font-size: .78rem; color: var(--text-light); text-align: center; margin-top: 10px; }
+        .auth-user-info strong { color: var(--text); }
     </style>
+    <!-- Firebase compat CDN -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
+
+<!-- ═══════════════ AUTH MODAL ═══════════════ -->
+<div class="auth-overlay" id="authOverlay" onclick="overlayClick(event)">
+    <div class="auth-modal">
+        <button class="auth-close" onclick="closeAuthModal()" title="Fermer">✕</button>
+        <h2 id="authTitle">👋 Bienvenue !</h2>
+        <p class="auth-sub" id="authSub">Connecte-toi pour sauvegarder ta progression.</p>
+        <div class="auth-tabs">
+            <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Se connecter</button>
+            <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Créer un compte</button>
+        </div>
+        <div class="auth-field">
+            <label>Adresse e-mail</label>
+            <input type="email" id="authEmail" placeholder="prenom@exemple.com" autocomplete="email">
+        </div>
+        <div class="auth-field">
+            <label>Mot de passe</label>
+            <input type="password" id="authPassword" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <div class="auth-field" id="fieldConfirm" style="display:none">
+            <label>Confirmer le mot de passe</label>
+            <input type="password" id="authConfirm" placeholder="••••••••" autocomplete="new-password">
+        </div>
+        <div class="auth-error" id="authError"></div>
+        <button class="auth-submit" id="authSubmit" onclick="submitAuth()">Se connecter</button>
+        <p class="auth-user-info" id="authUserInfo" style="display:none"></p>
+    </div>
+</div>
 
 <!-- ═══════════════ HEADER ═══════════════ -->
 <header>
@@ -464,6 +567,7 @@
         <div class="header-right">
             <div class="header-streak" id="streakDisplay">🔥 <span id="streakVal">0</span> niveaux</div>
             <div class="header-xp">⚡ <span id="headerXP">0</span> XP</div>
+            <button class="btn-auth" id="btnAuth" onclick="openAuthModal()">Se connecter</button>
         </div>
     </div>
 </header>
@@ -1045,6 +1149,159 @@ window.addEventListener('focus', () => {
     document.getElementById('grid-biologie').innerHTML  = '';
     renderAll();
 });
+
+/* ════════════════════════════════════════════════════
+   FIREBASE AUTH + FIRESTORE SYNC
+   ════════════════════════════════════════════════════ */
+const firebaseConfig = {
+    apiKey: "AIzaSyCfEyoTFuhefBMsH7nUQS69fOkXjhuMPeM",
+    authDomain: "appli-ce1d.firebaseapp.com",
+    projectId: "appli-ce1d",
+    storageBucket: "appli-ce1d.firebasestorage.app",
+    messagingSenderId: "875870246855",
+    appId: "1:875870246855:web:9362e8cbf391a09f286be2",
+    measurementId: "G-J2GM5VZCSP"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db   = firebase.firestore();
+
+/* ── Clés de progression dans localStorage ── */
+function getLocalProgress() {
+    const data = {};
+    for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('edu_completed_')) data[k] = '1';
+    }
+    return data;
+}
+
+/* ── Envoie la progression locale vers Firestore ── */
+async function pushProgressToCloud(uid) {
+    const progress = getLocalProgress();
+    if (Object.keys(progress).length === 0) return;
+    await db.collection('users').doc(uid).set({ progress }, { merge: true });
+}
+
+/* ── Récupère la progression depuis Firestore et fusionne dans localStorage ── */
+async function pullProgressFromCloud(uid) {
+    const snap = await db.collection('users').doc(uid).get();
+    if (!snap.exists) return;
+    const { progress } = snap.data();
+    if (!progress) return;
+    Object.keys(progress).forEach(k => localStorage.setItem(k, '1'));
+    /* Rafraîchit les cartes avec les nouvelles données */
+    document.getElementById('grid-maths').innerHTML     = '';
+    document.getElementById('grid-sciences').innerHTML  = '';
+    document.getElementById('grid-biologie').innerHTML  = '';
+    renderAll();
+}
+
+/* ── Met à jour l'affichage du bouton selon l'état de connexion ── */
+function updateAuthButton(user) {
+    const btn = document.getElementById('btnAuth');
+    if (user) {
+        const name = user.displayName || user.email.split('@')[0];
+        btn.textContent = '👤 ' + name;
+        btn.classList.add('logged-in');
+        btn.onclick = showUserMenu;
+    } else {
+        btn.textContent = 'Se connecter';
+        btn.classList.remove('logged-in');
+        btn.onclick = openAuthModal;
+    }
+}
+
+/* ── Écoute les changements d'état de connexion ── */
+auth.onAuthStateChanged(async user => {
+    updateAuthButton(user);
+    if (user) {
+        await pushProgressToCloud(user.uid);
+        await pullProgressFromCloud(user.uid);
+    }
+});
+
+/* ── Ouvre/ferme le modal ── */
+let currentTab = 'login';
+function openAuthModal() {
+    const user = auth.currentUser;
+    if (user) { showUserMenu(); return; }
+    document.getElementById('authOverlay').classList.add('open');
+    document.getElementById('authEmail').value    = '';
+    document.getElementById('authPassword').value = '';
+    document.getElementById('authConfirm').value  = '';
+    document.getElementById('authError').textContent = '';
+    switchTab('login');
+    setTimeout(() => document.getElementById('authEmail').focus(), 100);
+}
+function closeAuthModal() {
+    document.getElementById('authOverlay').classList.remove('open');
+}
+function overlayClick(e) {
+    if (e.target.id === 'authOverlay') closeAuthModal();
+}
+
+function switchTab(tab) {
+    currentTab = tab;
+    document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+    document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
+    document.getElementById('fieldConfirm').style.display = tab === 'register' ? '' : 'none';
+    document.getElementById('authSubmit').textContent = tab === 'login' ? 'Se connecter' : 'Créer le compte';
+    document.getElementById('authTitle').textContent  = tab === 'login' ? '👋 Bienvenue !' : '🎉 Nouveau compte';
+    document.getElementById('authSub').textContent    = tab === 'login'
+        ? 'Connecte-toi pour retrouver ta progression.'
+        : 'Crée un compte gratuit pour sauvegarder ta progression.';
+    document.getElementById('authError').textContent  = '';
+}
+
+/* ── Soumission du formulaire ── */
+async function submitAuth() {
+    const email    = document.getElementById('authEmail').value.trim();
+    const password = document.getElementById('authPassword').value;
+    const confirm  = document.getElementById('authConfirm').value;
+    const errEl    = document.getElementById('authError');
+    const btn      = document.getElementById('authSubmit');
+
+    errEl.textContent = '';
+    if (!email || !password) { errEl.textContent = 'Remplis tous les champs.'; return; }
+    if (password.length < 6) { errEl.textContent = 'Le mot de passe doit faire au moins 6 caractères.'; return; }
+    if (currentTab === 'register' && password !== confirm) { errEl.textContent = 'Les mots de passe ne correspondent pas.'; return; }
+
+    btn.disabled = true;
+    btn.textContent = '…';
+    try {
+        if (currentTab === 'login') {
+            await auth.signInWithEmailAndPassword(email, password);
+        } else {
+            await auth.createUserWithEmailAndPassword(email, password);
+        }
+        closeAuthModal();
+    } catch (err) {
+        const msgs = {
+            'auth/user-not-found':     'Aucun compte avec cet e-mail.',
+            'auth/wrong-password':     'Mot de passe incorrect.',
+            'auth/email-already-in-use': 'Cet e-mail est déjà utilisé.',
+            'auth/invalid-email':      'Adresse e-mail invalide.',
+            'auth/invalid-credential': 'E-mail ou mot de passe incorrect.',
+        };
+        errEl.textContent = msgs[err.code] || err.message;
+        btn.disabled = false;
+        btn.textContent = currentTab === 'login' ? 'Se connecter' : 'Créer le compte';
+    }
+}
+
+/* Valide avec la touche Entrée */
+document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && document.getElementById('authOverlay').classList.contains('open')) submitAuth();
+});
+
+/* ── Menu utilisateur (déconnexion) ── */
+function showUserMenu() {
+    const user = auth.currentUser;
+    if (!user) return;
+    const confirmed = window.confirm(`Connecté en tant que ${user.email}\n\nVeux-tu te déconnecter ?`);
+    if (confirmed) auth.signOut();
+}
 </script>
 
 </body>
