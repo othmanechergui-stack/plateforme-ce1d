@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — MonSite CE1D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <style>
+        :root {
+            --bg: #F0F2F5; --white: #fff; --text: #3C3C3C; --text-light: #888;
+            --border: #E0E0E0; --green: #58CC02; --green-dark: #46A302;
+            --green-bg: #F0FBE4; --red: #FF4B4B;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Nunito', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+        header {
+            background: #1A1A2E; color: white; padding: 16px 24px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        header h1 { font-size: 1.2rem; font-weight: 800; }
+        header span { font-size: .85rem; opacity: .7; }
+        .btn-logout {
+            background: rgba(255,255,255,.15); border: none; color: white;
+            padding: 7px 14px; border-radius: 8px; cursor: pointer;
+            font-family: inherit; font-size: .85rem; font-weight: 700;
+        }
+        .btn-logout:hover { background: rgba(255,255,255,.25); }
+
+        /* Login */
+        .login-wrap {
+            display: flex; align-items: center; justify-content: center;
+            min-height: 80vh;
+        }
+        .login-box {
+            background: var(--white); border-radius: 20px; padding: 36px 32px;
+            width: min(380px, 92vw); box-shadow: 0 8px 32px rgba(0,0,0,.1);
+        }
+        .login-box h2 { margin-bottom: 6px; }
+        .login-box p { color: var(--text-light); font-size: .9rem; margin-bottom: 22px; }
+        .field { margin-bottom: 14px; }
+        .field label { display: block; font-size: .82rem; font-weight: 700; color: var(--text-light); margin-bottom: 5px; }
+        .field input {
+            width: 100%; padding: 11px 14px; border: 2px solid var(--border);
+            border-radius: 10px; font-family: inherit; font-size: .95rem; background: var(--bg);
+        }
+        .field input:focus { outline: none; border-color: var(--green); background: #fff; }
+        .err { color: var(--red); font-size: .82rem; font-weight: 700; min-height: 18px; margin-bottom: 8px; }
+        .btn-primary {
+            width: 100%; padding: 13px; background: var(--green); color: #fff;
+            border: none; border-radius: 12px; font-family: inherit; font-size: 1rem;
+            font-weight: 800; cursor: pointer;
+        }
+        .btn-primary:hover { background: var(--green-dark); }
+        .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* Dashboard */
+        .dash { max-width: 900px; margin: 32px auto; padding: 0 20px; }
+        .dash-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .dash-header h2 { font-size: 1.3rem; }
+        .stat-chips { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+        .chip {
+            background: var(--white); border-radius: 14px; padding: 14px 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
+        }
+        .chip .val { font-size: 1.6rem; font-weight: 900; color: var(--green); }
+        .chip .lbl { font-size: .78rem; color: var(--text-light); font-weight: 700; }
+
+        table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+        th { background: #F7F7F7; padding: 12px 16px; text-align: left; font-size: .8rem; color: var(--text-light); font-weight: 800; text-transform: uppercase; letter-spacing: .5px; border-bottom: 2px solid var(--border); }
+        td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: .9rem; vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #FAFAFA; }
+
+        .bar-wrap { background: var(--border); border-radius: 50px; height: 8px; min-width: 120px; }
+        .bar-fill { background: var(--green); height: 8px; border-radius: 50px; transition: width .4s; }
+        .pct { font-size: .8rem; font-weight: 700; color: var(--text-light); margin-left: 8px; white-space: nowrap; }
+        .bar-cell { display: flex; align-items: center; }
+
+        .badge {
+            display: inline-block; padding: 3px 10px; border-radius: 50px;
+            font-size: .75rem; font-weight: 800;
+        }
+        .badge-high { background: var(--green-bg); color: var(--green-dark); }
+        .badge-mid  { background: #FFF3E0; color: #D07A00; }
+        .badge-low  { background: #F5F5F5; color: #999; }
+
+        .date { font-size: .78rem; color: var(--text-light); }
+        .loading { text-align: center; padding: 60px; color: var(--text-light); font-size: 1rem; }
+        .denied { text-align: center; padding: 60px; }
+        .denied h2 { font-size: 1.4rem; margin-bottom: 8px; }
+        .refresh-btn {
+            background: none; border: 2px solid var(--border); border-radius: 10px;
+            padding: 8px 16px; cursor: pointer; font-family: inherit; font-size: .85rem; font-weight: 700;
+        }
+        .refresh-btn:hover { border-color: var(--green); color: var(--green); }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <div class="loading">Chargement…</div>
+</div>
+
+<script>
+const ADMIN_EMAIL = 'othmanechergui@gmail.com';
+const TOTAL_LEVELS = 95; // 19 modules × 5 niveaux
+
+firebase.initializeApp({
+    apiKey: "AIzaSyCfEyoTFuhefBMsH7nUQS69fOkXjhuMPeM",
+    authDomain: "appli-ce1d.firebaseapp.com",
+    projectId: "appli-ce1d",
+    storageBucket: "appli-ce1d.firebasestorage.app",
+    messagingSenderId: "875870246855",
+    appId: "1:875870246855:web:9362e8cbf391a09f286be2"
+});
+const auth = firebase.auth();
+const db   = firebase.firestore();
+
+auth.onAuthStateChanged(user => {
+    if (!user) { renderLogin(); return; }
+    if (user.email !== ADMIN_EMAIL) { renderDenied(); return; }
+    renderDash(user);
+});
+
+/* ── Login ── */
+function renderLogin() {
+    document.getElementById('app').innerHTML = `
+        <div class="login-wrap">
+            <div class="login-box">
+                <h2>🔐 Admin</h2>
+                <p>Connecte-toi avec ton compte administrateur.</p>
+                <div class="field"><label>E-mail</label><input id="em" type="email" placeholder="ton@email.com"></div>
+                <div class="field"><label>Mot de passe</label><input id="pw" type="password" placeholder="••••••••"></div>
+                <div class="err" id="err"></div>
+                <button class="btn-primary" id="loginBtn" onclick="doLogin()">Se connecter</button>
+            </div>
+        </div>`;
+    document.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); }, { once: true });
+}
+
+async function doLogin() {
+    const em = document.getElementById('em').value.trim();
+    const pw = document.getElementById('pw').value;
+    const btn = document.getElementById('loginBtn');
+    document.getElementById('err').textContent = '';
+    btn.disabled = true; btn.textContent = '…';
+    try {
+        await auth.signInWithEmailAndPassword(em, pw);
+    } catch(e) {
+        document.getElementById('err').textContent = 'E-mail ou mot de passe incorrect.';
+        btn.disabled = false; btn.textContent = 'Se connecter';
+    }
+}
+
+/* ── Accès refusé ── */
+function renderDenied() {
+    document.getElementById('app').innerHTML = `
+        <div class="denied">
+            <h2>🚫 Accès refusé</h2>
+            <p>Ce compte n'est pas administrateur.</p>
+            <br><button class="btn-primary" style="width:auto;padding:10px 24px" onclick="auth.signOut()">Se déconnecter</button>
+        </div>`;
+}
+
+/* ── Dashboard ── */
+async function renderDash(user) {
+    document.getElementById('app').innerHTML = `
+        <header>
+            <div>
+                <h1>📊 Tableau de bord admin</h1>
+                <span>${user.email}</span>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center">
+                <button class="refresh-btn" onclick="renderDash(auth.currentUser)">↻ Rafraîchir</button>
+                <button class="btn-logout" onclick="auth.signOut()">Déconnexion</button>
+            </div>
+        </header>
+        <div class="dash">
+            <div class="loading" id="content">Chargement des élèves…</div>
+        </div>`;
+
+    const snap = await db.collection('users').orderBy('updatedAt', 'desc').get();
+    const users = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    if (users.length === 0) {
+        document.getElementById('content').textContent = 'Aucun élève inscrit pour l\'instant.';
+        return;
+    }
+
+    const totalStudents = users.length;
+    const avgPct = Math.round(users.reduce((s, u) => s + countCompleted(u.progress), 0) / totalStudents / TOTAL_LEVELS * 100);
+    const activeToday = users.filter(u => u.updatedAt && u.updatedAt.startsWith(new Date().toISOString().slice(0,10))).length;
+
+    document.getElementById('content').innerHTML = `
+        <div class="stat-chips">
+            <div class="chip"><div class="val">${totalStudents}</div><div class="lbl">Élèves inscrits</div></div>
+            <div class="chip"><div class="val">${avgPct}%</div><div class="lbl">Progression moyenne</div></div>
+            <div class="chip"><div class="val">${activeToday}</div><div class="lbl">Actifs aujourd'hui</div></div>
+        </div>
+        <table>
+            <thead><tr>
+                <th>Élève</th>
+                <th>Niveaux complétés</th>
+                <th>Progression</th>
+                <th>Dernière activité</th>
+            </tr></thead>
+            <tbody>
+                ${users.map(u => rowHtml(u)).join('')}
+            </tbody>
+        </table>`;
+}
+
+function countCompleted(progress) {
+    return progress ? Object.keys(progress).length : 0;
+}
+
+function rowHtml(u) {
+    const done = countCompleted(u.progress);
+    const pct  = Math.min(100, Math.round(done / TOTAL_LEVELS * 100));
+    const badge = pct >= 70 ? 'badge-high' : pct >= 30 ? 'badge-mid' : 'badge-low';
+    const label = pct >= 70 ? '🏆 Avancé' : pct >= 30 ? '📚 En cours' : '🌱 Débutant';
+    const date  = u.updatedAt ? u.updatedAt.slice(0,10) : '—';
+    const email = u.email || u.id.slice(0,8) + '…';
+
+    return `<tr>
+        <td><strong>${email}</strong></td>
+        <td><span class="badge ${badge}">${label}</span> &nbsp;${done} / ${TOTAL_LEVELS}</td>
+        <td>
+            <div class="bar-cell">
+                <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%"></div></div>
+                <span class="pct">${pct}%</span>
+            </div>
+        </td>
+        <td class="date">${date}</td>
+    </tr>`;
+}
+</script>
+</body>
+</html>

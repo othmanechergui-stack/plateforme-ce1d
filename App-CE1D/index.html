@@ -1179,8 +1179,11 @@ function getLocalProgress() {
 /* ── Envoie la progression locale vers Firestore ── */
 async function pushProgressToCloud(uid) {
     const progress = getLocalProgress();
-    if (Object.keys(progress).length === 0) return;
-    await db.collection('users').doc(uid).set({ progress }, { merge: true });
+    const user = auth.currentUser;
+    await db.collection('users').doc(uid).set(
+        { email: user.email, progress, updatedAt: new Date().toISOString() },
+        { merge: true }
+    );
 }
 
 /* ── Récupère la progression depuis Firestore et fusionne dans localStorage ── */
