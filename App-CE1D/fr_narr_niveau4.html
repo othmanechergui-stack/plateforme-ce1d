@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Français — Texte narratif · Niveau 4 — Le narrateur</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fr_lexique.css">
+    <style>
+        :root{--primary:#6A1B9A;--primary-dark:#4A148C;--primary-bg:#F3E5F5;--bg:#F0F2F5;--white:#FFFFFF;--text:#3C3C3C;--text-light:#888;--border:#E0E0E0;--radius:16px;--green:#58CC02;--green-dark:#46A302;--green-bg:#F0FBE4;--red:#FF4B4B;--red-dark:#CC0000;--red-bg:#FFEBEE;}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+        .top-bar{background:var(--primary);color:white;padding:14px 20px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:50;}
+        .back-btn{background:rgba(255,255,255,.2);color:white;border:none;border-radius:10px;padding:8px 14px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;text-decoration:none;}
+        .back-btn:hover{background:rgba(255,255,255,.3);}
+        .top-bar-info{flex:1;}.top-bar-info h1{font-size:1rem;font-weight:800;}.top-bar-info p{font-size:.8rem;opacity:.8;}
+        .xp-badge{background:rgba(255,255,255,.2);border-radius:50px;padding:6px 14px;font-size:.85rem;font-weight:900;white-space:nowrap;}
+        .progress-wrap{background:rgba(0,0,0,.2);height:7px;}.progress-fill{background:white;height:7px;transition:width .4s;}
+        .content{max-width:720px;margin:0 auto;padding:24px 20px 40px;}
+        .score-bar{display:flex;align-items:center;gap:12px;background:var(--white);border-radius:var(--radius);padding:14px 20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);font-weight:700;}
+        .score-dots{display:flex;gap:6px;flex-wrap:wrap;}.dot{width:14px;height:14px;border-radius:50%;background:var(--border);}.dot.ok{background:var(--green);}.dot.ko{background:var(--red);}
+        .rappel-card{background:var(--primary-bg);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;font-size:.9rem;}
+        .rappel-card h3{color:var(--primary-dark);font-size:.85rem;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;}
+        .rappel-card ul{padding-left:18px;line-height:1.9;}
+        .texte-card{background:var(--white);border-radius:var(--radius);padding:24px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:5px solid var(--primary);line-height:1.85;font-size:.97rem;}
+        .texte-card h2{font-size:1.1rem;color:var(--primary);margin-bottom:14px;}.texte-card p{margin-bottom:12px;}.texte-card p:last-child{margin-bottom:0;}
+        .mots-du-texte{background:var(--primary-bg);border-radius:var(--radius);padding:18px 20px;margin-bottom:20px;}
+        .quiz-card{background:var(--white);border-radius:var(--radius);padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:16px;}
+        .q-num{font-size:.78rem;font-weight:800;color:var(--primary);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+        .q-text{font-size:1rem;font-weight:700;margin-bottom:18px;line-height:1.5;}
+        .choices{display:flex;flex-direction:column;gap:10px;}
+        .choice-btn{background:var(--bg);border:2px solid var(--border);border-radius:12px;padding:13px 16px;font-family:inherit;font-size:.95rem;font-weight:600;cursor:pointer;text-align:left;transition:all .15s;}
+        .choice-btn:hover:not(:disabled){border-color:var(--primary);background:var(--primary-bg);}
+        .choice-btn.correct{background:var(--green-bg);border-color:var(--green);color:var(--green-dark);}
+        .choice-btn.wrong{background:var(--red-bg);border-color:var(--red);color:var(--red-dark);}
+        .choice-btn:disabled{cursor:not-allowed;}
+        .feedback{margin-top:14px;padding:12px 16px;border-radius:10px;font-weight:700;font-size:.9rem;display:none;}
+        .feedback.show{display:block;}.feedback.ok{background:var(--green-bg);color:var(--green-dark);}.feedback.ko{background:var(--red-bg);color:var(--red-dark);}
+        .next-btn{margin-top:14px;background:var(--primary);color:white;border:none;border-radius:12px;padding:12px 24px;font-family:inherit;font-size:.95rem;font-weight:800;cursor:pointer;display:none;}
+        .next-btn.show{display:inline-block;}.next-btn:hover{background:var(--primary-dark);}
+        .banner{display:none;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-radius:var(--radius);padding:28px 24px;text-align:center;margin-bottom:24px;}
+        .banner.show{display:block;}.banner .xp-big{font-size:2rem;font-weight:900;}.banner h2{font-size:1.4rem;margin:8px 0;}.banner p{opacity:.9;}
+        .banner-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
+        .banner-btn{padding:11px 22px;border-radius:12px;font-family:inherit;font-size:.95rem;font-weight:800;cursor:pointer;border:none;text-decoration:none;}
+        .banner-btn.primary{background:white;color:var(--primary);}.banner-btn.secondary{background:rgba(255,255,255,.2);color:white;}
+        .fail-box{display:none;background:var(--red-bg);border:2px solid var(--red);border-radius:var(--radius);padding:20px 24px;text-align:center;margin-bottom:24px;}
+        .fail-box.show{display:block;}.fail-box h3{color:var(--red-dark);margin-bottom:8px;}
+        .retry-btn{margin-top:12px;background:var(--red);color:white;border:none;border-radius:12px;padding:11px 24px;font-family:inherit;font-size:.95rem;font-weight:800;cursor:pointer;}
+        .nav-section{background:var(--white);border-radius:var(--radius);padding:20px 24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-top:24px;}
+        .nav-section h3{font-size:.82rem;color:var(--text-light);font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;}
+        .nav-levels{display:flex;flex-wrap:wrap;gap:9px;}
+        .nav-btn{padding:9px 16px;border-radius:50px;text-decoration:none;font-size:.85rem;font-weight:800;background:#F5F5F5;color:var(--text);border:2px solid var(--border);transition:all .15s;}
+        .nav-btn:hover{background:var(--primary-bg);border-color:var(--primary);color:var(--primary-dark);}
+        .nav-btn.current{background:var(--primary-bg);border-color:var(--primary);color:var(--primary-dark);}
+    </style>
+</head>
+<body>
+<div class="top-bar">
+    <a href="index.html" class="back-btn">← Accueil</a>
+    <div class="top-bar-info"><h1>📚 Texte narratif — Niveau 4</h1><p>Identifier le narrateur et le point de vue</p></div>
+    <div class="xp-badge">⚡ <span id="xpDisplay">0</span> XP</div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progressBar" style="width:0%"></div></div>
+
+<div class="content">
+    <div class="score-bar">
+        <span>Score :</span>
+        <div class="score-dots" id="scoreDots"></div>
+        <span id="scoreText" style="margin-left:auto;font-size:.9rem;color:var(--text-light)">0 / 0</span>
+    </div>
+
+    <div class="rappel-card">
+        <h3>Rappel — Types de narrateurs</h3>
+        <ul>
+            <li><strong>Narrateur interne (1ʳᵉ personne) :</strong> « Je » — il vit l'histoire, on voit ses pensées.</li>
+            <li><strong>Narrateur externe (3ᵉ personne omniscient) :</strong> « Il/Elle » — il sait tout, y compris les pensées des personnages.</li>
+            <li><strong>Narrateur externe (3ᵉ personne observateur) :</strong> « Il/Elle » — il ne rapporte que ce qu'il voit, pas les pensées.</li>
+        </ul>
+    </div>
+
+    <div class="texte-card">
+        <h2>La Lettre retrouvée</h2>
+        <p>Je rangeais le grenier quand je tombai sur une vieille boîte en fer, rouillée, coincée derrière un carton de vieux livres. Je ne l'avais jamais vue. À l'intérieur, une lettre <span class="lex" data-def="Pliée et fermée avec de la cire fondue, comme on le faisait autrefois.">cachetée</span> portait l'écriture de ma grand-mère — cette même écriture <span class="lex" data-def="Penchée, qui s'incline vers la droite.">penchée</span> que je reconnaissais entre mille.</p>
+        <p>Mon cœur s'accéléra. L'enveloppe était adressée à mon père, avec la mention : <em>« À n'ouvrir qu'après ma mort. »</em> Ma grand-mère était décédée il y a trois ans. Mon père ne savait pas que cette lettre existait.</p>
+        <p>Je restai un long moment à tenir l'enveloppe dans mes mains sans savoir quoi faire. La <span class="lex" data-def="Envie très forte de faire quelque chose, difficile à résister.">tentation</span> de l'ouvrir moi-même était grande — et en même temps, quelque chose me retenait. Ce n'était pas ma lettre.</p>
+        <p>Je descendis au salon, la lettre serrée contre moi. Mon père lisait son journal dans son fauteuil. Quand il leva les yeux et vit l'enveloppe, son visage <span class="lex" data-def="Changea brusquement d'expression, devint difficile à lire.">se ferma</span>. Il prit la lettre. Ses mains <span class="lex" data-def="Tremblaient légèrement, par émotion.">tremblaient</span> imperceptiblement.</p>
+        <p>— Merci, dit-il simplement.</p>
+        <p>Il se leva et sortit dans le jardin, seul. Je ne sus jamais ce que la lettre contenait. Mais ce soir-là, mon père revint dîner avec un sourire que je ne lui avais pas vu depuis des années.</p>
+    </div>
+
+    <div class="mots-du-texte" id="mots-du-texte"></div>
+
+    <div class="banner" id="banner">
+        <div class="xp-big">⚡ <span id="finalXP">0</span> XP</div>
+        <h2>Niveau réussi ! 🎉</h2><p id="bannerScore"></p>
+        <div class="banner-btns">
+            <a href="fr_narr_niveau5.html" class="banner-btn primary">Niveau 5 — Défi 🏆</a>
+            <a href="index.html" class="banner-btn secondary">🏠 Accueil</a>
+        </div>
+    </div>
+    <div class="fail-box" id="failBox">
+        <h3>😕 Pas encore…</h3><p id="failScore"></p>
+        <button class="retry-btn" onclick="restart()">↺ Recommencer</button>
+    </div>
+
+    <div id="quizZone"></div>
+
+    <div class="nav-section">
+        <h3>Niveaux — Texte narratif</h3>
+        <div class="nav-levels">
+            <a href="index.html" class="nav-btn">🏠 Accueil</a>
+            <a href="fr_narr_niveau1.html" class="nav-btn">Niveau 1 — Personnages</a>
+            <a href="fr_narr_niveau2.html" class="nav-btn">Niveau 2 — Schéma narratif</a>
+            <a href="fr_narr_niveau3.html" class="nav-btn">Niveau 3 — Sentiments</a>
+            <a href="fr_narr_niveau4.html" class="nav-btn current">▶ Niveau 4 — Narrateur</a>
+            <a href="fr_narr_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+        </div>
+    </div>
+</div>
+
+<script src="fr_lexique.js"></script>
+<script>
+const MODULE_ID='fr_narr', NIVEAU=4, XP_UNIT=15;
+const QUESTIONS=[
+    { q:"Quel est le type de narrateur dans ce texte ?", choices:["Narrateur externe omniscient (3ᵉ personne, connaît tout)","Narrateur interne (1ʳᵉ personne, vit l'histoire)","Narrateur externe observateur (3ᵉ personne, ne rapporte que ce qu'il voit)","Il n'y a pas de narrateur identifiable"], correct:1 },
+    { q:"Quel pronom grammatical confirme le type de narrateur ?", choices:["Il / Elle","On","Je","Vous"], correct:2 },
+    { q:"Quelle information le narrateur NE PEUT PAS connaître, selon son point de vue ?", choices:["Ce que son père ressent en tenant la lettre","Ce que la lettre contient (car il ne l'a pas lue)","L'écriture de sa grand-mère","L'adresse inscrite sur l'enveloppe"], correct:1 },
+    { q:"Le narrateur décrit ce que son père ressent quand il voit l'enveloppe. Comment l'auteur y parvient-il sans violer le point de vue interne ?", choices:["Il devine les pensées de son père directement.","Il décrit le visage et les mains de son père (ce qu'il voit), pas ses pensées.","Il demande à son père ce qu'il ressent.","Il raconte ce que son père lui a dit plus tard."], correct:1 },
+    { q:"Pourquoi le narrateur hésite-t-il à ouvrir la lettre lui-même ?", choices:["Il a peur de se faire gronder.","Il ne sait pas lire l'écriture de sa grand-mère.","La lettre est adressée à son père, et ouvrir le courrier d'autrui ne lui semble pas juste.","Il a peur que la lettre contienne de mauvaises nouvelles."], correct:2 },
+    { q:"Que veut dire « son visage se ferma » quand le père voit l'enveloppe ?", choices:["Il ferma les yeux pour mieux voir.","Son expression devint soudainement difficile à lire ou émotionnellement neutre en apparence.","Il sourit de bonheur en reconnaissant l'écriture.","Il fit semblant de ne pas avoir vu la lettre."], correct:1 },
+    { q:"Quel élément montre que la lettre a eu un effet positif sur le père, sans que le contenu soit révélé ?", choices:["Il donne de l'argent à son enfant ce soir-là.","Il revient dîner avec un sourire qu'on ne lui avait pas vu depuis des années.","Il appelle la famille pour leur lire la lettre.","Il accroche la lettre au mur du salon."], correct:1 },
+    { q:"Si le texte était écrit à la 3ᵉ personne omnisciente, qu'est-ce qui CHANGERAIT ?", choices:["Le titre serait différent.","Le narrateur pourrait décrire les pensées intimes du père et révéler le contenu de la lettre.","L'histoire se terminerait autrement.","Les personnages auraient des noms différents."], correct:1 }
+];
+
+const TOTAL=QUESTIONS.length, SEUIL=Math.ceil(TOTAL*.8);
+let current=0, score=0, xp=0;
+const dots=[];
+function initDots(){const c=document.getElementById('scoreDots');c.innerHTML='';dots.length=0;for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='dot';c.appendChild(d);dots.push(d);}document.getElementById('scoreText').textContent=`0 / ${TOTAL}`;}
+function updateProgress(){document.getElementById('progressBar').style.width=(current/TOTAL*100)+'%';document.getElementById('xpDisplay').textContent=xp;}
+function showQuestion(idx){const q=QUESTIONS[idx];document.getElementById('quizZone').innerHTML=`<div class="quiz-card"><div class="q-num">Question ${idx+1} / ${TOTAL}</div><div class="q-text">${q.q}</div><div class="choices" id="choices"></div><div class="feedback" id="feedback"></div><button class="next-btn" id="nextBtn" onclick="nextQuestion()">${idx+1<TOTAL?'Question suivante →':'Voir le résultat'}</button></div>`;q.choices.forEach((c,i)=>{const btn=document.createElement('button');btn.className='choice-btn';btn.textContent=c;btn.onclick=()=>answer(i,q.correct);document.getElementById('choices').appendChild(btn);});}
+function answer(chosen,correct){document.querySelectorAll('.choice-btn').forEach(b=>b.disabled=true);const fb=document.getElementById('feedback');document.querySelectorAll('.choice-btn')[correct].classList.add('correct');if(chosen===correct){document.querySelectorAll('.choice-btn')[chosen].classList.add('correct');fb.className='feedback show ok';fb.textContent='✅ Bonne réponse !';score++;xp+=XP_UNIT;dots[current].classList.add('ok');}else{document.querySelectorAll('.choice-btn')[chosen].classList.add('wrong');fb.className='feedback show ko';fb.textContent='❌ Mauvaise réponse. La bonne réponse est surlignée en vert.';dots[current].classList.add('ko');}document.getElementById('scoreText').textContent=`${score} / ${TOTAL}`;document.getElementById('xpDisplay').textContent=xp;document.getElementById('nextBtn').classList.add('show');}
+function nextQuestion(){current++;updateProgress();if(current>=TOTAL)finish();else showQuestion(current);}
+function finish(){document.getElementById('progressBar').style.width='100%';document.getElementById('quizZone').innerHTML='';if(score>=SEUIL){localStorage.setItem(`edu_completed_${MODULE_ID}_${NIVEAU}`,'1');document.getElementById('finalXP').textContent=xp;document.getElementById('bannerScore').textContent=`Score : ${score} / ${TOTAL} — ${Math.round(score/TOTAL*100)} %`;document.getElementById('banner').classList.add('show');}else{document.getElementById('failScore').textContent=`Score : ${score} / ${TOTAL} — Il faut au moins ${SEUIL} bonnes réponses (80 %).`;document.getElementById('failBox').classList.add('show');}}
+function restart(){current=0;score=0;xp=0;document.getElementById('banner').classList.remove('show');document.getElementById('failBox').classList.remove('show');updateProgress();initDots();showQuestion(0);}
+initDots();updateProgress();showQuestion(0);
+</script>
+</body>
+</html>
