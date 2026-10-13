@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Français — Article de presse · Niveau 4 — Points de vue</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fr_lexique.css">
+    <style>
+        :root{--primary:#B71C1C;--primary-dark:#7F0000;--primary-bg:#FFEBEE;--bg:#F0F2F5;--white:#FFFFFF;--text:#3C3C3C;--text-light:#888;--border:#E0E0E0;--radius:16px;--green:#58CC02;--green-dark:#46A302;--green-bg:#F0FBE4;--red:#FF4B4B;--red-dark:#CC0000;}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+        .top-bar{background:var(--primary);color:white;padding:14px 20px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:50;}
+        .back-btn{background:rgba(255,255,255,.2);color:white;border:none;border-radius:10px;padding:8px 14px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;text-decoration:none;}
+        .back-btn:hover{background:rgba(255,255,255,.3);}
+        .top-bar-info{flex:1;}.top-bar-info h1{font-size:1rem;font-weight:800;}.top-bar-info p{font-size:.8rem;opacity:.8;}
+        .xp-badge{background:rgba(255,255,255,.2);border-radius:50px;padding:6px 14px;font-size:.85rem;font-weight:900;white-space:nowrap;}
+        .progress-wrap{background:rgba(0,0,0,.2);height:7px;}.progress-fill{background:white;height:7px;transition:width .4s;}
+        .content{max-width:720px;margin:0 auto;padding:24px 20px 40px;}
+        .score-bar{display:flex;align-items:center;gap:12px;background:var(--white);border-radius:var(--radius);padding:14px 20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);font-weight:700;}
+        .score-dots{display:flex;gap:6px;flex-wrap:wrap;}.dot{width:14px;height:14px;border-radius:50%;background:var(--border);}.dot.ok{background:var(--green);}.dot.ko{background:var(--red);}
+        .rappel-card{background:var(--primary-bg);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;font-size:.9rem;}
+        .rappel-card h3{color:var(--primary-dark);font-size:.85rem;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;}
+        .rappel-card ul{padding-left:18px;line-height:2;}
+        .texte-card{background:var(--white);border-radius:var(--radius);padding:24px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:5px solid var(--primary);line-height:1.85;font-size:.97rem;}
+        .article-header{border-bottom:2px solid var(--primary-bg);padding-bottom:14px;margin-bottom:16px;}
+        .article-rubrique{font-size:.75rem;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:var(--primary);margin-bottom:6px;}
+        .article-titre{font-size:1.2rem;font-weight:900;line-height:1.3;margin-bottom:8px;}
+        .article-chapeau{font-size:.95rem;font-weight:700;color:#555;line-height:1.6;margin-bottom:8px;}
+        .article-meta{font-size:.75rem;color:var(--text-light);}
+        .texte-card p{margin-bottom:12px;}.texte-card p:last-child{margin-bottom:0;}
+        .opinion-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-left:6px;vertical-align:middle;}
+        .tag-a{background:#E3F2FD;color:#1565C0;}.tag-b{background:#E8F5E9;color:#2E7D32;}.tag-c{background:#FFF3E0;color:#E65100;}
+        .mots-du-texte{background:var(--primary-bg);border-radius:var(--radius);padding:18px 20px;margin-bottom:20px;}
+        .quiz-card{background:var(--white);border-radius:var(--radius);padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:16px;}
+        .q-num{font-size:.78rem;font-weight:800;color:var(--primary);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+        .q-text{font-size:1rem;font-weight:700;margin-bottom:18px;line-height:1.5;}
+        .choices{display:flex;flex-direction:column;gap:10px;}
+        .choice-btn{background:var(--bg);border:2px solid var(--border);border-radius:12px;padding:13px 16px;font-family:inherit;font-size:.95rem;font-weight:600;cursor:pointer;text-align:left;transition:all .15s;}
+        .choice-btn:hover:not(:disabled){border-color:var(--primary);background:var(--primary-bg);}
+        .choice-btn.correct{background:var(--green-bg);border-color:var(--green);color:var(--green-dark);}
+        .choice-btn.wrong{background:#FFEBEB;border-color:var(--red);color:var(--red-dark);}
+        .choice-btn:disabled{cursor:not-allowed;}
+        .feedback{margin-top:14px;padding:12px 16px;border-radius:10px;font-weight:700;font-size:.9rem;display:none;}
+        .feedback.show{display:block;}.feedback.ok{background:var(--green-bg);color:var(--green-dark);}.feedback.ko{background:#FFEBEB;color:var(--red-dark);}
+        .next-btn{margin-top:14px;background:var(--primary);color:white;border:none;border-radius:12px;padding:12px 24px;font-family:inherit;font-size:.95rem;font-weight:800;cursor:pointer;display:none;}
+        .next-btn.show{display:inline-block;}.next-btn:hover{background:var(--primary-dark);}
+        .banner{display:none;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-radius:var(--radius);padding:28px 24px;text-align:center;margin-bottom:24px;}
+        .banner.show{display:block;}.banner .xp-big{font-size:2rem;font-weight:900;}.banner h2{font-size:1.4rem;margin:8px 0;}.banner p{opacity:.9;}
+        .banner-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
+        .banner-btn{padding:11px 22px;border-radius:12px;font-family:inherit;font-size:.95rem;font-weight:800;cursor:pointer;border:none;text-decoration:none;}
+        .banner-btn.primary{background:white;color:var(--primary);}.banner-btn.secondary{background:rgba(255,255,255,.2);color:white;}
+        .fail-box{display:none;background:#FFEBEB;border:2px solid var(--red);border-radius:var(--radius);padding:20px 24px;text-align:center;margin-bottom:24px;}
+        .fail-box.show{display:block;}.fail-box h3{color:var(--red-dark);margin-bottom:8px;}
+        .retry-btn{margin-top:12px;background:var(--red);color:white;border:none;border-radius:12px;padding:11px 24px;font-family:inherit;font-size:.95rem;font-weight:800;cursor:pointer;}
+        .nav-section{background:var(--white);border-radius:var(--radius);padding:20px 24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-top:24px;}
+        .nav-section h3{font-size:.82rem;color:var(--text-light);font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;}
+        .nav-levels{display:flex;flex-wrap:wrap;gap:9px;}
+        .nav-btn{padding:9px 16px;border-radius:50px;text-decoration:none;font-size:.85rem;font-weight:800;background:#F5F5F5;color:var(--text);border:2px solid var(--border);transition:all .15s;}
+        .nav-btn:hover{background:var(--primary-bg);border-color:var(--primary);color:var(--primary-dark);}
+        .nav-btn.current{background:var(--primary-bg);border-color:var(--primary);color:var(--primary-dark);}
+    </style>
+</head>
+<body>
+<div class="top-bar">
+    <a href="index.html" class="back-btn">← Accueil</a>
+    <div class="top-bar-info"><h1>📰 Article de presse — Niveau 4</h1><p>Identifier et comparer des points de vue</p></div>
+    <div class="xp-badge">⚡ <span id="xpDisplay">0</span> XP</div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progressBar" style="width:0%"></div></div>
+
+<div class="content">
+    <div class="score-bar">
+        <span>Score :</span>
+        <div class="score-dots" id="scoreDots"></div>
+        <span id="scoreText" style="margin-left:auto;font-size:.9rem;color:var(--text-light)">0 / 0</span>
+    </div>
+
+    <div class="rappel-card">
+        <h3>Rappel — Points de vue dans la presse</h3>
+        <ul>
+            <li>Un article peut présenter plusieurs <strong>points de vue</strong> (acteurs, experts, citoyens).</li>
+            <li>Le journaliste peut rester <strong>neutre</strong> ou laisser transparaître sa propre position.</li>
+            <li>Repère : <em>qui parle ?</em> (guillemets, « selon », « estime », « affirme »)</li>
+        </ul>
+    </div>
+
+    <div class="texte-card">
+        <div class="article-header">
+            <div class="article-rubrique">📱 Numérique & Société</div>
+            <div class="article-titre">Les smartphones interdits en classe : bonne ou mauvaise idée ?</div>
+            <div class="article-chapeau">Plusieurs communes belges <span class="lex" data-def="Examinent sérieusement, discutent de la possibilité d'appliquer.">envisagent</span> d'interdire les smartphones dans les écoles secondaires. Le débat est lancé : enseignants, élèves et parents ne partagent pas tous le même avis.</div>
+            <div class="article-meta">Par notre rédaction · 22 janvier 2026 · 5 min de lecture</div>
+        </div>
+        <p>La France a interdit les téléphones portables dans les écoles primaires et les collèges en 2018. La Belgique, elle, n'a pas de <span class="lex" data-def="Loi applicable à tout le pays, sur tout le territoire.">législation nationale</span> sur le sujet. Chaque établissement fixe ses propres règles.</p>
+        <p><span class="opinion-tag tag-a">Point de vue A</span> Pour Mme Claes, professeure de mathématiques à Namur, l'interdiction est <span class="lex" data-def="Indispensable, dont on ne peut se passer.">indispensable</span>. « Le téléphone est une source de <span class="lex" data-def="Choses qui détournent l'attention, qui empêchent de se concentrer.">distractions</span> permanentes. Des études montrent que sa seule présence sur le bureau réduit la capacité de concentration, même éteint. Interdire, c'est protéger le droit d'apprendre. »</p>
+        <p><span class="opinion-tag tag-b">Point de vue B</span> Tom, 15 ans, élève en 3ᵉ secondaire, voit les choses autrement. « Mon téléphone me sert à chercher des informations pendant les cours, à utiliser des applications éducatives et à rester en contact avec mes parents. Une interdiction totale, c'est traiter les élèves comme des enfants. » Selon lui, apprendre à <span class="lex" data-def="Gérer soi-même son comportement, ses envies.">s'autoréguler</span> vaut mieux qu'une interdiction.</p>
+        <p><span class="opinion-tag tag-c">Point de vue C</span> La directrice d'une école bruxelloise préfère une approche nuancée. « Nous avons instauré des <span class="lex" data-def="Zones, espaces définis.">zones</span> sans téléphone : la classe et le réfectoire. Mais les élèves peuvent l'utiliser à la récréation. Cette solution respecte l'autonomie des jeunes tout en maintenant un cadre propice aux apprentissages. »</p>
+        <p>Le débat reste ouvert. Des études européennes récentes <span class="lex" data-def="Indiquent, montrent de façon générale.">suggèrent</span> que les élèves des pays ayant adopté des restrictions obtiennent de meilleurs résultats aux tests standardisés. Mais d'autres chercheurs soulignent que c'est la façon d'enseigner qui fait la différence, pas l'outil.</p>
+    </div>
+
+    <div class="mots-du-texte" id="mots-du-texte"></div>
+
+    <div class="banner" id="banner">
+        <div class="xp-big">⚡ <span id="finalXP">0</span> XP</div>
+        <h2>Niveau réussi ! 🎉</h2><p id="bannerScore"></p>
+        <div class="banner-btns">
+            <a href="fr_presse_niveau5.html" class="banner-btn primary">Niveau 5 — Défi 🏆</a>
+            <a href="index.html" class="banner-btn secondary">🏠 Accueil</a>
+        </div>
+    </div>
+    <div class="fail-box" id="failBox">
+        <h3>😕 Pas encore…</h3><p id="failScore"></p>
+        <button class="retry-btn" onclick="restart()">↺ Recommencer</button>
+    </div>
+
+    <div id="quizZone"></div>
+
+    <div class="nav-section">
+        <h3>Niveaux — Article de presse</h3>
+        <div class="nav-levels">
+            <a href="index.html" class="nav-btn">🏠 Accueil</a>
+            <a href="fr_presse_niveau1.html" class="nav-btn">Niveau 1 — Les 5W</a>
+            <a href="fr_presse_niveau2.html" class="nav-btn">Niveau 2 — Faits / Opinions</a>
+            <a href="fr_presse_niveau3.html" class="nav-btn">Niveau 3 — Structure</a>
+            <a href="fr_presse_niveau4.html" class="nav-btn current">▶ Niveau 4 — Points de vue</a>
+            <a href="fr_presse_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+        </div>
+    </div>
+</div>
+
+<script src="fr_lexique.js"></script>
+<script>
+const MODULE_ID='fr_presse', NIVEAU=4, XP_UNIT=15;
+const QUESTIONS=[
+    { q:"Combien de points de vue différents l'article présente-t-il sur l'interdiction des smartphones ?", choices:["Un seul point de vue","Deux points de vue","Trois points de vue","Quatre points de vue"], correct:2 },
+    { q:"Quel est le point de vue de Mme Claes (point de vue A) ?", choices:["Elle est contre l'interdiction et préfère l'autonomie des élèves.","Elle est favorable à une interdiction totale pour protéger la concentration des élèves.","Elle préfère une solution nuancée avec des zones sans téléphone.","Elle pense que c'est la méthode d'enseignement qui compte, pas l'outil."], correct:1 },
+    { q:"Sur quel argument Tom (point de vue B) base-t-il son opposition à l'interdiction ?", choices:["Le téléphone est trop cher à remplacer.","Le téléphone distrait les autres élèves.","Le téléphone a des usages utiles et apprendre à s'autoréguler est plus formateur qu'une interdiction.","Les professeurs utilisent aussi leur téléphone en classe."], correct:2 },
+    { q:"En quoi le point de vue C (la directrice) diffère-t-il des deux autres ?", choices:["Elle est totalement contre les téléphones à l'école.","Elle propose une position intermédiaire : interdire en classe mais autoriser à la récréation.","Elle pense que l'interdiction est inutile car les élèves sont responsables.","Elle veut interdire les téléphones uniquement pour les enseignants."], correct:1 },
+    { q:"Quel procédé le journaliste utilise-t-il pour rapporter les paroles de Mme Claes ?", choices:["Il paraphrase ses idées sans guillemets.","Il cite ses paroles exactes entre guillemets.","Il résume ses idées dans le chapeau.","Il attribue ses paroles à une source anonyme."], correct:1 },
+    { q:"L'article présente-t-il le point de vue du journaliste lui-même ?", choices:["Oui, clairement : il est contre l'interdiction.","Oui, clairement : il est pour l'interdiction.","Non, le journaliste reste neutre et présente plusieurs points de vue sans trancher.","Oui, il exprime son opinion dans la dernière phrase."], correct:2 },
+    { q:"Que signifie le conditionnel dans « Des études suggèrent que les élèves… obtiennent de meilleurs résultats » ?", choices:["C'est une certitude absolue prouvée par toutes les études.","C'est une tendance observée mais nuancée — le journaliste ne présente pas ça comme une vérité définitive.","C'est l'opinion personnelle du journaliste.","C'est une information fausse que le journaliste remet en question."], correct:1 },
+    { q:"Quelle est la position de la Belgique par rapport à la France sur la question des smartphones à l'école ?", choices:["La Belgique a la même loi que la France depuis 2018.","La Belgique a interdit les smartphones avant la France.","La Belgique n'a pas de législation nationale : chaque école fixe ses propres règles.","La Belgique a refusé toute restriction sur les smartphones à l'école."], correct:2 }
+];
+
+const TOTAL=QUESTIONS.length, SEUIL=Math.ceil(TOTAL*.8);
+let current=0, score=0, xp=0;
+const dots=[];
+function initDots(){const c=document.getElementById('scoreDots');c.innerHTML='';dots.length=0;for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='dot';c.appendChild(d);dots.push(d);}document.getElementById('scoreText').textContent=`0 / ${TOTAL}`;}
+function updateProgress(){document.getElementById('progressBar').style.width=(current/TOTAL*100)+'%';document.getElementById('xpDisplay').textContent=xp;}
+function showQuestion(idx){const q=QUESTIONS[idx];document.getElementById('quizZone').innerHTML=`<div class="quiz-card"><div class="q-num">Question ${idx+1} / ${TOTAL}</div><div class="q-text">${q.q}</div><div class="choices" id="choices"></div><div class="feedback" id="feedback"></div><button class="next-btn" id="nextBtn" onclick="nextQuestion()">${idx+1<TOTAL?'Question suivante →':'Voir le résultat'}</button></div>`;q.choices.forEach((c,i)=>{const btn=document.createElement('button');btn.className='choice-btn';btn.textContent=c;btn.onclick=()=>answer(i,q.correct);document.getElementById('choices').appendChild(btn);});}
+function answer(chosen,correct){document.querySelectorAll('.choice-btn').forEach(b=>b.disabled=true);const fb=document.getElementById('feedback');document.querySelectorAll('.choice-btn')[correct].classList.add('correct');if(chosen===correct){document.querySelectorAll('.choice-btn')[chosen].classList.add('correct');fb.className='feedback show ok';fb.textContent='✅ Bonne réponse !';score++;xp+=XP_UNIT;dots[current].classList.add('ok');}else{document.querySelectorAll('.choice-btn')[chosen].classList.add('wrong');fb.className='feedback show ko';fb.textContent='❌ Mauvaise réponse. La bonne réponse est surlignée en vert.';dots[current].classList.add('ko');}document.getElementById('scoreText').textContent=`${score} / ${TOTAL}`;document.getElementById('xpDisplay').textContent=xp;document.getElementById('nextBtn').classList.add('show');}
+function nextQuestion(){current++;updateProgress();if(current>=TOTAL)finish();else showQuestion(current);}
+function finish(){document.getElementById('progressBar').style.width='100%';document.getElementById('quizZone').innerHTML='';if(score>=SEUIL){localStorage.setItem(`edu_completed_${MODULE_ID}_${NIVEAU}`,'1');document.getElementById('finalXP').textContent=xp;document.getElementById('bannerScore').textContent=`Score : ${score} / ${TOTAL} — ${Math.round(score/TOTAL*100)} %`;document.getElementById('banner').classList.add('show');}else{document.getElementById('failScore').textContent=`Score : ${score} / ${TOTAL} — Il faut au moins ${SEUIL} bonnes réponses (80 %).`;document.getElementById('failBox').classList.add('show');}}
+function restart(){current=0;score=0;xp=0;document.getElementById('banner').classList.remove('show');document.getElementById('failBox').classList.remove('show');updateProgress();initDots();showQuestion(0);}
+initDots();updateProgress();showQuestion(0);
+</script>
+</body>
+</html>
