@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Français — Documents & consignes · Niveau 1 — Lire une affiche</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fr_lexique.css">
+    <style>
+        :root{--primary:#00695C;--primary-dark:#004D40;--primary-bg:#E0F2F1;--bg:#F0F2F5;--white:#FFFFFF;--text:#3C3C3C;--text-light:#888;--border:#E0E0E0;--radius:16px;--green:#58CC02;--green-dark:#46A302;--green-bg:#F0FBE4;--red:#FF4B4B;--red-dark:#CC0000;}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+        .top-bar{background:var(--primary);color:white;padding:14px 20px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:50;}
+        .back-btn{background:rgba(255,255,255,.2);color:white;border:none;border-radius:10px;padding:8px 14px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;text-decoration:none;}
+        .back-btn:hover{background:rgba(255,255,255,.3);}
+        .top-bar-info{flex:1;}.top-bar-info h1{font-size:1rem;font-weight:800;}.top-bar-info p{font-size:.8rem;opacity:.8;}
+        .xp-badge{background:rgba(255,255,255,.2);border-radius:50px;padding:6px 14px;font-size:.85rem;font-weight:900;white-space:nowrap;}
+        .progress-wrap{background:rgba(0,0,0,.2);height:7px;}.progress-fill{background:white;height:7px;transition:width .4s;}
+        .content{max-width:720px;margin:0 auto;padding:24px 20px 40px;}
+        .score-bar{display:flex;align-items:center;gap:12px;background:var(--white);border-radius:var(--radius);padding:14px 20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);font-weight:700;}
+        .score-dots{display:flex;gap:6px;flex-wrap:wrap;}.dot{width:14px;height:14px;border-radius:50%;background:var(--border);}.dot.ok{background:var(--green);}.dot.ko{background:var(--red);}
+        .rappel-card{background:var(--primary-bg);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;font-size:.9rem;}
+        .rappel-card h3{color:var(--primary-dark);font-size:.85rem;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;}
+        .rappel-card ul{padding-left:18px;line-height:2;}
+        /* Affiche simulée */
+        .affiche{background:var(--white);border-radius:var(--radius);box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:18px;overflow:hidden;}
+        .affiche-top{background:linear-gradient(135deg,#00695C,#004D40);color:white;padding:22px 24px;text-align:center;}
+        .affiche-top .logo{font-size:2rem;margin-bottom:6px;}
+        .affiche-top h2{font-size:1.4rem;font-weight:900;line-height:1.25;margin-bottom:6px;}
+        .affiche-top .slogan{font-size:.95rem;opacity:.9;font-style:italic;}
+        .affiche-body{padding:20px 24px;}
+        .affiche-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+        .affiche-info{background:var(--primary-bg);border-radius:10px;padding:10px 14px;}
+        .affiche-info .label{font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:var(--primary-dark);margin-bottom:3px;}
+        .affiche-info .val{font-size:.92rem;font-weight:700;}
+        .affiche-desc{font-size:.9rem;line-height:1.7;margin-bottom:14px;border-top:1px solid var(--border);padding-top:14px;}
+        .affiche-contact{background:#F5F5F5;border-radius:8px;padding:10px 14px;font-size:.82rem;color:var(--text-light);}
+        .mots-du-texte{background:var(--primary-bg);border-radius:var(--radius);padding:18px 20px;margin-bottom:20px;}
+        .quiz-card{background:var(--white);border-radius:var(--radius);padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:16px;}
+        .q-num{font-size:.78rem;font-weight:800;color:var(--primary);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+        .q-text{font-size:1rem;font-weight:700;margin-bottom:18px;line-height:1.5;}
+        .choices{display:flex;flex-direction:column;gap:10px;}
+        .choice-btn{background:var(--bg);border:2px solid var(--border);border-radius:12px;padding:13px 16px;font-family:inherit;font-size:.95rem;font-weight:600;cursor:pointer;text-align:left;transition:all .15s;}
+        .choice-btn:hover:not(:disabled){border-color:var(--primary);background:var(--primary-bg);}
+        .choice-btn.correct{background:var(--green-bg);border-color:var(--green);color:var(--green-dark);}
+        .choice-btn.wrong{background:#FFEBEB;border-color:var(--red);color:var(--red-dark);}
+        .choice-btn:disabled{cursor:not-allowed;}
+        .feedback{margin-top:14px;padding:12px 16px;border-radius:10px;font-weight:700;font-size:.9rem;display:none;}
+        .feedback.show{display:block;}.feedback.ok{background:var(--green-bg);color:var(--green-dark);}.feedback.ko{background:#FFEBEB;color:var(--red-dark);}
+        .next-btn{margin-top:14px;background:var(--primary);color:white;border:none;border-radius:12px;padding:12px 24px;font-family:inherit;font-size:.95rem;font-weight:800;cursor:pointer;display:none;}
+        .next-btn.show{display:inline-block;}.next-btn:hover{background:var(--primary-dark);}
+        .banner{display:none;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-radius:var(--radius);padding:28px 24px;text-align:center;margin-bottom:24px;}
+        .banner.show{display:block;}.banner .xp-big{font-size:2rem;font-weight:900;}.banner h2{font-size:1.4rem;margin:8px 0;}.banner p{opacity:.9;}
+        .banner-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
+        .banner-btn{padding:11px 22px;border-radius:12px;font-family:inherit;font-size:.95rem;font-weight:800;cursor:pointer;border:none;text-decoration:none;}
+        .banner-btn.primary{background:white;color:var(--primary);}.banner-btn.secondary{background:rgba(255,255,255,.2);color:white;}
+        .fail-box{display:none;background:#FFEBEB;border:2px solid var(--red);border-radius:var(--radius);padding:20px 24px;text-align:center;margin-bottom:24px;}
+        .fail-box.show{display:block;}.fail-box h3{color:var(--red-dark);margin-bottom:8px;}
+        .retry-btn{margin-top:12px;background:var(--red);color:white;border:none;border-radius:12px;padding:11px 24px;font-family:inherit;font-size:.95rem;font-weight:800;cursor:pointer;}
+        .nav-section{background:var(--white);border-radius:var(--radius);padding:20px 24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-top:24px;}
+        .nav-section h3{font-size:.82rem;color:var(--text-light);font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;}
+        .nav-levels{display:flex;flex-wrap:wrap;gap:9px;}
+        .nav-btn{padding:9px 16px;border-radius:50px;text-decoration:none;font-size:.85rem;font-weight:800;background:#F5F5F5;color:var(--text);border:2px solid var(--border);transition:all .15s;}
+        .nav-btn:hover{background:var(--primary-bg);border-color:var(--primary);color:var(--primary-dark);}
+        .nav-btn.current{background:var(--primary-bg);border-color:var(--primary);color:var(--primary-dark);}
+    </style>
+</head>
+<body>
+<div class="top-bar">
+    <a href="index.html" class="back-btn">← Accueil</a>
+    <div class="top-bar-info"><h1>📋 Documents & consignes — Niveau 1</h1><p>Lire et comprendre une affiche</p></div>
+    <div class="xp-badge">⚡ <span id="xpDisplay">0</span> XP</div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progressBar" style="width:0%"></div></div>
+
+<div class="content">
+    <div class="score-bar">
+        <span>Score :</span>
+        <div class="score-dots" id="scoreDots"></div>
+        <span id="scoreText" style="margin-left:auto;font-size:.9rem;color:var(--text-light)">0 / 0</span>
+    </div>
+
+    <div class="rappel-card">
+        <h3>Rappel — Lire une affiche</h3>
+        <ul>
+            <li>Une affiche communique un <strong>message rapide</strong> : titre, slogan, infos pratiques.</li>
+            <li>Elle combine <strong>texte, couleurs et mise en page</strong> pour attirer l'attention.</li>
+            <li>Repère : <em>Qui organise ? Quoi ? Où ? Quand ? Pour qui ?</em></li>
+        </ul>
+    </div>
+
+    <!-- Affiche simulée -->
+    <div class="affiche">
+        <div class="affiche-top">
+            <div class="logo">🌿</div>
+            <h2>FESTIVAL VERT<br>de Namur</h2>
+            <div class="slogan">« Agissons ensemble pour une planète vivante »</div>
+        </div>
+        <div class="affiche-body">
+            <div class="affiche-info-grid">
+                <div class="affiche-info">
+                    <div class="label">📅 Date</div>
+                    <div class="val">Samedi 14 juin 2025<br>10h → 20h</div>
+                </div>
+                <div class="affiche-info">
+                    <div class="label">📍 Lieu</div>
+                    <div class="val">Parc de la Citadelle<br>Namur</div>
+                </div>
+                <div class="affiche-info">
+                    <div class="label">🎟️ Prix</div>
+                    <div class="val">Entrée gratuite<br>pour tous</div>
+                </div>
+                <div class="affiche-info">
+                    <div class="label">👥 Public</div>
+                    <div class="val">Familles, jeunes,<br>associations</div>
+                </div>
+            </div>
+            <div class="affiche-desc">
+                <strong>Au programme :</strong> ateliers de <span class="lex" data-def="Transformation des déchets en de nouveaux matériaux.">recyclage</span> créatif, conférences sur la <span class="lex" data-def="Capacité à durer longtemps sans épuiser les ressources naturelles.">durabilité</span>, marché de producteurs locaux, spectacles de rue et animations pour enfants. Venez en vélo ou en transport en commun : un parking vélos <span class="lex" data-def="Surveillé, avec du personnel présent.">gardienné</span> sera disponible à l'entrée.
+            </div>
+            <div class="affiche-contact">
+                📧 festivalvert.namur@gmail.com &nbsp;|&nbsp; 🌐 www.festivalvert-namur.be &nbsp;|&nbsp; Organisé par l'ASBL NaturAction
+            </div>
+        </div>
+    </div>
+
+    <div class="mots-du-texte" id="mots-du-texte"></div>
+
+    <div class="banner" id="banner">
+        <div class="xp-big">⚡ <span id="finalXP">0</span> XP</div>
+        <h2>Niveau réussi ! 🎉</h2><p id="bannerScore"></p>
+        <div class="banner-btns">
+            <a href="fr_doc_niveau2.html" class="banner-btn primary">Niveau 2 →</a>
+            <a href="index.html" class="banner-btn secondary">🏠 Accueil</a>
+        </div>
+    </div>
+    <div class="fail-box" id="failBox">
+        <h3>😕 Pas encore…</h3><p id="failScore"></p>
+        <button class="retry-btn" onclick="restart()">↺ Recommencer</button>
+    </div>
+
+    <div id="quizZone"></div>
+
+    <div class="nav-section">
+        <h3>Niveaux — Documents & consignes</h3>
+        <div class="nav-levels">
+            <a href="index.html" class="nav-btn">🏠 Accueil</a>
+            <a href="fr_doc_niveau1.html" class="nav-btn current">▶ Niveau 1 — Affiches</a>
+            <a href="fr_doc_niveau2.html" class="nav-btn">Niveau 2 — Tableaux</a>
+            <a href="fr_doc_niveau3.html" class="nav-btn">Niveau 3 — Consignes</a>
+            <a href="fr_doc_niveau4.html" class="nav-btn">Niveau 4 — Comparer</a>
+            <a href="fr_doc_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+        </div>
+    </div>
+</div>
+
+<script src="fr_lexique.js"></script>
+<script>
+const MODULE_ID='fr_doc', NIVEAU=1, XP_UNIT=15;
+const QUESTIONS=[
+    { q:"Quel est le nom de l'événement présenté sur cette affiche ?", choices:["NaturAction Festival","Festival Vert de Namur","Fête de la nature","Marché de producteurs de Namur"], correct:1 },
+    { q:"À quelle date et à quel endroit a lieu cet événement ?", choices:["Dimanche 15 juin, Place de l'Alhambra","Samedi 14 juin, Parc de la Citadelle à Namur","Vendredi 13 juin, Centre-ville de Namur","Samedi 14 juin, Parc de Laeken à Bruxelles"], correct:1 },
+    { q:"Quel est le prix d'entrée ?", choices:["5 € par adulte, gratuit pour les enfants","10 € par famille","Entrée gratuite pour tous","Entrée payante, tarif non précisé"], correct:2 },
+    { q:"Quel est le slogan de cet événement ?", choices:["« La nature nous appartient »","« Ensemble pour une économie verte »","« Agissons ensemble pour une planète vivante »","« Le recyclage, c'est l'avenir »"], correct:2 },
+    { q:"Quel type d'activité N'EST PAS mentionné dans le programme ?", choices:["Ateliers de recyclage créatif","Marché de producteurs locaux","Concours de photographie","Animations pour enfants"], correct:2 },
+    { q:"Qui organise cet événement ?", choices:["La Ville de Namur","Le Parc de la Citadelle","L'ASBL NaturAction","Le Festival de Wallonie"], correct:2 },
+    { q:"Quelle recommandation est donnée pour venir à l'événement ?", choices:["Venir en voiture et utiliser le parking souterrain","Venir en vélo ou en transport en commun","Réserver sa place à l'avance par e-mail","Venir uniquement en famille"], correct:1 },
+    { q:"À quel public cet événement s'adresse-t-il principalement ?", choices:["Uniquement aux enfants de moins de 12 ans","Aux professionnels de l'environnement uniquement","Aux familles, jeunes et associations","Aux habitants de Namur uniquement"], correct:2 }
+];
+
+const TOTAL=QUESTIONS.length, SEUIL=Math.ceil(TOTAL*.8);
+let current=0, score=0, xp=0;
+const dots=[];
+function initDots(){const c=document.getElementById('scoreDots');c.innerHTML='';dots.length=0;for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='dot';c.appendChild(d);dots.push(d);}document.getElementById('scoreText').textContent=`0 / ${TOTAL}`;}
+function updateProgress(){document.getElementById('progressBar').style.width=(current/TOTAL*100)+'%';document.getElementById('xpDisplay').textContent=xp;}
+function showQuestion(idx){const q=QUESTIONS[idx];document.getElementById('quizZone').innerHTML=`<div class="quiz-card"><div class="q-num">Question ${idx+1} / ${TOTAL}</div><div class="q-text">${q.q}</div><div class="choices" id="choices"></div><div class="feedback" id="feedback"></div><button class="next-btn" id="nextBtn" onclick="nextQuestion()">${idx+1<TOTAL?'Question suivante →':'Voir le résultat'}</button></div>`;q.choices.forEach((c,i)=>{const btn=document.createElement('button');btn.className='choice-btn';btn.textContent=c;btn.onclick=()=>answer(i,q.correct);document.getElementById('choices').appendChild(btn);});}
+function answer(chosen,correct){document.querySelectorAll('.choice-btn').forEach(b=>b.disabled=true);const fb=document.getElementById('feedback');document.querySelectorAll('.choice-btn')[correct].classList.add('correct');if(chosen===correct){document.querySelectorAll('.choice-btn')[chosen].classList.add('correct');fb.className='feedback show ok';fb.textContent='✅ Bonne réponse !';score++;xp+=XP_UNIT;dots[current].classList.add('ok');}else{document.querySelectorAll('.choice-btn')[chosen].classList.add('wrong');fb.className='feedback show ko';fb.textContent='❌ Mauvaise réponse. La bonne réponse est surlignée en vert.';dots[current].classList.add('ko');}document.getElementById('scoreText').textContent=`${score} / ${TOTAL}`;document.getElementById('xpDisplay').textContent=xp;document.getElementById('nextBtn').classList.add('show');}
+function nextQuestion(){current++;updateProgress();if(current>=TOTAL)finish();else showQuestion(current);}
+function finish(){document.getElementById('progressBar').style.width='100%';document.getElementById('quizZone').innerHTML='';if(score>=SEUIL){localStorage.setItem(`edu_completed_${MODULE_ID}_${NIVEAU}`,'1');document.getElementById('finalXP').textContent=xp;document.getElementById('bannerScore').textContent=`Score : ${score} / ${TOTAL} — ${Math.round(score/TOTAL*100)} %`;document.getElementById('banner').classList.add('show');}else{document.getElementById('failScore').textContent=`Score : ${score} / ${TOTAL} — Il faut au moins ${SEUIL} bonnes réponses (80 %).`;document.getElementById('failBox').classList.add('show');}}
+function restart(){current=0;score=0;xp=0;document.getElementById('banner').classList.remove('show');document.getElementById('failBox').classList.remove('show');updateProgress();initDots();showQuestion(0);}
+initDots();updateProgress();showQuestion(0);
+</script>
+</body>
+</html>
