@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Français — Texte argumentatif · Niveau 3 — Les types d'arguments</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fr_lexique.css">
+    <style>
+        :root{--primary:#E65100;--primary-dark:#BF360C;--primary-bg:#FBE9E7;--bg:#F0F2F5;--white:#FFFFFF;--text:#3C3C3C;--text-light:#888;--border:#E0E0E0;--radius:16px;--green:#58CC02;--green-dark:#46A302;--green-bg:#F0FBE4;--red:#FF4B4B;--red-dark:#CC0000;}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+        .top-bar{background:var(--primary);color:white;padding:14px 20px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:50;}
+        .back-btn{background:rgba(255,255,255,.2);color:white;border:none;border-radius:10px;padding:8px 14px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;text-decoration:none;}
+        .back-btn:hover{background:rgba(255,255,255,.3);}
+        .top-bar-info{flex:1;}.top-bar-info h1{font-size:1rem;font-weight:800;}.top-bar-info p{font-size:.8rem;opacity:.8;}
+        .xp-badge{background:rgba(255,255,255,.2);border-radius:50px;padding:6px 14px;font-size:.85rem;font-weight:900;white-space:nowrap;}
+        .progress-wrap{background:rgba(0,0,0,.2);height:7px;}.progress-fill{background:white;height:7px;transition:width .4s;}
+        .content{max-width:720px;margin:0 auto;padding:24px 20px 40px;}
+        .score-bar{display:flex;align-items:center;gap:12px;background:var(--white);border-radius:var(--radius);padding:14px 20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);font-weight:700;}
+        .score-dots{display:flex;gap:6px;flex-wrap:wrap;}.dot{width:14px;height:14px;border-radius:50%;background:var(--border);}.dot.ok{background:var(--green);}.dot.ko{background:var(--red);}
+        .rappel-card{background:var(--primary-bg);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;font-size:.9rem;}
+        .rappel-card h3{color:var(--primary-dark);font-size:.85rem;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;}
+        .arg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:4px;}
+        .arg-row{background:white;border-radius:10px;padding:9px 12px;font-size:.85rem;border:1px solid var(--border);line-height:1.5;}
+        .arg-row strong{display:block;color:var(--primary-dark);margin-bottom:2px;}
+        .texte-card{background:var(--white);border-radius:var(--radius);padding:24px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:5px solid var(--primary);line-height:1.85;font-size:.97rem;}
+        .texte-card h3{font-size:1.05rem;font-weight:900;margin-bottom:14px;color:var(--primary-dark);}
+        .texte-card p{margin-bottom:12px;}.texte-card p:last-child{margin-bottom:0;}
+        .arg-tag{display:inline-block;padding:1px 7px;border-radius:4px;font-size:.72rem;font-weight:900;letter-spacing:.5px;margin-left:5px;vertical-align:middle;}
+        .tag-stat{background:#E3F2FD;color:#1565C0;}
+        .tag-expert{background:#E8F5E9;color:#2E7D32;}
+        .tag-ex{background:#FFF3E0;color:#E65100;}
+        .tag-log{background:#F3E5F5;color:#6A1B9A;}
+        .mots-du-texte{background:var(--primary-bg);border-radius:var(--radius);padding:18px 20px;margin-bottom:20px;}
+        .quiz-card{background:var(--white);border-radius:var(--radius);padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:16px;}
+        .q-num{font-size:.78rem;font-weight:800;color:var(--primary);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+        .q-text{font-size:1rem;font-weight:700;margin-bottom:18px;line-height:1.5;}
+        .choices{display:flex;flex-direction:column;gap:10px;}
+        .choice-btn{background:var(--bg);border:2px solid var(--border);border-radius:12px;padding:13px 16px;font-family:inherit;font-size:.95rem;font-weight:600;cursor:pointer;text-align:left;transition:all .15s;}
+        .choice-btn:hover:not(:disabled){border-color:var(--primary);background:var(--primary-bg);}
+        .choice-btn.correct{background:var(--green-bg);border-color:var(--green);color:var(--green-dark);}
+        .choice-btn.wrong{background:#FFEBEB;border-color:var(--red);color:var(--red-dark);}
+        .choice-btn:disabled{cursor:not-allowed;}
+        .feedback{margin-top:14px;padding:12px 16px;border-radius:10px;font-weight:700;font-size:.9rem;display:none;}
+        .feedback.show{display:block;}.feedback.ok{background:var(--green-bg);color:var(--green-dark);}.feedback.ko{background:#FFEBEB;color:var(--red-dark);}
+        .next-btn{margin-top:14px;background:var(--primary);color:white;border:none;border-radius:12px;padding:12px 24px;font-family:inherit;font-size:.95rem;font-weight:800;cursor:pointer;display:none;}
+        .next-btn.show{display:inline-block;}.next-btn:hover{background:var(--primary-dark);}
+        .banner{display:none;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-radius:var(--radius);padding:28px 24px;text-align:center;margin-bottom:24px;}
+        .banner.show{display:block;}.banner .xp-big{font-size:2rem;font-weight:900;}.banner h2{font-size:1.4rem;margin:8px 0;}.banner p{opacity:.9;}
+        .banner-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
+        .banner-btn{padding:11px 22px;border-radius:12px;font-family:inherit;font-size:.95rem;font-weight:800;cursor:pointer;border:none;text-decoration:none;}
+        .banner-btn.primary{background:white;color:var(--primary);}.banner-btn.secondary{background:rgba(255,255,255,.2);color:white;}
+        .fail-box{display:none;background:#FFEBEB;border:2px solid var(--red);border-radius:var(--radius);padding:20px 24px;text-align:center;margin-bottom:24px;}
+        .fail-box.show{display:block;}.fail-box h3{color:var(--red-dark);margin-bottom:8px;}
+        .retry-btn{margin-top:12px;background:var(--red);color:white;border:none;border-radius:12px;padding:11px 24px;font-family:inherit;font-size:.95rem;font-weight:800;cursor:pointer;}
+        .nav-section{background:var(--white);border-radius:var(--radius);padding:20px 24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-top:24px;}
+        .nav-section h3{font-size:.82rem;color:var(--text-light);font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;}
+        .nav-levels{display:flex;flex-wrap:wrap;gap:9px;}
+        .nav-btn{padding:9px 16px;border-radius:50px;text-decoration:none;font-size:.85rem;font-weight:800;background:#F5F5F5;color:var(--text);border:2px solid var(--border);transition:all .15s;}
+        .nav-btn:hover{background:var(--primary-bg);border-color:var(--primary);color:var(--primary-dark);}
+        .nav-btn.current{background:var(--primary-bg);border-color:var(--primary);color:var(--primary-dark);}
+    </style>
+</head>
+<body>
+<div class="top-bar">
+    <a href="index.html" class="back-btn">← Accueil</a>
+    <div class="top-bar-info"><h1>💬 Texte argumentatif — Niveau 3</h1><p>Les types d'arguments</p></div>
+    <div class="xp-badge">⚡ <span id="xpDisplay">0</span> XP</div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progressBar" style="width:0%"></div></div>
+
+<div class="content">
+    <div class="score-bar">
+        <span>Score :</span>
+        <div class="score-dots" id="scoreDots"></div>
+        <span id="scoreText" style="margin-left:auto;font-size:.9rem;color:var(--text-light)">0 / 0</span>
+    </div>
+
+    <div class="rappel-card">
+        <h3>Rappel — Types d'arguments</h3>
+        <div class="arg-grid">
+            <div class="arg-row"><strong>📊 Statistique / chiffre</strong>Donnée chiffrée vérifiable pour appuyer un fait.</div>
+            <div class="arg-row"><strong>🎓 Autorité / expert</strong>Citation d'un spécialiste, d'une étude ou d'une institution.</div>
+            <div class="arg-row"><strong>📖 Exemple concret</strong>Cas réel illustrant l'argument.</div>
+            <div class="arg-row"><strong>🧠 Logique / déduction</strong>Raisonnement qui conduit à une conclusion nécessaire.</div>
+            <div class="arg-row"><strong>❤️ Émotion / valeur</strong>Appel à la justice, la solidarité, l'humanité.</div>
+        </div>
+    </div>
+
+    <div class="texte-card">
+        <h3>Texte — « Pour abaisser l'âge du vote à 16 ans »</h3>
+        <p>Il est temps d'abaisser l'âge du droit de vote à 16 ans en Belgique. Les jeunes d'aujourd'hui sont suffisamment <span class="lex" data-def="Capables de prendre des décisions réfléchies et responsables.">matures</span> et informés pour participer aux décisions qui les concernent directement.</p>
+        <p>D'abord, les jeunes de 16 ans sont déjà considérés comme suffisamment responsables pour conduire un <span class="lex" data-def="Véhicule à moteur léger, scooter ou petite moto.">cyclomoteur</span>, travailler et payer des impôts. <span class="arg-tag tag-log">Logique</span> S'ils peuvent assumer ces responsabilités, pourquoi leur refuser le droit de voter ?</p>
+        <p>Ensuite, selon une étude de l'Université d'Édimbourg menée dans 16 pays, les jeunes qui votent pour la première fois à 16 ans ont un taux de participation électorale plus élevé tout au long de leur vie que ceux qui votent pour la première fois à 18 ans. <span class="arg-tag tag-expert">Expert / étude</span></p>
+        <p>Par ailleurs, l'Autriche, l'Écosse et plusieurs pays <span class="lex" data-def="Des pays proches géographiquement ou culturellement.">voisins</span> ont déjà accordé le droit de vote à 16 ans sans que cela ne pose de problème majeur. <span class="arg-tag tag-ex">Exemple concret</span></p>
+        <p>Enfin, 68 % des jeunes Belges de 15 à 17 ans affirment vouloir voter si on leur en donnait la possibilité. <span class="arg-tag tag-stat">Statistique</span> Les ignorer revient à <span class="lex" data-def="Nier leur existence, leur importance.">nier</span> leur <span class="lex" data-def="Droit de décider pour eux-mêmes.">autonomie</span>. <span class="arg-tag" style="background:#FCE4EC;color:#880E4F;">Émotion / valeur</span></p>
+    </div>
+
+    <div class="mots-du-texte" id="mots-du-texte"></div>
+
+    <div class="banner" id="banner">
+        <div class="xp-big">⚡ <span id="finalXP">0</span> XP</div>
+        <h2>Niveau réussi ! 🎉</h2><p id="bannerScore"></p>
+        <div class="banner-btns">
+            <a href="fr_arg_niveau4.html" class="banner-btn primary">Niveau 4 →</a>
+            <a href="index.html" class="banner-btn secondary">🏠 Accueil</a>
+        </div>
+    </div>
+    <div class="fail-box" id="failBox">
+        <h3>😕 Pas encore…</h3><p id="failScore"></p>
+        <button class="retry-btn" onclick="restart()">↺ Recommencer</button>
+    </div>
+
+    <div id="quizZone"></div>
+
+    <div class="nav-section">
+        <h3>Niveaux — Texte argumentatif</h3>
+        <div class="nav-levels">
+            <a href="index.html" class="nav-btn">🏠 Accueil</a>
+            <a href="fr_arg_niveau1.html" class="nav-btn">Niveau 1 — Thèse</a>
+            <a href="fr_arg_niveau2.html" class="nav-btn">Niveau 2 — Connecteurs</a>
+            <a href="fr_arg_niveau3.html" class="nav-btn current">▶ Niveau 3 — Arguments</a>
+            <a href="fr_arg_niveau4.html" class="nav-btn">Niveau 4 — Évaluer</a>
+            <a href="fr_arg_niveau5.html" class="nav-btn">Niveau 5 — Défi CE1D 🏆</a>
+        </div>
+    </div>
+</div>
+
+<script src="fr_lexique.js"></script>
+<script>
+const MODULE_ID='fr_arg', NIVEAU=3, XP_UNIT=15;
+const QUESTIONS=[
+    { q:"Quel est le type de l'argument : « selon une étude de l'Université d'Édimbourg… » ?", choices:["Statistique / chiffre","Argument d'autorité / étude scientifique","Exemple concret","Argument logique"], correct:1 },
+    { q:"« L'Autriche, l'Écosse et plusieurs pays voisins ont déjà accordé le vote à 16 ans. » Quel type d'argument est utilisé ?", choices:["Statistique","Argument d'autorité","Exemple concret","Argument émotionnel"], correct:2 },
+    { q:"« 68 % des jeunes Belges de 15 à 17 ans affirment vouloir voter. » C'est :", choices:["Un exemple concret","Un argument logique","Une statistique chiffrée","Un argument d'autorité"], correct:2 },
+    { q:"« S'ils peuvent conduire et payer des impôts, pourquoi leur refuser le vote ? » C'est :", choices:["Un argument statistique","Un argument logique / par analogie","Un argument d'autorité","Un argument émotionnel"], correct:1 },
+    { q:"Combien d'arguments différents le texte présente-t-il pour défendre sa thèse ?", choices:["Deux arguments","Trois arguments","Quatre arguments","Cinq arguments"], correct:2 },
+    { q:"Quelle est la thèse défendue dans ce texte ?", choices:["Les jeunes de 16 ans sont irresponsables.","Il faut abaisser l'âge du vote à 16 ans en Belgique.","Les élections belges devraient être obligatoires.","L'Autriche a un meilleur système électoral que la Belgique."], correct:1 },
+    { q:"« Les ignorer revient à nier leur autonomie. » Quel type d'argument est utilisé ici ?", choices:["Statistique","Exemple concret","Argument logique","Appel aux valeurs / à l'émotion"], correct:3 },
+    { q:"Quel argument serait le PLUS difficile à réfuter (le plus solide) ?", choices:["68 % des jeunes veulent voter (sondage)","Les jeunes conduisent des cyclomoteurs à 16 ans (analogie)","L'Université d'Édimbourg a montré une participation plus élevée (étude scientifique)","Les ignorer nie leur autonomie (émotion)"], correct:2 }
+];
+
+const TOTAL=QUESTIONS.length, SEUIL=Math.ceil(TOTAL*.8);
+let current=0, score=0, xp=0;
+const dots=[];
+function initDots(){const c=document.getElementById('scoreDots');c.innerHTML='';dots.length=0;for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='dot';c.appendChild(d);dots.push(d);}document.getElementById('scoreText').textContent=`0 / ${TOTAL}`;}
+function updateProgress(){document.getElementById('progressBar').style.width=(current/TOTAL*100)+'%';document.getElementById('xpDisplay').textContent=xp;}
+function showQuestion(idx){const q=QUESTIONS[idx];document.getElementById('quizZone').innerHTML=`<div class="quiz-card"><div class="q-num">Question ${idx+1} / ${TOTAL}</div><div class="q-text">${q.q}</div><div class="choices" id="choices"></div><div class="feedback" id="feedback"></div><button class="next-btn" id="nextBtn" onclick="nextQuestion()">${idx+1<TOTAL?'Question suivante →':'Voir le résultat'}</button></div>`;q.choices.forEach((c,i)=>{const btn=document.createElement('button');btn.className='choice-btn';btn.textContent=c;btn.onclick=()=>answer(i,q.correct);document.getElementById('choices').appendChild(btn);});}
+function answer(chosen,correct){document.querySelectorAll('.choice-btn').forEach(b=>b.disabled=true);const fb=document.getElementById('feedback');document.querySelectorAll('.choice-btn')[correct].classList.add('correct');if(chosen===correct){document.querySelectorAll('.choice-btn')[chosen].classList.add('correct');fb.className='feedback show ok';fb.textContent='✅ Bonne réponse !';score++;xp+=XP_UNIT;dots[current].classList.add('ok');}else{document.querySelectorAll('.choice-btn')[chosen].classList.add('wrong');fb.className='feedback show ko';fb.textContent='❌ Mauvaise réponse. La bonne réponse est surlignée en vert.';dots[current].classList.add('ko');}document.getElementById('scoreText').textContent=`${score} / ${TOTAL}`;document.getElementById('xpDisplay').textContent=xp;document.getElementById('nextBtn').classList.add('show');}
+function nextQuestion(){current++;updateProgress();if(current>=TOTAL)finish();else showQuestion(current);}
+function finish(){document.getElementById('progressBar').style.width='100%';document.getElementById('quizZone').innerHTML='';if(score>=SEUIL){localStorage.setItem(`edu_completed_${MODULE_ID}_${NIVEAU}`,'1');document.getElementById('finalXP').textContent=xp;document.getElementById('bannerScore').textContent=`Score : ${score} / ${TOTAL} — ${Math.round(score/TOTAL*100)} %`;document.getElementById('banner').classList.add('show');}else{document.getElementById('failScore').textContent=`Score : ${score} / ${TOTAL} — Il faut au moins ${SEUIL} bonnes réponses (80 %).`;document.getElementById('failBox').classList.add('show');}}
+function restart(){current=0;score=0;xp=0;document.getElementById('banner').classList.remove('show');document.getElementById('failBox').classList.remove('show');updateProgress();initDots();showQuestion(0);}
+initDots();updateProgress();showQuestion(0);
+</script>
+</body>
+</html>
